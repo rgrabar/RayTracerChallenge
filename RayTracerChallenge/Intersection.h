@@ -7,10 +7,7 @@
 
 #include "Ray.h"
 #include "Sphere.h"
-
-class Intersection;
-
-std::vector<Intersection *> intersections;
+#include <set>
 
 class Intersection {
 public:
@@ -20,31 +17,46 @@ public:
 	const void* s;
 
 	Intersection(float _t, const void* _s) : t(_t), s(_s) {
-			
+
 	}
 
-	inline static void sortIntersections() {
-		//std::sort(intersections.begin(), intersections.end(), Intersections::compareByLength);
-		std::sort(intersections.begin(), intersections.end(), [](const Intersection* a, const Intersection* b)-> bool {
-			return a->t < b->t;
-			});
-	}
-
-	inline static Intersection* hit() {
-		sortIntersections();
-		
-		for (auto& x : intersections) {
-			if (x->t >= 0)
-				return x;
-		}
-		
-		return nullptr;
-	}
+	static Intersection* hit();
 
 };
 
+auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
+	return lhs->t < rhs->t;
+};
+
+std::set<Intersection*, decltype(cmp)> intersections(cmp);
+
+Intersection* Intersection::hit() {
+	//sortIntersections();
+
+	float maxT = INT_MAX;
+	Intersection* ret = nullptr;
+
+	for (auto& x : intersections) {
+		if (x->t < 0)
+			continue;
+		if (x->t < maxT) {
+			maxT = x->t;
+			ret = x;
+		}
+	}
+
+	if (ret != nullptr)
+		return ret;
+
+	return nullptr;
+}
+
 //TODO: not sure if this should return intersect objects
-std::vector<Intersection> intersection(Ray ray, const void* s) {
+
+template<typename T>
+std::vector<Intersection> intersection(Ray ray, const T* s) {
+
+	ray = ray.transform(s->transform.inverse());
 
 	auto sphereToRay = ray.origin - Tuple::point(0, 0, 0);
 	auto a = ray.direction.dotProduct(ray.direction);

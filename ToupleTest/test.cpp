@@ -20,7 +20,6 @@
 #include "../RayTracerChallenge/Intersection.h"
 #include "../RayTracerChallenge/Intersection.cpp"
 
-#include "../RayTracerChallenge/Intersections.h"
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -1069,13 +1068,13 @@ TEST(TrackingIntersections, AggregatingIntersections) {
 	auto x = Intersection(1, &s);
 	auto x1 = Intersection(2, &s);
 
-	intersections.emplace_back(&x);
-	intersections.emplace_back(&x1);
+	intersections.insert(&x);
+	intersections.insert(&x1);
 
 	ASSERT_EQ(intersections.size(), 2);
 
-	ASSERT_FLOAT_EQ(intersections[0]->t, 1);
-	ASSERT_FLOAT_EQ(intersections[1]->t, 2);
+	ASSERT_TRUE(intersections.count(&x), 1);
+	ASSERT_TRUE(intersections.count(&x1), 1);
 
 }
 
@@ -1091,6 +1090,7 @@ TEST(TrackingIntersections, ObjectOnTheIntersection) {
 	ASSERT_EQ(intersect[1].s, &s);
 
 }
+
 TEST(HitTest, PositiveT) {
 
 	auto s = Sphere();
@@ -1102,8 +1102,8 @@ TEST(HitTest, PositiveT) {
 	// not sure if this is intended behaviour
 	intersections.clear();
 
-	intersections.push_back(&i1);
-	intersections.push_back(&i2);
+	intersections.insert(&i1);
+	intersections.insert(&i2);
 
 	auto i = Intersection::hit();
 
@@ -1122,8 +1122,8 @@ TEST(HitTest, NegativeT) {
 	auto i1 = Intersection(-1.f, &s);
 	auto i2 = Intersection(1.f, &s);
 
-	intersections.push_back(&i1);
-	intersections.push_back(&i2);
+	intersections.insert(&i1);
+	intersections.insert(&i2);
 
 	auto i = Intersection::hit();
 
@@ -1143,10 +1143,10 @@ TEST(HitTest, LowestNonNegative) {
 	auto i3 = Intersection(-3.f, &s);
 	auto i4 = Intersection(2.f, &s);
 
-	intersections.push_back(&i1);
-	intersections.push_back(&i2);
-	intersections.push_back(&i3);
-	intersections.push_back(&i4);
+	intersections.insert(&i1);
+	intersections.insert(&i2);
+	intersections.insert(&i3);
+	intersections.insert(&i4);
 
 	auto i = Intersection::hit();
 
@@ -1184,6 +1184,11 @@ TEST(RayTest, DefaultTransformation) {
 
 	Sphere s;
 
+	Matrix id(4, 4);
+	id = identityMatrix(4);
+
+	ASSERT_EQ(s.transform, id);
+
 	Ray r(Tuple::point(1, 2, 3), Tuple::vector(0, 1, 0));
 
 	Matrix m = scale(2, 3, 4);
@@ -1193,4 +1198,34 @@ TEST(RayTest, DefaultTransformation) {
 	ASSERT_EQ(r2.origin, Tuple::point(2, 6, 12));
 	ASSERT_EQ(r2.direction, Tuple::vector(0, 3, 0));
 
+	auto t = translate(2, 3, 4);
+
+	s.transform = t;
+
+	ASSERT_EQ(s.transform, t);
+
+}
+
+TEST(RayTest, ScaledSphereAndRay) {
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	auto s = Sphere();
+	s.transform = scale(2, 2, 2);
+
+	auto xs = intersection(r, &s);
+
+	ASSERT_EQ(xs.size(), 2);
+	ASSERT_EQ(xs[0].t, 3);
+	ASSERT_EQ(xs[1].t, 7);
+}
+
+TEST(RayTest, TranslatedSphereAndRay) {
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	auto s = Sphere();
+	s.transform = translate(5, 0, 0);
+
+	auto xs = intersection(r, &s);
+
+	ASSERT_EQ(xs.size(), 0);
 }
