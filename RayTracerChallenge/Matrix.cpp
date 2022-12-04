@@ -91,7 +91,6 @@ Matrix Matrix::submatrix(int row, int col)const {
     return sub;
 }
 
-
 bool operator==(const Matrix lhs, const Matrix rhs) {
     if (lhs.w != rhs.w || lhs.h != rhs.h) {
         return false;
@@ -128,4 +127,13 @@ const Tuple operator*(const Matrix lhs, const Tuple rhs) {
         lhs.matrix[8] * rhs.x + lhs.matrix[9] * rhs.y + lhs.matrix[10] * rhs.z + lhs.matrix[11] * rhs.w,
         lhs.matrix[12] * rhs.x + lhs.matrix[13] * rhs.y + lhs.matrix[14] * rhs.z + lhs.matrix[15] * rhs.w
     );
+}
+
+
+Matrix identityMatrix(int dimension) {
+    Matrix identity = Matrix(dimension, dimension);
+    for (int i = 0; i < dimension; ++i) {
+        identity.setElement(i, i, 1);
+    }
+    return identity;
 }

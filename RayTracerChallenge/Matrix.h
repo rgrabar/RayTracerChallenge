@@ -4,8 +4,8 @@
 
 class Matrix {
 
-	//TODO: identity matrix (test aswell)
 public:
+
 	Matrix(int _h, int _w);
 	int h, w;
 	float* matrix;
@@ -20,6 +20,9 @@ public:
 	const Matrix inverse()const;
 
 };
+
+// TODO: not sure if this is the best to use identity matrix function...
+Matrix identityMatrix(int dimension);
 
 bool operator==(const Matrix lhs, const Matrix rhs);
 const Matrix operator*(const Matrix lhs, const Matrix rhs);
