@@ -193,22 +193,22 @@ TEST(ColorTest, ColorMultiplication) {
 
 TEST(MatrixTest, MatrixConstruction) {
 	Matrix m(4, 4);
-	m.setElement(0, 0, 1);
-	m.setElement(0, 1, 2);
-	m.setElement(0, 2, 3);
-	m.setElement(0, 3, 4);
-	m.setElement(1, 0, 5.5);
-	m.setElement(1, 1, 6.5);
-	m.setElement(1, 2, 7.5);
-	m.setElement(1, 3, 8.5);
-	m.setElement(2, 0, 9);
-	m.setElement(2, 1, 10);
-	m.setElement(2, 2, 11);
-	m.setElement(2, 3, 12);
-	m.setElement(3, 0, 13.5);
-	m.setElement(3, 1, 14.5);
-	m.setElement(3, 2, 15.5);
-	m.setElement(3, 3, 16.5);
+	m.matrix[0 * m.w + 0] = 1;
+	m.matrix[0 * m.w + 1] = 2;
+	m.matrix[0 * m.w + 2] = 3;
+	m.matrix[0 * m.w + 3] = 4;
+	m.matrix[1 * m.w + 0] = 5.5;
+	m.matrix[1 * m.w + 1] = 6.5;
+	m.matrix[1 * m.w + 2] = 7.5;
+	m.matrix[1 * m.w + 3] = 8.5;
+	m.matrix[2 * m.w + 0] = 9;
+	m.matrix[2 * m.w + 1] = 10;
+	m.matrix[2 * m.w + 2] = 11;
+	m.matrix[2 * m.w + 3] = 12;
+	m.matrix[3 * m.w + 0] = 13.5;
+	m.matrix[3 * m.w + 1] = 14.5;
+	m.matrix[3 * m.w + 2] = 15.5;
+	m.matrix[3 * m.w + 3] = 16.5;
 
 	ASSERT_FLOAT_EQ(m.matrix[0], 1);
 	ASSERT_FLOAT_EQ(m.matrix[1], 2);
@@ -226,28 +226,28 @@ TEST(MatrixTest, MatrixConstruction) {
 	ASSERT_FLOAT_EQ(m.matrix[13], 14.5);
 	ASSERT_FLOAT_EQ(m.matrix[14], 15.5);
 	ASSERT_FLOAT_EQ(m.matrix[15], 16.5);
-
+	
 	Matrix m1(2, 2);
-	m1.setElement(0, 0, -3);
-	m1.setElement(0, 1, 5);
-	m1.setElement(1, 0, 1);
-	m1.setElement(1, 1, -2);
+	m1.matrix[0 * m1.w + 0] = -3;
+	m1.matrix[0 * m1.w + 1] = 5;
+	m1.matrix[1 * m1.w + 0] = 1;
+	m1.matrix[1 * m1.w + 1] = -2;
 
 	ASSERT_FLOAT_EQ(m1.matrix[0], -3);
 	ASSERT_FLOAT_EQ(m1.matrix[1], 5);
 	ASSERT_FLOAT_EQ(m1.matrix[2], 1);
 	ASSERT_FLOAT_EQ(m1.matrix[3], -2);
-
+	
 	Matrix m2(3, 3);
-	m2.setElement(0, 0, -3);
-	m2.setElement(0, 1, 5);
-	m2.setElement(0, 2, 0);
-	m2.setElement(1, 0, 1);
-	m2.setElement(1, 1, -2);
-	m2.setElement(1, 2, -7);
-	m2.setElement(2, 0, 0);
-	m2.setElement(2, 1, 1);
-	m2.setElement(2, 2, 1);
+	m2.matrix[0 * m2.w + 0] = -3;
+	m2.matrix[0 * m2.w + 1] = 5;
+	m2.matrix[0 * m2.w + 2] = 0;
+	m2.matrix[1 * m2.w + 0] = 1;
+	m2.matrix[1 * m2.w + 1] = -2;
+	m2.matrix[1 * m2.w + 2] = -7;
+	m2.matrix[2 * m2.w + 0] = 0;
+	m2.matrix[2 * m2.w + 1] = 1;
+	m2.matrix[2 * m2.w + 2] = 1;
 
 	ASSERT_FLOAT_EQ(m2.matrix[0], -3);
 	ASSERT_FLOAT_EQ(m2.matrix[1], 5);
@@ -263,58 +263,58 @@ TEST(MatrixTest, MatrixConstruction) {
 
 TEST(MatrixTest, MatrixEquality) {
 	Matrix m(4, 4);
-	m.setElement(0, 0, 1);
-	m.setElement(0, 1, 2);
-	m.setElement(0, 2, 3);
-	m.setElement(0, 3, 4);
-	m.setElement(1, 0, 5);
-	m.setElement(1, 1, 6);
-	m.setElement(1, 2, 7);
-	m.setElement(1, 3, 8);
-	m.setElement(2, 0, 9);
-	m.setElement(2, 1, 8);
-	m.setElement(2, 2, 7);
-	m.setElement(2, 3, 6);
-	m.setElement(3, 0, 5);
-	m.setElement(3, 1, 4);
-	m.setElement(3, 2, 3);
-	m.setElement(3, 3, 2);
+	m.matrix[0 * m.w + 0] = 1;
+	m.matrix[0 * m.w + 1] = 2;
+	m.matrix[0 * m.w + 2] = 3;
+	m.matrix[0 * m.w + 3] = 4;
+	m.matrix[1 * m.w + 0] = 5;
+	m.matrix[1 * m.w + 1] = 6;
+	m.matrix[1 * m.w + 2] = 7;
+	m.matrix[1 * m.w + 3] = 8;
+	m.matrix[2 * m.w + 0] = 9;
+	m.matrix[2 * m.w + 1] = 8;
+	m.matrix[2 * m.w + 2] = 7;
+	m.matrix[2 * m.w + 3] = 6;
+	m.matrix[3 * m.w + 0] = 5;
+	m.matrix[3 * m.w + 1] = 4;
+	m.matrix[3 * m.w + 2] = 3;
+	m.matrix[3 * m.w + 3] = 2;
 
 	Matrix m1(4, 4);
-	m1.setElement(0, 0, 1);
-	m1.setElement(0, 1, 2);
-	m1.setElement(0, 2, 3);
-	m1.setElement(0, 3, 4);
-	m1.setElement(1, 0, 5);
-	m1.setElement(1, 1, 6);
-	m1.setElement(1, 2, 7);
-	m1.setElement(1, 3, 8);
-	m1.setElement(2, 0, 9);
-	m1.setElement(2, 1, 8);
-	m1.setElement(2, 2, 7);
-	m1.setElement(2, 3, 6);
-	m1.setElement(3, 0, 5);
-	m1.setElement(3, 1, 4);
-	m1.setElement(3, 2, 3);
-	m1.setElement(3, 3, 2);
+	m1.matrix[0 * m1.w + 0] = 1;
+	m1.matrix[0 * m1.w + 1] = 2;
+	m1.matrix[0 * m1.w + 2] = 3;
+	m1.matrix[0 * m1.w + 3] = 4;
+	m1.matrix[1 * m1.w + 0] = 5;
+	m1.matrix[1 * m1.w + 1] = 6;
+	m1.matrix[1 * m1.w + 2] = 7;
+	m1.matrix[1 * m1.w + 3] = 8;
+	m1.matrix[2 * m1.w + 0] = 9;
+	m1.matrix[2 * m1.w + 1] = 8;
+	m1.matrix[2 * m1.w + 2] = 7;
+	m1.matrix[2 * m1.w + 3] = 6;
+	m1.matrix[3 * m1.w + 0] = 5;
+	m1.matrix[3 * m1.w + 1] = 4;
+	m1.matrix[3 * m1.w + 2] = 3;
+	m1.matrix[3 * m1.w + 3] = 2;
 
 	Matrix m2(4, 4);
-	m2.setElement(0, 0, 2);
-	m2.setElement(0, 1, 3);
-	m2.setElement(0, 2, 4);
-	m2.setElement(0, 3, 5);
-	m2.setElement(1, 0, 6);
-	m2.setElement(1, 1, 7);
-	m2.setElement(1, 2, 8);
-	m2.setElement(1, 3, 9);
-	m2.setElement(2, 0, 8);
-	m2.setElement(2, 1, 7);
-	m2.setElement(2, 2, 6);
-	m2.setElement(2, 3, 5);
-	m2.setElement(3, 0, 4);
-	m2.setElement(3, 1, 3);
-	m2.setElement(3, 2, 2);
-	m2.setElement(3, 3, 1);
+	m2.matrix[0 * m2.w + 0] = 2;
+	m2.matrix[0 * m2.w + 1] = 3;
+	m2.matrix[0 * m2.w + 2] = 4;
+	m2.matrix[0 * m2.w + 3] = 5;
+	m2.matrix[1 * m2.w + 0] = 6;
+	m2.matrix[1 * m2.w + 1] = 7;
+	m2.matrix[1 * m2.w + 2] = 8;
+	m2.matrix[1 * m2.w + 3] = 9;
+	m2.matrix[2 * m2.w + 0] = 8;
+	m2.matrix[2 * m2.w + 1] = 7;
+	m2.matrix[2 * m2.w + 2] = 6;
+	m2.matrix[2 * m2.w + 3] = 5;
+	m2.matrix[3 * m2.w + 0] = 4;
+	m2.matrix[3 * m2.w + 1] = 3;
+	m2.matrix[3 * m2.w + 2] = 2;
+	m2.matrix[3 * m2.w + 3] = 1;
 
 	EXPECT_TRUE(m == m1);
 	EXPECT_FALSE(m == m2);
@@ -323,58 +323,58 @@ TEST(MatrixTest, MatrixEquality) {
 TEST(MatrixTest, MatrixMultiplication) {
 
 	Matrix m1(4, 4);
-	m1.setElement(0, 0, 1);
-	m1.setElement(0, 1, 2);
-	m1.setElement(0, 2, 3);
-	m1.setElement(0, 3, 4);
-	m1.setElement(1, 0, 5);
-	m1.setElement(1, 1, 6);
-	m1.setElement(1, 2, 7);
-	m1.setElement(1, 3, 8);
-	m1.setElement(2, 0, 9);
-	m1.setElement(2, 1, 8);
-	m1.setElement(2, 2, 7);
-	m1.setElement(2, 3, 6);
-	m1.setElement(3, 0, 5);
-	m1.setElement(3, 1, 4);
-	m1.setElement(3, 2, 3);
-	m1.setElement(3, 3, 2);
+	m1.matrix[0 * m1.w + 0] = 1;
+	m1.matrix[0 * m1.w + 1] = 2;
+	m1.matrix[0 * m1.w + 2] = 3;
+	m1.matrix[0 * m1.w + 3] = 4;
+	m1.matrix[1 * m1.w + 0] = 5;
+	m1.matrix[1 * m1.w + 1] = 6;
+	m1.matrix[1 * m1.w + 2] = 7;
+	m1.matrix[1 * m1.w + 3] = 8;
+	m1.matrix[2 * m1.w + 0] = 9;
+	m1.matrix[2 * m1.w + 1] = 8;
+	m1.matrix[2 * m1.w + 2] = 7;
+	m1.matrix[2 * m1.w + 3] = 6;
+	m1.matrix[3 * m1.w + 0] = 5;
+	m1.matrix[3 * m1.w + 1] = 4;
+	m1.matrix[3 * m1.w + 2] = 3;
+	m1.matrix[3 * m1.w + 3] = 2;
 
 	Matrix m2(4, 4);
-	m2.setElement(0, 0, -2);
-	m2.setElement(0, 1, 1);
-	m2.setElement(0, 2, 2);
-	m2.setElement(0, 3, 3);
-	m2.setElement(1, 0, 3);
-	m2.setElement(1, 1, 2);
-	m2.setElement(1, 2, 1);
-	m2.setElement(1, 3, -1);
-	m2.setElement(2, 0, 4);
-	m2.setElement(2, 1, 3);
-	m2.setElement(2, 2, 6);
-	m2.setElement(2, 3, 5);
-	m2.setElement(3, 0, 1);
-	m2.setElement(3, 1, 2);
-	m2.setElement(3, 2, 7);
-	m2.setElement(3, 3, 8);
+	m2.matrix[0 * m1.w + 0] = -2;
+	m2.matrix[0 * m1.w + 1] = 1;
+	m2.matrix[0 * m1.w + 2] = 2;
+	m2.matrix[0 * m1.w + 3] = 3;
+	m2.matrix[1 * m1.w + 0] = 3;
+	m2.matrix[1 * m1.w + 1] = 2;
+	m2.matrix[1 * m1.w + 2] = 1;
+	m2.matrix[1 * m1.w + 3] = -1;
+	m2.matrix[2 * m1.w + 0] = 4;
+	m2.matrix[2 * m1.w + 1] = 3;
+	m2.matrix[2 * m1.w + 2] = 6;
+	m2.matrix[2 * m1.w + 3] = 5;
+	m2.matrix[3 * m1.w + 0] = 1;
+	m2.matrix[3 * m1.w + 1] = 2;
+	m2.matrix[3 * m1.w + 2] = 7;
+	m2.matrix[3 * m1.w + 3] = 8;
 
 	Matrix m3(4, 4);
-	m3.setElement(0, 0, 20);
-	m3.setElement(0, 1, 22);
-	m3.setElement(0, 2, 50);
-	m3.setElement(0, 3, 48);
-	m3.setElement(1, 0, 44);
-	m3.setElement(1, 1, 54);
-	m3.setElement(1, 2, 114);
-	m3.setElement(1, 3, 108);
-	m3.setElement(2, 0, 40);
-	m3.setElement(2, 1, 58);
-	m3.setElement(2, 2, 110);
-	m3.setElement(2, 3, 102);
-	m3.setElement(3, 0, 16);
-	m3.setElement(3, 1, 26);
-	m3.setElement(3, 2, 46);
-	m3.setElement(3, 3, 42);
+	m3.matrix[0 * m3.w + 0] = 20;
+	m3.matrix[0 * m3.w + 1] = 22;
+	m3.matrix[0 * m3.w + 2] = 50;
+	m3.matrix[0 * m3.w + 3] = 48;
+	m3.matrix[1 * m3.w + 0] = 44;
+	m3.matrix[1 * m3.w + 1] = 54;
+	m3.matrix[1 * m3.w + 2] = 114;
+	m3.matrix[1 * m3.w + 3] = 108;
+	m3.matrix[2 * m3.w + 0] = 40;
+	m3.matrix[2 * m3.w + 1] = 58;
+	m3.matrix[2 * m3.w + 2] = 110;
+	m3.matrix[2 * m3.w + 3] = 102;
+	m3.matrix[3 * m3.w + 0] = 16;
+	m3.matrix[3 * m3.w + 1] = 26;
+	m3.matrix[3 * m3.w + 2] = 46;
+	m3.matrix[3 * m3.w + 3] = 42;
 
 	EXPECT_EQ(m1 * m2, m3);
 }
@@ -382,22 +382,22 @@ TEST(MatrixTest, MatrixMultiplication) {
 TEST(MatrixTest, MatrixTupleMultiplication) {
 	Matrix m(4, 4);
 
-	m.setElement(0, 0, 1);
-	m.setElement(0, 1, 2);
-	m.setElement(0, 2, 3);
-	m.setElement(0, 3, 4);
-	m.setElement(1, 0, 2);
-	m.setElement(1, 1, 4);
-	m.setElement(1, 2, 4);
-	m.setElement(1, 3, 2);
-	m.setElement(2, 0, 8);
-	m.setElement(2, 1, 6);
-	m.setElement(2, 2, 4);
-	m.setElement(2, 3, 1);
-	m.setElement(3, 0, 0);
-	m.setElement(3, 1, 0);
-	m.setElement(3, 2, 0);
-	m.setElement(3, 3, 1);
+	m.matrix[0 * m.w + 0] = 1;
+	m.matrix[0 * m.w + 1] = 2;
+	m.matrix[0 * m.w + 2] = 3;
+	m.matrix[0 * m.w + 3] = 4;
+	m.matrix[1 * m.w + 0] = 2;
+	m.matrix[1 * m.w + 1] = 4;
+	m.matrix[1 * m.w + 2] = 4;
+	m.matrix[1 * m.w + 3] = 2;
+	m.matrix[2 * m.w + 0] = 8;
+	m.matrix[2 * m.w + 1] = 6;
+	m.matrix[2 * m.w + 2] = 4;
+	m.matrix[2 * m.w + 3] = 1;
+	m.matrix[3 * m.w + 0] = 0;
+	m.matrix[3 * m.w + 1] = 0;
+	m.matrix[3 * m.w + 2] = 0;
+	m.matrix[3 * m.w + 3] = 1;
 
 	Tuple tp(1, 2, 3, 1);
 
@@ -406,40 +406,40 @@ TEST(MatrixTest, MatrixTupleMultiplication) {
 
 TEST(MatrixTest, MatrixTranspose) {
 	Matrix mt(4, 4);
-	mt.setElement(0, 0, 0);
-	mt.setElement(0, 1, 9);
-	mt.setElement(0, 2, 3);
-	mt.setElement(0, 3, 0);
-	mt.setElement(1, 0, 9);
-	mt.setElement(1, 1, 8);
-	mt.setElement(1, 2, 0);
-	mt.setElement(1, 3, 8);
-	mt.setElement(2, 0, 1);
-	mt.setElement(2, 1, 8);
-	mt.setElement(2, 2, 5);
-	mt.setElement(2, 3, 3);
-	mt.setElement(3, 0, 0);
-	mt.setElement(3, 1, 0);
-	mt.setElement(3, 2, 5);
-	mt.setElement(3, 3, 8);
+	mt.matrix[0 * mt.w + 0] = 0;
+	mt.matrix[0 * mt.w + 1] = 9;
+	mt.matrix[0 * mt.w + 2] = 3;
+	mt.matrix[0 * mt.w + 3] = 0;
+	mt.matrix[1 * mt.w + 0] = 9;
+	mt.matrix[1 * mt.w + 1] = 8;
+	mt.matrix[1 * mt.w + 2] = 0;
+	mt.matrix[1 * mt.w + 3] = 8;
+	mt.matrix[2 * mt.w + 0] = 1;
+	mt.matrix[2 * mt.w + 1] = 8;
+	mt.matrix[2 * mt.w + 2] = 5;
+	mt.matrix[2 * mt.w + 3] = 3;
+	mt.matrix[3 * mt.w + 0] = 0;
+	mt.matrix[3 * mt.w + 1] = 0;
+	mt.matrix[3 * mt.w + 2] = 5;
+	mt.matrix[3 * mt.w + 3] = 8;
 
 	Matrix cmp(4, 4);
-	cmp.setElement(0, 0, 0);
-	cmp.setElement(0, 1, 9);
-	cmp.setElement(0, 2, 1);
-	cmp.setElement(0, 3, 0);
-	cmp.setElement(1, 0, 9);
-	cmp.setElement(1, 1, 8);
-	cmp.setElement(1, 2, 8);
-	cmp.setElement(1, 3, 0);
-	cmp.setElement(2, 0, 3);
-	cmp.setElement(2, 1, 0);
-	cmp.setElement(2, 2, 5);
-	cmp.setElement(2, 3, 5);
-	cmp.setElement(3, 0, 0);
-	cmp.setElement(3, 1, 8);
-	cmp.setElement(3, 2, 3);
-	cmp.setElement(3, 3, 8);
+	cmp.matrix[0 * mt.w + 0] = 0;
+	cmp.matrix[0 * mt.w + 1] = 9;
+	cmp.matrix[0 * mt.w + 2] = 1;
+	cmp.matrix[0 * mt.w + 3] = 0;
+	cmp.matrix[1 * mt.w + 0] = 9;
+	cmp.matrix[1 * mt.w + 1] = 8;
+	cmp.matrix[1 * mt.w + 2] = 8;
+	cmp.matrix[1 * mt.w + 3] = 0;
+	cmp.matrix[2 * mt.w + 0] = 3;
+	cmp.matrix[2 * mt.w + 1] = 0;
+	cmp.matrix[2 * mt.w + 2] = 5;
+	cmp.matrix[2 * mt.w + 3] = 5;
+	cmp.matrix[3 * mt.w + 0] = 0;
+	cmp.matrix[3 * mt.w + 1] = 8;
+	cmp.matrix[3 * mt.w + 2] = 3;
+	cmp.matrix[3 * mt.w + 3] = 8;
 
 	ASSERT_EQ(mt.transpose(), cmp);
 }
@@ -447,11 +447,11 @@ TEST(MatrixTest, MatrixTranspose) {
 TEST(MatrixTest, MatrixDeterminant2x2) {
 
 	Matrix d(2, 2);
-	d.setElement(0, 0, 1);
-	d.setElement(0, 1, 5);
+	d.matrix[0 * d.w + 0] = 1;
+	d.matrix[0 * d.w + 1] = 5;
 
-	d.setElement(1, 0, -3);
-	d.setElement(1, 1, 2);
+	d.matrix[1 * d.w + 0] = -3;
+	d.matrix[1 * d.w + 1] = 2;
 
 	ASSERT_FLOAT_EQ(d.determinant(), 17);
 }
@@ -459,52 +459,52 @@ TEST(MatrixTest, MatrixDeterminant2x2) {
 TEST(MatrixTest, MatrixSubmatrix) {
 
 	Matrix sub3(3, 3);
-	sub3.setElement(0, 0, 1);
-	sub3.setElement(0, 1, 5);
-	sub3.setElement(0, 2, 0);
-	sub3.setElement(1, 0, -3);
-	sub3.setElement(1, 1, 2);
-	sub3.setElement(1, 2, 7);
-	sub3.setElement(2, 0, 0);
-	sub3.setElement(2, 1, 6);
-	sub3.setElement(2, 2, -3);
+	sub3.matrix[0 * sub3.w + 0] = 1;
+	sub3.matrix[0 * sub3.w + 1] = 5;
+	sub3.matrix[0 * sub3.w + 2] = 0;
+	sub3.matrix[1 * sub3.w + 0] = -3;
+	sub3.matrix[1 * sub3.w + 1] = 2;
+	sub3.matrix[1 * sub3.w + 2] = 7;
+	sub3.matrix[2 * sub3.w + 0] = 0;
+	sub3.matrix[2 * sub3.w + 1] = 6;
+	sub3.matrix[2 * sub3.w + 2] = -3;
 
 	Matrix cmp(2, 2);
-	cmp.setElement(0, 0, -3);
-	cmp.setElement(0, 1, 2);
-	cmp.setElement(1, 0, 0);
-	cmp.setElement(1, 1, 6);
+	cmp.matrix[0 * cmp.w + 0] = -3;
+	cmp.matrix[0 * cmp.w + 1] = 2;
+	cmp.matrix[1 * cmp.w + 0] = 0;
+	cmp.matrix[1 * cmp.w + 1] = 6;
 
 	ASSERT_EQ(sub3.submatrix(0, 2), cmp);
 
 	Matrix sub4(4, 4);
-	sub4.setElement(0, 0, -6);
-	sub4.setElement(0, 1, 1);
-	sub4.setElement(0, 2, 1);
-	sub4.setElement(0, 3, 6);
-	sub4.setElement(1, 0, -8);
-	sub4.setElement(1, 1, 5);
-	sub4.setElement(1, 2, 8);
-	sub4.setElement(1, 3, 6);
-	sub4.setElement(2, 0, -1);
-	sub4.setElement(2, 1, 0);
-	sub4.setElement(2, 2, 8);
-	sub4.setElement(2, 3, 2);
-	sub4.setElement(3, 0, -7);
-	sub4.setElement(3, 1, 1);
-	sub4.setElement(3, 2, -1);
-	sub4.setElement(3, 3, 1);
+	sub4.matrix[0 * sub4.w + 0] = -6;
+	sub4.matrix[0 * sub4.w + 1] = 1;
+	sub4.matrix[0 * sub4.w + 2] = 1;
+	sub4.matrix[0 * sub4.w + 3] = 6;
+	sub4.matrix[1 * sub4.w + 0] = -8;
+	sub4.matrix[1 * sub4.w + 1] = 5;
+	sub4.matrix[1 * sub4.w + 2] = 8;
+	sub4.matrix[1 * sub4.w + 3] = 6;
+	sub4.matrix[2 * sub4.w + 0] = -1;
+	sub4.matrix[2 * sub4.w + 1] = 0;
+	sub4.matrix[2 * sub4.w + 2] = 8;
+	sub4.matrix[2 * sub4.w + 3] = 2;
+	sub4.matrix[3 * sub4.w + 0] = -7;
+	sub4.matrix[3 * sub4.w + 1] = 1;
+	sub4.matrix[3 * sub4.w + 2] = -1;
+	sub4.matrix[3 * sub4.w + 3] = 1;
 
 	Matrix cmp1(3, 3);
-	cmp1.setElement(0, 0, -6);
-	cmp1.setElement(0, 1, 1);
-	cmp1.setElement(0, 2, 6);
-	cmp1.setElement(1, 0, -8);
-	cmp1.setElement(1, 1, 8);
-	cmp1.setElement(1, 2, 6);
-	cmp1.setElement(2, 0, -7);
-	cmp1.setElement(2, 1, -1);
-	cmp1.setElement(2, 2, 1);
+	cmp1.matrix[0 * cmp1.w + 0] = -6;
+	cmp1.matrix[0 * cmp1.w + 1] = 1;
+	cmp1.matrix[0 * cmp1.w + 2] = 6;
+	cmp1.matrix[1 * cmp1.w + 0] = -8;
+	cmp1.matrix[1 * cmp1.w + 1] = 8;
+	cmp1.matrix[1 * cmp1.w + 2] = 6;
+	cmp1.matrix[2 * cmp1.w + 0] = -7;
+	cmp1.matrix[2 * cmp1.w + 1] = -1;
+	cmp1.matrix[2 * cmp1.w + 2] = 1;
 
 	ASSERT_EQ(sub4.submatrix(2, 1), cmp1);
 }
@@ -512,15 +512,15 @@ TEST(MatrixTest, MatrixSubmatrix) {
 TEST(MatrixTest, MatrixMinor) {
 
 	Matrix mino(3, 3);
-	mino.setElement(0, 0, 3);
-	mino.setElement(0, 1, 5);
-	mino.setElement(0, 2, 0);
-	mino.setElement(1, 0, 2);
-	mino.setElement(1, 1, -1);
-	mino.setElement(1, 2, -7);
-	mino.setElement(2, 0, 6);
-	mino.setElement(2, 1, -1);
-	mino.setElement(2, 2, 5);
+	mino.matrix[0 * mino.w + 0] = 3;
+	mino.matrix[0 * mino.w + 1] = 5;
+	mino.matrix[0 * mino.w + 2] = 0;
+	mino.matrix[1 * mino.w + 0] = 2;
+	mino.matrix[1 * mino.w + 1] = -1;
+	mino.matrix[1 * mino.w + 2] = -7;
+	mino.matrix[2 * mino.w + 0] = 6;
+	mino.matrix[2 * mino.w + 1] = -1;
+	mino.matrix[2 * mino.w + 2] = 5;
 
 	ASSERT_FLOAT_EQ(mino.minor(1 ,0), 25);
 	ASSERT_FLOAT_EQ(mino.submatrix(1, 0).determinant(), 25);
@@ -528,15 +528,15 @@ TEST(MatrixTest, MatrixMinor) {
 
 TEST(MatrixTest, MatrixCofactor) {
 	Matrix detmino1(3, 3);
-	detmino1.setElement(0, 0, 3);
-	detmino1.setElement(0, 1, 5);
-	detmino1.setElement(0, 2, 0);
-	detmino1.setElement(1, 0, 2);
-	detmino1.setElement(1, 1, -1);
-	detmino1.setElement(1, 2, -7);
-	detmino1.setElement(2, 0, 6);
-	detmino1.setElement(2, 1, -1);
-	detmino1.setElement(2, 2, 5);
+	detmino1.matrix[0 * detmino1.w + 0] = 3;
+	detmino1.matrix[0 * detmino1.w + 1] = 5;
+	detmino1.matrix[0 * detmino1.w + 2] = 0;
+	detmino1.matrix[1 * detmino1.w + 0] = 2;
+	detmino1.matrix[1 * detmino1.w + 1] = -1;
+	detmino1.matrix[1 * detmino1.w + 2] = -7;
+	detmino1.matrix[2 * detmino1.w + 0] = 6;
+	detmino1.matrix[2 * detmino1.w + 1] = -1;
+	detmino1.matrix[2 * detmino1.w + 2] = 5;
 
 	ASSERT_FLOAT_EQ(detmino1.minor(0, 0), -12);
 	ASSERT_FLOAT_EQ(detmino1.cofactor(0, 0), -12);
@@ -547,15 +547,15 @@ TEST(MatrixTest, MatrixCofactor) {
 TEST(MatrixTest, MatrixDeterminantLarge) {
 
 	Matrix detmino1(3, 3);
-	detmino1.setElement(0, 0, 1);
-	detmino1.setElement(0, 1, 2);
-	detmino1.setElement(0, 2, 6);
-	detmino1.setElement(1, 0, -5);
-	detmino1.setElement(1, 1, 8);
-	detmino1.setElement(1, 2, -4);
-	detmino1.setElement(2, 0, 2);
-	detmino1.setElement(2, 1, 6);
-	detmino1.setElement(2, 2, 4);
+	detmino1.matrix[0 * detmino1.w + 0] = 1;
+	detmino1.matrix[0 * detmino1.w + 1] = 2;
+	detmino1.matrix[0 * detmino1.w + 2] = 6;
+	detmino1.matrix[1 * detmino1.w + 0] = -5;
+	detmino1.matrix[1 * detmino1.w + 1] = 8;
+	detmino1.matrix[1 * detmino1.w + 2] = -4;
+	detmino1.matrix[2 * detmino1.w + 0] = 2;
+	detmino1.matrix[2 * detmino1.w + 1] = 6;
+	detmino1.matrix[2 * detmino1.w + 2] = 4;
 
 	ASSERT_FLOAT_EQ(detmino1.cofactor(0, 0), 56);
 	ASSERT_FLOAT_EQ(detmino1.cofactor(0, 1), 12);
@@ -563,22 +563,22 @@ TEST(MatrixTest, MatrixDeterminantLarge) {
 	ASSERT_FLOAT_EQ(detmino1.determinant(), -196);
 
 	Matrix detmino2(4, 4);
-	detmino2.setElement(0, 0, -2);
-	detmino2.setElement(0, 1, -8);
-	detmino2.setElement(0, 2, 3);
-	detmino2.setElement(0, 3, 5);
-	detmino2.setElement(1, 0, -3);
-	detmino2.setElement(1, 1, 1);
-	detmino2.setElement(1, 2, 7);
-	detmino2.setElement(1, 3, 3);
-	detmino2.setElement(2, 0, 1);
-	detmino2.setElement(2, 1, 2);
-	detmino2.setElement(2, 2, -9);
-	detmino2.setElement(2, 3, 6);
-	detmino2.setElement(3, 0, -6);
-	detmino2.setElement(3, 1, 7);
-	detmino2.setElement(3, 2, 7);
-	detmino2.setElement(3, 3, -9);
+	detmino2.matrix[0 * detmino2.w + 0] = -2;
+	detmino2.matrix[0 * detmino2.w + 1] = -8;
+	detmino2.matrix[0 * detmino2.w + 2] = 3;
+	detmino2.matrix[0 * detmino2.w + 3] = 5;
+	detmino2.matrix[1 * detmino2.w + 0] = -3;
+	detmino2.matrix[1 * detmino2.w + 1] = 1;
+	detmino2.matrix[1 * detmino2.w + 2] = 7;
+	detmino2.matrix[1 * detmino2.w + 3] = 3;
+	detmino2.matrix[2 * detmino2.w + 0] = 1;
+	detmino2.matrix[2 * detmino2.w + 1] = 2;
+	detmino2.matrix[2 * detmino2.w + 2] = -9;
+	detmino2.matrix[2 * detmino2.w + 3] = 6;
+	detmino2.matrix[3 * detmino2.w + 0] = -6;
+	detmino2.matrix[3 * detmino2.w + 1] = 7;
+	detmino2.matrix[3 * detmino2.w + 2] = 7;
+	detmino2.matrix[3 * detmino2.w + 3] = -9;
 
 
 	ASSERT_FLOAT_EQ(detmino2.cofactor(0, 0), 690);
@@ -590,44 +590,44 @@ TEST(MatrixTest, MatrixDeterminantLarge) {
 
 TEST(MatrixTest, MatrixInvertibility) {
 	Matrix invertible1(4, 4);
-	invertible1.setElement(0, 0, 6);
-	invertible1.setElement(0, 1, 4);
-	invertible1.setElement(0, 2, 4);
-	invertible1.setElement(0, 3, 4);
-	invertible1.setElement(1, 0, 5);
-	invertible1.setElement(1, 1, 5);
-	invertible1.setElement(1, 2, 7);
-	invertible1.setElement(1, 3, 6);
-	invertible1.setElement(2, 0, 4);
-	invertible1.setElement(2, 1, -9);
-	invertible1.setElement(2, 2, 3);
-	invertible1.setElement(2, 3, -7);
-	invertible1.setElement(3, 0, 9);
-	invertible1.setElement(3, 1, 1);
-	invertible1.setElement(3, 2, 7);
-	invertible1.setElement(3, 3, -6);
+	invertible1.matrix[0 * invertible1.w + 0] = 6;
+	invertible1.matrix[0 * invertible1.w + 1] = 4;
+	invertible1.matrix[0 * invertible1.w + 2] = 4;
+	invertible1.matrix[0 * invertible1.w + 3] = 4;
+	invertible1.matrix[1 * invertible1.w + 0] = 5;
+	invertible1.matrix[1 * invertible1.w + 1] = 5;
+	invertible1.matrix[1 * invertible1.w + 2] = 7;
+	invertible1.matrix[1 * invertible1.w + 3] = 6;
+	invertible1.matrix[2 * invertible1.w + 0] = 4;
+	invertible1.matrix[2 * invertible1.w + 1] = -9;
+	invertible1.matrix[2 * invertible1.w + 2] = 3;
+	invertible1.matrix[2 * invertible1.w + 3] = -7;
+	invertible1.matrix[3 * invertible1.w + 0] = 9;
+	invertible1.matrix[3 * invertible1.w + 1] = 1;
+	invertible1.matrix[3 * invertible1.w + 2] = 7;
+	invertible1.matrix[3 * invertible1.w + 3] = -6;
 
 	ASSERT_FLOAT_EQ(invertible1.determinant(), -2120);
 	ASSERT_TRUE(invertible1.invertible() ==  1);
 	
 
 	Matrix invertible2(4, 4);
-	invertible2.setElement(0, 0, -4);
-	invertible2.setElement(0, 1, 2);
-	invertible2.setElement(0, 2, -2);
-	invertible2.setElement(0, 3, -3);
-	invertible2.setElement(1, 0, 9);
-	invertible2.setElement(1, 1, 6);
-	invertible2.setElement(1, 2, 2);
-	invertible2.setElement(1, 3, 6);
-	invertible2.setElement(2, 0, 0);
-	invertible2.setElement(2, 1, -5);
-	invertible2.setElement(2, 2, 1);
-	invertible2.setElement(2, 3, -5);
-	invertible2.setElement(3, 0, 0);
-	invertible2.setElement(3, 1, 0);
-	invertible2.setElement(3, 2, 0);
-	invertible2.setElement(3, 3, 0);
+	invertible2.matrix[0 * invertible2.w + 0] =  -4;
+	invertible2.matrix[0 * invertible2.w + 1] = 2;
+	invertible2.matrix[0 * invertible2.w + 2] =  -2;
+	invertible2.matrix[0 * invertible2.w + 3] =  -3;
+	invertible2.matrix[1 * invertible2.w + 0] =  9;
+	invertible2.matrix[1 * invertible2.w + 1] =  6;
+	invertible2.matrix[1 * invertible2.w + 2] =  2;
+	invertible2.matrix[1 * invertible2.w + 3] =  6;
+	invertible2.matrix[2 * invertible2.w + 0] =  0;
+	invertible2.matrix[2 * invertible2.w + 1] =  -5;
+	invertible2.matrix[2 * invertible2.w + 2] =  1;
+	invertible2.matrix[2 * invertible2.w + 3] =  -5;
+	invertible2.matrix[3 * invertible2.w + 0] =  0;
+	invertible2.matrix[3 * invertible2.w + 1] =  0;
+	invertible2.matrix[3 * invertible2.w + 2] =  0;
+	invertible2.matrix[3 * invertible2.w + 3] =  0;
 
 	ASSERT_TRUE(invertible2.invertible() == 0);
 }
@@ -636,136 +636,118 @@ TEST(MatrixTest, MatrixInvertibility) {
 TEST(MatrixTest, MatrixInverse) {
 	
 	Matrix inverse1(4, 4);
-	inverse1.setElement(0, 0, -5);
-	inverse1.setElement(0, 1, 2);
-	inverse1.setElement(0, 2, 6);
-	inverse1.setElement(0, 3, -8);
-		   
-	inverse1.setElement(1, 0, 1);
-	inverse1.setElement(1, 1, -5);
-	inverse1.setElement(1, 2, 1);
-	inverse1.setElement(1, 3, 8);
-		   
-	inverse1.setElement(2, 0, 7);
-	inverse1.setElement(2, 1, 7);
-	inverse1.setElement(2, 2, -6);
-	inverse1.setElement(2, 3, -7);
-		   
-	inverse1.setElement(3, 0, 1);
-	inverse1.setElement(3, 1, -3);
-	inverse1.setElement(3, 2, 7);
-	inverse1.setElement(3, 3, 4);
+	inverse1.matrix[0 * inverse1.w + 0] = -5;
+	inverse1.matrix[0 * inverse1.w + 1] = 2;
+	inverse1.matrix[0 * inverse1.w + 2] = 6;
+	inverse1.matrix[0 * inverse1.w + 3] = -8;
+	inverse1.matrix[1 * inverse1.w + 0] = 1;
+	inverse1.matrix[1 * inverse1.w + 1] = -5;
+	inverse1.matrix[1 * inverse1.w + 2] = 1;
+	inverse1.matrix[1 * inverse1.w + 3] = 8;	   
+	inverse1.matrix[2 * inverse1.w + 0] = 7;
+	inverse1.matrix[2 * inverse1.w + 1] = 7;
+	inverse1.matrix[2 * inverse1.w + 2] = -6;
+	inverse1.matrix[2 * inverse1.w + 3] = -7;   
+	inverse1.matrix[3 * inverse1.w + 0] = 1;
+	inverse1.matrix[3 * inverse1.w + 1] = -3;
+	inverse1.matrix[3 * inverse1.w + 2] = 7;
+	inverse1.matrix[3 * inverse1.w + 3] = 4;
 
 	Matrix cmp1(4, 4);
-	cmp1.setElement(0, 0, 0.21805);
-	cmp1.setElement(0, 1, 0.45113);
-	cmp1.setElement(0, 2, 0.24060);
-	cmp1.setElement(0, 3, -0.04511);
-	   
-	cmp1.setElement(1, 0, -0.80827);
-	cmp1.setElement(1, 1, -1.45677);
-	cmp1.setElement(1, 2, -0.44361);
-	cmp1.setElement(1, 3, 0.52068);
-	   
-	cmp1.setElement(2, 0, -0.07895);
-	cmp1.setElement(2, 1, -0.22368);
-	cmp1.setElement(2, 2, -0.05263);
-	cmp1.setElement(2, 3, 0.19737);
-	   
-	cmp1.setElement(3, 0, -0.522561);
-	cmp1.setElement(3, 1, -0.81391);
-	cmp1.setElement(3, 2, -0.30075);
-	cmp1.setElement(3, 3, 0.30639);
+	cmp1.matrix[0 * cmp1.w + 0] = 0.21805;
+	cmp1.matrix[0 * cmp1.w + 1] = 0.45113;
+	cmp1.matrix[0 * cmp1.w + 2] = 0.24060;
+	cmp1.matrix[0 * cmp1.w + 3] = -0.04511;
+	cmp1.matrix[1 * cmp1.w + 0] = -0.80827;
+	cmp1.matrix[1 * cmp1.w + 1] = -1.45677;
+	cmp1.matrix[1 * cmp1.w + 2] = -0.44361;
+	cmp1.matrix[1 * cmp1.w + 3] = 0.52068;
+	cmp1.matrix[2 * cmp1.w + 0] = -0.07895;
+	cmp1.matrix[2 * cmp1.w + 1] = -0.22368;
+	cmp1.matrix[2 * cmp1.w + 2] = -0.05263;
+	cmp1.matrix[2 * cmp1.w + 3] = 0.19737;
+	cmp1.matrix[3 * cmp1.w + 0] = -0.522561;
+	cmp1.matrix[3 * cmp1.w + 1] = -0.81391;
+	cmp1.matrix[3 * cmp1.w + 2] = -0.30075;
+	cmp1.matrix[3 * cmp1.w + 3] = 0.30639;
 
 	ASSERT_EQ(inverse1.inverse(), cmp1);
 
 
 	Matrix inverse2(4, 4);
-	inverse2.setElement(0, 0, 8);
-	inverse2.setElement(0, 1, -5);
-	inverse2.setElement(0, 2, 9);
-	inverse2.setElement(0, 3, 2);
-		   
-	inverse2.setElement(1, 0, 7);
-	inverse2.setElement(1, 1, 5);
-	inverse2.setElement(1, 2, 6);
-	inverse2.setElement(1, 3, 1);
-		   
-	inverse2.setElement(2, 0, -6);
-	inverse2.setElement(2, 1, 0);
-	inverse2.setElement(2, 2, 9);
-	inverse2.setElement(2, 3, 6);
-		   
-	inverse2.setElement(3, 0, -3);
-	inverse2.setElement(3, 1, 0);
-	inverse2.setElement(3, 2, -9);
-	inverse2.setElement(3, 3, -4);
+	inverse2.matrix[0 * inverse2.w + 0] = 8;
+	inverse2.matrix[0 * inverse2.w + 1] = -5;
+	inverse2.matrix[0 * inverse2.w + 2] = 9;
+	inverse2.matrix[0 * inverse2.w + 3] = 2;   
+	inverse2.matrix[1 * inverse2.w + 0] = 7;
+	inverse2.matrix[1 * inverse2.w + 1] = 5;
+	inverse2.matrix[1 * inverse2.w + 2] = 6;
+	inverse2.matrix[1 * inverse2.w + 3] = 1;
+	inverse2.matrix[2 * inverse2.w + 0] = -6;
+	inverse2.matrix[2 * inverse2.w + 1] = 0;
+	inverse2.matrix[2 * inverse2.w + 2] = 9;
+	inverse2.matrix[2 * inverse2.w + 3] = 6;
+	inverse2.matrix[3 * inverse2.w + 0] = -3;
+	inverse2.matrix[3 * inverse2.w + 1] = 0;
+	inverse2.matrix[3 * inverse2.w + 2] = -9;
+	inverse2.matrix[3 * inverse2.w + 3] = -4;
 
 	Matrix cmp2(4, 4);
-	cmp2.setElement(0, 0, -0.15385);
-	cmp2.setElement(0, 1, -0.15385);
-	cmp2.setElement(0, 2, -0.28205);
-	cmp2.setElement(0, 3, -0.53846);
-	
-	cmp2.setElement(1, 0, -0.07692);
-	cmp2.setElement(1, 1, 0.12308);
-	cmp2.setElement(1, 2, 0.02564);
-	cmp2.setElement(1, 3, 0.03077);
-	
-	cmp2.setElement(2, 0, 0.35897);
-	cmp2.setElement(2, 1, 0.35897);
-	cmp2.setElement(2, 2, 0.43590);
-	cmp2.setElement(2, 3, 0.92308);
-	
-	cmp2.setElement(3, 0, -0.69231);
-	cmp2.setElement(3, 1, -0.69231);
-	cmp2.setElement(3, 2, -0.76923);
-	cmp2.setElement(3, 3, -1.92308);
+	cmp2.matrix[0 * cmp2.w + 0] = -0.15385;
+	cmp2.matrix[0 * cmp2.w + 1] = -0.15385;
+	cmp2.matrix[0 * cmp2.w + 2] = -0.28205;
+	cmp2.matrix[0 * cmp2.w + 3] = -0.53846;
+	cmp2.matrix[1 * cmp2.w + 0] = -0.07692;
+	cmp2.matrix[1 * cmp2.w + 1] = 0.12308;
+	cmp2.matrix[1 * cmp2.w + 2] = 0.02564;
+	cmp2.matrix[1 * cmp2.w + 3] = 0.03077;
+	cmp2.matrix[2 * cmp2.w + 0] = 0.35897;
+	cmp2.matrix[2 * cmp2.w + 1] = 0.35897;
+	cmp2.matrix[2 * cmp2.w + 2] = 0.43590;
+	cmp2.matrix[2 * cmp2.w + 3] = 0.92308;
+	cmp2.matrix[3 * cmp2.w + 0] = -0.69231;
+	cmp2.matrix[3 * cmp2.w + 1] = -0.69231;
+	cmp2.matrix[3 * cmp2.w + 2] = -0.76923;
+	cmp2.matrix[3 * cmp2.w + 3] = -1.92308;
 
 	ASSERT_EQ(inverse2.inverse(), cmp2);
 
 	
 	Matrix inverse3(4, 4);
-	inverse3.setElement(0, 0, 9);
-	inverse3.setElement(0, 1, 3);
-	inverse3.setElement(0, 2, 0);
-	inverse3.setElement(0, 3, 9);
-		   
-	inverse3.setElement(1, 0, -5);
-	inverse3.setElement(1, 1, -2);
-	inverse3.setElement(1, 2, -6);
-	inverse3.setElement(1, 3, -3);
-		   
-	inverse3.setElement(2, 0, -4);
-	inverse3.setElement(2, 1, 9);
-	inverse3.setElement(2, 2, 6);
-	inverse3.setElement(2, 3, 4);
-		   
-	inverse3.setElement(3, 0, -7);
-	inverse3.setElement(3, 1, 6);
-	inverse3.setElement(3, 2, 6);
-	inverse3.setElement(3, 3, 2);
+	inverse3.matrix[0 * inverse3.w + 0] = 9;
+	inverse3.matrix[0 * inverse3.w + 1] = 3;
+	inverse3.matrix[0 * inverse3.w + 2] = 0;
+	inverse3.matrix[0 * inverse3.w + 3] = 9;
+	inverse3.matrix[1 * inverse3.w + 0] = -5;
+	inverse3.matrix[1 * inverse3.w + 1] = -2;
+	inverse3.matrix[1 * inverse3.w + 2] = -6;
+	inverse3.matrix[1 * inverse3.w + 3] = -3;
+	inverse3.matrix[2 * inverse3.w + 0] = -4;
+	inverse3.matrix[2 * inverse3.w + 1] = 9;
+	inverse3.matrix[2 * inverse3.w + 2] = 6;
+	inverse3.matrix[2 * inverse3.w + 3] = 4;
+	inverse3.matrix[3 * inverse3.w + 0] = -7;
+	inverse3.matrix[3 * inverse3.w + 1] = 6;
+	inverse3.matrix[3 * inverse3.w + 2] = 6;
+	inverse3.matrix[3 * inverse3.w + 3] = 2;
 
 	Matrix cmp3(4, 4);
-	cmp3.setElement(0, 0, -0.04074);
-	cmp3.setElement(0, 1, -0.07778);
-	cmp3.setElement(0, 2, 0.14444);
-	cmp3.setElement(0, 3, -0.22222);
-	   
-	cmp3.setElement(1, 0, -0.07778);
-	cmp3.setElement(1, 1, 0.03333);
-	cmp3.setElement(1, 2, 0.36667);
-	cmp3.setElement(1, 3, -0.33333);
-	   
-	cmp3.setElement(2, 0, -0.02901);
-	cmp3.setElement(2, 1, -0.14630);
-	cmp3.setElement(2, 2, -0.10926);
-	cmp3.setElement(2, 3, 0.12963);
-	   
-	cmp3.setElement(3, 0, 0.17778);
-	cmp3.setElement(3, 1, 0.06667);
-	cmp3.setElement(3, 2, -0.26667);
-	cmp3.setElement(3, 3, 0.33333);
+	cmp3.matrix[0 * cmp3.w + 0] = -0.04074;
+	cmp3.matrix[0 * cmp3.w + 1] = -0.07778;
+	cmp3.matrix[0 * cmp3.w + 2] = 0.14444;
+	cmp3.matrix[0 * cmp3.w + 3] = -0.22222;
+	cmp3.matrix[1 * cmp3.w + 0] = -0.07778;
+	cmp3.matrix[1 * cmp3.w + 1] = 0.03333;
+	cmp3.matrix[1 * cmp3.w + 2] = 0.36667;
+	cmp3.matrix[1 * cmp3.w + 3] = -0.33333;
+	cmp3.matrix[2 * cmp3.w + 0] = -0.02901;
+	cmp3.matrix[2 * cmp3.w + 1] = -0.14630;
+	cmp3.matrix[2 * cmp3.w + 2] = -0.10926;
+	cmp3.matrix[2 * cmp3.w + 3] = 0.12963;
+	cmp3.matrix[3 * cmp3.w + 0] = 0.17778;
+	cmp3.matrix[3 * cmp3.w + 1] = 0.06667;
+	cmp3.matrix[3 * cmp3.w + 2] = -0.26667;
+	cmp3.matrix[3 * cmp3.w + 3] = 0.33333;
 
 	ASSERT_EQ(inverse3.inverse(), cmp3);
 	
@@ -773,46 +755,40 @@ TEST(MatrixTest, MatrixInverse) {
 
 TEST(MatrixTest, MatrixMultiplicationByInverse) {
 	Matrix mat1(4, 4);
-	mat1.setElement(0, 0, 3);
-	mat1.setElement(0, 1, -9);
-	mat1.setElement(0, 2, 7);
-	mat1.setElement(0, 3, 3);
-	
-	mat1.setElement(1, 0, 3);
-	mat1.setElement(1, 1, -8);
-	mat1.setElement(1, 2, 2);
-	mat1.setElement(1, 3, -9);
-	
-	mat1.setElement(2, 0, -4);
-	mat1.setElement(2, 1, 4);
-	mat1.setElement(2, 2, 4);
-	mat1.setElement(2, 3, 1);
-	
-	mat1.setElement(3, 0, -6);
-	mat1.setElement(3, 1, 5);
-	mat1.setElement(3, 2, -1);
-	mat1.setElement(3, 3, 1);
+	mat1.matrix[0 * mat1.w + 0] = 3;
+	mat1.matrix[0 * mat1.w + 1] = -9;
+	mat1.matrix[0 * mat1.w + 2] = 7;
+	mat1.matrix[0 * mat1.w + 3] = 3;
+	mat1.matrix[1 * mat1.w + 0] = 3;
+	mat1.matrix[1 * mat1.w + 1] = -8;
+	mat1.matrix[1 * mat1.w + 2] = 2;
+	mat1.matrix[1 * mat1.w + 3] = -9;
+	mat1.matrix[2 * mat1.w + 0] = -4;
+	mat1.matrix[2 * mat1.w + 1] = 4;
+	mat1.matrix[2 * mat1.w + 2] = 4;
+	mat1.matrix[2 * mat1.w + 3] = 1;
+	mat1.matrix[3 * mat1.w + 0] = -6;
+	mat1.matrix[3 * mat1.w + 1] = 5;
+	mat1.matrix[3 * mat1.w + 2] = -1;
+	mat1.matrix[3 * mat1.w + 3] = 1;
 
 	Matrix mat2(4, 4);
-	mat2.setElement(0, 0, 8);
-	mat2.setElement(0, 1, 2);
-	mat2.setElement(0, 2, 2);
-	mat2.setElement(0, 3, 2);
-	   
-	mat2.setElement(1, 0, 3);
-	mat2.setElement(1, 1, -1);
-	mat2.setElement(1, 2, 7);
-	mat2.setElement(1, 3, 0);
-	   
-	mat2.setElement(2, 0, 7);
-	mat2.setElement(2, 1, 0);
-	mat2.setElement(2, 2, 5);
-	mat2.setElement(2, 3, 4);
-	   
-	mat2.setElement(3, 0, 6);
-	mat2.setElement(3, 1, -2);
-	mat2.setElement(3, 2, 0);
-	mat2.setElement(3, 3, 5);
+	mat2.matrix[0 * mat2.w + 0] = 8;
+	mat2.matrix[0 * mat2.w + 1] = 2;
+	mat2.matrix[0 * mat2.w + 2] = 2;
+	mat2.matrix[0 * mat2.w + 3] = 2;
+	mat2.matrix[1 * mat2.w + 0] = 3;
+	mat2.matrix[1 * mat2.w + 1] = -1;
+	mat2.matrix[1 * mat2.w + 2] = 7;
+	mat2.matrix[1 * mat2.w + 3] = 0;
+	mat2.matrix[2 * mat2.w + 0] = 7;
+	mat2.matrix[2 * mat2.w + 1] = 0;
+	mat2.matrix[2 * mat2.w + 2] = 5;
+	mat2.matrix[2 * mat2.w + 3] = 4;
+	mat2.matrix[3 * mat2.w + 0] = 6;
+	mat2.matrix[3 * mat2.w + 1] = -2;
+	mat2.matrix[3 * mat2.w + 2] = 0;
+	mat2.matrix[3 * mat2.w + 3] = 5;
 
 	Matrix mat3 = mat1 * mat2;
 	mat3 = mat3 * mat2.inverse();
