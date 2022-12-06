@@ -2,6 +2,7 @@
 #include "Tuple.h"
 #include "Ray.h"
 #include "Matrix.h"
+#include "Material.h"
 
 #include <utility>
 #include <optional>
@@ -15,4 +16,6 @@ public:
 
 	Sphere() :origin(Tuple::point(0, 0, 0)) {}
 	Matrix transform = identityMatrix(4);
+
+	Material material;
 };

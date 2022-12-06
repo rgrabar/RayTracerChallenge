@@ -20,6 +20,13 @@
 #include "../RayTracerChallenge/Intersection.h"
 #include "../RayTracerChallenge/Intersection.cpp"
 
+#include "../RayTracerChallenge/Normal.h"
+
+#include "../RayTracerChallenge/Light.h"
+#include "../RayTracerChallenge/Light.cpp"
+
+#include "../RayTracerChallenge/Material.h"
+#include "../RayTracerChallenge/Material.cpp"
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -1228,4 +1235,127 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto xs = intersection(r, &s);
 
 	ASSERT_EQ(xs.size(), 0);
+}
+
+TEST(NormalTest, NormalOnASphereXZYAxis) {
+	auto s = Sphere();
+	auto n = normal_at(s, Tuple::point(1, 0, 0));
+
+	ASSERT_EQ(n, Tuple::vector(1, 0, 0));
+
+	n = normal_at(s, Tuple::point(0, 1, 0));
+	ASSERT_EQ(n, Tuple::vector(0, 1, 0));
+
+	n = normal_at(s, Tuple::point(0, 0, 1));
+	ASSERT_EQ(n, Tuple::vector(0, 0, 1));
+
+	n = normal_at(s, Tuple::point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
+	ASSERT_EQ(n, Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+}
+
+TEST(NormalTest, TranslatedSphere) {
+	auto s = Sphere();
+	s.transform = (translate(0, 1, 0));
+
+	auto n = normal_at(s, Tuple::point(0, 1.70711, -0.70711));
+
+	ASSERT_EQ(n, Tuple::vector(0, 0.70711, -0.70711));
+}
+
+TEST(NormalTest, TransformedSphere) {
+	auto s = Sphere();
+	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
+
+	auto n = normal_at(s, Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
+	
+}
+
+TEST(ReflectionTest, VectorAt45) {
+	auto v = Tuple::vector(1, -1, 0);
+	auto n = Tuple::vector(0, 1, 0);
+
+	auto r = reflect(v, n);
+
+	ASSERT_EQ(r, Tuple::vector(1, 1, 0));
+}
+
+TEST(ReflectionTest, SlantedSurface) {
+	auto v = Tuple::vector(0, -1, 0);
+	auto n = Tuple::vector(sqrt(2) /2, sqrt(2) / 2, 0);
+
+	auto r = reflect(v, n);
+
+	ASSERT_EQ(r, Tuple::vector(1, 0, 0));
+}
+
+TEST(LightTest, PointLightPositionIntensity) {
+	auto intensity = Color(1, 1, 1);
+	auto position = Tuple::point(0, 0, 0);
+	Light light(intensity, position);
+
+	ASSERT_EQ(light.position, position);
+	ASSERT_EQ(light.intesity, intensity);
+}
+
+TEST(MaterialTest, SphereMaterial) {
+	auto s = Sphere();
+	Material material;
+
+	ASSERT_EQ(s.material, material);
+}
+
+TEST(LightingTest, EyeBetweenLight) {
+	Material m;
+	Tuple position = Tuple::point(0, 0, 0);
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv = Tuple::vector(0, 0, -1);
+	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	auto result = m.lighting(light, position, eyev, normalv);
+
+	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
+}
+
+TEST(LightingTest, EyeBetweenLightOffset45) {
+	Material m;
+	Tuple position = Tuple::point(0, 0, 0);
+	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
+	auto normalv = Tuple::vector(0, 0, -1);
+	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	auto result = m.lighting(light, position, eyev, normalv);
+
+	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
+}
+
+TEST(LightingTest, EyeOppositeLightOffset45) {
+	Material m;
+	Tuple position = Tuple::point(0, 0, 0);
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv = Tuple::vector(0, 0, -1);
+	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	auto result = m.lighting(light, position, eyev, normalv);
+
+	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
+}
+
+TEST(LightingTest, EyeInPathLightOffset45) {
+	Material m;
+	Tuple position = Tuple::point(0, 0, 0);
+	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
+	auto normalv = Tuple::vector(0, 0, -1);
+	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	auto result = m.lighting(light, position, eyev, normalv);
+
+	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
+}
+
+TEST(LightingTest, LightBehindSurface) {
+	Material m;
+	Tuple position = Tuple::point(0, 0, 0);
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv = Tuple::vector(0, 0, -1);
+	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
+	auto result = m.lighting(light, position, eyev, normalv);
+
+	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }

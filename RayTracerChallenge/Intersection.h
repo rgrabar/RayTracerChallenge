@@ -68,6 +68,9 @@ std::vector<Intersection> intersection(Ray ray, const T* s) {
 	if (discriminant < 0)
 		return {};
 
+
+	//TODO: make the first t the non negative smaller value
+
 	float t1 = (-b - sqrt(discriminant)) / (2 * a);
 	float t2 = (-b + sqrt(discriminant)) / (2 * a);
 

@@ -6,7 +6,7 @@
 #include "Transformations.h"
 #include "Sphere.h"
 #include "Intersection.h"
-
+#include "Normal.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -19,7 +19,7 @@ int main() {
 
 
 	/*
-	* CODE FOR THE PROJECTILE: 
+	// CODE FOR THE PROJECTILE: 
 	Canvas c(900, 550);
 	
 	Tuple start = Tuple::point(0.f, 1.f, 0.f);
@@ -41,9 +41,9 @@ int main() {
 	*/
 
 	/*
-	* 
-	* Clock code: 
-	* 
+	 
+	// Clock code: 
+	 
 	float radius = 10;
 
 	Canvas c(900, 550);
@@ -65,7 +65,7 @@ int main() {
 	c.canvasToImage();
 
 	*/
-	
+	 // Code for the red circle
 	int canvas_Size = 100;
 
 	Canvas c(100, 100);
@@ -76,8 +76,14 @@ int main() {
 	auto half = wall_size / 2;
 	auto shape = Sphere();
 
-	shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
+	shape.material.color = Color(1, 0.2, 1);
 
+
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+
+
+
+	//shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
 	for (int y = 0; y < canvas_Size; ++y) {
 		auto world_y = half - pixel_size * y;
 		for(int x = 0; x < canvas_Size; ++x) {
@@ -89,10 +95,20 @@ int main() {
 			auto r = Ray(ray_origin, no);
 			
 			auto xs = intersection(r, &shape);
-			if(xs.size() != 0)
-				c.writePixel(x, y, Color(1, 0, 0));
+
+			if (xs.size() != 0) {
+
+				auto wPoint = r.position(xs[0].t);
+				// TODO: i ako je tocno ca delan
+				auto normal = normal_at((*(Sphere *)xs[0].s), wPoint);
+				auto eye = -r.direction;
+				Material tmp;
+				auto co =  (*(Sphere *)xs[0].s).material.lighting(light, wPoint, eye, normal);
+				c.writePixel(x, y, co);
+
 				//intersections.emplace_back(&xs[0]);
 				//std::cout << "HIT! \n";
+			}
 			//if (Intersection::hit() != nullptr) {
 			//}
 		}
@@ -105,7 +121,7 @@ int main() {
 	auto duration = duration_cast<microseconds>(stop - start);
 
 	std::cout << duration.count() << std::endl;
-
+	
 
 	return 0;
 }
