@@ -19,6 +19,18 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
     }
 };
 
+Matrix::~Matrix() {
+    free(matrix);
+}
+
+Matrix::Matrix(const Matrix& matrix) {
+    this->w = matrix.w;
+    this->h = matrix.h;
+
+    this->matrix = (float*)malloc(w * h * sizeof(float));
+    memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
+}
+
 void Matrix::setElement(int y, int x, float value) {
     matrix[y * w + x] = value;
 }
@@ -89,6 +101,23 @@ Matrix Matrix::submatrix(int row, int col)const {
         tmp1++;
     }
     return sub;
+}
+
+Matrix& Matrix::operator=(const Matrix &matrix) {
+    if (this != &matrix) {
+        if (w == matrix.w && h == matrix.h) {
+            memcpy(this->matrix, matrix.matrix, this->w * this->h * sizeof(float));
+        }
+        else {
+            w = matrix.w;
+            h = matrix.h;
+            free(this->matrix);
+            this->matrix = (float*)malloc(this->w * this->h * sizeof(float));
+            memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
+        }
+    }
+
+    return *this;
 }
 
 bool operator==(const Matrix lhs, const Matrix rhs) {

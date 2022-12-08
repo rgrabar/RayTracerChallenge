@@ -1,15 +1,20 @@
 #pragma once
 
 #include "Tuple.h"
+#include <stdlib.h>     /* malloc, calloc, realloc, free */
 
 class Matrix {
 
 public:
 
 	Matrix(int _h, int _w);
+	~Matrix();
 	int h, w;
 	float* matrix;
 
+	Matrix(const Matrix& matrix);
+	Matrix& operator=(const Matrix& matrix);
+	
 	void setElement(int y, int x, float value);
 	const Matrix transpose()const;
 	const float determinant()const;
