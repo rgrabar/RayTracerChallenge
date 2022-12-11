@@ -18,15 +18,15 @@ struct Tuple {
 	bool isVector();
 	float magnitude();
 	Tuple normalize();
-	float dotProduct(Tuple v);
-	Tuple crossProduct(Tuple v);
+	float dotProduct(const Tuple& v) const;
+	Tuple crossProduct(const Tuple& v) const;
 
 	float x, y, z, w;
 };
 
-bool operator==(const Tuple lhs, const Tuple rhs);
-Tuple operator+(const Tuple lhs, const Tuple rhs);
-Tuple operator-(const Tuple lhs, const Tuple rhs);
-Tuple operator-(const Tuple negate);
-Tuple operator*(const Tuple negate, float scalar);
-Tuple operator/(const Tuple negate, float scalar);
+bool operator==(const Tuple& lhs, const Tuple& rhs);
+Tuple operator+(const Tuple& lhs, const Tuple& rhs);
+Tuple operator-(const Tuple& lhs, const Tuple& rhs);
+Tuple operator-(const Tuple& negate);
+Tuple operator*(const Tuple& negate, float scalar);
+Tuple operator/(const Tuple& negate, float scalar);

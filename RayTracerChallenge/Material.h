@@ -13,7 +13,7 @@ struct Material {
 	float specular = 0.9;
 	float shininess = 200;
 
-	Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv);
+	Color lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv) const;
 };
 
-bool operator==(const Material lhs, const Material rhs);
+bool operator==(const Material& lhs, const Material& rhs);

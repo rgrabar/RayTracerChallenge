@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-Color Material::lighting(Light light, Tuple point, Tuple eyev, Tuple normalv) {
+Color Material::lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv) const {
 	auto effectiveColor = color * light.intesity;
 	auto lightv = (light.position - point).normalize();
 	auto ambientColor = effectiveColor * ambient;
@@ -35,7 +35,7 @@ Color Material::lighting(Light light, Tuple point, Tuple eyev, Tuple normalv) {
 	return ambientColor + diffuseColor + specularColor;
 }
 
-bool operator==(const Material lhs, const Material rhs) {
+bool operator==(const Material& lhs, const Material& rhs) {
  return lhs.color == rhs.color && lhs.ambient == rhs.ambient
 	 && lhs.diffuse == rhs.diffuse && lhs.specular == rhs.specular
 	 && lhs.shininess == rhs.shininess;

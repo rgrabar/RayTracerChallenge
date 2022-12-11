@@ -9,8 +9,8 @@ public:
 
 };
 
-bool operator==(const Color firstColor, const Color secondColor);
-Color operator+(const Color firstColor, const Color secondColor);
-Color operator-(const Color firstColor, const Color secondColor);
-Color operator*(const Color color, float scalar);
-Color operator*(const Color firstColor, const Color secondColor);
+bool operator==(const Color& firstColor, const Color& secondColor);
+Color operator+(const Color& firstColor, const Color& secondColor);
+Color operator-(const Color& firstColor, const Color& secondColor);
+Color operator*(const Color& color, float scalar);
+Color operator*(const Color& firstColor, const Color& secondColor);

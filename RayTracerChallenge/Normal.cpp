@@ -1,6 +1,6 @@
 #include "Normal.h"
 
-Tuple normal_at(Sphere s, Tuple worldPoint) {
+Tuple normal_at(const Sphere& s, const Tuple& worldPoint) {
 	auto objectPoint = s.transform.inverse() * worldPoint;
 	auto objectNormal = objectPoint - Tuple::point(0, 0, 0);
 
@@ -10,6 +10,6 @@ Tuple normal_at(Sphere s, Tuple worldPoint) {
 	return (worldNormal.normalize());
 }
 
-Tuple reflect(Tuple in, Tuple normal) {
+Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }

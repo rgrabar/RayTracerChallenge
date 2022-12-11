@@ -3,6 +3,6 @@
 #include "Sphere.h"
 #include "Tuple.h"
 
-Tuple normal_at(Sphere s, Tuple worldPoint);
+Tuple normal_at(const Sphere& s, const Tuple& worldPoint);
 
-Tuple reflect(Tuple in, Tuple normal);
+Tuple reflect(const Tuple& in, const Tuple& normal);

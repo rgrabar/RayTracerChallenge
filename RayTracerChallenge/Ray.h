@@ -8,11 +8,11 @@ public:
 	Tuple origin, direction;
 
 
-	Ray(Tuple _origin, Tuple _direction) : origin(_origin), direction(_direction){}
+	Ray(const Tuple& _origin, const Tuple& _direction) : origin(_origin), direction(_direction){}
 
 	Tuple position(float t) const;
 
-	Ray transform(const Matrix m);
+	Ray transform(const Matrix& m);
 
 
 

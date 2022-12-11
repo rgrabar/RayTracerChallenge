@@ -78,8 +78,10 @@ int main() {
 
 	shape.material.color = Color(1, 0.2, 1);
 
+	Color lightColor(1, 1, 1);
+	auto lightPoint = Tuple::point(-10, 10, -10);
 
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Light light(lightColor, lightPoint);
 
 
 

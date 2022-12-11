@@ -23,38 +23,37 @@ Tuple Tuple::normalize() {
 	return Tuple(x / mag, y / mag, z / mag, w / mag);
 }
 
-float Tuple::dotProduct(Tuple v) {
+float Tuple::dotProduct(const Tuple& v)const {
 	return x * v.x + y * v.y + z * v.z + w * v.w;
 }
 
-Tuple Tuple::crossProduct(Tuple v)
-{
+Tuple Tuple::crossProduct(const Tuple& v) const {
 	return Tuple::vector(y * v.z - z * v.y, z * v.x - x *v.z, x * v.y - y * v.x);
 }
 
-bool operator==(const Tuple lhs, const Tuple rhs) {
+bool operator==(const Tuple& lhs, const Tuple& rhs) {
 	return epsilonEqual(lhs.x, rhs.x) &&
 		   epsilonEqual(lhs.y, rhs.y) &&
 		   epsilonEqual(lhs.z, rhs.z) &&
 		   epsilonEqual(lhs.w, rhs.w);
 }
 
-Tuple operator+(const Tuple lhs, const Tuple rhs) {
+Tuple operator+(const Tuple& lhs, const Tuple& rhs) {
 	return Tuple(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
 }
 
-Tuple operator-(const Tuple lhs, const Tuple rhs) {
+Tuple operator-(const Tuple& lhs, const Tuple& rhs) {
 	return Tuple(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
 }
 
-Tuple operator-(const Tuple negate) {
+Tuple operator-(const Tuple& negate) {
 	return Tuple(-negate.x, -negate.y, -negate.z, -negate.w);
 }
 
-Tuple operator*(const Tuple tuple, float scalar) {
+Tuple operator*(const Tuple& tuple, float scalar) {
 	return Tuple(tuple.x * scalar, tuple.y * scalar, tuple.z * scalar, tuple.w * scalar);
 }
 
-Tuple operator/(const Tuple tuple, float scalar) {
+Tuple operator/(const Tuple& tuple, float scalar) {
 	return Tuple(tuple.x / scalar, tuple.y / scalar, tuple.z / scalar, tuple.w / scalar);
 }

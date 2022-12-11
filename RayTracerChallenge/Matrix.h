@@ -2,6 +2,7 @@
 
 #include "Tuple.h"
 #include <stdlib.h>     /* malloc, calloc, realloc, free */
+#include <memory>
 
 class Matrix {
 
@@ -29,6 +30,6 @@ public:
 // TODO: not sure if this is the best to use identity matrix function...
 Matrix identityMatrix(int dimension);
 
-bool operator==(const Matrix lhs, const Matrix rhs);
-const Matrix operator*(const Matrix lhs, const Matrix rhs);
-const Tuple operator*(const Matrix lhs, const Tuple rhs);
+bool operator==(const Matrix& lhs, const Matrix& rhs);
+const Matrix operator*(const Matrix& lhs, const Matrix& rhs);
+const Tuple operator*(const Matrix& lhs, const Tuple& rhs);

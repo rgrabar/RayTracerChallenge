@@ -28,6 +28,7 @@ Matrix::Matrix(const Matrix& matrix) {
     this->h = matrix.h;
 
     this->matrix = (float*)malloc(w * h * sizeof(float));
+    printf("memcpy copy const\n");
     memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
 }
 
@@ -106,9 +107,11 @@ Matrix Matrix::submatrix(int row, int col)const {
 Matrix& Matrix::operator=(const Matrix &matrix) {
     if (this != &matrix) {
         if (w == matrix.w && h == matrix.h) {
+            printf("copy equals\n");
             memcpy(this->matrix, matrix.matrix, this->w * this->h * sizeof(float));
         }
         else {
+            printf("copy equals\n");
             w = matrix.w;
             h = matrix.h;
             free(this->matrix);
@@ -120,7 +123,7 @@ Matrix& Matrix::operator=(const Matrix &matrix) {
     return *this;
 }
 
-bool operator==(const Matrix lhs, const Matrix rhs) {
+bool operator==(const Matrix& lhs, const Matrix& rhs) {
     if (lhs.w != rhs.w || lhs.h != rhs.h) {
         return false;
     }
@@ -134,7 +137,7 @@ bool operator==(const Matrix lhs, const Matrix rhs) {
     return true;
 }
 
-const Matrix operator*(const Matrix lhs, const Matrix rhs) {
+const Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
     Matrix ret = Matrix(lhs.h, rhs.w);
     for (int row = 0; row < lhs.h; ++row) {
         for (int col = 0; col < rhs.w; ++col) {
@@ -148,7 +151,7 @@ const Matrix operator*(const Matrix lhs, const Matrix rhs) {
     return ret;
 }
 
-const Tuple operator*(const Matrix lhs, const Tuple rhs) {
+const Tuple operator*(const Matrix& lhs, const Tuple& rhs) {
     return Tuple(
         //m(0, 0) * t.x() + m(0, 1) * t.y() + m(0, 2) * t.z() + m(0, 3) * t.w(),
         lhs.matrix[0] * rhs.x + lhs.matrix[1] * rhs.y + lhs.matrix[2] * rhs.z + lhs.matrix[3] * rhs.w,
