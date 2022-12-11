@@ -48,6 +48,9 @@
     <ClCompile Include="Normal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Arena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tuple.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Arena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

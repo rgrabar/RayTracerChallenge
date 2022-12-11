@@ -7,6 +7,7 @@
 #include "Sphere.h"
 #include "Intersection.h"
 #include "Normal.h"
+#include "Arena.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -86,7 +87,7 @@ int main() {
 
 
 	//shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
-	for (int y = 0; y < canvas_Size; ++y) {
+		for (int y = 0; y < canvas_Size; ++y) {
 		auto world_y = half - pixel_size * y;
 		for(int x = 0; x < canvas_Size; ++x) {
 			auto world_x = -half + pixel_size * x;
@@ -116,11 +117,18 @@ int main() {
 		}
 	}
 
-	std::cout << "SAVING TO PPM \n";
-	c.canvasToImage();
+	std::cout << "Traced the image \n";
 
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
+
+	std::cout << duration.count() << std::endl;
+
+	std::cout << "SAVING TO PPM \n";
+	c.canvasToImage();
+
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
 
 	std::cout << duration.count() << std::endl;
 	

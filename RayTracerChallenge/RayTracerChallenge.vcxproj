@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Arena.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Tuple.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Arena.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Helper.h" />

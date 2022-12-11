@@ -3,10 +3,25 @@
 #include <iostream>
 #include <vector>
 
-Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
-	matrix = (float*)calloc(h * w, sizeof(float));
+// arena code
+//Arena Matrix::a {0};
 
+Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
+    /*
+    // arena code
+    if (a.buf == nullptr) {
+        //std::cout << "NULLPRT\n";
+        //1002640576
+        void* backing_buffer = malloc(100024 * 100024);
+        arena_init(&a, backing_buffer, 100024 * 100024);
+    }
+   
+    matrix = (float*)arena_alloc(&a, w * h * sizeof(float));
+    */
+
+    matrix = (float*)calloc(h * w, sizeof(float));
     if (matrix) {
+        //std::cout << "allocated\n";
         for (int i = 0; i < h; ++i) {
             for (int j = 0; j < w; ++j) {
                 matrix[i * w + j] = 0.0;
@@ -20,6 +35,7 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
 };
 
 Matrix::~Matrix() {
+    // remove for arena
     free(matrix);
 }
 
@@ -28,7 +44,6 @@ Matrix::Matrix(const Matrix& matrix) {
     this->h = matrix.h;
 
     this->matrix = (float*)malloc(w * h * sizeof(float));
-    printf("memcpy copy const\n");
     memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
 }
 
@@ -107,11 +122,9 @@ Matrix Matrix::submatrix(int row, int col)const {
 Matrix& Matrix::operator=(const Matrix &matrix) {
     if (this != &matrix) {
         if (w == matrix.w && h == matrix.h) {
-            printf("copy equals\n");
             memcpy(this->matrix, matrix.matrix, this->w * this->h * sizeof(float));
         }
         else {
-            printf("copy equals\n");
             w = matrix.w;
             h = matrix.h;
             free(this->matrix);
