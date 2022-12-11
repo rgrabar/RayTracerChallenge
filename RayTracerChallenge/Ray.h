@@ -5,8 +5,8 @@
 class Ray {
 
 public:
-	Tuple origin, direction;
 
+	Tuple origin, direction;
 
 	Ray(const Tuple& _origin, const Tuple& _direction) : origin(_origin), direction(_direction){}
 

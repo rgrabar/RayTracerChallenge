@@ -25,7 +25,7 @@ Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 void Canvas::writePixel(int x, int y, const Color& c)const {
 	// TODO: don't be dumb
 	if(y * w + x < w * h)
-		canvas[(y * w + x)] = c;
+		canvas[y * w + x] = c;
 }
 
 int Canvas::scaleColor(float c) const{

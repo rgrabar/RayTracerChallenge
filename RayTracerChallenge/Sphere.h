@@ -18,4 +18,6 @@ public:
 	Matrix transform = identityMatrix(4);
 
 	Material material;
+
+	bool operator==(const Sphere& other) const;
 };

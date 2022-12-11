@@ -13,7 +13,6 @@ struct Tuple {
 		return Tuple(x, y, z, 0.f);
 	}
 
-
 	bool isPoint();
 	bool isVector();
 	float magnitude();
