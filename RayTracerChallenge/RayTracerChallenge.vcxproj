@@ -153,6 +153,7 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Transformations.cpp" />
     <ClCompile Include="Tuple.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arena.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transformations.h" />
     <ClInclude Include="Tuple.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

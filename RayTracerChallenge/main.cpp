@@ -79,15 +79,11 @@ int main() {
 
 	shape.material.color = Color(1, 0.2, 1);
 
-	Color lightColor(1, 1, 1);
-	auto lightPoint = Tuple::point(-10, 10, -10);
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 
-	Light light(lightColor, lightPoint);
+	shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
 
-
-
-	//shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
-		for (int y = 0; y < canvas_Size; ++y) {
+	for (int y = 0; y < canvas_Size; ++y) {
 		auto world_y = half - pixel_size * y;
 		for(int x = 0; x < canvas_Size; ++x) {
 			auto world_x = -half + pixel_size * x;
@@ -102,7 +98,7 @@ int main() {
 			if (xs.size() != 0) {
 
 				auto wPoint = r.position(xs[0].t);
-				// TODO: i ako je tocno ca delan
+				// TODO: i ako je tocno ca delan, create a shape class?
 				auto normal = normal_at((*(Sphere *)xs[0].s), wPoint);
 				auto eye = -r.direction;
 				Material tmp;

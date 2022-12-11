@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "../RayTracerChallenge/Tuple.h"
 #include "../RayTracerChallenge/Tuple.cpp"
 
@@ -27,6 +28,9 @@
 
 #include "../RayTracerChallenge/Material.h"
 #include "../RayTracerChallenge/Material.cpp"
+
+#include "../RayTracerChallenge/World.h"
+#include "../RayTracerChallenge/World.cpp"
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -1358,4 +1362,50 @@ TEST(LightingTest, LightBehindSurface) {
 	auto result = m.lighting(light, position, eyev, normalv);
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
+}
+
+TEST(WorldTest, DefaultWorld) {
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Sphere s1, s2;
+	s1.material.color = Color(1, 0.2, 1);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	World w;
+
+	ASSERT_EQ(w.light, light);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	ASSERT_EQ(w.objects[0], &s1);
+	ASSERT_EQ(w.objects[1], &s2);
+}
+
+TEST(WorldTest, WorldRayIntersect) {
+
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	
+	Sphere s1, s2;
+	s1.material.color = Color(1, 0.2, 1);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	auto test =	worldIntersection(w, r);
+
+	float cmpTo[] = { 4, 4.5, 5.5, 6 };
+
+	int cnt = 0;
+
+	for (auto x : test) {
+		ASSERT_FLOAT_EQ(x.t, cmpTo[cnt++]);
+	}
 }
