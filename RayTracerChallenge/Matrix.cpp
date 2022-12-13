@@ -89,7 +89,7 @@ const float Matrix::invertible()const {
 const Matrix Matrix::inverse()const {
     // TODO: return some error?
     if (!invertible()) {
-        std::cout << "Not invertible!";
+        std::cout << "Not invertible!\n";
     }
     Matrix inverse(w, h);
     for (int i = 0; i < w; i++) {
