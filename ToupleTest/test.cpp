@@ -33,6 +33,9 @@
 #include "../RayTracerChallenge/World.h"
 #include "../RayTracerChallenge/World.cpp"
 
+#include "../RayTracerChallenge/PreComputations.h"
+#include "../RayTracerChallenge/PreComputations.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -107,10 +110,10 @@ TEST(TupleTest, NegateTuple) {
 }
 
 TEST(TupleTest, SubVectorFromZeroVector) {
-  Tuple zero = Tuple::vector(0, 0, 0);
-  Tuple v = Tuple::vector(1, -2, 3);
+	Tuple zero = Tuple::vector(0, 0, 0);
+	Tuple v = Tuple::vector(1, -2, 3);
 
-  ASSERT_TRUE(zero - v == Tuple::vector(-1, 2, -3));
+	ASSERT_TRUE(zero - v == Tuple::vector(-1, 2, -3));
 }
 
 TEST(TupleTest, TupleMultipliedWihtScalar) {
@@ -175,7 +178,7 @@ TEST(ColorTest, ColorBasic) {
 	EXPECT_FLOAT_EQ(color.b, 1.7);
 }
 
-TEST(ColorTest, Addition){
+TEST(ColorTest, Addition) {
 	Color color = Color(0.9, 0.6, 0.75);
 	Color color1 = Color(0.7, 0.1, 0.25);
 
@@ -237,7 +240,7 @@ TEST(MatrixTest, MatrixConstruction) {
 	ASSERT_FLOAT_EQ(m.matrix[13], 14.5);
 	ASSERT_FLOAT_EQ(m.matrix[14], 15.5);
 	ASSERT_FLOAT_EQ(m.matrix[15], 16.5);
-	
+
 	Matrix m1(2, 2);
 	m1.matrix[0 * m1.w + 0] = -3;
 	m1.matrix[0 * m1.w + 1] = 5;
@@ -248,7 +251,7 @@ TEST(MatrixTest, MatrixConstruction) {
 	ASSERT_FLOAT_EQ(m1.matrix[1], 5);
 	ASSERT_FLOAT_EQ(m1.matrix[2], 1);
 	ASSERT_FLOAT_EQ(m1.matrix[3], -2);
-	
+
 	Matrix m2(3, 3);
 	m2.matrix[0 * m2.w + 0] = -3;
 	m2.matrix[0 * m2.w + 1] = 5;
@@ -533,7 +536,7 @@ TEST(MatrixTest, MatrixMinor) {
 	mino.matrix[2 * mino.w + 1] = -1;
 	mino.matrix[2 * mino.w + 2] = 5;
 
-	ASSERT_FLOAT_EQ(mino.minor(1 ,0), 25);
+	ASSERT_FLOAT_EQ(mino.minor(1, 0), 25);
 	ASSERT_FLOAT_EQ(mino.submatrix(1, 0).determinant(), 25);
 }
 
@@ -619,33 +622,33 @@ TEST(MatrixTest, MatrixInvertibility) {
 	invertible1.matrix[3 * invertible1.w + 3] = -6;
 
 	ASSERT_FLOAT_EQ(invertible1.determinant(), -2120);
-	ASSERT_TRUE(invertible1.invertible() ==  1);
-	
+	ASSERT_TRUE(invertible1.invertible() == 1);
+
 
 	Matrix invertible2(4, 4);
-	invertible2.matrix[0 * invertible2.w + 0] =  -4;
+	invertible2.matrix[0 * invertible2.w + 0] = -4;
 	invertible2.matrix[0 * invertible2.w + 1] = 2;
-	invertible2.matrix[0 * invertible2.w + 2] =  -2;
-	invertible2.matrix[0 * invertible2.w + 3] =  -3;
-	invertible2.matrix[1 * invertible2.w + 0] =  9;
-	invertible2.matrix[1 * invertible2.w + 1] =  6;
-	invertible2.matrix[1 * invertible2.w + 2] =  2;
-	invertible2.matrix[1 * invertible2.w + 3] =  6;
-	invertible2.matrix[2 * invertible2.w + 0] =  0;
-	invertible2.matrix[2 * invertible2.w + 1] =  -5;
-	invertible2.matrix[2 * invertible2.w + 2] =  1;
-	invertible2.matrix[2 * invertible2.w + 3] =  -5;
-	invertible2.matrix[3 * invertible2.w + 0] =  0;
-	invertible2.matrix[3 * invertible2.w + 1] =  0;
-	invertible2.matrix[3 * invertible2.w + 2] =  0;
-	invertible2.matrix[3 * invertible2.w + 3] =  0;
+	invertible2.matrix[0 * invertible2.w + 2] = -2;
+	invertible2.matrix[0 * invertible2.w + 3] = -3;
+	invertible2.matrix[1 * invertible2.w + 0] = 9;
+	invertible2.matrix[1 * invertible2.w + 1] = 6;
+	invertible2.matrix[1 * invertible2.w + 2] = 2;
+	invertible2.matrix[1 * invertible2.w + 3] = 6;
+	invertible2.matrix[2 * invertible2.w + 0] = 0;
+	invertible2.matrix[2 * invertible2.w + 1] = -5;
+	invertible2.matrix[2 * invertible2.w + 2] = 1;
+	invertible2.matrix[2 * invertible2.w + 3] = -5;
+	invertible2.matrix[3 * invertible2.w + 0] = 0;
+	invertible2.matrix[3 * invertible2.w + 1] = 0;
+	invertible2.matrix[3 * invertible2.w + 2] = 0;
+	invertible2.matrix[3 * invertible2.w + 3] = 0;
 
 	ASSERT_TRUE(invertible2.invertible() == 0);
 }
 
 
 TEST(MatrixTest, MatrixInverse) {
-	
+
 	Matrix inverse1(4, 4);
 	inverse1.matrix[0 * inverse1.w + 0] = -5;
 	inverse1.matrix[0 * inverse1.w + 1] = 2;
@@ -654,11 +657,11 @@ TEST(MatrixTest, MatrixInverse) {
 	inverse1.matrix[1 * inverse1.w + 0] = 1;
 	inverse1.matrix[1 * inverse1.w + 1] = -5;
 	inverse1.matrix[1 * inverse1.w + 2] = 1;
-	inverse1.matrix[1 * inverse1.w + 3] = 8;	   
+	inverse1.matrix[1 * inverse1.w + 3] = 8;
 	inverse1.matrix[2 * inverse1.w + 0] = 7;
 	inverse1.matrix[2 * inverse1.w + 1] = 7;
 	inverse1.matrix[2 * inverse1.w + 2] = -6;
-	inverse1.matrix[2 * inverse1.w + 3] = -7;   
+	inverse1.matrix[2 * inverse1.w + 3] = -7;
 	inverse1.matrix[3 * inverse1.w + 0] = 1;
 	inverse1.matrix[3 * inverse1.w + 1] = -3;
 	inverse1.matrix[3 * inverse1.w + 2] = 7;
@@ -689,7 +692,7 @@ TEST(MatrixTest, MatrixInverse) {
 	inverse2.matrix[0 * inverse2.w + 0] = 8;
 	inverse2.matrix[0 * inverse2.w + 1] = -5;
 	inverse2.matrix[0 * inverse2.w + 2] = 9;
-	inverse2.matrix[0 * inverse2.w + 3] = 2;   
+	inverse2.matrix[0 * inverse2.w + 3] = 2;
 	inverse2.matrix[1 * inverse2.w + 0] = 7;
 	inverse2.matrix[1 * inverse2.w + 1] = 5;
 	inverse2.matrix[1 * inverse2.w + 2] = 6;
@@ -723,7 +726,7 @@ TEST(MatrixTest, MatrixInverse) {
 
 	ASSERT_EQ(inverse2.inverse(), cmp2);
 
-	
+
 	Matrix inverse3(4, 4);
 	inverse3.matrix[0 * inverse3.w + 0] = 9;
 	inverse3.matrix[0 * inverse3.w + 1] = 3;
@@ -761,7 +764,7 @@ TEST(MatrixTest, MatrixInverse) {
 	cmp3.matrix[3 * cmp3.w + 3] = 0.33333;
 
 	ASSERT_EQ(inverse3.inverse(), cmp3);
-	
+
 }
 
 TEST(MatrixTest, MatrixMultiplicationByInverse) {
@@ -816,10 +819,10 @@ TEST(TransformationTest, Translation) {
 }
 
 TEST(TransformationTest, MulInverseOfTranslation) {
-	
+
 	Matrix t = translate(5, -3, 2);
 	Matrix inv = t.inverse();
-	Tuple p = Tuple::point(-3,4, 5);
+	Tuple p = Tuple::point(-3, 4, 5);
 
 	ASSERT_EQ(inv * p, Tuple::point(-8, 7, 3));
 }
@@ -870,7 +873,7 @@ TEST(TransformationTest, RotatonX) {
 	Matrix halfQuarter = rotationX(TEST_PI / 4);
 	Matrix fullQuarter = rotationX(TEST_PI / 2);
 
-	ASSERT_EQ(halfQuarter * p,  Tuple::point(0, sqrt(2)/2, sqrt(2) / 2));
+	ASSERT_EQ(halfQuarter * p, Tuple::point(0, sqrt(2) / 2, sqrt(2) / 2));
 	ASSERT_EQ(fullQuarter * p, Tuple::point(0, 0, 1));
 }
 
@@ -880,7 +883,7 @@ TEST(TransformationTest, RotatonY) {
 	Matrix halfQuarter = rotationY(TEST_PI / 4);
 	Matrix fullQuarter = rotationY(TEST_PI / 2);
 
-	ASSERT_EQ(halfQuarter * p, Tuple::point(sqrt(2) / 2, 0 , sqrt(2) / 2));
+	ASSERT_EQ(halfQuarter * p, Tuple::point(sqrt(2) / 2, 0, sqrt(2) / 2));
 	ASSERT_EQ(fullQuarter * p, Tuple::point(1, 0, 0));
 }
 
@@ -971,7 +974,7 @@ TEST(TransformationTest, TransformationChained) {
 	Matrix C = translate(10, 5, 7);
 
 	Matrix T = C * B * A;
-	
+
 	ASSERT_EQ(T * p, Tuple::point(15, 0, 7));
 
 }
@@ -1254,7 +1257,7 @@ TEST(NormalTest, NormalOnASphereXZYAxis) {
 	n = normal_at(s, Tuple::point(0, 0, 1));
 	ASSERT_EQ(n, Tuple::vector(0, 0, 1));
 
-	n = normal_at(s, Tuple::point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
+	n = normal_at(s, Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	ASSERT_EQ(n, Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
@@ -1273,7 +1276,7 @@ TEST(NormalTest, TransformedSphere) {
 
 	auto n = normal_at(s, Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
 	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
-	
+
 }
 
 TEST(ReflectionTest, VectorAt45) {
@@ -1287,7 +1290,7 @@ TEST(ReflectionTest, VectorAt45) {
 
 TEST(ReflectionTest, SlantedSurface) {
 	auto v = Tuple::vector(0, -1, 0);
-	auto n = Tuple::vector(sqrt(2) /2, sqrt(2) / 2, 0);
+	auto n = Tuple::vector(sqrt(2) / 2, sqrt(2) / 2, 0);
 
 	auto r = reflect(v, n);
 
@@ -1368,7 +1371,7 @@ TEST(LightingTest, LightBehindSurface) {
 TEST(WorldTest, DefaultWorld) {
 	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 	Sphere s1, s2;
-	s1.material.color = Color(1, 0.2, 1);
+	s1.material.color = Color(0.8, 1.0, 0.6);
 	s1.material.diffuse = 0.7;
 	s1.material.specular = 0.2;
 
@@ -1389,9 +1392,9 @@ TEST(WorldTest, WorldRayIntersect) {
 
 	World w;
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-	
+
 	Sphere s1, s2;
-	s1.material.color = Color(1, 0.2, 1);
+	s1.material.color = Color(0.8, 1.0, 0.6);
 	s1.material.diffuse = 0.7;
 	s1.material.specular = 0.2;
 
@@ -1400,7 +1403,7 @@ TEST(WorldTest, WorldRayIntersect) {
 	w.objects.emplace_back(&s1);
 	w.objects.emplace_back(&s2);
 
-	auto test =	worldIntersection(w, r);
+	auto test = worldIntersection(w, r);
 
 	float cmpTo[] = { 4, 4.5, 5.5, 6 };
 
@@ -1409,4 +1412,87 @@ TEST(WorldTest, WorldRayIntersect) {
 	for (auto x : test) {
 		ASSERT_FLOAT_EQ(x.t, cmpTo[cnt++]);
 	}
+}
+
+TEST(PreCompute, Initialization) {
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto s = Sphere();
+	Intersection i(4.f, &s);
+	Precomputations comps(i, r);
+	
+	 //TODO: make defaults for Precomputation class
+	ASSERT_FLOAT_EQ(i.t, comps.t);
+	ASSERT_EQ(comps.shape, &s);
+	ASSERT_EQ(comps.point, Tuple::point(0, 0, -1));
+
+	ASSERT_EQ(comps.eyev, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(comps.normalv, Tuple::vector(0, 0, -1));
+	
+}
+	
+TEST(PreCompute, IntersectionOutside) {
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto s = Sphere();
+	Intersection i(4.f, &s);
+	Precomputations comps(i, r);
+
+	ASSERT_EQ(comps.inside, false);
+}
+	
+TEST(PreCompute, IntersectionInside) {
+	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	auto s = Sphere();
+	Intersection i(1.f, &s);
+	Precomputations comps(i, r);
+
+	ASSERT_EQ(comps.point, Tuple::point(0, 0, 1));
+	ASSERT_EQ(comps.eyev, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(comps.inside, true);
+	ASSERT_EQ(comps.normalv, Tuple::vector(0, 0, -1));
+}
+
+TEST(PreCompute, ShadingAnIntersection) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Intersection i(4.f, w.objects[0]);
+
+	Precomputations comps(i, r);
+	auto c = w.shadeHit(comps);
+
+	ASSERT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+}
+
+TEST(PreCompute, FromInside) {
+	World w;
+	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+
+	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Intersection i(0.5f, w.objects[1]);
+
+	Precomputations comps(i, r);
+	auto c = w.shadeHit(comps);
+	ASSERT_EQ(c, Color(0.90498, 0.90498, 0.90498));
 }

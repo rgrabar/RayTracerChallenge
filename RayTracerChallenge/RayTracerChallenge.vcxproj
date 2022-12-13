@@ -150,6 +150,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Normal.cpp" />
+    <ClCompile Include="PreComputations.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Transformations.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Normal.h" />
+    <ClInclude Include="PreComputations.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transformations.h" />

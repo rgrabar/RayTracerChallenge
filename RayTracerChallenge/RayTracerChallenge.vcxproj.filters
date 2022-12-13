@@ -57,6 +57,9 @@
     <ClCompile Include="Intersection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PreComputations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tuple.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreComputations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
