@@ -7,7 +7,6 @@
 
 #include "Ray.h"
 #include "Sphere.h"
-#include "World.h"
 #include <set>
 
 class Intersection {
@@ -64,4 +63,4 @@ std::vector<Intersection> intersection(Ray ray, const T* s) {
 	return { {t1, s}, {t2, s} };
 }
 
-std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray);
+
