@@ -19,6 +19,7 @@
 #include "../RayTracerChallenge/Sphere.cpp"
 
 #include "../RayTracerChallenge/Intersection.h"
+#include "../RayTracerChallenge/Intersection.cpp"
 
 #include "../RayTracerChallenge/Normal.h"
 #include "../RayTracerChallenge/Normal.cpp"
