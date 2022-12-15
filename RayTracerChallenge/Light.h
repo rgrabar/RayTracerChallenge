@@ -8,7 +8,7 @@ public:
 	
 	Light(const Color& _intensity, const Tuple& _position);
 
-	bool operator==(const Light& other) const;
+	bool operator==(const Light& other)const;
 
 	Color intesity;
 	Tuple position;

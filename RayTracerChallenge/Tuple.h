@@ -17,8 +17,8 @@ struct Tuple {
 	bool isVector();
 	float magnitude();
 	Tuple normalize();
-	float dotProduct(const Tuple& v) const;
-	Tuple crossProduct(const Tuple& v) const;
+	float dotProduct(const Tuple& v)const;
+	Tuple crossProduct(const Tuple& v)const;
 
 	float x, y, z, w;
 };

@@ -1,23 +1,15 @@
 #pragma once
+
+#include "Shape.h"
 #include "Tuple.h"
 #include "Ray.h"
 #include "Matrix.h"
 #include "Material.h"
 
-#include <utility>
-#include <optional>
-#include <functional>
-
-class Sphere
-{
+class Sphere : public Shape {
 
 public:
-	Tuple origin;
-
-	Sphere() :origin(Tuple::point(0, 0, 0)) {}
-	Matrix transform = identityMatrix(4);
-
-	Material material;
+	Sphere() : Shape(Tuple::point(0, 0, 0)) {}
 
 	bool operator==(const Sphere& other) const;
 };

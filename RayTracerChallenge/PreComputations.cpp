@@ -13,7 +13,7 @@ Precomputations::Precomputations(Intersection& _intersection, Ray& _ray) :
 	
 	point = ray.position(t);
 	eyev = -ray.direction;
-	normalv = normal_at(*(Sphere *)shape,point);
+	normalv = normal_at(*shape,point);
 
 	if (normalv.dotProduct(eyev) < 0) {
 		inside = true;

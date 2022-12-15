@@ -3,7 +3,6 @@
 
 Color::Color(float x, float y, float z) : r(x), g(y), b(z) {};
 
-
 Color operator+(const Color& firstColor, const Color& secondColor) {
 	return Color(firstColor.r + secondColor.r, firstColor.g + secondColor.g, firstColor.b + secondColor.b);
 }

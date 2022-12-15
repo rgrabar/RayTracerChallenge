@@ -169,6 +169,7 @@
     <ClInclude Include="Normal.h" />
     <ClInclude Include="PreComputations.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transformations.h" />
     <ClInclude Include="Tuple.h" />

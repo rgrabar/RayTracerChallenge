@@ -2,15 +2,12 @@
 #include "Normal.h"
 #include <iostream>
 
-
-Color Material::lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv) const {
+Color Material::lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv)const {
 	auto effectiveColor = color * light.intesity;
 	auto lightv = (light.position - point).normalize();
 	auto ambientColor = effectiveColor * ambient;
-
 	auto lightDotNormal = lightv.dotProduct(normalv);
 
-	// TODO: zac nije ok bez ()
 	Color diffuseColor(0, 0, 0);
 	Color specularColor(0, 0, 0);
 

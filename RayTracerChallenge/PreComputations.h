@@ -10,10 +10,9 @@ public:
 
 	Ray ray;
 	float t;
-	const void* shape;
+	Shape* shape;
 	Tuple point, eyev, normalv;
 	bool inside;
 
 	Precomputations(Intersection& _intersection, Ray& _ray);
-	
 };

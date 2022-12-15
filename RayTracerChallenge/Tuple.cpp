@@ -4,7 +4,6 @@
 Tuple::Tuple(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {
 };
 
-
 bool Tuple::isPoint() {
 	return epsilonEqual(1.0, w);
 }
@@ -12,7 +11,6 @@ bool Tuple::isPoint() {
 bool Tuple::isVector() {
 	return epsilonEqual(0.0, w);
 }
-
 
 float Tuple::magnitude(){
 	return std::sqrt(x * x + y * y + z * z + w + w);
@@ -27,7 +25,7 @@ float Tuple::dotProduct(const Tuple& v)const {
 	return x * v.x + y * v.y + z * v.z + w * v.w;
 }
 
-Tuple Tuple::crossProduct(const Tuple& v) const {
+Tuple Tuple::crossProduct(const Tuple& v)const {
 	return Tuple::vector(y * v.z - z * v.y, z * v.x - x *v.z, x * v.y - y * v.x);
 }
 

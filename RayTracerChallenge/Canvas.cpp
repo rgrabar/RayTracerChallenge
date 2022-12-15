@@ -4,8 +4,6 @@
 #include <fstream>
 #include <string> 
 
-
-
 Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 	canvas = (Color*)calloc(w * h, sizeof(Color));
 
@@ -28,7 +26,7 @@ void Canvas::writePixel(int x, int y, const Color& c)const {
 		canvas[y * w + x] = c;
 }
 
-int Canvas::scaleColor(float c) const{
+int Canvas::scaleColor(float c)const {
 	if (c < 0)
 		return 0;
 	else if (c > 1)
@@ -37,7 +35,7 @@ int Canvas::scaleColor(float c) const{
 		return (int)(255 * c);
 }
 
-void Canvas::canvasToImage() const{
+void Canvas::canvasToImage()const {
 
 	// TODO: limit amount of characters per row below <70
 
@@ -56,7 +54,6 @@ void Canvas::canvasToImage() const{
 		}
 		writer << "\n";
 	}
-	
-	writer.close();
 
+	writer.close();
 }

@@ -1008,7 +1008,7 @@ TEST(INTERSECTION, TwoPoints) {
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 2);
 
@@ -1022,7 +1022,7 @@ TEST(INTERSECTION, Tangent) {
 	Sphere s;
 
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 2);
 
@@ -1036,7 +1036,7 @@ TEST(INTERSECTION, Miss) {
 	Ray r(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 0);
 }
@@ -1046,7 +1046,7 @@ TEST(INTERSECTION, RayInsideSphere) {
 	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 2);
 
@@ -1060,7 +1060,7 @@ TEST(INTERSECTION, SphereBehindRay) {
 	Ray r(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 2);
 	ASSERT_FLOAT_EQ(intersect[0].t, -6.f);
@@ -1098,7 +1098,7 @@ TEST(TrackingIntersections, ObjectOnTheIntersection) {
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 	auto s = Sphere();
 
-	auto intersect = intersection(r, &s);
+	auto intersect = intersection(r, s);
 
 	ASSERT_EQ(intersect.size(), 2);
 	ASSERT_EQ(intersect[0].s, &s);
@@ -1227,7 +1227,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
 
-	auto xs = intersection(r, &s);
+	auto xs = intersection(r, s);
 
 	ASSERT_EQ(xs.size(), 2);
 	ASSERT_EQ(xs[0].t, 3);
@@ -1240,7 +1240,7 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	auto xs = intersection(r, &s);
+	auto xs = intersection(r, s);
 
 	ASSERT_EQ(xs.size(), 0);
 }

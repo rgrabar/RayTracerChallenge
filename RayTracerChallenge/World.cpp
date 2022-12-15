@@ -1,7 +1,8 @@
 #include "World.h"
 #include <iostream>
 Color World::shadeHit(Precomputations& comps) {
-	Sphere* x = (Sphere*)comps.shape;
+	//TODO: ovo lipje
+	Shape* x = comps.shape;
 
 	return x->material.lighting(light, comps.point, comps.eyev, comps.normalv);
 }
@@ -9,15 +10,15 @@ Color World::shadeHit(Precomputations& comps) {
 
 std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray) {
 
-	std::set<Intersection, decltype(cmp1)> test(cmp1);
+	std::set<Intersection, decltype(cmp1)> intersections(cmp1);
 
 	for (auto object : w.objects) {
 		ray = ray.transform(object->transform.inverse());
 
-		auto sphereToRay = ray.origin - Tuple::point(0, 0, 0);
+		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
 		auto a = ray.direction.dotProduct(ray.direction);
-		auto b = 2 * ray.direction.dotProduct(sphereToRay);
-		auto c = sphereToRay.dotProduct(sphereToRay) - 1;
+		auto b = 2 * ray.direction.dotProduct(shapeToRay);
+		auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
 		float discriminant = b * b - 4 * a * c;
 
@@ -31,9 +32,9 @@ std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray) {
 		float t2 = (-b + sqrt(discriminant)) / (2 * a);
 
 		// TODO: is this the best way to return?
-		test.insert({ t1, object });
-		test.insert({ t2, object });
+		intersections.insert({ t1, object });
+		intersections.insert({ t2, object });
 
 	}
-	return test;
+	return intersections;
 }

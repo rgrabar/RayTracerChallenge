@@ -11,9 +11,8 @@
 class World {
 public:
 
-
 	Light light {Color(1, 1, 1), Tuple::point(-10, 10, -10)};
-	std::vector<Sphere*> objects;
+	std::vector<Shape*> objects;
 
 	Color shadeHit(Precomputations& comps);
 };

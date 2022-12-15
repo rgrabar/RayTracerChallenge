@@ -7,6 +7,7 @@
 
 #include "Ray.h"
 #include "Sphere.h"
+#include "Shape.h"
 #include <set>
 
 class Intersection {
@@ -14,9 +15,9 @@ public:
 
 	// di ga je hit
 	float t;
-	const void* s;
+	Shape* s;
 
-	Intersection(float _t, const void* _s);
+	Intersection(float _t, Shape* _s);
 
 	static inline Intersection* hit();
 
@@ -31,21 +32,19 @@ const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
 };
 
 //TODO: not sure if this should return intersect objects
-template<typename T>
-std::vector<Intersection> intersection(Ray ray, const T* s) {
 
-	ray = ray.transform(s->transform.inverse());
+inline std::vector<Intersection> intersection(const Ray& ray, Shape& s) {
 
-	auto sphereToRay = ray.origin - Tuple::point(0, 0, 0);
-	auto a = ray.direction.dotProduct(ray.direction);
-	auto b = 2 * ray.direction.dotProduct(sphereToRay);
-	auto c = sphereToRay.dotProduct(sphereToRay) - 1;
+	auto rayCalc = ray.transform(s.transform.inverse());
+	auto shapeToRay = rayCalc.origin - Tuple::point(0, 0, 0);
+	auto a = rayCalc.direction.dotProduct(rayCalc.direction);
+	auto b = 2 * rayCalc.direction.dotProduct(shapeToRay);
+	auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
 	float discriminant = b * b - 4 * a * c;
 
 	if (discriminant < 0)
 		return {};
-
 
 	//TODO: make the first t the non negative smaller value
 
@@ -60,7 +59,7 @@ std::vector<Intersection> intersection(Ray ray, const T* s) {
 	retInter.emplace_back(t1, s);
 	retInter.emplace_back(t2, s);
 	*/
-	return { {t1, s}, {t2, s} };
+	return { {t1, &s}, {t2, &s} };
 }
 
 

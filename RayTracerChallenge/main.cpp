@@ -12,12 +12,11 @@
 #include <chrono>
 using namespace std::chrono;
 
-# define TEST_PI           3.14159265358979323846  /* pi */
+# define TEST_PI           3.14159265358979323846
 
 int main() {
 
 	auto start = high_resolution_clock::now();
-
 
 	/*
 	// CODE FOR THE PROJECTILE: 
@@ -81,7 +80,7 @@ int main() {
 
 	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 
-	shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
+	//shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
 
 	for (int y = 0; y < canvas_Size; ++y) {
 		auto world_y = half - pixel_size * y;
@@ -93,16 +92,15 @@ int main() {
 			no = no.normalize();
 			auto r = Ray(ray_origin, no);
 			
-			auto xs = intersection(r, &shape);
+			auto xs = intersection(r, shape);
 
 			if (xs.size() != 0) {
 
 				auto wPoint = r.position(xs[0].t);
-				// TODO: i ako je tocno ca delan, create a shape class?
-				auto normal = normal_at((*(Sphere *)xs[0].s), wPoint);
+				auto normal = normal_at(*(xs[0].s), wPoint);
 				auto eye = -r.direction;
 				Material tmp;
-				auto co =  (*(Sphere *)xs[0].s).material.lighting(light, wPoint, eye, normal);
+				auto co =  (*xs[0].s).material.lighting(light, wPoint, eye, normal);
 				c.writePixel(x, y, co);
 
 				//intersections.emplace_back(&xs[0]);
@@ -127,7 +125,6 @@ int main() {
 	duration = duration_cast<microseconds>(stop - start);
 
 	std::cout << duration.count() << std::endl;
-	
 
 	return 0;
 }

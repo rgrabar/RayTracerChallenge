@@ -1,11 +1,10 @@
 #include "Intersection.h"
 
-Intersection::Intersection(float _t, const void* _s) : t(_t), s(_s) {}
+Intersection::Intersection(float _t, Shape* _s) : t(_t), s(_s) {}
 
 std::set<Intersection*, decltype(cmp)> intersections(cmp);
 
 Intersection* Intersection::hit() {
-	//sortIntersections();
 
 	float maxT = INT_MAX;
 	Intersection* ret = nullptr;
