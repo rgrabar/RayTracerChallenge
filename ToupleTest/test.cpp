@@ -1083,13 +1083,15 @@ TEST(TrackingIntersections, AggregatingIntersections) {
 	auto x = Intersection(1, &s);
 	auto x1 = Intersection(2, &s);
 
-	intersections.insert(&x);
-	intersections.insert(&x1);
+	Intersections i;
 
-	ASSERT_EQ(intersections.size(), 2);
+	i.intersections.insert(&x);
+	i.intersections.insert(&x1);
 
-	ASSERT_TRUE(intersections.count(&x), 1);
-	ASSERT_TRUE(intersections.count(&x1), 1);
+	ASSERT_EQ(i.intersections.size(), 2);
+
+	ASSERT_TRUE(i.intersections.count(&x), 1);
+	ASSERT_TRUE(i.intersections.count(&x1), 1);
 
 }
 
@@ -1113,16 +1115,14 @@ TEST(HitTest, PositiveT) {
 	auto i1 = Intersection(1.f, &s);
 	auto i2 = Intersection(2.f, &s);
 
-	// TODO: needs to be cleared because of previous tests
-	// not sure if this is intended behaviour
-	intersections.clear();
+	Intersections i;
 
-	intersections.insert(&i1);
-	intersections.insert(&i2);
+	i.intersections.insert(&i1);
+	i.intersections.insert(&i2);
 
-	auto i = Intersection::hit();
+	auto ht = i.hit();
 
-	ASSERT_EQ(i, &i1);
+	ASSERT_EQ(ht, &i1);
 
 }
 
@@ -1130,19 +1130,17 @@ TEST(HitTest, PositiveT) {
 TEST(HitTest, NegativeT) {
 
 	auto s = Sphere();
-
-	// TODO: make Intersections non static?
-	intersections.clear();
+	Intersections i;
 
 	auto i1 = Intersection(-1.f, &s);
 	auto i2 = Intersection(1.f, &s);
 
-	intersections.insert(&i1);
-	intersections.insert(&i2);
+	i.intersections.insert(&i1);
+	i.intersections.insert(&i2);
 
-	auto i = Intersection::hit();
+	auto ht = i.hit();
 
-	ASSERT_EQ(i, &i2);
+	ASSERT_EQ(ht, &i2);
 
 }
 
@@ -1150,22 +1148,21 @@ TEST(HitTest, LowestNonNegative) {
 
 	auto s = Sphere();
 
-	// TODO: make Intersections non static?
-	intersections.clear();
+	Intersections i;
 
 	auto i1 = Intersection(5.f, &s);
 	auto i2 = Intersection(7.f, &s);
 	auto i3 = Intersection(-3.f, &s);
 	auto i4 = Intersection(2.f, &s);
 
-	intersections.insert(&i1);
-	intersections.insert(&i2);
-	intersections.insert(&i3);
-	intersections.insert(&i4);
+	i.intersections.insert(&i1);
+	i.intersections.insert(&i2);
+	i.intersections.insert(&i3);
+	i.intersections.insert(&i4);
 
-	auto i = Intersection::hit();
+	auto ht = i.hit();
 
-	ASSERT_EQ(i, &i4);
+	ASSERT_EQ(ht, &i4);
 }
 
 TEST(RayTest, RayTranslation) {

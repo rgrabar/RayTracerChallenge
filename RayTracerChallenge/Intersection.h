@@ -19,16 +19,17 @@ public:
 
 	Intersection(float _t, Shape* _s);
 
-	static inline Intersection* hit();
-
 };
 
 const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
 	return lhs->t < rhs->t;
 };
 
-const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
-	return lhs.t < rhs.t;
+class Intersections {
+public:
+
+	Intersection* hit();
+	std::set<Intersection*, decltype(cmp)> intersections;
 };
 
 //TODO: not sure if this should return intersect objects

@@ -17,4 +17,8 @@ public:
 	Color shadeHit(Precomputations& comps);
 };
 
+const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
+	return lhs.t < rhs.t;
+};
+
 std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray);

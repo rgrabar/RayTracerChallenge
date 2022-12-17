@@ -2,9 +2,7 @@
 
 Intersection::Intersection(float _t, Shape* _s) : t(_t), s(_s) {}
 
-std::set<Intersection*, decltype(cmp)> intersections(cmp);
-
-Intersection* Intersection::hit() {
+Intersection* Intersections::hit() {
 
 	float maxT = INT_MAX;
 	Intersection* ret = nullptr;
