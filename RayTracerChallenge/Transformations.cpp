@@ -96,3 +96,32 @@ Matrix shearing(float xy, float xz, float yx, float yz, float zx, float zy) {
 
 	return shear;
 }
+
+Matrix viewTransformation(const Tuple& from, Tuple& to, Tuple& up) {
+	auto forward = to - from;
+	forward = forward.normalize();
+	auto upn = up.normalize();
+	auto left = forward.crossProduct(upn);
+	auto trueUp = left.crossProduct(forward);
+
+	Matrix orientation(4, 4);
+
+	orientation.matrix[0] = left.x;
+	orientation.matrix[1] = left.y;
+	orientation.matrix[2] = left.z;
+	orientation.matrix[3] = 0;
+	orientation.matrix[4] = trueUp.x;
+	orientation.matrix[5] = trueUp.y;
+	orientation.matrix[6] = trueUp.z;
+	orientation.matrix[7] = 0;
+	orientation.matrix[8] = -forward.x;
+	orientation.matrix[9] = -forward.y;
+	orientation.matrix[10] = -forward.z;
+	orientation.matrix[11] = 0;
+	orientation.matrix[12] = 0;
+	orientation.matrix[13] = 0;
+	orientation.matrix[14] = 0;
+	orientation.matrix[15] = 1;
+
+	return orientation * translate(-from.x, -from.y, -from.z);
+}

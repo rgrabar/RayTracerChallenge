@@ -1400,14 +1400,14 @@ TEST(WorldTest, WorldRayIntersect) {
 	w.objects.emplace_back(&s1);
 	w.objects.emplace_back(&s2);
 
-	auto test = worldIntersection(w, r);
+	auto test = w.worldIntersection(r);
 
 	float cmpTo[] = { 4, 4.5, 5.5, 6 };
 
 	int cnt = 0;
 
 	for (auto x : test) {
-		ASSERT_FLOAT_EQ(x.t, cmpTo[cnt++]);
+		ASSERT_FLOAT_EQ(x->t, cmpTo[cnt++]);
 	}
 }
 
@@ -1492,4 +1492,122 @@ TEST(PreCompute, FromInside) {
 	Precomputations comps(i, r);
 	auto c = w.shadeHit(comps);
 	ASSERT_EQ(c, Color(0.90498, 0.90498, 0.90498));
+}
+
+TEST(PreCompute, RayMiss) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	auto c = w.colorAt(r);
+
+	ASSERT_EQ(c, Color(0, 0, 0));
+}
+
+TEST(PreCompute, RayHit) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	auto c = w.colorAt(r);
+
+	ASSERT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+}
+
+TEST(PreCompute, IntersectionBehindRay) {
+	World w;
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+	s1.material.ambient = 1;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+	s2.material.ambient = 1;
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Ray r(Tuple::point(0, 0, 0.75), Tuple::vector(0, 0, -1));
+	auto c = w.colorAt(r);
+
+	ASSERT_EQ(c, s2.material.color);
+}
+
+TEST(ViewTransformation, defaultOrientation) {
+	
+	Tuple from = Tuple::point(0, 0, 0);
+	Tuple to = Tuple::point(0, 0, -1);
+	Tuple up = Tuple::vector(0, 1, 0);
+	auto t = viewTransformation(from, to, up);
+
+	ASSERT_EQ(t, identityMatrix(4));
+}
+
+TEST(ViewTransformation, lookingInPozitiveZ) {
+
+	Tuple from = Tuple::point(0, 0, 0);
+	Tuple to = Tuple::point(0, 0, 1);
+	Tuple up = Tuple::vector(0, 1, 0);
+	auto t = viewTransformation(from, to, up);
+
+	ASSERT_EQ(t, scale(-1, 1, -1));
+}
+
+
+TEST(ViewTransformation, viewTransfomationMovesTheWorld) {
+
+	Tuple from = Tuple::point(0, 0, 8);
+	Tuple to = Tuple::point(0, 0, 0);
+	Tuple up = Tuple::vector(0, 1, 0);
+	auto t = viewTransformation(from, to, up);
+
+	ASSERT_EQ(t, translate(0, 0, -8));
+}
+
+TEST(ViewTransformation, ArbitraryViewTransform) {
+
+	Tuple from = Tuple::point(1, 3, 2);
+	Tuple to = Tuple::point(4, -2, 8);
+	Tuple up = Tuple::vector(1, 1, 0);
+	auto t = viewTransformation(from, to, up);
+
+	Matrix testM(4, 4);
+	testM.matrix[0] = -0.50709;
+	testM.matrix[1] = 0.50709;
+	testM.matrix[2] = 0.67612;
+	testM.matrix[3] = -2.36643;
+	testM.matrix[4] = 0.76772;
+	testM.matrix[5] = 0.60609;
+	testM.matrix[6] = 0.12122;
+	testM.matrix[7] = -2.82843;
+	testM.matrix[8] = -0.35857;
+	testM.matrix[9] = 0.59761;
+	testM.matrix[10] = -0.71714;
+	testM.matrix[11] = 0;
+	testM.matrix[12] = 0;
+	testM.matrix[13] = 0;
+	testM.matrix[14] = 0;
+	testM.matrix[15] = 1;
+
+	ASSERT_EQ(t, testM);
 }

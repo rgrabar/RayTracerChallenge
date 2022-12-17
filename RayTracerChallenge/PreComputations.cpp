@@ -2,7 +2,7 @@
 #include "Normal.h"
 #include <iostream>
 
-Precomputations::Precomputations(Intersection& _intersection, Ray& _ray) : 
+Precomputations::Precomputations(const Intersection& _intersection, const Ray& _ray) : 
 	ray(_ray), 
 	point(Tuple::point(0, 0, -1)), 
 	eyev(Tuple::vector(0, 0, -1)), 

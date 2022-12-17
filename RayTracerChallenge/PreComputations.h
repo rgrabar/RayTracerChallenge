@@ -14,5 +14,5 @@ public:
 	Tuple point, eyev, normalv;
 	bool inside;
 
-	Precomputations(Intersection& _intersection, Ray& _ray);
+	Precomputations(const Intersection& _intersection, const Ray& _ray);
 };

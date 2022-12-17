@@ -25,8 +25,17 @@ const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
 	return lhs->t < rhs->t;
 };
 
+const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
+	return lhs.t < rhs.t;
+};
+
+
 class Intersections {
 public:
+	Intersections() {};
+	Intersections(const std::set<Intersection*, decltype(cmp)>& i) : intersections(i) {
+
+	}
 
 	Intersection* hit();
 	std::set<Intersection*, decltype(cmp)> intersections;

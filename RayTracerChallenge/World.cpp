@@ -1,23 +1,21 @@
 #include "World.h"
 #include <iostream>
-Color World::shadeHit(Precomputations& comps) {
-	//TODO: ovo lipje
-	Shape* x = comps.shape;
+Color World::shadeHit(const Precomputations& comps) const{
 
-	return x->material.lighting(light, comps.point, comps.eyev, comps.normalv);
+	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv);
 }
 //TODO: not sure if this should return intersect objects
 
-std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray) {
+std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)const{
 
-	std::set<Intersection, decltype(cmp1)> intersections(cmp1);
+	std::set<Intersection*, decltype(cmp)> intersections(cmp);
 
-	for (auto object : w.objects) {
-		ray = ray.transform(object->transform.inverse());
+	for (auto object : objects) {
+		auto rayToSphere = ray.transform(object->transform.inverse());
 
-		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
-		auto a = ray.direction.dotProduct(ray.direction);
-		auto b = 2 * ray.direction.dotProduct(shapeToRay);
+		auto shapeToRay = rayToSphere.origin - Tuple::point(0, 0, 0);
+		auto a = rayToSphere.direction.dotProduct(rayToSphere.direction);
+		auto b = 2 * rayToSphere.direction.dotProduct(shapeToRay);
 		auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
 		float discriminant = b * b - 4 * a * c;
@@ -31,10 +29,26 @@ std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray) {
 		float t1 = (-b - sqrt(discriminant)) / (2 * a);
 		float t2 = (-b + sqrt(discriminant)) / (2 * a);
 
+		auto tmp = new Intersection(t1, object);
+		auto tmp1 = new Intersection(t2, object);
+
 		// TODO: is this the best way to return?
-		intersections.insert({ t1, object });
-		intersections.insert({ t2, object });
+		intersections.insert(tmp);
+		intersections.insert(tmp1);
 
 	}
 	return intersections;
+}
+
+Color World::colorAt(const Ray& r)const {
+	auto intWorld = worldIntersection(r);
+	Intersections i(intWorld);
+
+	Intersection* ht = i.hit();
+	if (ht == nullptr)
+		return Color(0, 0, 0);
+
+	Precomputations p(*ht, r);
+
+	return shadeHit(p);
 }

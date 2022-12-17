@@ -14,11 +14,9 @@ public:
 	Light light {Color(1, 1, 1), Tuple::point(-10, 10, -10)};
 	std::vector<Shape*> objects;
 
-	Color shadeHit(Precomputations& comps);
+	Color shadeHit(const Precomputations& comps) const;
+	std::set <Intersection*, decltype(cmp)> worldIntersection(const Ray& ray)const;
+
+	Color colorAt(const Ray& r)const;
 };
 
-const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
-	return lhs.t < rhs.t;
-};
-
-std::set <Intersection, decltype(cmp1)> worldIntersection(World& w, Ray& ray);

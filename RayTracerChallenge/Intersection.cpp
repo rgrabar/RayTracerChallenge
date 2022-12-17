@@ -2,22 +2,15 @@
 
 Intersection::Intersection(float _t, Shape* _s) : t(_t), s(_s) {}
 
-Intersection* Intersections::hit() {
 
-	float maxT = INT_MAX;
-	Intersection* ret = nullptr;
+Intersection* Intersections::hit() {
 
 	for (auto& x : intersections) {
 		if (x->t < 0)
 			continue;
-		if (x->t < maxT) {
-			maxT = x->t;
-			ret = x;
-		}
+		else
+			return x;
 	}
-
-	if (ret != nullptr)
-		return ret;
 
 	return nullptr;
 }
