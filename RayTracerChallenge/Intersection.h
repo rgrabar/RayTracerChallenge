@@ -33,7 +33,7 @@ const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
 
 //TODO: not sure if this should return intersect objects
 
-inline std::vector<Intersection> intersection(const Ray& ray, Shape& s) {
+inline std::vector<Intersection> intersect(const Ray& ray, Shape& s) {
 
 	auto rayCalc = ray.transform(s.transform.inverse());
 	auto shapeToRay = rayCalc.origin - Tuple::point(0, 0, 0);

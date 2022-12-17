@@ -92,7 +92,7 @@ int main() {
 			no = no.normalize();
 			auto r = Ray(ray_origin, no);
 			
-			auto xs = intersection(r, shape);
+			auto xs = intersect(r, shape);
 
 			if (xs.size() != 0) {
 
