@@ -97,7 +97,7 @@ Matrix shearing(float xy, float xz, float yx, float yz, float zx, float zy) {
 	return shear;
 }
 
-Matrix viewTransformation(const Tuple& from, Tuple& to, Tuple& up) {
+Matrix viewTransformation(const Tuple& from, const Tuple& to, const Tuple& up) {
 	auto forward = to - from;
 	forward = forward.normalize();
 	auto upn = up.normalize();

@@ -12,11 +12,11 @@ bool Tuple::isVector() {
 	return epsilonEqual(0.0, w);
 }
 
-float Tuple::magnitude(){
+float Tuple::magnitude()const{
 	return std::sqrt(x * x + y * y + z * z + w + w);
 }
 
-Tuple Tuple::normalize() {
+Tuple Tuple::normalize()const {
 	float mag = magnitude();
 	return Tuple(x / mag, y / mag, z / mag, w / mag);
 }
