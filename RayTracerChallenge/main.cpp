@@ -8,6 +8,8 @@
 #include "Intersection.h"
 #include "Normal.h"
 #include "Arena.h"
+#include "World.h"
+#include "Camera.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -65,7 +67,8 @@ int main() {
 	c.canvasToImage();
 
 	*/
-	 // Code for the red circle
+	 // Code for the red circle and for the shaded circle with reflection
+	/*
 	int canvas_Size = 100;
 
 	Canvas c(100, 100);
@@ -112,6 +115,69 @@ int main() {
 	}
 
 	std::cout << "Traced the image \n";
+	c.canvasToImage();
+	*/
+	
+	
+	auto floor = Sphere();
+	floor.transform = scale(10, 0.01, 10);
+	floor.material = Material();
+	floor.material.color = Color(1, 0.9, 0.9);
+	floor.material.specular = 0;
+	
+	auto leftWall = Sphere();
+	leftWall.transform = translate(0, 0, 5) * rotationY(-TEST_PI/4) *rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
+	leftWall.material = floor.material;
+
+	auto rightWall = Sphere();
+	rightWall.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
+	rightWall.material = floor.material;
+	
+	auto middle = Sphere();
+	middle.transform = translate(-0.5, 1, 0.5);
+	middle.material = Material();
+	middle.material.color = Color(0.1, 1, 0.5);
+	middle.material.diffuse = 0.7;
+	middle.material.specular = 0.3;
+
+	auto right = Sphere();
+	right.transform = translate(1.5, 0.5, -0.5) * scale(0.5, 0.5, 0.5);
+	right.material = Material();
+	right.material.color = Color(0.5, 1, 0.1);
+	right.material.diffuse = 0.7;
+	right.material.specular = 0.3;
+
+	auto left = Sphere();
+	left.transform = translate(-1.5, 0.33, -0.75) * scale(0.33, 0.33, 0.33);
+	left.material = Material();
+	left.material.color = Color(1, 0.8, 0.1);
+	left.material.diffuse = 0.7;
+	left.material.specular = 0.3;
+
+	auto world = World();
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.objects.emplace_back(&floor);
+	world.objects.emplace_back(&leftWall);
+	world.objects.emplace_back(&rightWall);
+	world.objects.emplace_back(&middle);
+	world.objects.emplace_back(&left);
+	world.objects.emplace_back(&right);
+
+	Camera cam(450, 350, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	/*
+	for (int i = 0; i < ans.h; ++i) {
+		for (int j = 0; j < ans.w; ++j) {
+			std::cout << ans.canvas[i * ans.w + j].r << " "
+				<< ans.canvas[i * ans.w + j].g << " "
+				<< ans.canvas[i * ans.w + j].b << " ";
+		}
+		std::cout << "\n";
+	}
+	*/
+	ans.canvasToImage();
 
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
@@ -119,7 +185,6 @@ int main() {
 	std::cout << duration.count() << std::endl;
 
 	std::cout << "SAVING TO PPM \n";
-	c.canvasToImage();
 
 	stop = high_resolution_clock::now();
 	duration = duration_cast<microseconds>(stop - start);

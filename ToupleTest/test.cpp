@@ -3,6 +3,9 @@
 #include "../RayTracerChallenge/Tuple.h"
 #include "../RayTracerChallenge/Tuple.cpp"
 
+#include "../RayTracerChallenge/Canvas.h"
+#include "../RayTracerChallenge/Canvas.cpp"
+
 #include "../RayTracerChallenge/Color.h"
 #include "../RayTracerChallenge/Color.cpp"
 
@@ -35,6 +38,9 @@
 
 #include "../RayTracerChallenge/PreComputations.h"
 #include "../RayTracerChallenge/PreComputations.cpp"
+
+#include "../RayTracerChallenge/Camera.h"
+#include "../RayTracerChallenge/Camera.cpp"
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -1610,4 +1616,66 @@ TEST(ViewTransformation, ArbitraryViewTransform) {
 	testM.matrix[15] = 1;
 
 	ASSERT_EQ(t, testM);
+}
+
+TEST(CameraTest, ConstructingACamera) {
+	Camera c(160, 120, TEST_PI / 2);
+	ASSERT_EQ(c.hSize, 160);
+	ASSERT_EQ(c.vSize, 120);
+	ASSERT_FLOAT_EQ(c.fieldOfView, TEST_PI / 2);
+	ASSERT_EQ(c.transform, identityMatrix(4));
+}
+
+TEST(CameraTest, HorizontalCanvas) {
+	Camera c(200, 125, TEST_PI / 2);
+	ASSERT_FLOAT_EQ(c.pixelSize, 0.01);
+
+	Camera c1(125, 200, TEST_PI / 2);
+	ASSERT_FLOAT_EQ(c1.pixelSize, 0.01);
+}
+
+TEST(CameraTest, RayThroughCenter) {
+	Camera c(201, 101, TEST_PI / 2);
+		
+	auto r = c.rayForPixel(100, 50);
+	ASSERT_EQ(r.origin, Tuple::point(0,0, 0));
+	ASSERT_EQ(r.direction, Tuple::vector(0, 0, -1));
+}
+
+TEST(CameraTest, RayThroughCorner) {
+	Camera c(201, 101, TEST_PI / 2);
+
+	auto r = c.rayForPixel(0, 0);
+	ASSERT_EQ(r.origin, Tuple::point(0, 0, 0));
+	ASSERT_EQ(r.direction, Tuple::vector(0.66519, 0.33259, -0.66851));
+}
+
+TEST(CameraTest, RayCameraTransformed) {
+	Camera c(201, 101, TEST_PI / 2);
+	c.transform = rotationY(TEST_PI / 4) * translate(0, -2, 5);
+	auto r = c.rayForPixel(100, 50);
+	ASSERT_EQ(r.origin, Tuple::point(0, 2, -5));
+	ASSERT_EQ(r.direction, Tuple::vector(sqrt(2) / 2, 0, -sqrt(2)/2));
+}
+
+TEST(CameraTest, RenderingWithCamera) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Camera c(11, 11, TEST_PI / 2);
+	c.transform = viewTransformation(Tuple::point(0, 0, -5), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+
+	auto image = c.render(w);
+
+	ASSERT_EQ(image.canvas[5*11+5], Color(0.38066, 0.47583, 0.2855));
 }

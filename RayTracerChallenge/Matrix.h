@@ -15,7 +15,6 @@ public:
 	float* matrix;
 	// arena code
 	//static struct Arena a;
-
 	Matrix(const Matrix& matrix);
 	Matrix& operator=(const Matrix& matrix);
 	

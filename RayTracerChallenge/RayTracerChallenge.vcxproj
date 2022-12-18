@@ -103,6 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arena.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Intersection.cpp" />
@@ -159,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arena.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Helper.h" />
