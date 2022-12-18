@@ -25,11 +25,6 @@ const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
 	return lhs->t < rhs->t;
 };
 
-const auto cmp1 = [](const Intersection lhs, const Intersection rhs) {
-	return lhs.t < rhs.t;
-};
-
-
 class Intersections {
 public:
 	Intersections() {};

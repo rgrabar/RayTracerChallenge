@@ -21,7 +21,8 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 		float discriminant = b * b - 4 * a * c;
 
 		if (discriminant < 0)
-			return {};
+			continue;
+			//return {};
 
 
 		//TODO: make the first t the non negative smaller value
