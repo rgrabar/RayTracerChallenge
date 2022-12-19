@@ -2,7 +2,7 @@
 #include <iostream>
 Color World::shadeHit(const Precomputations& comps) const{
 
-	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv);
+	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv, 0);
 }
 //TODO: not sure if this should return intersect objects
 

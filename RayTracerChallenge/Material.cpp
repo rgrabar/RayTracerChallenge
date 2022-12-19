@@ -2,7 +2,7 @@
 #include "Normal.h"
 #include <iostream>
 
-Color Material::lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv)const {
+Color Material::lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow)const {
 	auto effectiveColor = color * light.intesity;
 	auto lightv = (light.position - point).normalize();
 	auto ambientColor = effectiveColor * ambient;
@@ -29,7 +29,10 @@ Color Material::lighting(const Light& light, const Tuple& point, const Tuple& ey
 	
 	auto test = ambientColor + diffuseColor + specularColor;
 
-	return ambientColor + diffuseColor + specularColor;
+	if(inShadow)
+		return ambientColor;
+	else
+		return ambientColor + diffuseColor + specularColor;
 }
 
 bool operator==(const Material& lhs, const Material& rhs) {

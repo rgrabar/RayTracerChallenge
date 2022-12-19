@@ -1322,7 +1322,7 @@ TEST(LightingTest, EyeBetweenLight) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = m.lighting(light, position, eyev, normalv);
+	auto result = m.lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1333,7 +1333,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = m.lighting(light, position, eyev, normalv);
+	auto result = m.lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1344,7 +1344,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = m.lighting(light, position, eyev, normalv);
+	auto result = m.lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1355,7 +1355,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = m.lighting(light, position, eyev, normalv);
+	auto result = m.lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -1366,7 +1366,7 @@ TEST(LightingTest, LightBehindSurface) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
-	auto result = m.lighting(light, position, eyev, normalv);
+	auto result = m.lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -1678,4 +1678,17 @@ TEST(CameraTest, RenderingWithCamera) {
 	auto image = c.render(w);
 
 	ASSERT_EQ(image.canvas[5*11+5], Color(0.38066, 0.47583, 0.2855));
+}
+
+TEST(ShadowTest, InShadow) {
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv= Tuple::vector(0, 0, -1);
+	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
+	
+	auto m = Material();
+	auto position = Tuple::point(0, 0, 0);
+
+	auto res = m.lighting(light, position, eyev, normalv, 1);
+
+	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
 }
