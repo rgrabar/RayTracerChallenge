@@ -14,10 +14,10 @@ class Intersection {
 public:
 
 	// di ga je hit
-	float t;
+	double t;
 	Shape* s;
 
-	Intersection(float _t, Shape* _s);
+	Intersection(double _t, Shape* _s);
 
 };
 
@@ -46,15 +46,15 @@ inline std::vector<Intersection> intersect(const Ray& ray, Shape& s) {
 	auto b = 2 * rayCalc.direction.dotProduct(shapeToRay);
 	auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
-	float discriminant = b * b - 4 * a * c;
+	double discriminant = b * b - 4 * a * c;
 
 	if (discriminant < 0)
 		return {};
 
 	//TODO: make the first t the non negative smaller value
 
-	float t1 = (-b - sqrt(discriminant)) / (2 * a);
-	float t2 = (-b + sqrt(discriminant)) / (2 * a);
+	double t1 = (-b - sqrt(discriminant)) / (2 * a);
+	double t2 = (-b + sqrt(discriminant)) / (2 * a);
 
 	//TODO: not sure if I should add each record 
 	//intersections.emplace_back(t1, s);

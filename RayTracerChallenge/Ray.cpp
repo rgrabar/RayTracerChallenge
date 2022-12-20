@@ -1,6 +1,6 @@
 #include "Ray.h"
 
-Tuple Ray::position(float t)const{
+Tuple Ray::position(double t)const{
 	return origin + direction * t;
 }
 

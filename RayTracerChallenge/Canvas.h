@@ -9,5 +9,5 @@ public:
 	Color* canvas;
 	void writePixel(int x, int y, const Color& c)const;
 	void canvasToImage()const;
-	int scaleColor(float c)const;
+	int scaleColor(double c)const;
 };

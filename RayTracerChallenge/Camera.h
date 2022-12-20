@@ -11,16 +11,16 @@ class Camera {
 public:
 	int hSize;
 	int vSize;
-	float fieldOfView;
-	float halfWidth;
-	float halfheight;
-	float pixelSize;
+	double fieldOfView;
+	double halfWidth;
+	double halfheight;
+	double pixelSize;
 
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
 
-	Camera(int _hSize, int _vSize, float _fieldOfView);
-	Ray rayForPixel(float px, float py);
+	Camera(int _hSize, int _vSize, double _fieldOfView);
+	Ray rayForPixel(double px, double py);
 
 	Canvas render(const World& world);
 };

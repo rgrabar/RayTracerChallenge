@@ -16,10 +16,10 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
         arena_init(&a, backing_buffer, 100024 * 100024);
     }
    
-    matrix = (float*)arena_alloc(&a, w * h * sizeof(float));
+    matrix = (double*)arena_alloc(&a, w * h * sizeof(double));
     */
 
-    matrix = (float*)calloc(h * w, sizeof(float));
+    matrix = (double*)calloc(h * w, sizeof(double));
     if (matrix) {
         //std::cout << "allocated\n";
         for (int i = 0; i < h; ++i) {
@@ -43,11 +43,11 @@ Matrix::Matrix(const Matrix& matrix) {
     this->w = matrix.w;
     this->h = matrix.h;
 
-    this->matrix = (float*)malloc(w * h * sizeof(float));
-    memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
+    this->matrix = (double*)malloc(w * h * sizeof(double));
+    memcpy(this->matrix, matrix.matrix, w * h * sizeof(double));
 }
 
-void Matrix::setElement(int y, int x, float value) {
+void Matrix::setElement(int y, int x, double value) {
     matrix[y * w + x] = value;
 }
 
@@ -61,28 +61,28 @@ const Matrix Matrix::transpose() const {
     return transposed;
 }
 
-const float Matrix::determinant()const {
+const double Matrix::determinant()const {
     if(w == 2)
         return matrix[0] * matrix[3] - matrix[1] * matrix[2];
-    float det = 0;
+    double det = 0;
     for (int i = 0; i < w; ++i) {
         det += matrix[i] * cofactor(0, i);
     }
     return det;
 }
 
-const float Matrix::minor(int row, int col)const {
+const double Matrix::minor(int row, int col)const {
     return submatrix(row, col).determinant();
 }
 
-const float Matrix::cofactor(int row, int col)const {
+const double Matrix::cofactor(int row, int col)const {
     if ((row + col) % 2 == 0) {
         return minor(row, col);
     }
     return minor(row, col) * -1;
 }
 
-const float Matrix::invertible()const {
+const double Matrix::invertible()const {
     return determinant() != 0;
 }
 
@@ -94,7 +94,7 @@ const Matrix Matrix::inverse()const {
     Matrix inverse(w, h);
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; ++j) {
-            float c = cofactor(i, j);
+            double c = cofactor(i, j);
             inverse.matrix[j * w + i] = c / determinant();
         }
     }
@@ -122,14 +122,14 @@ Matrix Matrix::submatrix(int row, int col)const {
 Matrix& Matrix::operator=(const Matrix &matrix) {
     if (this != &matrix) {
         if (w == matrix.w && h == matrix.h) {
-            memcpy(this->matrix, matrix.matrix, this->w * this->h * sizeof(float));
+            memcpy(this->matrix, matrix.matrix, this->w * this->h * sizeof(double));
         }
         else {
             w = matrix.w;
             h = matrix.h;
             free(this->matrix);
-            this->matrix = (float*)malloc(this->w * this->h * sizeof(float));
-            memcpy(this->matrix, matrix.matrix, w * h * sizeof(float));
+            this->matrix = (double*)malloc(this->w * this->h * sizeof(double));
+            memcpy(this->matrix, matrix.matrix, w * h * sizeof(double));
         }
     }
 
@@ -154,7 +154,7 @@ const Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
     Matrix ret = Matrix(lhs.h, rhs.w);
     for (int row = 0; row < lhs.h; ++row) {
         for (int col = 0; col < rhs.w; ++col) {
-            float element = 0;
+            double element = 0;
             for (int i = 0; i < lhs.w; ++i) {
                 element += lhs.matrix[row * lhs.w + i] * rhs.matrix[i * rhs.w + col];
             }

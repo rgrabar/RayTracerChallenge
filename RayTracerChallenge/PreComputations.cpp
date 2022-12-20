@@ -25,5 +25,5 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 		inside = false;
 
 	// TODO figure out why epsilon gives a lot of acne
-	overPoint = point + normalv * 0.003;
+	overPoint = point + normalv * (EPSILON);
 }

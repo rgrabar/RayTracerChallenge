@@ -10,7 +10,7 @@ class Precomputations {
 public:
 
 	Ray ray;
-	float t;
+	double t;
 	Shape* shape;
 	Tuple point, eyev, normalv;
 	bool inside;

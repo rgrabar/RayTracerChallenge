@@ -1,6 +1,6 @@
 #include "Intersection.h"
 
-Intersection::Intersection(float _t, Shape* _s) : t(_t), s(_s) {}
+Intersection::Intersection(double _t, Shape* _s) : t(_t), s(_s) {}
 
 
 Intersection* Intersections::hit() {

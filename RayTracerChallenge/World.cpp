@@ -20,7 +20,7 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 		auto b = 2 * rayToSphere.direction.dotProduct(shapeToRay);
 		auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
-		float discriminant = b * b - 4 * a * c;
+		double discriminant = b * b - 4 * a * c;
 
 		if (discriminant < 0)
 			continue;
@@ -29,8 +29,8 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 
 		//TODO: make the first t the non negative smaller value
 
-		float t1 = (-b - sqrt(discriminant)) / (2 * a);
-		float t2 = (-b + sqrt(discriminant)) / (2 * a);
+		double t1 = (-b - sqrt(discriminant)) / (2 * a);
+		double t2 = (-b + sqrt(discriminant)) / (2 * a);
 
 		auto tmp = new Intersection(t1, object);
 		auto tmp1 = new Intersection(t2, object);

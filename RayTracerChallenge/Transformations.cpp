@@ -1,7 +1,7 @@
 #include "Transformations.h"
 #include <iostream>
 
-Matrix translate(float x, float y, float z) {
+Matrix translate(double x, double y, double z) {
 	Matrix translation = Matrix(4, 4);
 	for (int i = 0; i < translation.h; ++i) {
 		for (int j = 0; j < translation.w; ++j) {
@@ -16,7 +16,7 @@ Matrix translate(float x, float y, float z) {
 	return translation;
 }
 
-Matrix scale(float x, float y, float z) {
+Matrix scale(double x, double y, double z) {
 	Matrix scaled = Matrix(4, 4);
 	for (int i = 0; i < scaled.h; ++i) {
 		for (int j = 0; j < scaled.w; ++j) {
@@ -32,11 +32,11 @@ Matrix scale(float x, float y, float z) {
 	return scaled;
 }
 
-Matrix rotationX(float angle) {
+Matrix rotationX(double angle) {
 
 	Matrix rotationX = Matrix(4, 4);
-	float cosR = cos(angle);
-	float sinR = sin(angle);
+	double cosR = cos(angle);
+	double sinR = sin(angle);
 
 	rotationX.matrix[0] = 1;
 	rotationX.matrix[5] = cosR;
@@ -48,11 +48,11 @@ Matrix rotationX(float angle) {
 	return rotationX;
 }
 
-Matrix rotationY(float angle) {
+Matrix rotationY(double angle) {
 
 	Matrix rotationY = Matrix(4, 4);
-	float cosR = cos(angle);
-	float sinR = sin(angle);
+	double cosR = cos(angle);
+	double sinR = sin(angle);
 
 	rotationY.matrix[0] = cosR;
 	rotationY.matrix[2] = sinR;
@@ -64,11 +64,11 @@ Matrix rotationY(float angle) {
 	return rotationY;
 }
 
-Matrix rotationZ(float angle) {
+Matrix rotationZ(double angle) {
 
 	Matrix rotationZ = Matrix(4, 4);
-	float cosR = cos(angle);
-	float sinR = sin(angle);
+	double cosR = cos(angle);
+	double sinR = sin(angle);
 
 	rotationZ.matrix[0] = cosR;
 	rotationZ.matrix[1] = -sinR;
@@ -80,7 +80,7 @@ Matrix rotationZ(float angle) {
 	return rotationZ;
 }
 
-Matrix shearing(float xy, float xz, float yx, float yz, float zx, float zy) {
+Matrix shearing(double xy, double xz, double yx, double yz, double zx, double zy) {
 
 	Matrix shear = Matrix(4, 4);
 	shear.matrix[0] = 1;

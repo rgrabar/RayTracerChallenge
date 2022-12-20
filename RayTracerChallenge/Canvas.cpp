@@ -26,7 +26,7 @@ void Canvas::writePixel(int x, int y, const Color& c)const {
 		canvas[y * w + x] = c;
 }
 
-int Canvas::scaleColor(float c)const {
+int Canvas::scaleColor(double c)const {
 	if (c < 0)
 		return 0;
 	else if (c > 1)

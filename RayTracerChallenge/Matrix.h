@@ -12,19 +12,19 @@ public:
 	Matrix(int _h, int _w);
 	~Matrix();
 	int h, w;
-	float* matrix;
+	double* matrix;
 	// arena code
 	//static struct Arena a;
 	Matrix(const Matrix& matrix);
 	Matrix& operator=(const Matrix& matrix);
 	
-	void setElement(int y, int x, float value);
+	void setElement(int y, int x, double value);
 	const Matrix transpose()const;
-	const float determinant()const;
+	const double determinant()const;
 	Matrix submatrix(int row, int col)const;
-	const float minor(int row, int col)const;
-	const float cofactor(int row, int col)const;
-	const float invertible()const;
+	const double minor(int row, int col)const;
+	const double cofactor(int row, int col)const;
+	const double invertible()const;
 	const Matrix inverse()const;
 
 };

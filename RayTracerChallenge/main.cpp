@@ -46,14 +46,14 @@ int main() {
 	 
 	// Clock code: 
 	 
-	float radius = 10;
+	double radius = 10;
 
 	Canvas c(900, 550);
 
 	c.writePixel(900 / 2, 550 / 2, Color(1, 0, 0));
 
-	float centerX = 900 / 2.f;
-	float centerY = 550 / 2.f;
+	double centerX = 900 / 2.f;
+	double centerY = 550 / 2.f;
 
 	Matrix  r = rotationZ(0.01745329252);
 	Tuple twelve = Tuple::point(0, 10, 0);
@@ -73,8 +73,8 @@ int main() {
 
 	Canvas c(100, 100);
 	auto ray_origin = Tuple::point(0, 0, -5);
-	float wall_z = 10.f;
-	float wall_size = 7.f;
+	double wall_z = 10.f;
+	double wall_size = 7.f;
 	auto pixel_size = wall_size / canvas_Size;
 	auto half = wall_size / 2;
 	auto shape = Sphere();
@@ -163,7 +163,7 @@ int main() {
 	world.objects.emplace_back(&left);
 	world.objects.emplace_back(&right);
 
-	Camera cam(450, 350, TEST_PI / 3);
+	Camera cam(150, 50, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 

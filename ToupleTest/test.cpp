@@ -124,14 +124,14 @@ TEST(TupleTest, SubVectorFromZeroVector) {
 
 TEST(TupleTest, TupleMultipliedWihtScalar) {
 	Tuple t1 = Tuple(1, -2, 3, -4);
-	float a = 3.5;
+	double a = 3.5;
 
 	ASSERT_TRUE(t1 * a == Tuple(3.5, -7, 10.5, -14));
 }
 
 TEST(TupleTest, TupleDividedWihtScalar) {
 	Tuple t1 = Tuple(1, -2, 3, -4);
-	float a = 3.5;
+	double a = 3.5;
 
 	ASSERT_TRUE(t1 * a == Tuple(3.5, -7, 10.5, -14));
 }
@@ -1410,7 +1410,7 @@ TEST(WorldTest, WorldRayIntersect) {
 
 	auto test = w.worldIntersection(r);
 
-	float cmpTo[] = { 4, 4.5, 5.5, 6 };
+	double cmpTo[] = { 4, 4.5, 5.5, 6 };
 
 	int cnt = 0;
 

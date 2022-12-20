@@ -1,8 +1,8 @@
 #include "Camera.h"
 
-Camera::Camera(int _hSize, int _vSize, float _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
+Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);
-	auto aspect = hSize / (float)vSize;
+	auto aspect = hSize / (double)vSize;
 
 	if (aspect >= 1) {
 		halfWidth = halfView;
@@ -15,7 +15,7 @@ Camera::Camera(int _hSize, int _vSize, float _fieldOfView) : hSize(_hSize), vSiz
 	pixelSize = halfWidth * 2 / hSize;
 }
 
-Ray Camera::rayForPixel(float px, float py) {
+Ray Camera::rayForPixel(double px, double py) {
 	auto xOffset = (px + 0.5) * pixelSize;
 	auto yOffset = (py + 0.5) * pixelSize;
 

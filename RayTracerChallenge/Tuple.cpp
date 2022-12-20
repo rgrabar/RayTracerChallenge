@@ -1,7 +1,7 @@
 #include "Tuple.h"
 #include "Helper.h"
 
-Tuple::Tuple(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {
+Tuple::Tuple(double _x, double _y, double _z, double _w) : x(_x), y(_y), z(_z), w(_w) {
 };
 
 bool Tuple::isPoint() {
@@ -12,16 +12,16 @@ bool Tuple::isVector() {
 	return epsilonEqual(0.0, w);
 }
 
-float Tuple::magnitude()const{
+double Tuple::magnitude()const{
 	return std::sqrt(x * x + y * y + z * z + w + w);
 }
 
 Tuple Tuple::normalize()const {
-	float mag = magnitude();
+	double mag = magnitude();
 	return Tuple(x / mag, y / mag, z / mag, w / mag);
 }
 
-float Tuple::dotProduct(const Tuple& v)const {
+double Tuple::dotProduct(const Tuple& v)const {
 	return x * v.x + y * v.y + z * v.z + w * v.w;
 }
 
@@ -48,10 +48,10 @@ Tuple operator-(const Tuple& negate) {
 	return Tuple(-negate.x, -negate.y, -negate.z, -negate.w);
 }
 
-Tuple operator*(const Tuple& tuple, float scalar) {
+Tuple operator*(const Tuple& tuple, double scalar) {
 	return Tuple(tuple.x * scalar, tuple.y * scalar, tuple.z * scalar, tuple.w * scalar);
 }
 
-Tuple operator/(const Tuple& tuple, float scalar) {
+Tuple operator/(const Tuple& tuple, double scalar) {
 	return Tuple(tuple.x / scalar, tuple.y / scalar, tuple.z / scalar, tuple.w / scalar);
 }
