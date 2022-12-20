@@ -18,5 +18,6 @@ public:
 	std::set <Intersection*, decltype(cmp)> worldIntersection(const Ray& ray)const;
 
 	Color colorAt(const Ray& r)const;
+	bool isShadowed(const Tuple& point)const;
 };
 

@@ -1357,6 +1357,8 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto result = m.lighting(light, position, eyev, normalv, 0);
 
+	std::cout << result.b << " " << result.g << " " << result.r << "\n";
+
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
 
@@ -1680,7 +1682,7 @@ TEST(CameraTest, RenderingWithCamera) {
 	ASSERT_EQ(image.canvas[5*11+5], Color(0.38066, 0.47583, 0.2855));
 }
 
-TEST(ShadowTest, InShadow) {
+TEST(ShadowTest, SurfaceInShadow) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv= Tuple::vector(0, 0, -1);
 	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
@@ -1691,4 +1693,88 @@ TEST(ShadowTest, InShadow) {
 	auto res = m.lighting(light, position, eyev, normalv, 1);
 
 	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
+}
+
+TEST(ShadowTest, TestingNotInShadow) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Tuple p = Tuple::point(0, 10, 0);
+
+	ASSERT_FALSE(w.isShadowed(p));
+}
+
+TEST(ShadowTest, TestingInShadow) {
+	World w;
+	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	Tuple p = Tuple::point(0, 10, 0);
+
+	ASSERT_FALSE(w.isShadowed(p));
+
+	auto p1 = Tuple::point(10, -10, 10);
+	ASSERT_TRUE(w.isShadowed(p1));
+	
+	auto p2 = Tuple::point(-20, 20, -20);
+	ASSERT_FALSE(w.isShadowed(p2));
+
+	auto p3 = Tuple::point(-2, 2, -2);
+	ASSERT_FALSE(w.isShadowed(p3));
+}
+
+TEST(ShadowTest, ShadeHitAcne) {
+	World w;
+	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	Sphere s1;
+	Sphere s2;
+
+	s2.transform = translate(0, 0, 10);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	auto r = Ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
+	auto i = Intersection(4.f, &s2);
+
+	auto comps = Precomputations(i, r);
+
+	auto c = w.shadeHit(comps);
+
+	ASSERT_EQ(c, Color(0.1, 0.1, 0.1));
+}
+
+TEST(ShadowTest, OffsetThePoint) {
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto s = Sphere();
+	s.transform = translate(0, 0, 1);
+
+	auto i = Intersection(5.f, &s);
+
+	auto comps = Precomputations(i, r);
+
+	ASSERT_TRUE(comps.overPoint.z < -EPSILON/2);
+
+	ASSERT_TRUE(comps.point.z > comps.overPoint.z);
+
 }

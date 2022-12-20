@@ -4,6 +4,7 @@
 #include "Sphere.h"
 #include "Intersection.h"
 #include "Tuple.h"
+#include "Helper.h"
 
 class Precomputations {
 public:
@@ -13,6 +14,6 @@ public:
 	Shape* shape;
 	Tuple point, eyev, normalv;
 	bool inside;
-
+	Tuple overPoint;
 	Precomputations(const Intersection& _intersection, const Ray& _ray);
 };

@@ -2,11 +2,13 @@
 #include "Normal.h"
 #include <iostream>
 
-Precomputations::Precomputations(const Intersection& _intersection, const Ray& _ray) : 
-	ray(_ray), 
-	point(Tuple::point(0, 0, -1)), 
-	eyev(Tuple::vector(0, 0, -1)), 
-	normalv(Tuple::vector(0, 0, -1)) 
+Precomputations::Precomputations(const Intersection& _intersection, const Ray& _ray) :
+	ray(_ray),
+	point(Tuple::point(0, 0, -1)),
+	eyev(Tuple::vector(0, 0, -1)),
+	normalv(Tuple::vector(0, 0, -1)),
+	// TODO: this should not be a default
+	overPoint(Tuple::vector(0, 0, 0))
 {
 	t = _intersection.t;
 	shape = _intersection.s;
@@ -21,4 +23,7 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 	}
 	else
 		inside = false;
+
+	// TODO figure out why epsilon gives a lot of acne
+	overPoint = point + normalv * 0.003;
 }

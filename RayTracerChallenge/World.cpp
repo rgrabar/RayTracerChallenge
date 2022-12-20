@@ -2,7 +2,9 @@
 #include <iostream>
 Color World::shadeHit(const Precomputations& comps) const{
 
-	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv, 0);
+	auto shadowed = isShadowed(comps.overPoint);
+
+	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv, shadowed);
 }
 //TODO: not sure if this should return intersect objects
 
@@ -52,4 +54,20 @@ Color World::colorAt(const Ray& r)const {
 	Precomputations p(*ht, r);
 
 	return shadeHit(p);
+}
+
+bool World::isShadowed(const Tuple& point)const {
+	auto v = light.position - point;
+	auto distance = v.magnitude();
+	auto direction = v.normalize();
+
+	auto r = Ray(point, direction);
+
+	auto intersections = worldIntersection(r);
+	Intersections i(intersections);
+
+	auto h = i.hit();
+	if (h != nullptr && h->t < distance)
+		return true;
+	return false;
 }
