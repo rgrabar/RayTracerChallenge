@@ -117,8 +117,8 @@ int main() {
 	std::cout << "Traced the image \n";
 	c.canvasToImage();
 	*/
-	
-	
+	/*
+	// CODE FOR SHADOWS CHAPTER
 	auto floor = Sphere();
 	floor.transform = scale(10, 0.01, 10);
 	floor.material = Material();
@@ -163,20 +163,54 @@ int main() {
 	world.objects.emplace_back(&left);
 	world.objects.emplace_back(&right);
 
-	Camera cam(150, 50, TEST_PI / 3);
+	
+
+	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
-	/*
-	for (int i = 0; i < ans.h; ++i) {
-		for (int j = 0; j < ans.w; ++j) {
-			std::cout << ans.canvas[i * ans.w + j].r << " "
-				<< ans.canvas[i * ans.w + j].g << " "
-				<< ans.canvas[i * ans.w + j].b << " ";
-		}
-		std::cout << "\n";
-	}
+	ans.canvasToImage();
 	*/
+
+	auto middle = Sphere();
+	middle.transform = translate(-0.55, 1.4, -1.25) * scale(0.25, 0.25, 0.25);
+	middle.material = Material();
+	middle.material.color = Color(1, 1, 0.3);
+	middle.material.diffuse = 0.7;
+	middle.material.specular = 0.3;
+
+	auto right = Sphere();
+	right.transform = translate(0.3, 1.4, -1.25) * scale(0.25, 0.25, 0.25);
+	right.material = Material();
+	right.material.color = Color(1, 1, 0.3);
+	right.material.diffuse = 0.7;
+	right.material.specular = 0.3;
+
+	auto left = Sphere();
+	left.transform = rotationX(-TEST_PI / 2) * translate(-0.25, 1, 1) * scale(1, 0.25, 1);
+	left.material = Material();
+	left.material.color = Color(1, 1, 0);
+	left.material.diffuse = 0.7;
+	left.material.specular = 0.3;
+
+	auto bottom = Sphere();
+	bottom.transform = translate(-0.1, 0.6, -1.25) * scale(0.65, 0.1, 0.25);
+	bottom.material = Material();
+	bottom.material.color = Color(0.1, 1, 0.5);
+	bottom.material.diffuse = 0.7;
+	bottom.material.specular = 0.3;
+
+	auto world = World();
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.objects.emplace_back(&middle);
+	world.objects.emplace_back(&left);
+	world.objects.emplace_back(&right);
+	world.objects.emplace_back(&bottom);
+
+	Camera cam(250, 150, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
 	ans.canvasToImage();
 
 	auto stop = high_resolution_clock::now();
