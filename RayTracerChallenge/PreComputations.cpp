@@ -11,7 +11,7 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 	overPoint(Tuple::vector(0, 0, 0))
 {
 	t = _intersection.t;
-	shape = _intersection.s;
+	shape = ((Shape*)_intersection.s);
 	
 	point = ray.position(t);
 	eyev = -ray.direction;
