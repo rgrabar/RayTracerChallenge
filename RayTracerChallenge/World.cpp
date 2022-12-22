@@ -13,11 +13,13 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 	std::set<Intersection*, decltype(cmp)> intersections(cmp);
 
 	for (auto object : objects) {
+		
 		auto a = object->intersect(ray);
 
 		if (a.size() == 0)
 			continue;
 		if (a.size() == 1) {
+			// TODO: ZASTO NE MOREDULEN SAMO &a[0]??
 			auto tmp = new Intersection(a[0].t, a[0].s);
 			intersections.insert(tmp);
 			
