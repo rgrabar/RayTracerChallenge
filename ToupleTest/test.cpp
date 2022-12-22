@@ -42,6 +42,9 @@
 #include "../RayTracerChallenge/Camera.h"
 #include "../RayTracerChallenge/Camera.cpp"
 
+#include "../RayTracerChallenge/Plane.h"
+#include "../RayTracerChallenge/Plane.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -1796,4 +1799,26 @@ TEST(ShapesRefactor, DefaultMaterial) {
 	s.material = m;
 
 	ASSERT_EQ(s.material, m);
+}
+
+TEST(PlaneRefactor, IntersectingAbove) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, 1, 0), Tuple::vector(0, -1, 0));
+
+	auto xs = p.intersect(r);
+
+	ASSERT_EQ(xs.size(), 1);
+	ASSERT_EQ(xs[0].t, 1);
+	ASSERT_EQ(xs[0].s, &p);
+}
+
+TEST(PlaneRefactor, IntersectingBelow) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, -1, 0), Tuple::vector(0, 1, 0));
+
+	auto xs = p.intersect(r);
+
+	ASSERT_EQ(xs.size(), 1);
+	ASSERT_EQ(xs[0].t, 1);
+	ASSERT_EQ(xs[0].s, &p);
 }
