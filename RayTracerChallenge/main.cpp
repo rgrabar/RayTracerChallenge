@@ -121,6 +121,7 @@ int main() {
 	
 	// CODE FOR SHADOWS CHAPTER
 	auto plane = Plane();
+
 	auto floor = Sphere();
 	floor.transform = scale(10, 0.01, 10);
 	floor.material = Material();

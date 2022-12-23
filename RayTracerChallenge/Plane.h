@@ -5,7 +5,7 @@
 
 class Plane : public Shape{
 public:
-	Plane() {}
+	Plane() : Shape(Tuple::point(0, 0, 0)) {}
 
 	inline std::vector<Intersection> intersect(const Ray& ray) {
 		auto rayCalc = ray.transform(transform.inverse());
@@ -15,7 +15,7 @@ public:
 
 		return { {t, this} };
 	}
-	Tuple normalAt(const Tuple& worldPoint) {
+	Tuple normalAt(const Tuple& worldPoint)const {
 		return Tuple::vector(0.0, 1.0, 0.0);
 	}
 };

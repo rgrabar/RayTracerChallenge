@@ -5,6 +5,7 @@
 #include "Ray.h"
 #include "Matrix.h"
 #include "Material.h"
+#include <iostream>
 
 class Sphere : public Shape {
 
@@ -41,7 +42,7 @@ public:
 		*/
 		return { {t1, this}, {t2, this} };
 	}
-	Tuple normalAt(const Tuple& worldPoint) {
+	Tuple normalAt(const Tuple& worldPoint)const {
 		auto objectPoint = transform.inverse() * worldPoint;
 		auto objectNormal = objectPoint - Tuple::point(0, 0, 0);
 
