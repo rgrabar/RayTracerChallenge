@@ -13,32 +13,25 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 	std::set<Intersection*, decltype(cmp)> intersections(cmp);
 
 	for (auto object : objects) {
-		auto rayToSphere = ray.transform(object->transform.inverse());
 
-		auto shapeToRay = rayToSphere.origin - Tuple::point(0, 0, 0);
-		auto a = rayToSphere.direction.dotProduct(rayToSphere.direction);
-		auto b = 2 * rayToSphere.direction.dotProduct(shapeToRay);
-		auto c = shapeToRay.dotProduct(shapeToRay) - 1;
+		// put ray in object space needed before intersect function
+		auto rayCalc = ray.transform(object->transform.inverse());
+		auto a = object->intersect(rayCalc);
 
-		double discriminant = b * b - 4 * a * c;
-
-		if (discriminant < 0)
+		if (a.size() == 0)
 			continue;
-			//return {};
-
-
-		//TODO: make the first t the non negative smaller value
-
-		double t1 = (-b - sqrt(discriminant)) / (2 * a);
-		double t2 = (-b + sqrt(discriminant)) / (2 * a);
-
-		auto tmp = new Intersection(t1, object);
-		auto tmp1 = new Intersection(t2, object);
-
-		// TODO: is this the best way to return?
-		intersections.insert(tmp);
-		intersections.insert(tmp1);
-
+		if (a.size() == 1) {
+			// TODO: ZASTO NE MOREDULEN SAMO &a[0]??
+			auto tmp = new Intersection(a[0].t, a[0].s);
+			intersections.insert(tmp);
+			
+		}
+		else {
+			auto tmp = new Intersection(a[0].t, a[0].s);
+			auto tmp1 = new Intersection(a[1].t, a[1].s);
+			intersections.insert(tmp);
+			intersections.insert(tmp1);
+		}
 	}
 	return intersections;
 }

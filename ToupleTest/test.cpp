@@ -42,6 +42,9 @@
 #include "../RayTracerChallenge/Camera.h"
 #include "../RayTracerChallenge/Camera.cpp"
 
+#include "../RayTracerChallenge/Plane.h"
+#include "../RayTracerChallenge/Plane.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -1014,7 +1017,7 @@ TEST(INTERSECTION, TwoPoints) {
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 2);
 
@@ -1028,7 +1031,7 @@ TEST(INTERSECTION, Tangent) {
 	Sphere s;
 
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 2);
 
@@ -1042,7 +1045,7 @@ TEST(INTERSECTION, Miss) {
 	Ray r(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 0);
 }
@@ -1052,7 +1055,7 @@ TEST(INTERSECTION, RayInsideSphere) {
 	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 2);
 
@@ -1066,7 +1069,7 @@ TEST(INTERSECTION, SphereBehindRay) {
 	Ray r(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
 	Sphere s;
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 2);
 	ASSERT_FLOAT_EQ(i[0].t, -6.f);
@@ -1106,7 +1109,7 @@ TEST(TrackingIntersections, ObjectOnTheIntersection) {
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 	auto s = Sphere();
 
-	auto i = intersect(r, s);
+	auto i = s.intersect(r);
 
 	ASSERT_EQ(i.size(), 2);
 	ASSERT_EQ(i[0].s, &s);
@@ -1230,7 +1233,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
 
-	auto xs = intersect(r, s);
+	auto xs = s.intersect(r);
 
 	ASSERT_EQ(xs.size(), 2);
 	ASSERT_EQ(xs[0].t, 3);
@@ -1243,24 +1246,24 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	auto xs = intersect(r, s);
+	auto xs = s.intersect(r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
 
 TEST(NormalTest, NormalOnASphereXZYAxis) {
 	auto s = Sphere();
-	auto n = normal_at(s, Tuple::point(1, 0, 0));
+	auto n = s.normalAt( Tuple::point(1, 0, 0));
 
 	ASSERT_EQ(n, Tuple::vector(1, 0, 0));
 
-	n = normal_at(s, Tuple::point(0, 1, 0));
+	n = s.normalAt( Tuple::point(0, 1, 0));
 	ASSERT_EQ(n, Tuple::vector(0, 1, 0));
 
-	n = normal_at(s, Tuple::point(0, 0, 1));
+	n = s.normalAt( Tuple::point(0, 0, 1));
 	ASSERT_EQ(n, Tuple::vector(0, 0, 1));
 
-	n = normal_at(s, Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	n = s.normalAt( Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	ASSERT_EQ(n, Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
@@ -1268,7 +1271,7 @@ TEST(NormalTest, TranslatedSphere) {
 	auto s = Sphere();
 	s.transform = (translate(0, 1, 0));
 
-	auto n = normal_at(s, Tuple::point(0, 1.70711, -0.70711));
+	auto n = s.normalAt( Tuple::point(0, 1.70711, -0.70711));
 
 	ASSERT_EQ(n, Tuple::vector(0, 0.70711, -0.70711));
 }
@@ -1277,7 +1280,7 @@ TEST(NormalTest, TransformedSphere) {
 	auto s = Sphere();
 	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
 
-	auto n = normal_at(s, Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	auto n = s.normalAt( Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
 	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
 
 }
@@ -1770,11 +1773,52 @@ TEST(ShadowTest, OffsetThePoint) {
 	s.transform = translate(0, 0, 1);
 
 	auto i = Intersection(5.f, &s);
-
 	auto comps = Precomputations(i, r);
 
 	ASSERT_TRUE(comps.overPoint.z < -EPSILON/2);
-
 	ASSERT_TRUE(comps.point.z > comps.overPoint.z);
+}
+// TODO: tests for intersect? page 119 or all of them?
 
+TEST(ShapesRefactor, DefaultTransformation) {
+	auto s = Sphere();
+	
+	ASSERT_EQ(s.transform, identityMatrix(4));
+
+	s.transform = translate(2, 3, 4);
+	ASSERT_EQ(s.transform, translate(2, 3, 4));
+}
+
+TEST(ShapesRefactor, DefaultMaterial) {
+	auto s = Sphere();
+	Material m;
+
+	ASSERT_EQ(s.material, m);
+
+	m.ambient = 1;
+	s.material = m;
+
+	ASSERT_EQ(s.material, m);
+}
+
+TEST(PlaneRefactor, IntersectingAbove) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, 1, 0), Tuple::vector(0, -1, 0));
+
+	auto xs = p.intersect(r);
+
+	ASSERT_EQ(xs.size(), 1);
+	ASSERT_EQ(xs[0].t, 1);
+	ASSERT_EQ(xs[0].s, &p);
+}
+
+TEST(PlaneRefactor, IntersectingBelow) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, -1, 0), Tuple::vector(0, 1, 0));
+
+	auto xs = p.intersect(r);
+
+	ASSERT_EQ(xs.size(), 1);
+	ASSERT_EQ(xs[0].t, 1);
+	ASSERT_EQ(xs[0].s, &p);
 }

@@ -10,6 +10,7 @@
 #include "Arena.h"
 #include "World.h"
 #include "Camera.h"
+#include "Plane.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -117,8 +118,10 @@ int main() {
 	std::cout << "Traced the image \n";
 	c.canvasToImage();
 	*/
-	/*
+	
 	// CODE FOR SHADOWS CHAPTER
+	auto plane = Plane();
+
 	auto floor = Sphere();
 	floor.transform = scale(10, 0.01, 10);
 	floor.material = Material();
@@ -156,12 +159,13 @@ int main() {
 
 	auto world = World();
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	world.objects.emplace_back(&floor);
-	world.objects.emplace_back(&leftWall);
-	world.objects.emplace_back(&rightWall);
+	//world.objects.emplace_back(&floor);
+	//world.objects.emplace_back(&leftWall);
+	//world.objects.emplace_back(&rightWall);
 	world.objects.emplace_back(&middle);
 	world.objects.emplace_back(&left);
 	world.objects.emplace_back(&right);
+	world.objects.emplace_back(&plane);
 
 	
 
@@ -170,7 +174,9 @@ int main() {
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-	*/
+	
+	/*
+	auto plane = Plane();
 
 	auto middle = Sphere();
 	middle.transform = translate(-0.55, 1.4, -1.25) * scale(0.25, 0.25, 0.25);
@@ -202,17 +208,18 @@ int main() {
 
 	auto world = World();
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	world.objects.emplace_back(&middle);
-	world.objects.emplace_back(&left);
-	world.objects.emplace_back(&right);
-	world.objects.emplace_back(&bottom);
+	//world.objects.emplace_back(&middle);
+	//world.objects.emplace_back(&left);
+	//world.objects.emplace_back(&right);
+	//world.objects.emplace_back(&bottom);
+	world.objects.emplace_back(&plane);
 
 	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-
+	*/
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
 
