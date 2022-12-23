@@ -13,8 +13,10 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 	std::set<Intersection*, decltype(cmp)> intersections(cmp);
 
 	for (auto object : objects) {
-		
-		auto a = object->intersect(ray);
+
+		// put ray in object space needed before intersect function
+		auto rayCalc = ray.transform(object->transform.inverse());
+		auto a = object->intersect(rayCalc);
 
 		if (a.size() == 0)
 			continue;

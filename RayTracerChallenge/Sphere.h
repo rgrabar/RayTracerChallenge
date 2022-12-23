@@ -16,10 +16,10 @@ public:
 
 	inline std::vector<Intersection> intersect(const Ray& ray) {
 
-		auto rayCalc = ray.transform(transform.inverse());
-		auto shapeToRay = rayCalc.origin - Tuple::point(0, 0, 0);
-		auto a = rayCalc.direction.dotProduct(rayCalc.direction);
-		auto b = 2 * rayCalc.direction.dotProduct(shapeToRay);
+		
+		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
+		auto a = ray.direction.dotProduct(ray.direction);
+		auto b = 2 * ray.direction.dotProduct(shapeToRay);
 		auto c = shapeToRay.dotProduct(shapeToRay) - 1;
 
 		double discriminant = b * b - 4 * a * c;
