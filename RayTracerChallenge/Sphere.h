@@ -42,13 +42,7 @@ public:
 		*/
 		return { {t1, this}, {t2, this} };
 	}
-	Tuple normalAt(const Tuple& worldPoint)const {
-		auto objectPoint = transform.inverse() * worldPoint;
-		auto objectNormal = objectPoint - Tuple::point(0, 0, 0);
-
-		auto worldNormal = transform.inverse().transpose() * objectNormal;
-		worldNormal.w = 0;
-
-		return (worldNormal.normalize());
+	Tuple normalAt(const Tuple& objectPoint)const {
+		return objectPoint - Tuple::point(0, 0, 0);
 	}
 };
