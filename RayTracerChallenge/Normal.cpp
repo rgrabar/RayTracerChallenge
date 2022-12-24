@@ -14,3 +14,10 @@ Tuple normal_at(const Shape& s, const Tuple& worldPoint) {
 Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }
+
+std::vector<Intersection> intersect(const Shape* object, const Ray& ray) {
+
+	// put ray in object space needed before intersect function
+	auto rayCalc = ray.transform(object->transform.inverse());
+	return object->intersect(rayCalc);;
+}

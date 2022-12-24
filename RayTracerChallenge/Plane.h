@@ -7,12 +7,10 @@ class Plane : public Shape{
 public:
 	Plane() : Shape(Tuple::point(0, 0, 0)) {}
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
-		auto rayCalc = ray.transform(transform.inverse());
-		if (fabs(rayCalc.direction.y) < EPSILON)
+	inline std::vector<Intersection> intersect(const Ray& ray)const {
+		if (fabs(ray.direction.y) < EPSILON)
 			return {};
-		double t = -rayCalc.origin.y / rayCalc.direction.y;
-
+		double t = -ray.origin.y / ray.direction.y;
 		return { {t, this} };
 	}
 	Tuple normalAt(const Tuple& worldPoint)const {

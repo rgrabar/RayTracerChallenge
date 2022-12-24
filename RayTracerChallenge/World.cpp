@@ -14,9 +14,7 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 
 	for (auto object : objects) {
 
-		// put ray in object space needed before intersect function
-		auto rayCalc = ray.transform(object->transform.inverse());
-		auto a = object->intersect(rayCalc);
+		auto a = intersect(object, ray);
 
 		if (a.size() == 0)
 			continue;

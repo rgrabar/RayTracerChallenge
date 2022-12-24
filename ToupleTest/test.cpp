@@ -1233,7 +1233,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
 
-	auto xs = s.intersect(r);
+	auto xs = intersect(&s, r);
 
 	ASSERT_EQ(xs.size(), 2);
 	ASSERT_EQ(xs[0].t, 3);
@@ -1246,7 +1246,7 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	auto xs = s.intersect(r);
+	auto xs = intersect(&s, r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -1271,7 +1271,7 @@ TEST(NormalTest, TranslatedSphere) {
 	auto s = Sphere();
 	s.transform = (translate(0, 1, 0));
 
-	auto n = s.normalAt( Tuple::point(0, 1.70711, -0.70711));
+	auto n = normal_at(s, Tuple::point(0, 1.70711, -0.70711));
 
 	ASSERT_EQ(n, Tuple::vector(0, 0.70711, -0.70711));
 }
@@ -1280,7 +1280,7 @@ TEST(NormalTest, TransformedSphere) {
 	auto s = Sphere();
 	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
 
-	auto n = s.normalAt( Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	auto n = normal_at(s, Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
 	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
 
 }
@@ -1800,6 +1800,38 @@ TEST(ShapesRefactor, DefaultMaterial) {
 
 	ASSERT_EQ(s.material, m);
 }
+
+TEST(PlaneRefactor, NormalIsConstant) {
+	auto p = Plane();
+	
+	auto n1 = normal_at(p, Tuple::point(0, 0, 0));
+	ASSERT_EQ(Tuple::vector(0, 1, 0), n1);
+
+	auto n2 = normal_at(p, Tuple::point(10, 0, -10));
+	ASSERT_EQ(Tuple::vector(0, 1, 0), n2);
+
+	auto n3 = normal_at(p, Tuple::point(-5, 0, 150));
+	ASSERT_EQ(Tuple::vector(0, 1, 0), n3);
+}
+
+TEST(PlaneRefactor, IntersectingParallel) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, 10, 0), Tuple::vector(0, 0, 0));
+
+	auto xs = intersect(&p, r);
+
+	ASSERT_EQ(xs.size(), 0);
+}
+
+TEST(PlaneRefactor, IntersectingCoplanar) {
+	auto p = Plane();
+	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+
+	auto xs = intersect(&p, r);
+
+	ASSERT_EQ(xs.size(), 0);
+}
+
 
 TEST(PlaneRefactor, IntersectingAbove) {
 	auto p = Plane();

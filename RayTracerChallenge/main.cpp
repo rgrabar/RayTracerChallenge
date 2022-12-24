@@ -118,11 +118,21 @@ int main() {
 	std::cout << "Traced the image \n";
 	c.canvasToImage();
 	*/
-	/*
+	
 	// CODE FOR SHADOWS CHAPTER
 	auto plane = Plane();
-	plane.transform = translate(10, 0, 0)
+	plane.transform = rotationZ(0.f);
+	plane.material.specular = 0;
 
+	auto plane1 = Plane();
+	plane1.transform = translate(0, 0, 5) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	plane1.material.color = Color(1, 1, 1);
+	plane1.material.specular = 0.f;
+
+	//auto plane2 = Plane();
+	//plane2.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2);
+
+	/*
 	auto floor = Sphere();
 	floor.transform = scale(10, 0.01, 10);
 	floor.material = Material();
@@ -136,7 +146,7 @@ int main() {
 	auto rightWall = Sphere();
 	rightWall.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
 	rightWall.material = floor.material;
-	
+	*/
 	auto middle = Sphere();
 	middle.transform = translate(-0.5, 1, 0.5);
 	middle.material = Material();
@@ -166,18 +176,26 @@ int main() {
 	world.objects.emplace_back(&middle);
 	world.objects.emplace_back(&left);
 	world.objects.emplace_back(&right);
+	world.objects.emplace_back(&plane1);
 	world.objects.emplace_back(&plane);
+	//world.objects.emplace_back(&plane2);
 
 	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-	*/
 	
+	/*
 	auto plane = Plane();
+	plane.transform = rotationZ(0.f);
+	plane.material.specular = 0.f;
 
 	auto plane1 = Plane();
+	plane1.transform = translate(0.0, 0.f, 5.f) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	plane1.material.color = Color(1.0, 1.0, 1.0);
+	plane1.material.specular = 0.f;
+
 	plane.material.color = Color(1, 1, 0);
 
 	auto middle = Sphere();
@@ -216,14 +234,14 @@ int main() {
 	world.objects.emplace_back(&right);
 	world.objects.emplace_back(&bottom);
 	world.objects.emplace_back(&plane);
-	//world.objects.emplace_back(&plane1);
+	world.objects.emplace_back(&plane1);
 
-	Camera cam(250, 150, TEST_PI / 3);
+	Camera cam(200, 100, TEST_PI / 1.5);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-	
+	*/
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
 

@@ -19,7 +19,7 @@ public:
 
 	//TODO: not sure if this should return intersect objects
 
-	inline virtual std::vector<Intersection> intersect(const Ray& ray) = 0;
+	inline virtual std::vector<Intersection> intersect(const Ray& ray)const = 0;
 	inline virtual Tuple normalAt(const Tuple& worldPoint)const = 0;
 
 };

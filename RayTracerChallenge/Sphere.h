@@ -14,7 +14,7 @@ public:
 
 	bool operator==(const Sphere& other) const;
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
+	inline std::vector<Intersection> intersect(const Ray& ray)const {
 
 		
 		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
