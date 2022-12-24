@@ -2,6 +2,9 @@
 #include "Helper.h"
 #include <iostream>
 #include <vector>
+#include <ppl.h>
+
+using namespace concurrency;
 
 // arena code
 //Arena Matrix::a {0};
@@ -152,7 +155,9 @@ bool operator==(const Matrix& lhs, const Matrix& rhs) {
 
 const Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
     Matrix ret = Matrix(lhs.h, rhs.w);
-    for (int row = 0; row < lhs.h; ++row) {
+
+    //TODO: almost no impact?
+    parallel_for(0, lhs.h, [&](size_t row) {
         for (int col = 0; col < rhs.w; ++col) {
             double element = 0;
             for (int i = 0; i < lhs.w; ++i) {
@@ -160,7 +165,8 @@ const Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
             }
             ret.matrix[row * rhs.w + col] = element;
         }
-    }
+    });
+
     return ret;
 }
 
