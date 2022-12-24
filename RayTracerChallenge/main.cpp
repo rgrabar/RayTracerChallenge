@@ -118,9 +118,10 @@ int main() {
 	std::cout << "Traced the image \n";
 	c.canvasToImage();
 	*/
-	
+	/*
 	// CODE FOR SHADOWS CHAPTER
 	auto plane = Plane();
+	plane.transform = translate(10, 0, 0)
 
 	auto floor = Sphere();
 	floor.transform = scale(10, 0.01, 10);
@@ -167,16 +168,17 @@ int main() {
 	world.objects.emplace_back(&right);
 	world.objects.emplace_back(&plane);
 
-	
-
 	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
+	*/
 	
-	/*
 	auto plane = Plane();
+
+	auto plane1 = Plane();
+	plane.material.color = Color(1, 1, 0);
 
 	auto middle = Sphere();
 	middle.transform = translate(-0.55, 1.4, -1.25) * scale(0.25, 0.25, 0.25);
@@ -184,7 +186,7 @@ int main() {
 	middle.material.color = Color(1, 1, 0.3);
 	middle.material.diffuse = 0.7;
 	middle.material.specular = 0.3;
-
+	
 	auto right = Sphere();
 	right.transform = translate(0.3, 1.4, -1.25) * scale(0.25, 0.25, 0.25);
 	right.material = Material();
@@ -205,21 +207,23 @@ int main() {
 	bottom.material.color = Color(0.1, 1, 0.5);
 	bottom.material.diffuse = 0.7;
 	bottom.material.specular = 0.3;
+	
 
 	auto world = World();
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	//world.objects.emplace_back(&middle);
-	//world.objects.emplace_back(&left);
-	//world.objects.emplace_back(&right);
-	//world.objects.emplace_back(&bottom);
+	world.objects.emplace_back(&middle);
+	world.objects.emplace_back(&left);
+	world.objects.emplace_back(&right);
+	world.objects.emplace_back(&bottom);
 	world.objects.emplace_back(&plane);
+	//world.objects.emplace_back(&plane1);
 
 	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-	*/
+	
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
 
