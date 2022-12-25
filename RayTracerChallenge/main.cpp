@@ -11,6 +11,7 @@
 #include "World.h"
 #include "Camera.h"
 #include "Plane.h"
+#include <cstdio>
 
 #include <chrono>
 using namespace std::chrono;
@@ -121,13 +122,13 @@ int main() {
 	
 	// CODE FOR SHADOWS CHAPTER
 	auto plane = Plane();
-	plane.transform = rotationZ(0.f);
+	plane.material.color = Color(1, 0.9, 0.9);
 	plane.material.specular = 0;
+	plane.material.pattern = new Pattern(Color(0.6650976253640603, 0.7912817405912899, 0.44011403856670883), Color(0.8373936802745096, 0.41784209897452695, 0.3438756980098788));
 
 	auto plane1 = Plane();
-	plane1.transform = translate(0, 0, 5) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
-	plane1.material.color = Color(1, 1, 1);
-	plane1.material.specular = 0.f;
+	plane1.transform = translate(0, 0, 3) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	plane1.material = plane.material;
 
 	//auto plane2 = Plane();
 	//plane2.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2);
@@ -147,12 +148,15 @@ int main() {
 	rightWall.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
 	rightWall.material = floor.material;
 	*/
+
 	auto middle = Sphere();
 	middle.transform = translate(-0.5, 1, 0.5);
 	middle.material = Material();
 	middle.material.color = Color(0.1, 1, 0.5);
 	middle.material.diffuse = 0.7;
 	middle.material.specular = 0.3;
+	middle.material.pattern = new Pattern(Color(0.5123, 0.3426, 0.934906), Color(0.934906 , 0.3426, 0.5123));
+	middle.material.pattern->transform = rotationZ(TEST_PI / 8) * scale(0.25,0.25,0.25);
 
 	auto right = Sphere();
 	right.transform = translate(1.5, 0.5, -0.5) * scale(0.5, 0.5, 0.5);
@@ -160,6 +164,7 @@ int main() {
 	right.material.color = Color(0.5, 1, 0.1);
 	right.material.diffuse = 0.7;
 	right.material.specular = 0.3;
+	right.material.pattern = new Pattern(Color(0.93859, 0.1257, 0.8694), Color(0.325, 0.93663, 0.34536));
 
 	auto left = Sphere();
 	left.transform = translate(-1.5, 0.33, -0.75) * scale(0.33, 0.33, 0.33);
@@ -167,6 +172,7 @@ int main() {
 	left.material.color = Color(1, 0.8, 0.1);
 	left.material.diffuse = 0.7;
 	left.material.specular = 0.3;
+	left.material.pattern = new Pattern();
 
 	auto world = World();
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
@@ -180,8 +186,8 @@ int main() {
 	world.objects.emplace_back(&plane);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(250, 150, TEST_PI / 3);
-	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	Camera cam(950, 850, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(1, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
@@ -254,5 +260,7 @@ int main() {
 
 	std::cout << duration.count() << std::endl;
 
+
+	std::getchar();
 	return 0;
 }

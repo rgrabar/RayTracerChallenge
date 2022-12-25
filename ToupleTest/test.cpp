@@ -45,6 +45,9 @@
 #include "../RayTracerChallenge/Plane.h"
 #include "../RayTracerChallenge/Plane.cpp"
 
+#include "../RayTracerChallenge/Pattern.h"
+#include "../RayTracerChallenge/Pattern.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -1325,7 +1328,7 @@ TEST(LightingTest, EyeBetweenLight) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = m.lighting(light, position, eyev, normalv, 0);
+	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1336,7 +1339,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = m.lighting(light, position, eyev, normalv, 0);
+	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1347,7 +1350,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = m.lighting(light, position, eyev, normalv, 0);
+	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1358,7 +1361,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = m.lighting(light, position, eyev, normalv, 0);
+	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
 	std::cout << result.b << " " << result.g << " " << result.r << "\n";
 
@@ -1371,7 +1374,7 @@ TEST(LightingTest, LightBehindSurface) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
-	auto result = m.lighting(light, position, eyev, normalv, 0);
+	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -1693,7 +1696,7 @@ TEST(ShadowTest, SurfaceInShadow) {
 	auto m = Material();
 	auto position = Tuple::point(0, 0, 0);
 
-	auto res = m.lighting(light, position, eyev, normalv, 1);
+	auto res = lighting(new Sphere(), light, position, eyev, normalv, 1);
 
 	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
 }
@@ -1853,4 +1856,61 @@ TEST(PlaneRefactor, IntersectingBelow) {
 	ASSERT_EQ(xs.size(), 1);
 	ASSERT_EQ(xs[0].t, 1);
 	ASSERT_EQ(xs[0].s, &p);
+}
+
+TEST(PatternTest, DefaultPattern) {
+	auto pattern = Pattern();
+
+	ASSERT_EQ(pattern.a, Color(1, 1, 1));
+	ASSERT_EQ(pattern.b, Color(0, 0, 0));
+}
+
+TEST(PatternTest, PatternAt) {
+	auto pattern = Pattern();
+	
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 1, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 2, 0)), Color(1, 1, 1));
+
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 1)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 2)), Color(1, 1, 1));
+	
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(0.9, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(-0.1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(-1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.stripeAt(Tuple::point(-1.1, 0, 0)), Color(1, 1, 1));
+}
+
+TEST(PatternTest, ObjectTransformation) {
+	auto object = Sphere();
+	object.transform = scale(2, 2, 2);
+	object.material.pattern = new Pattern();
+
+	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
+	
+	ASSERT_EQ(c, Color(1, 1, 1));
+}
+
+TEST(PatternTest, StripesWithPatternTransform) {
+	auto object = Sphere();
+	object.material.pattern = new Pattern();
+	object.material.pattern->transform = scale(2, 2, 2);
+
+	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
+
+	ASSERT_EQ(c, Color(1, 1, 1));
+}
+
+TEST(PatternTest, StripesWithPatternAndObjectTransform) {
+	auto object = Sphere();
+	object.transform = scale(2, 2, 2);
+	object.material.pattern = new Pattern();
+	object.material.pattern->transform = translate(0.5, 0, 0);
+
+	auto c = object.material.pattern->stripeAt(Tuple::point(2.5, 0, 0));
+
+	ASSERT_EQ(c, Color(1, 1, 1));
 }

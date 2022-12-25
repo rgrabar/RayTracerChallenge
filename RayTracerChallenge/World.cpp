@@ -4,7 +4,7 @@ Color World::shadeHit(const Precomputations& comps) const{
 
 	auto shadowed = isShadowed(comps.overPoint);
 
-	return (comps.shape)->material.lighting(light, comps.point, comps.eyev, comps.normalv, shadowed);
+	return lighting(comps.shape, light, comps.point, comps.eyev, comps.normalv, shadowed);
 }
 //TODO: not sure if this should return intersect objects
 
