@@ -48,6 +48,15 @@
 #include "../RayTracerChallenge/Pattern.h"
 #include "../RayTracerChallenge/Pattern.cpp"
 
+#include "../RayTracerChallenge/StripePattern.h"
+#include "../RayTracerChallenge/StripePattern.cpp"
+
+#include "../RayTracerChallenge/GradientPattern.h"
+#include "../RayTracerChallenge/GradientPattern.cpp"
+
+#include "../RayTracerChallenge/CheckerPattern.h"
+#include "../RayTracerChallenge/CheckerPattern.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -1858,36 +1867,38 @@ TEST(PlaneRefactor, IntersectingBelow) {
 	ASSERT_EQ(xs[0].s, &p);
 }
 
+//TODO: generalizing paterns tests missing
+
 TEST(PatternTest, DefaultPattern) {
-	auto pattern = Pattern();
+	auto pattern = StripePattern();
 
 	ASSERT_EQ(pattern.a, Color(1, 1, 1));
 	ASSERT_EQ(pattern.b, Color(0, 0, 0));
 }
 
 TEST(PatternTest, PatternAt) {
-	auto pattern = Pattern();
+	auto pattern = StripePattern();
 	
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 1, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 2, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 1, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 2, 0)), Color(1, 1, 1));
 
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 1)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 2)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 2)), Color(1, 1, 1));
 	
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(0.9, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(-0.1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(-1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.stripeAt(Tuple::point(-1.1, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.9, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-0.1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-1.1, 0, 0)), Color(1, 1, 1));
 }
 
 TEST(PatternTest, ObjectTransformation) {
 	auto object = Sphere();
 	object.transform = scale(2, 2, 2);
-	object.material.pattern = new Pattern();
+	object.material.pattern = new StripePattern();
 
 	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
 	
@@ -1896,7 +1907,7 @@ TEST(PatternTest, ObjectTransformation) {
 
 TEST(PatternTest, StripesWithPatternTransform) {
 	auto object = Sphere();
-	object.material.pattern = new Pattern();
+	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = scale(2, 2, 2);
 
 	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
@@ -1907,10 +1918,38 @@ TEST(PatternTest, StripesWithPatternTransform) {
 TEST(PatternTest, StripesWithPatternAndObjectTransform) {
 	auto object = Sphere();
 	object.transform = scale(2, 2, 2);
-	object.material.pattern = new Pattern();
+	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = translate(0.5, 0, 0);
 
-	auto c = object.material.pattern->stripeAt(Tuple::point(2.5, 0, 0));
+	auto c = object.material.pattern->patternColorAt(Tuple::point(2.5, 0, 0));
 
 	ASSERT_EQ(c, Color(1, 1, 1));
+}
+
+
+TEST(PatternTest, GradientPatternTest) {
+
+	auto object = Sphere();
+	object.material.pattern = new GradientPattern(Color(1, 1, 1), Color(0, 0, 0));
+
+	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+}
+
+TEST(PatternTest, CheckerTest) {
+
+	auto pattern = CheckerPattern();
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.99, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1.01, 0, 0)), Color(0, 0, 0));
+
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0.99, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 1.01, 0)), Color(0, 0, 0));
+
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0.99)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1.01)), Color(0, 0, 0));
 }

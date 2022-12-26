@@ -3,8 +3,8 @@
 Color World::shadeHit(const Precomputations& comps) const{
 
 	auto shadowed = isShadowed(comps.overPoint);
-
-	return lighting(comps.shape, light, comps.point, comps.eyev, comps.normalv, shadowed);
+	// TODO: sending comps.point instead of comps.overPoint causes acne
+	return lighting(comps.shape, light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
 }
 //TODO: not sure if this should return intersect objects
 

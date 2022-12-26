@@ -27,7 +27,7 @@ Color stripeAtObject(const Shape* object, const Tuple& worldPoint) {
 	auto objectPoint = object->transform.inverse() * worldPoint;
 	auto patternPoint = object->material.pattern->transform.inverse() * objectPoint;
 
-	return object->material.pattern->stripeAt(patternPoint);
+	return object->material.pattern->patternColorAt(patternPoint);
 }
 
 Color lighting(const Shape* object, const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow){

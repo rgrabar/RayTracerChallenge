@@ -8,9 +8,8 @@ public:
 	Color a;
 	Color b;
 	Matrix transform = identityMatrix(4);
-
 	Pattern();
 	Pattern(const Color& _a, const Color& _b);
 
-	Color stripeAt(const Tuple& point)const;
+	virtual Color patternColorAt(const Tuple& point)const = 0;
 };
