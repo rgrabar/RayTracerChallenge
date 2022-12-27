@@ -15,6 +15,10 @@ Color operator*(const Color& c, const double scalar) {
 	return Color(c.r * scalar, c.g * scalar, c.b * scalar);
 }
 
+Color operator/(const Color& c, const double scalar) {
+	return Color(c.r / scalar, c.g / scalar, c.b / scalar);
+}
+
 Color operator*(const Color& firstColor, const Color& secondColor) {
 	return Color(firstColor.r * secondColor.r, firstColor.g * secondColor.g, firstColor.b * secondColor.b);
 }

@@ -16,6 +16,7 @@
 #include "GradientPattern.h"
 #include "RingPattern.h"
 #include "CheckerPattern.h"
+#include "BlendedPattern.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -126,8 +127,14 @@ int main() {
 	
 	// CODE FOR SHADOWS CHAPTER
 	auto plane = Plane();
-	plane.material.pattern = new CheckerPattern(Color(0.f, 0.f, 0.f), Color(1.f, 1.f, 1.f));
-	plane.material.pattern->transform = scale(0.25, 0.25, 0.25);
+	auto pat = StripePattern(Color(1, 0, 0), Color(0, 0, 0));
+	auto pat1 = StripePattern(Color(0, 1, 0), Color(0, 0, 1));
+	pat1.transform = rotationY(TEST_PI / 2);
+	plane.material.pattern = new BlendedPattern(&pat, &pat1);
+	//plane.material.pattern = &pat;
+
+	//plane.material.pattern = new CheckerPattern(Color(0.f, 0.f, 0.f), Color(1.f, 1.f, 1.f));
+	//plane.material.pattern->transform = scale(0.25, 0.25, 0.25);
 
 	auto plane1 = Plane();
 	plane1.transform = translate(0, 0, 3) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
