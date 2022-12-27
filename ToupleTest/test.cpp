@@ -57,6 +57,9 @@
 #include "../RayTracerChallenge/CheckerPattern.h"
 #include "../RayTracerChallenge/CheckerPattern.cpp"
 
+#include "../RayTracerChallenge/RingPattern.h"
+#include "../RayTracerChallenge/RingPattern.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 
@@ -1895,6 +1898,27 @@ TEST(PatternTest, PatternAt) {
 	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-1.1, 0, 0)), Color(1, 1, 1));
 }
 
+TEST(PatternTest, LightingWithPattern) {
+	auto sphere = Sphere();
+	
+	auto material = Material();
+	material.pattern = new StripePattern();
+	material.ambient = 1;
+	material.diffuse = 0;
+	material.specular = 0;
+
+	sphere.material = material;
+
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv = Tuple::vector(0, 0, -1);
+	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	auto c1 = lighting(&sphere, light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
+	auto c2 = lighting(&sphere, light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
+
+	ASSERT_EQ(c1, Color(1, 1, 1));
+	ASSERT_EQ(c2, Color(0, 0, 0));
+}
+
 TEST(PatternTest, ObjectTransformation) {
 	auto object = Sphere();
 	object.transform = scale(2, 2, 2);
@@ -1926,6 +1950,40 @@ TEST(PatternTest, StripesWithPatternAndObjectTransform) {
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
 
+TEST(PatternTest, GeneralizingPatterns) {
+	auto pattern = StripePattern();
+	ASSERT_EQ(pattern.transform, identityMatrix(4));
+}
+
+TEST(PatternTest, GeneralizingPatternsTransform) {
+	auto pattern = StripePattern();
+	pattern.transform = translate(1, 2, 3);
+	ASSERT_EQ(pattern.transform, translate(1, 2, 3));
+}
+
+TEST(PatternTest, PatternWithObjectTransform) {
+	
+	// TODO: should i have a non member patterncolorat funciton (pattern_at_shape in the book)
+	// implement a test pattern?
+	auto shape = Sphere();
+	shape.transform = scale(2, 2, 2);
+	auto pattern = StripePattern();
+	shape.material.pattern = &pattern;
+	auto c = pattern.patternColorAt(Tuple::point(2, 3, 4));
+	//ASSERT_EQ(c, Color(1, 1.5, 2));
+}
+
+TEST(PatternTest, PatternWihtObjectAndPatternTransform) {
+
+	// TODO: test pattern
+	auto shape = Sphere();
+	shape.transform = scale(2, 2, 2);
+	auto pattern = StripePattern();
+	pattern.transform = translate(0.5, 1, 1.5);
+	shape.material.pattern = &pattern;
+	auto c = stripeAtObject(&shape, Tuple::point(2.5, 3, 3.5));
+	//ASSERT_EQ(c, Color(0.75, 0.75, 0.75));
+}
 
 TEST(PatternTest, GradientPatternTest) {
 
@@ -1936,6 +1994,16 @@ TEST(PatternTest, GradientPatternTest) {
 	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
 	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
 	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+}
+
+TEST(PatternTest, RingPatternTest) {
+
+	auto pattern = RingPattern();
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1)), Color(0, 0, 0));
+
+	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.708, 0, 0.708)), Color(0, 0, 0));
 }
 
 TEST(PatternTest, CheckerTest) {
