@@ -17,6 +17,8 @@
 #include "RingPattern.h"
 #include "CheckerPattern.h"
 #include "BlendedPattern.h"
+#include "RadialGradientPattern.h"
+#include "NestedPattern.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -138,7 +140,8 @@ int main() {
 
 	auto plane1 = Plane();
 	plane1.transform = translate(0, 0, 3) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
-	plane1.material.pattern = new RingPattern(Color(1, 0.25098, 0), Color(0, 0, 0));
+	//plane1.material.pattern = new RingPattern(Color(1, 0.25098, 0), Color(0, 0, 0));
+	plane1.material.pattern = new RadialGradientPattern(Color(0, 1, 0), Color(0, 0, 1));
 
 	//auto plane2 = Plane();
 	//plane2.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2);
@@ -197,7 +200,7 @@ int main() {
 	world.objects.emplace_back(&plane);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(1250, 1150, TEST_PI / 3);
+	Camera cam(250, 150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(1, 1.5, -8), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 

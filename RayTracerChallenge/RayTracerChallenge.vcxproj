@@ -161,10 +161,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="NestedPattern.cpp" />
     <ClCompile Include="Normal.cpp" />
     <ClCompile Include="Pattern.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PreComputations.cpp" />
+    <ClCompile Include="RadialGradientPattern.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RingPattern.cpp" />
     <ClCompile Include="Sphere.cpp" />
@@ -186,10 +189,13 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="NestedPattern.h" />
     <ClInclude Include="Normal.h" />
     <ClInclude Include="Pattern.h" />
+    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PreComputations.h" />
+    <ClInclude Include="RadialGradientPattern.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="RingPattern.h" />
     <ClInclude Include="Shape.h" />

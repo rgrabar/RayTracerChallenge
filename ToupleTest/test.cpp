@@ -2021,3 +2021,5 @@ TEST(PatternTest, CheckerTest) {
 	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0.99)), Color(1, 1, 1));
 	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1.01)), Color(0, 0, 0));
 }
+
+// TODO: nested patterns
