@@ -15,10 +15,12 @@ public:
 	Light light {Color(1, 1, 1), Tuple::point(-10, 10, -10)};
 	std::vector<Shape*> objects;
 
-	Color shadeHit(const Precomputations& comps) const;
+	Color shadeHit(const Precomputations& comps, int& remaining) const;
 	std::set <Intersection*, decltype(cmp)> worldIntersection(const Ray& ray)const;
 
-	Color colorAt(const Ray& r)const;
+	Color colorAt(const Ray& r, int remaining = 4)const;
 	bool isShadowed(const Tuple& point)const;
+
+	Color reflectedColor(const Precomputations& comps, int& remaining) const;
 };
 

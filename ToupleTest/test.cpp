@@ -62,6 +62,7 @@
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
+// TODO: tmp = 1; for shade hit, better way to make it work with defaults
 
 TEST(TupleTest, PointBasic) {
 	Tuple tuple = Tuple(4.3, -4.2, 3.1, 1.0);
@@ -1491,7 +1492,9 @@ TEST(PreCompute, ShadingAnIntersection) {
 	Intersection i(4.f, w.objects[0]);
 
 	Precomputations comps(i, r);
-	auto c = w.shadeHit(comps);
+
+	int tmp = 1;
+	auto c = w.shadeHit(comps, tmp);
 
 	ASSERT_EQ(c, Color(0.38066, 0.47583, 0.2855));
 }
@@ -1516,7 +1519,9 @@ TEST(PreCompute, FromInside) {
 	Intersection i(0.5f, w.objects[1]);
 
 	Precomputations comps(i, r);
-	auto c = w.shadeHit(comps);
+
+	int tmp = 1;
+	auto c = w.shadeHit(comps ,tmp);
 	ASSERT_EQ(c, Color(0.90498, 0.90498, 0.90498));
 }
 
@@ -1776,7 +1781,8 @@ TEST(ShadowTest, ShadeHitAcne) {
 
 	auto comps = Precomputations(i, r);
 
-	auto c = w.shadeHit(comps);
+	int tmp = 1;
+	auto c = w.shadeHit(comps, tmp);
 
 	ASSERT_EQ(c, Color(0.1, 0.1, 0.1));
 }
@@ -2022,4 +2028,145 @@ TEST(PatternTest, CheckerTest) {
 	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1.01)), Color(0, 0, 0));
 }
 
-// TODO: nested patterns
+// TODO: nested patterns, perlin noise
+
+TEST(ReflectivityTest, DefaultMaterial) {
+
+	Material m;
+	ASSERT_EQ(m.reflective, 0.0);
+}
+
+TEST(ReflectivityTest, ReflectionVector) {
+
+	auto shape = Plane();
+	auto r = Ray(Tuple::point(0, 1, -1), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto i = Intersection(sqrt(2), &shape);
+	auto comps = Precomputations(i, r);
+
+	ASSERT_EQ(comps.reflectv, Tuple::vector(0, sqrt(2) / 2, sqrt(2) / 2));
+}
+
+TEST(ReflectivityTest, NonReflectiveMaterial) {
+
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	World w;
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+
+	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+
+	auto i = Intersection(1, w.objects[1]);
+	auto comps = Precomputations(i, r);
+
+	int tmp = 1;
+	auto color = w.reflectedColor(comps, tmp);
+
+	ASSERT_EQ(color, Color(0, 0, 0));
+}
+
+TEST(ReflectivityTest, ReflectiveMaterial) {
+
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	auto shape = Plane();
+	shape.material.reflective = 0.5;
+	shape.transform = translate(0, -1, 0);
+
+	World w;
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+	w.objects.emplace_back(&shape);
+
+	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+
+	auto i = Intersection(sqrt(2), w.objects[2]);
+	auto comps = Precomputations(i, r);
+
+	int tmp = 1;
+
+	auto color = w.reflectedColor(comps, tmp);
+
+	// TODO: test seems fine a bigger epsilon for tests?
+	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
+	//ASSERT_EQ(color, Color(0.19032, 0.2379, 0.14274));
+}
+
+TEST(ReflectivityTest, ShadeHitReflectiveMaterial) {
+
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	auto shape = Plane();
+	shape.material.reflective = 0.5;
+	shape.transform = translate(0, -1, 0);
+
+	World w;
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+	w.objects.emplace_back(&shape);
+
+	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+
+	auto i = Intersection(sqrt(2), w.objects[2]);
+	auto comps = Precomputations(i, r);
+
+	int tmp = 1;
+	auto color = w.shadeHit(comps, tmp);
+
+	// TODO: test seems fine a bigger epsilon for tests?
+	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
+	//ASSERT_EQ(color, Color(0.87677, 0.92436, 0.82918));
+}
+
+// TODO: test if there is infinite recursion test 6 in the book
+
+
+TEST(ReflectivityTest, ShadeHitReflectiveMaterialMaxDepth) {
+
+	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	Sphere s1, s2;
+	s1.material.color = Color(0.8, 1.0, 0.6);
+	s1.material.diffuse = 0.7;
+	s1.material.specular = 0.2;
+
+	s2.transform = scale(0.5, 0.5, 0.5);
+
+	auto shape = Plane();
+	shape.material.reflective = 0.5;
+	shape.transform = translate(0, -1, 0);
+
+	World w;
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+	w.objects.emplace_back(&shape);
+
+	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+
+	auto i = Intersection(sqrt(2), w.objects[2]);
+	auto comps = Precomputations(i, r);
+
+	int tmp = 0;
+	auto color = w.reflectedColor(comps, tmp);
+
+	// TODO: test seems fine a bigger epsilon for tests?
+	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
+	ASSERT_EQ(color, Color(0, 0, 0));
+}

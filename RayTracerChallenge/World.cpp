@@ -1,10 +1,15 @@
 #include "World.h"
 #include <iostream>
-Color World::shadeHit(const Precomputations& comps) const{
+#include "Helper.h"
+
+Color World::shadeHit(const Precomputations& comps, int& remaining) const{
 
 	auto shadowed = isShadowed(comps.overPoint);
 	// TODO: sending comps.point instead of comps.overPoint causes acne
-	return lighting(comps.shape, light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
+	auto surface = lighting(comps.shape, light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
+	auto reflected = reflectedColor(comps, remaining);
+
+	return surface + reflected;
 }
 //TODO: not sure if this should return intersect objects
 
@@ -34,7 +39,7 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 	return intersections;
 }
 
-Color World::colorAt(const Ray& r)const {
+Color World::colorAt(const Ray& r, int remaining)const {
 	auto intWorld = worldIntersection(r);
 	Intersections i(intWorld);
 
@@ -44,7 +49,7 @@ Color World::colorAt(const Ray& r)const {
 
 	Precomputations p(*ht, r);
 
-	return shadeHit(p);
+	return shadeHit(p, remaining);
 }
 
 bool World::isShadowed(const Tuple& point)const {
@@ -61,4 +66,18 @@ bool World::isShadowed(const Tuple& point)const {
 	if (h != nullptr && h->t < distance)
 		return true;
 	return false;
+}
+
+Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
+	if (remaining <= 0)
+		return Color(0, 0, 0);
+	
+	if (epsilonEqual(comps.shape->material.reflective, 0)) {
+		return Color(0, 0, 0);
+	}
+
+	auto reflectedRay = Ray(comps.overPoint, comps.reflectv);
+	auto color = colorAt(reflectedRay, remaining - 1);
+
+	return color * comps.shape->material.reflective;
 }

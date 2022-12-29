@@ -12,8 +12,9 @@ public:
 	Ray ray;
 	double t;
 	Shape* shape;
-	Tuple point, eyev, normalv;
+	Tuple point, eyev, normalv, reflectv;
 	bool inside;
 	Tuple overPoint;
+	
 	Precomputations(const Intersection& _intersection, const Ray& _ray);
 };

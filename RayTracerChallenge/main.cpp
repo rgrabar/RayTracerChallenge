@@ -133,6 +133,7 @@ int main() {
 	auto pat1 = StripePattern(Color(0, 1, 0), Color(0, 0, 1));
 	pat1.transform = rotationY(TEST_PI / 2);
 	plane.material.pattern = new BlendedPattern(&pat, &pat1);
+	plane.material.reflective = 0.5;
 	//plane.material.pattern = &pat;
 
 	//plane.material.pattern = new CheckerPattern(Color(0.f, 0.f, 0.f), Color(1.f, 1.f, 1.f));
@@ -200,7 +201,7 @@ int main() {
 	world.objects.emplace_back(&plane);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(250, 150, TEST_PI / 3);
+	Camera cam(1250, 1150, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(1, 1.5, -8), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
