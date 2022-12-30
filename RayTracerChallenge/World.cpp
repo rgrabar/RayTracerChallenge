@@ -1,6 +1,7 @@
 #include "World.h"
 #include <iostream>
 #include "Helper.h"
+#include "Transformations.h"
 
 Color World::shadeHit(const Precomputations& comps, int& remaining) const{
 
@@ -80,4 +81,21 @@ Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
 	auto color = colorAt(reflectedRay, remaining - 1);
 
 	return color * comps.shape->material.reflective;
+}
+
+World defaultWorld() {
+
+	Sphere* s1 = new Sphere();
+	Sphere* s2 = new Sphere();
+	s1->material.color = Color(0.8, 1.0, 0.6);
+	s1->material.diffuse = 0.7;
+	s1->material.specular = 0.2;
+
+	s2->transform = scale(0.5, 0.5, 0.5);
+
+	World w;
+	w.objects.emplace_back(s1);
+	w.objects.emplace_back(s2);
+
+	return w;
 }

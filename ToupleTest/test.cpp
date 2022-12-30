@@ -1376,8 +1376,6 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
 
-	std::cout << result.b << " " << result.g << " " << result.r << "\n";
-
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
 
@@ -1414,18 +1412,8 @@ TEST(WorldTest, DefaultWorld) {
 
 TEST(WorldTest, WorldRayIntersect) {
 
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	auto test = w.worldIntersection(r);
 
@@ -1476,18 +1464,8 @@ TEST(PreCompute, IntersectionInside) {
 }
 
 TEST(PreCompute, ShadingAnIntersection) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	Intersection i(4.f, w.objects[0]);
 
@@ -1500,21 +1478,10 @@ TEST(PreCompute, ShadingAnIntersection) {
 }
 
 TEST(PreCompute, FromInside) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 
 	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	Intersection i(0.5f, w.objects[1]);
 
@@ -1526,18 +1493,8 @@ TEST(PreCompute, FromInside) {
 }
 
 TEST(PreCompute, RayMiss) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	auto c = w.colorAt(r);
 
@@ -1545,18 +1502,8 @@ TEST(PreCompute, RayMiss) {
 }
 
 TEST(PreCompute, RayHit) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	auto c = w.colorAt(r);
 
@@ -1564,24 +1511,13 @@ TEST(PreCompute, RayHit) {
 }
 
 TEST(PreCompute, IntersectionBehindRay) {
-	World w;
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-	s1.material.ambient = 1;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-	s2.material.ambient = 1;
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
+	World w = defaultWorld();
+	w.objects[1]->material.ambient = 1;
 
 	Ray r(Tuple::point(0, 0, 0.75), Tuple::vector(0, 0, -1));
 	auto c = w.colorAt(r);
 
-	ASSERT_EQ(c, s2.material.color);
+	ASSERT_EQ(c, w.objects[1]->material.color);
 }
 
 TEST(ViewTransformation, defaultOrientation) {
@@ -1684,18 +1620,8 @@ TEST(CameraTest, RayCameraTransformed) {
 }
 
 TEST(CameraTest, RenderingWithCamera) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	Camera c(11, 11, TEST_PI / 2);
 	c.transform = viewTransformation(Tuple::point(0, 0, -5), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
@@ -1719,18 +1645,8 @@ TEST(ShadowTest, SurfaceInShadow) {
 }
 
 TEST(ShadowTest, TestingNotInShadow) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	Tuple p = Tuple::point(0, 10, 0);
 
@@ -1738,18 +1654,8 @@ TEST(ShadowTest, TestingNotInShadow) {
 }
 
 TEST(ShadowTest, TestingInShadow) {
-	World w;
+	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	Tuple p = Tuple::point(0, 10, 0);
 
@@ -1766,18 +1672,11 @@ TEST(ShadowTest, TestingInShadow) {
 }
 
 TEST(ShadowTest, ShadeHitAcne) {
-	World w;
+	World w = defaultWorld();
 	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	Sphere s1;
-	Sphere s2;
-
-	s2.transform = translate(0, 0, 10);
-
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 
 	auto r = Ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
-	auto i = Intersection(4.f, &s2);
+	auto i = Intersection(4.f, w.objects[1]);
 
 	auto comps = Precomputations(i, r);
 
@@ -2048,17 +1947,7 @@ TEST(ReflectivityTest, ReflectionVector) {
 
 TEST(ReflectivityTest, NonReflectiveMaterial) {
 
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
-	World w;
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
+	World w = defaultWorld();
 
 	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 
@@ -2073,21 +1962,12 @@ TEST(ReflectivityTest, NonReflectiveMaterial) {
 
 TEST(ReflectivityTest, ReflectiveMaterial) {
 
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
-
+	World w = defaultWorld();
+	
 	auto shape = Plane();
 	shape.material.reflective = 0.5;
 	shape.transform = translate(0, -1, 0);
 
-	World w;
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 	w.objects.emplace_back(&shape);
 
 	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
@@ -2106,21 +1986,12 @@ TEST(ReflectivityTest, ReflectiveMaterial) {
 
 TEST(ReflectivityTest, ShadeHitReflectiveMaterial) {
 
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
+	World w = defaultWorld();
 
 	auto shape = Plane();
 	shape.material.reflective = 0.5;
 	shape.transform = translate(0, -1, 0);
 
-	World w;
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 	w.objects.emplace_back(&shape);
 
 	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
@@ -2141,21 +2012,12 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterial) {
 
 TEST(ReflectivityTest, ShadeHitReflectiveMaterialMaxDepth) {
 
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	Sphere s1, s2;
-	s1.material.color = Color(0.8, 1.0, 0.6);
-	s1.material.diffuse = 0.7;
-	s1.material.specular = 0.2;
-
-	s2.transform = scale(0.5, 0.5, 0.5);
+	World w = defaultWorld();
 
 	auto shape = Plane();
 	shape.material.reflective = 0.5;
 	shape.transform = translate(0, -1, 0);
 
-	World w;
-	w.objects.emplace_back(&s1);
-	w.objects.emplace_back(&s2);
 	w.objects.emplace_back(&shape);
 
 	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
@@ -2169,4 +2031,11 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterialMaxDepth) {
 	// TODO: test seems fine a bigger epsilon for tests?
 	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
 	ASSERT_EQ(color, Color(0, 0, 0));
+}
+
+TEST(RefractionTest, DefaultMaterial) {
+
+	auto m = Material();
+	ASSERT_FLOAT_EQ(m.transparency, 0.0f);
+	ASSERT_FLOAT_EQ(m.reflectiveIndex, 1.0f);
 }

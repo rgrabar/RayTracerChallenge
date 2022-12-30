@@ -24,3 +24,4 @@ public:
 	Color reflectedColor(const Precomputations& comps, int& remaining) const;
 };
 
+World defaultWorld();
