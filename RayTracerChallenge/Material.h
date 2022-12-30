@@ -15,6 +15,8 @@ struct Material {
 	double specular = 0.9;
 	double shininess = 200;
 	double reflective = 0.0;
+	double transparency = 0.0;
+	double reflectiveIndex = 1.0;
 	Pattern* pattern = nullptr;
 
 };

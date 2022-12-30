@@ -20,7 +20,7 @@ std::vector<Intersection> intersect(const Shape* object, const Ray& ray) {
 
 	// put ray in object space needed before intersect function
 	auto rayCalc = ray.transform(object->transform.inverse());
-	return object->intersect(rayCalc);;
+	return object->intersect(rayCalc);
 }
 
 Color stripeAtObject(const Shape* object, const Tuple& worldPoint) {
