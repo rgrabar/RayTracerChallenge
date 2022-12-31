@@ -2039,3 +2039,30 @@ TEST(RefractionTest, DefaultMaterial) {
 	ASSERT_FLOAT_EQ(m.transparency, 0.0f);
 	ASSERT_FLOAT_EQ(m.reflectiveIndex, 1.0f);
 }
+
+TEST(RefractionTest, GlassySphere) {
+
+	auto s = glassSphere();
+	ASSERT_EQ(s.transform, identityMatrix(4));
+	ASSERT_FLOAT_EQ(s.material.transparency, 1.0);
+	ASSERT_FLOAT_EQ(s.material.reflectiveIndex, 1.5);
+
+}
+
+TEST(RefractionTest, n1n2VariousIntersections) {
+
+	auto a = glassSphere();
+	a.transform = scale(2, 2, 2);
+	a.material.reflectiveIndex = 1.5;
+
+	auto b = glassSphere();
+	b.transform = scale(0, 0, -0.25);
+	b.material.reflectiveIndex = 2.0;
+
+	auto b = glassSphere();
+	b.transform = scale(0, 0, 0.25);
+	b.material.reflectiveIndex = 2.5;
+
+	auto r = Ray(Tuple::point(0, 0, -4), Tuple::vector(0, 0, 1));
+	
+}
