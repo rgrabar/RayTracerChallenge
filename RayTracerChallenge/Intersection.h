@@ -28,7 +28,7 @@ public:
 
 	}
 
-	Intersection* hit();
+	Intersection* hit()const;
 	std::set<Intersection*, decltype(cmp)> intersections;
 };
 

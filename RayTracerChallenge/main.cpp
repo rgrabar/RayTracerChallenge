@@ -126,8 +126,8 @@ int main() {
 	std::cout << "Traced the image \n";
 	c.canvasToImage();
 	*/
-	
-	// CODE FOR SHADOWS CHAPTER
+	/*
+	// CODE FOR SHADOWS CHAPTER, PATTERNS, REFLECTION
 	auto plane = Plane();
 	auto pat = StripePattern(Color(1, 0, 0), Color(0, 0, 0));
 	auto pat1 = StripePattern(Color(0, 1, 0), Color(0, 0, 1));
@@ -143,26 +143,10 @@ int main() {
 	plane1.transform = translate(0, 0, 3) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
 	//plane1.material.pattern = new RingPattern(Color(1, 0.25098, 0), Color(0, 0, 0));
 	plane1.material.pattern = new RadialGradientPattern(Color(0, 1, 0), Color(0, 0, 1));
-
+	
 	//auto plane2 = Plane();
 	//plane2.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2);
-
-	/*
-	auto floor = Sphere();
-	floor.transform = scale(10, 0.01, 10);
-	floor.material = Material();
-	floor.material.color = Color(1, 0.9, 0.9);
-	floor.material.specular = 0;
 	
-	auto leftWall = Sphere();
-	leftWall.transform = translate(0, 0, 5) * rotationY(-TEST_PI/4) *rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
-	leftWall.material = floor.material;
-
-	auto rightWall = Sphere();
-	rightWall.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2) * scale(10, 0.01, 10);
-	rightWall.material = floor.material;
-	*/
-
 	auto middle = Sphere();
 	middle.transform = translate(-0.5, 1, 0.5);
 	middle.material = Material();
@@ -171,6 +155,7 @@ int main() {
 	middle.material.specular = 0.3;
 	middle.material.pattern = new StripePattern(Color(0.5123, 0.3426, 0.934906), Color(0.934906 , 0.3426, 0.5123));
 	middle.material.pattern->transform = rotationZ(TEST_PI / 8) * scale(0.25,0.25,0.25);
+	//middle.material.reflective = 0.5;
 
 	auto right = Sphere();
 	right.transform = translate(1.5, 0.5, -0.5) * scale(0.5, 0.5, 0.5);
@@ -201,13 +186,14 @@ int main() {
 	world.objects.emplace_back(&plane);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(1250, 1150, TEST_PI / 3);
+	Camera cam(550, 450, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(1, 1.5, -8), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
+	*/
 	
-	/*
+	/* // shit smiley
 	auto plane = Plane();
 	plane.transform = rotationZ(0.f);
 	plane.material.specular = 0.f;
@@ -263,6 +249,101 @@ int main() {
 
 	ans.canvasToImage();
 	*/
+
+
+
+	/*
+	auto world = World();
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+
+	auto floor = Plane();
+	floor.material.pattern = new CheckerPattern(Color(1, 0.9, 0.9), Color(0, 0.1, 0.1));
+	floor.transform = translate(0, -0.1, 0);
+	floor.material.specular = 0;
+	floor.material.reflective = 0.5;
+
+	auto shape = Sphere();
+	shape.transform = scale(0.5, 0.5, 0.5) * translate(1.5, 0.5, 0.5);
+	shape.material.color = Color(0, 0, 0.4);
+	shape.material.diffuse = 0.0;
+	shape.material.specular = 1;
+	shape.material.reflective = 0.5;
+	shape.material.transparency = 0.9;
+	shape.material.refractiveIndex = 1.52; 
+
+
+	world.objects.emplace_back(&floor);
+	world.objects.emplace_back(&shape);
+
+
+	Camera cam(600, 300, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+	*/
+
+
+
+
+
+
+
+
+
+
+	auto world = World();
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+
+	auto floor = Plane();
+	floor.material.pattern = new CheckerPattern(Color(1, 0, 0), Color(0.5, 0.5, 0.5));
+	floor.material.reflective = 0.;
+
+	auto leftWall = Plane();
+	leftWall.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0.5, 0.5, 0.5));
+	leftWall.material.reflective = 0.;
+	leftWall.transform = rotationZ(1.570795) * translate(-15, 0, 0);
+
+	auto rightWall = Plane();
+	rightWall.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0.5, 0.5, 0.5));
+	rightWall.material.reflective = 0.;
+	rightWall.transform = rotationX(1.570795) * translate(0, 0, 15);
+
+
+
+	auto shape = Sphere();
+	shape.transform = scale(0.5, 0.5, 0.5) * translate(1.5, 0.5, 0.5);
+	shape.material.color = Color(0, 0, 0.4);
+	shape.material.diffuse = 0.0;
+	shape.material.specular = 1;
+	shape.material.reflective = 0.5;
+	shape.material.transparency = 0.9;
+	shape.material.refractiveIndex = 1.52;
+
+
+	world.objects.emplace_back(&floor);
+	world.objects.emplace_back(&leftWall);
+	world.objects.emplace_back(&rightWall);
+	//world.objects.emplace_back(&shape);
+
+
+	Camera cam(600, 300, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(5, 1.5, -5.5), Tuple::point(0, 0.7, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+
+
+
+
+
+
+
+
+
+
+
+
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
 

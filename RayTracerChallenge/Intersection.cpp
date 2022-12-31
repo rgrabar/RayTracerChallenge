@@ -3,7 +3,7 @@
 Intersection::Intersection(double _t, const void* _s) : t(_t), s(_s) {}
 
 
-Intersection* Intersections::hit() {
+Intersection* Intersections::hit()const {
 
 	for (auto& x : intersections) {
 		if (x->t < 0)

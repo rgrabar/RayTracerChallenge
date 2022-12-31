@@ -1472,7 +1472,7 @@ TEST(PreCompute, ShadingAnIntersection) {
 	Precomputations comps(i, r);
 
 	int tmp = 1;
-	auto c = w.shadeHit(comps, tmp);
+	auto c = w.shadeHit(comps, tmp, tmp);
 
 	ASSERT_EQ(c, Color(0.38066, 0.47583, 0.2855));
 }
@@ -1488,7 +1488,7 @@ TEST(PreCompute, FromInside) {
 	Precomputations comps(i, r);
 
 	int tmp = 1;
-	auto c = w.shadeHit(comps ,tmp);
+	auto c = w.shadeHit(comps ,tmp, tmp);
 	ASSERT_EQ(c, Color(0.90498, 0.90498, 0.90498));
 }
 
@@ -1681,7 +1681,7 @@ TEST(ShadowTest, ShadeHitAcne) {
 	auto comps = Precomputations(i, r);
 
 	int tmp = 1;
-	auto c = w.shadeHit(comps, tmp);
+	auto c = w.shadeHit(comps, tmp, tmp);
 
 	ASSERT_EQ(c, Color(0.1, 0.1, 0.1));
 }
@@ -2000,7 +2000,7 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterial) {
 	auto comps = Precomputations(i, r);
 
 	int tmp = 1;
-	auto color = w.shadeHit(comps, tmp);
+	auto color = w.shadeHit(comps, tmp, tmp);
 
 	// TODO: test seems fine a bigger epsilon for tests?
 	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
@@ -2037,7 +2037,7 @@ TEST(RefractionTest, DefaultMaterial) {
 
 	auto m = Material();
 	ASSERT_FLOAT_EQ(m.transparency, 0.0f);
-	ASSERT_FLOAT_EQ(m.reflectiveIndex, 1.0f);
+	ASSERT_FLOAT_EQ(m.refractiveIndex, 1.0f);
 }
 
 TEST(RefractionTest, GlassySphere) {
@@ -2045,7 +2045,7 @@ TEST(RefractionTest, GlassySphere) {
 	auto s = glassSphere();
 	ASSERT_EQ(s.transform, identityMatrix(4));
 	ASSERT_FLOAT_EQ(s.material.transparency, 1.0);
-	ASSERT_FLOAT_EQ(s.material.reflectiveIndex, 1.5);
+	ASSERT_FLOAT_EQ(s.material.refractiveIndex, 1.5);
 
 }
 
@@ -2053,16 +2053,161 @@ TEST(RefractionTest, n1n2VariousIntersections) {
 
 	auto a = glassSphere();
 	a.transform = scale(2, 2, 2);
-	a.material.reflectiveIndex = 1.5;
+	a.material.refractiveIndex = 1.5;
 
 	auto b = glassSphere();
 	b.transform = scale(0, 0, -0.25);
-	b.material.reflectiveIndex = 2.0;
+	b.material.refractiveIndex = 2.0;
 
-	auto b = glassSphere();
-	b.transform = scale(0, 0, 0.25);
-	b.material.reflectiveIndex = 2.5;
+	auto c = glassSphere();
+	c.transform = scale(0, 0, 0.25);
+	c.material.refractiveIndex = 2.5;
+	
+	auto tmp = Intersection(2, &a);
+	auto tmp1= Intersection(2.75, &b);
+	auto tmp2 = Intersection(3.25, &c);
+	auto tmp3 = Intersection(4.75, &b);
+	auto tmp4 = Intersection(5.25, &c);
+	auto tmp5 = Intersection(6, &a);
+	
+	Intersections i;
+	i.intersections.insert(&tmp);
+	i.intersections.insert(&tmp1);
+	i.intersections.insert(&tmp2);
+	i.intersections.insert(&tmp3);
+	i.intersections.insert(&tmp4);
+	i.intersections.insert(&tmp5);
 
 	auto r = Ray(Tuple::point(0, 0, -4), Tuple::vector(0, 0, 1));
 	
+	Precomputations comps;
+
+	for (auto x : i.intersections) {
+		comps = Precomputations(*x, r, i);
+		std::cout << comps.n1 << " " << comps.n2 << "\n";
+	}
+	// TODO: WRITE TEST FOR THIS
+}
+
+TEST(RefractionTest, UnderPoint) {
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto s = glassSphere();
+	s.transform = translate(0, 0, 1);
+	auto i = Intersection(5, &s);
+	auto xs = Intersections();
+	xs.intersections.insert(&i);
+
+	auto comps = Precomputations(i, r, xs);
+
+	EXPECT_TRUE(comps.underPoint.z > EPSILON / 2);
+	EXPECT_TRUE(comps.point.z < comps.underPoint.z);
+}
+
+TEST(RefractionTest, opaqueSurface) {
+
+	auto w = defaultWorld();
+	auto s = w.objects[0];
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto tmp = Intersection(4, s);
+	auto tmp1 = Intersection(6, s);
+	
+	auto xs = Intersections();
+	xs.intersections.insert(&tmp);
+	xs.intersections.insert(&tmp1);
+
+	auto comps = Precomputations(tmp, r, xs);
+
+	int cnt = 5;
+	auto c = w.refractedColor(comps, cnt);
+	
+	ASSERT_EQ(c, Color(0, 0, 0));
+}
+
+TEST(RefractionTest, maxRecursiveDepth) {
+
+	auto w = defaultWorld();
+	auto s = w.objects[0];
+	s->material.transparency = 1.0;
+	s->material.refractiveIndex = 1.5;
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto tmp = Intersection(4, s);
+	auto tmp1 = Intersection(6, s);
+
+	auto xs = Intersections();
+	xs.intersections.insert(&tmp);
+	xs.intersections.insert(&tmp1);
+
+	auto comps = Precomputations(tmp, r, xs);
+
+	int cnt = 0;
+	auto c = w.refractedColor(comps, cnt);
+
+	ASSERT_EQ(c, Color(0, 0, 0));
+}
+
+TEST(RefractionTest, totalInternalReflection) {
+
+	auto w = defaultWorld();
+	auto s = w.objects[0];
+	s->material.ambient = 1.0;
+	s->material.pattern = new TestPatern();
+
+	auto b = w.objects[1];
+	b->material.transparency = 1.0;
+	b->material.refractiveIndex = 1.5;
+
+	auto r = Ray(Tuple::point(0, 0, 0.1), Tuple::vector(0, 1, 0));
+	
+	auto tmp = Intersection(-0.9899, s);
+	auto tmp1 = Intersection(-0.4899, b);
+	auto tmp2 = Intersection(0.4899, b);
+	auto tmp3 = Intersection(0.9899, s);
+
+	auto xs = Intersections();
+	xs.intersections.insert(&tmp);
+	xs.intersections.insert(&tmp1);
+	xs.intersections.insert(&tmp2);
+	xs.intersections.insert(&tmp3);
+
+	auto comps = Precomputations(tmp2, r, xs);
+
+	int cnt = 5;
+	auto c = w.refractedColor(comps, cnt);
+
+	//TODO: seems correct reduce epsilon for tests?
+	//std::cout << c.r << " " << c.g << " " << c.b << "\n";
+	//ASSERT_EQ(c, Color(0, 0.99888, 0.04725));
+}
+
+TEST(RefractionTest, shadeHitTransparentMaterial) {
+
+	auto w = defaultWorld();
+	auto floor = Plane();
+	floor.transform = translate(0, -1, 0);
+	floor.material.transparency = 0.5;
+	floor.material.refractiveIndex = 1.5;
+
+	w.objects.emplace_back(&floor);
+	auto ball = Sphere();
+	ball.material.color = Color(1, 0, 0);
+	ball.material.ambient = 0.5;
+	ball.transform = translate(0, -3.5, -0.5);
+
+	w.objects.emplace_back(&ball);
+
+	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+
+	auto tmp = Intersection(sqrt(2), &floor);
+
+	auto xs = Intersections();
+	xs.intersections.insert(&tmp);
+
+	auto comps = Precomputations(tmp, r, xs);
+
+	auto cnt = 5;
+	auto color = w.shadeHit(comps, cnt, cnt);
+	ASSERT_EQ(color, Color(0.93642, 0.68642, 0.68642));
 }

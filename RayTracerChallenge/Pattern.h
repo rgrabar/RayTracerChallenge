@@ -13,3 +13,10 @@ public:
 
 	virtual Color patternColorAt(const Tuple& point)const = 0;
 };
+
+class TestPatern :public Pattern{
+public:
+	 Color patternColorAt(const Tuple& object_point) const {
+		return Color(object_point.x, object_point.y, object_point.z);
+	}
+};

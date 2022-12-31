@@ -51,7 +51,7 @@ inline Sphere glassSphere() {
 	auto s = Sphere();
 	s.transform = identityMatrix(4);
 	s.material.transparency = 1.0;
-	s.material.reflectiveIndex = 1.5;
+	s.material.refractiveIndex = 1.5;
 	
 	return s;
 }

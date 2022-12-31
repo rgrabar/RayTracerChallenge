@@ -16,7 +16,7 @@ struct Material {
 	double shininess = 200;
 	double reflective = 0.0;
 	double transparency = 0.0;
-	double reflectiveIndex = 1.0;
+	double refractiveIndex = 1.0;
 	Pattern* pattern = nullptr;
 
 };
