@@ -2,11 +2,11 @@
 #include <iostream>
 #include "Pattern.h"
 
-Tuple normal_at(const Shape& s, const Tuple& worldPoint) {
+Tuple normal_at(Shape& s, const Tuple& worldPoint) {
 
-	auto objectPoint = s.transform.inverse() * worldPoint;
+	auto objectPoint = *(s.transform.inverse()) * worldPoint;
 	auto objectNormal = s.normalAt(objectPoint);
-	auto worldNormal = s.transform.inverse().transpose() * objectNormal;
+	auto worldNormal = (*(s.transform.inverse())).transpose() * objectNormal;
 	worldNormal.w = 0;
 
 	return (worldNormal.normalize());
@@ -16,21 +16,21 @@ Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }
 
-std::vector<Intersection> intersect(const Shape* object, const Ray& ray) {
+std::vector<Intersection> intersect(Shape* object, const Ray& ray) {
 
 	// put ray in object space needed before intersect function
-	auto rayCalc = ray.transform(object->transform.inverse());
+	auto rayCalc = ray.transform(*(object->transform.inverse()));
 	return object->intersect(rayCalc);
 }
 
-Color stripeAtObject(const Shape* object, const Tuple& worldPoint) {
-	auto objectPoint = object->transform.inverse() * worldPoint;
-	auto patternPoint = object->material.pattern->transform.inverse() * objectPoint;
+Color stripeAtObject(Shape* object, const Tuple& worldPoint) {
+	auto objectPoint = *(object->transform.inverse()) * worldPoint;
+	auto patternPoint = *(object->material.pattern->transform.inverse()) * objectPoint;
 
 	return object->material.pattern->patternColorAt(patternPoint);
 }
 
-Color lighting(const Shape* object, const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow){
+Color lighting(Shape* object, const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow){
 
 	Color newColor = object->material.color;
 

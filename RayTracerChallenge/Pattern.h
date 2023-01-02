@@ -11,7 +11,7 @@ public:
 	Pattern();
 	Pattern(const Color& _a, const Color& _b);
 
-	virtual Color patternColorAt(const Tuple& point)const = 0;
+	virtual Color patternColorAt(const Tuple& point) = 0;
 };
 
 class TestPatern :public Pattern{

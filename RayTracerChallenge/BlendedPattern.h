@@ -6,7 +6,7 @@ public:
 	BlendedPattern() {}
 	BlendedPattern(Pattern* _a, Pattern* _b) : a(_a), b(_b) {}
 
-	Color patternColorAt(const Tuple& point)const;
+	Color patternColorAt(const Tuple& point);
 
 	Pattern* a = nullptr;
 	Pattern* b = nullptr;

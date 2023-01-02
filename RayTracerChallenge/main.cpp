@@ -289,52 +289,79 @@ int main() {
 
 
 
+	auto plane = Plane();
+	auto pat = CheckerPattern(Color(1.0, 1.0, 1.0), Color(0.5, 0.5, 0.5));
+	plane.material.pattern = &pat;
+	//plane.material.pattern = &pat;
+
+	//plane.material.pattern = new CheckerPattern(Color(0.f, 0.f, 0.f), Color(1.f, 1.f, 1.f));
+	//plane.material.pattern->transform = scale(0.25, 0.25, 0.25);
+
+	auto plane1 = Plane();
+	plane1.transform = translate(0, 0, 3) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	//plane1.material.pattern = new RingPattern(Color(1, 0.25098, 0), Color(0, 0, 0));
+	plane1.material.pattern = new CheckerPattern(Color(1.0, 1.0, 1.0), Color(0.5, 0.5, 0.5));
+
+	
+	auto plane2 = Plane();
+	plane2.transform = translate(0, 0, 5) * rotationY(TEST_PI / 4) * rotationX(TEST_PI / 2);
+    plane2.material.pattern = new CheckerPattern(Color(1.0, 1.0, 1.0), Color(0.5, 0.5, 0.5));
+	plane2.transform = rotationZ(1.570795) * translate(-15, 0, 0);
+
+	auto middle = Sphere();
+	middle.transform = translate(-0.5, 1, 0.5);
+	middle.material = Material();
+	middle.material.color = Color(0.1, 1, 0.5);
+	middle.material.diffuse = 0.7;
+	middle.material.specular = 0.3;
+	middle.material.pattern = new StripePattern(Color(0.5123, 0.3426, 0.934906), Color(0.934906, 0.3426, 0.5123));
+	middle.material.pattern->transform = rotationZ(TEST_PI / 8) * scale(0.25, 0.25, 0.25);
+	//middle.material.reflective = 0.5;
+
+	auto right = Sphere();
+	right.transform = translate(1.5, 0.5, -0.5) * scale(0.5, 0.5, 0.5);
+	right.material = Material();
+	right.material.color = Color(0.5, 1, 0.1);
+	right.material.diffuse = 0.7;
+	right.material.specular = 0.3;
+	right.material.pattern = new GradientPattern(Color(1, 0, 0), Color(0, 0, 1));
+	right.material.pattern->transform = scale(1, 2, 1) * translate(1, 1.5, 1) * rotationZ(TEST_PI / 2);
+
+	auto left = Sphere();
+	left.transform = translate(-1.5, 0.33, -0.75) * scale(0.33, 0.33, 0.33);
+	left.material = Material();
+	left.material.color = Color(1, 0.8, 0.1);
+	left.material.diffuse = 0.7;
+	left.material.specular = 0.3;
+	left.material.pattern = new StripePattern(Color(0, 0, 0), Color(1, 1, 0));
 
 
-
+	auto kanta = Sphere();
+	kanta.transform = translate(1, 0.5, -1.5) * scale(0.5, 0.5, 0.5);
+	kanta.material = Material();
+	kanta.material.color = Color(0.1, 0.1, 0.1);
+	kanta.material.transparency = 1;
+	kanta.material.refractiveIndex = 1.5;
+	
 	auto world = World();
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
+	//world.objects.emplace_back(&floor);
+	//world.objects.emplace_back(&leftWall);
+	//world.objects.emplace_back(&rightWall);
+	world.objects.emplace_back(&middle);
+	world.objects.emplace_back(&left);
+	world.objects.emplace_back(&right);
+	world.objects.emplace_back(&plane1);
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&kanta);
+	//world.objects.emplace_back(&plane2);
+	//world.objects.emplace_back(&plane2);
 
-	auto floor = Plane();
-	floor.material.pattern = new CheckerPattern(Color(1, 0, 0), Color(0.5, 0.5, 0.5));
-	floor.material.reflective = 0.;
-
-	auto leftWall = Plane();
-	leftWall.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0.5, 0.5, 0.5));
-	leftWall.material.reflective = 0.;
-	leftWall.transform = rotationZ(1.570795) * translate(-15, 0, 0);
-
-	auto rightWall = Plane();
-	rightWall.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0.5, 0.5, 0.5));
-	rightWall.material.reflective = 0.;
-	rightWall.transform = rotationX(1.570795) * translate(0, 0, 15);
-
-
-
-	auto shape = Sphere();
-	shape.transform = scale(0.5, 0.5, 0.5) * translate(1.5, 0.5, 0.5);
-	shape.material.color = Color(0, 0, 0.4);
-	shape.material.diffuse = 0.0;
-	shape.material.specular = 1;
-	shape.material.reflective = 0.5;
-	shape.material.transparency = 0.9;
-	shape.material.refractiveIndex = 1.52;
-
-
-	world.objects.emplace_back(&floor);
-	world.objects.emplace_back(&leftWall);
-	world.objects.emplace_back(&rightWall);
-	//world.objects.emplace_back(&shape);
-
-
-	Camera cam(600, 300, TEST_PI / 3);
-	cam.transform = viewTransformation(Tuple::point(5, 1.5, -5.5), Tuple::point(0, 0.7, 0), Tuple::vector(0, 1, 0));
+	Camera cam(1920, 1080, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(5.0, 1.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
-
-
-
 
 
 

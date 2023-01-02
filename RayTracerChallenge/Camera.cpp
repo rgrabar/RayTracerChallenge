@@ -25,8 +25,8 @@ Ray Camera::rayForPixel(double px, double py) {
 	auto worldX = halfWidth - xOffset;
 	auto worldY = halfheight - yOffset;
 
-	auto pixel = transform.inverse() * Tuple::point(worldX, worldY, -1);
-	auto origin = transform.inverse() * Tuple::point(0, 0, 0);
+	auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
+	auto origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
 	auto direction = (pixel - origin).normalize();
 
 	return Ray(origin, direction);
