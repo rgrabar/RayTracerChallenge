@@ -19,6 +19,7 @@
 #include "BlendedPattern.h"
 #include "RadialGradientPattern.h"
 #include "NestedPattern.h"
+#include "Cube.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -333,7 +334,13 @@ int main() {
 	left.material.color = Color(1, 0.8, 0.1);
 	left.material.diffuse = 0.7;
 	left.material.specular = 0.3;
-	left.material.pattern = new StripePattern(Color(0, 0, 0), Color(1, 1, 0));
+	left.material.pattern = new RingPattern(Color(0, 0, 0), Color(1, 1, 0));
+	left.material.pattern->transform = rotationZ(TEST_PI / 2) * scale(0.33, 0.33, 0.33);
+
+
+	auto cube = Cube();
+	cube.transform = translate(-3, 0.5, -1.5) * scale(0.5, 0.5, 0.5);
+	cube.material.pattern = new CheckerPattern(Color(0, 1, 0), Color(0, 1, 1));
 
 
 	auto kanta = Sphere();
@@ -354,10 +361,11 @@ int main() {
 	world.objects.emplace_back(&plane1);
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&kanta);
+	world.objects.emplace_back(&cube);
 	//world.objects.emplace_back(&plane2);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(1920, 1080, TEST_PI / 3);
+	Camera cam(920, 880, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(5.0, 1.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 

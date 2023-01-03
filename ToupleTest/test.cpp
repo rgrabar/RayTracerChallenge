@@ -2087,7 +2087,7 @@ TEST(RefractionTest, n1n2VariousIntersections) {
 
 	for (auto x : i.intersections) {
 		comps = Precomputations(*x, r, i);
-		std::cout << comps.n1 << " " << comps.n2 << "\n";
+		//std::cout << comps.n1 << " " << comps.n2 << "\n";
 	}
 	// TODO: WRITE TEST FOR THIS
 }
@@ -2213,4 +2213,88 @@ TEST(RefractionTest, shadeHitTransparentMaterial) {
 	auto cnt = 5;
 	auto color = w.shadeHit(comps, cnt, cnt);
 	ASSERT_EQ(color, Color(0.93642, 0.68642, 0.68642));
+}
+
+
+TEST(CubeTest, RayIntersectsCube) {
+
+	auto c = Cube();
+
+	std::vector<Ray> testRay{
+		Ray(Tuple::point(5, 0.5, 0), Tuple::vector(-1, 0, 0)),
+		Ray(Tuple::point(-5, 0.5, 0), Tuple::vector(1, 0, 0)),
+		Ray(Tuple::point(0.5, 5, 0), Tuple::vector(0, -1, 0)),
+		Ray(Tuple::point(0.5, -5, 0), Tuple::vector(0, 1, 0)),
+		Ray(Tuple::point(0.5, 0, 5), Tuple::vector(0, 0, -1)),
+		Ray(Tuple::point(0.5, 0, -5), Tuple::vector(0, 0, 1)),
+		Ray(Tuple::point(0, 0.5, 0), Tuple::vector(0, 0, 1))
+	};
+
+	double t1[] = {4, 4, 4, 4, 4, 4, -1};
+	double t2[] = {6, 6, 6, 6, 6, 6, 1};
+
+	auto cnt = 0;
+
+	for (auto x : testRay) {
+		auto xs = c.intersect(x);
+		ASSERT_EQ(xs.size(), 2);
+		ASSERT_FLOAT_EQ(xs[0].t, t1[cnt]);
+		ASSERT_FLOAT_EQ(xs[1].t, t2[cnt]);
+		cnt++;
+	}
+}
+
+TEST(CubeTest, RayMissCube) {
+
+	auto c = Cube();
+
+	std::vector<Ray> testRay{
+		Ray(Tuple::point(-2, 0, 0), Tuple::vector(0.2673, 0.5345, 0.8018)),
+		Ray(Tuple::point(0, -2, 0), Tuple::vector(0.8018, 0.2673, 0.5345)),
+		Ray(Tuple::point(0, 0, -2), Tuple::vector(0.5345, 0.8018, 0.2673)),
+		Ray(Tuple::point(2, 0, 2), Tuple::vector(0, 0, -1)),
+		Ray(Tuple::point(0, 2, 2), Tuple::vector(0, -1, 0)),
+		Ray(Tuple::point(2, 2, 0), Tuple::vector(-1, 0, 0))
+	};
+
+	for (auto x : testRay) {
+		auto xs = c.intersect(x);
+		ASSERT_EQ(xs.size(), 0);
+	}
+}
+
+TEST(CubeTest, NormalCube) {
+
+	auto c = Cube();
+
+	std::vector<Tuple> point{
+		Tuple::point(1, 0.5, -0.8),
+		Tuple::point(-1, -0.2, 0.9),
+		Tuple::point(-0.4, 1, -0.1),
+		Tuple::point(0.3, -1, -0.7),
+		Tuple::point(-0.6, 0.3, 1),
+		Tuple::point(0.4, 0.4, -1),
+		Tuple::point(1, 1, 1),
+		Tuple::point(-1, -1, -1)
+	};
+
+	std::vector<Tuple> normal{
+		Tuple::vector(1, 0, 0),
+		Tuple::vector(-1, 0, 0),
+		Tuple::vector(0, 1, 0),
+		Tuple::vector(0, -1, 0),
+		Tuple::vector(0, 0, 1),
+		Tuple::vector(0, 0, -1),
+		Tuple::vector(1, 0, 0),
+		Tuple::vector(-1, 0, 0)
+	};
+
+	auto cnt = 0;
+
+	for (auto x : point) {
+		auto n = c.normalAt(x);
+
+		ASSERT_EQ(n, normal[cnt]);
+		cnt++;
+	}
 }
