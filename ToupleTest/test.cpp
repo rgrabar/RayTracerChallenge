@@ -60,6 +60,9 @@
 #include "../RayTracerChallenge/RingPattern.h"
 #include "../RayTracerChallenge/RingPattern.cpp"
 
+#include "../RayTracerChallenge/Cube.h"
+#include "../RayTracerChallenge/Cube.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -710,7 +713,7 @@ TEST(MatrixTest, MatrixInverse) {
 	cmp1.matrix[3 * cmp1.w + 2] = -0.30075;
 	cmp1.matrix[3 * cmp1.w + 3] = 0.30639;
 
-	ASSERT_EQ(inverse1.inverse(), cmp1);
+	ASSERT_EQ((*inverse1.inverse()), cmp1);
 
 
 	Matrix inverse2(4, 4);
@@ -749,7 +752,7 @@ TEST(MatrixTest, MatrixInverse) {
 	cmp2.matrix[3 * cmp2.w + 2] = -0.76923;
 	cmp2.matrix[3 * cmp2.w + 3] = -1.92308;
 
-	ASSERT_EQ(inverse2.inverse(), cmp2);
+	ASSERT_EQ(*inverse2.inverse(), cmp2);
 
 
 	Matrix inverse3(4, 4);
@@ -788,7 +791,7 @@ TEST(MatrixTest, MatrixInverse) {
 	cmp3.matrix[3 * cmp3.w + 2] = -0.26667;
 	cmp3.matrix[3 * cmp3.w + 3] = 0.33333;
 
-	ASSERT_EQ(inverse3.inverse(), cmp3);
+	ASSERT_EQ(*inverse3.inverse(), cmp3);
 
 }
 
@@ -830,7 +833,7 @@ TEST(MatrixTest, MatrixMultiplicationByInverse) {
 	mat2.matrix[3 * mat2.w + 3] = 5;
 
 	Matrix mat3 = mat1 * mat2;
-	mat3 = mat3 * mat2.inverse();
+	mat3 = mat3 * (*mat2.inverse());
 
 	ASSERT_EQ(mat3, mat1);
 }
@@ -846,7 +849,7 @@ TEST(TransformationTest, Translation) {
 TEST(TransformationTest, MulInverseOfTranslation) {
 
 	Matrix t = translate(5, -3, 2);
-	Matrix inv = t.inverse();
+	Matrix inv = *t.inverse();
 	Tuple p = Tuple::point(-3, 4, 5);
 
 	ASSERT_EQ(inv * p, Tuple::point(-8, 7, 3));
@@ -880,7 +883,7 @@ TEST(TransformationTest, MulInverseOfScale) {
 
 	Tuple v = Tuple::vector(-4, 6, 8);
 	Matrix t = scale(2, 3, 4);
-	Matrix inv = t.inverse();
+	Matrix inv = *t.inverse();
 
 	ASSERT_EQ(inv * v, Tuple::vector(-2, 2, 2));
 }

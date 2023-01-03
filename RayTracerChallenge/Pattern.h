@@ -16,7 +16,7 @@ public:
 
 class TestPatern :public Pattern{
 public:
-	 Color patternColorAt(const Tuple& object_point) const {
+	 Color patternColorAt(const Tuple& object_point) {
 		return Color(object_point.x, object_point.y, object_point.z);
 	}
 };
