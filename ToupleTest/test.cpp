@@ -63,6 +63,9 @@
 #include "../RayTracerChallenge/Cube.h"
 #include "../RayTracerChallenge/Cube.cpp"
 
+#include "../RayTracerChallenge/Cylinder.h"
+#include "../RayTracerChallenge/Cylinder.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -2399,5 +2402,20 @@ TEST(CubeTest, NormalCube) {
 
 		ASSERT_EQ(n, normal[cnt]);
 		cnt++;
+	}
+}
+
+TEST(CylinderTest, RayMisses) {
+
+	auto cyl = Cylinder();
+	std::vector<Tuple> origin = { Tuple::point(1, 0, 0), Tuple::point(0, 0, 0), Tuple::point(0, 0, -5) };
+	std::vector<Tuple> direction = { Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0), Tuple::vector(1, 1, 1) };
+
+	for (int i = 0; i < 3; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+		auto xs = cyl.intersect(r);
+
+		ASSERT_EQ(xs.size(), 0);
 	}
 }
