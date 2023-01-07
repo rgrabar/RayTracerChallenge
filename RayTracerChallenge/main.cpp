@@ -21,6 +21,7 @@
 #include "NestedPattern.h"
 #include "Cube.h"
 #include "Cylinder.h"
+#include "Cone.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -385,6 +386,13 @@ int main() {
 	cilindro4.material.color = Color(0, 1, 0);
 	cilindro4.closed = true;
 
+	auto cone = Cone();
+	cone.minimum = -1;
+	cone.maximum = 0;
+	cone.transform = translate(3, 0.9, -3.1) * scale(0.2, 0.3, 0.2);
+	cone.material.color = Color(0, 1, 0);
+	cone.closed = true;
+	
 	auto world = World();
 	//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
 	world.light = Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1));
@@ -403,10 +411,11 @@ int main() {
 	world.objects.emplace_back(&cilindro2);
 	world.objects.emplace_back(&cilindro3);
 	world.objects.emplace_back(&cilindro4);
+	world.objects.emplace_back(&cone);
 	//world.objects.emplace_back(&plane2);
 	//world.objects.emplace_back(&plane2);
 
-	Camera cam(920, 880, TEST_PI / 3);
+	Camera cam(1920, 1580, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(5.0, 1.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 

@@ -66,6 +66,9 @@
 #include "../RayTracerChallenge/Cylinder.h"
 #include "../RayTracerChallenge/Cylinder.cpp"
 
+#include "../RayTracerChallenge/Cone.h"
+#include "../RayTracerChallenge/Cone.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -2518,6 +2521,82 @@ TEST(CylinderTest, NormalVectorEndCaps) {
 		
 		auto n = cyl.normalAt(point[i]);
 
+
+		ASSERT_EQ(n, normal[i]);
+	}
+}
+
+TEST(ConeTest, ConeIntersection) {
+
+	auto cyl = Cone();
+
+	std::vector<Tuple> origin = { Tuple::point(0, 0, -5), Tuple::point(0, 0, -5), Tuple::point(1, 1, -5) };
+	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(1, 1, 1), Tuple::vector(-0.5, -1, 1) };
+
+	//TODO: small difference in number compared to the book, use a smaller epsilon?
+	double t0[] = { 5, 8.6602545, 4.5500555 };
+	double t1[] = { 5, 8.6602545, 49.44994 };
+
+	for (int i = 0; i < 3; ++i) {
+
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+		auto xs = cyl.intersect(r);
+
+		ASSERT_EQ(xs.size(), 2);
+
+		ASSERT_FLOAT_EQ(xs[0].t, t0[i]);
+		ASSERT_FLOAT_EQ(xs[1].t, t1[i]);
+	}
+}
+
+TEST(ConeTest, ConeRayParralelToHalve) {
+
+	auto cyl = Cone();
+	auto direction = Tuple::vector(0, 1, 1).normalize();
+	auto r = Ray(Tuple::point(0, 0, -1), direction);
+
+	auto xs = cyl.intersect(r);
+
+	ASSERT_EQ(xs.size(), 1);
+	//TODO: small difference in number compared to the book, use a smaller epsilon?
+	ASSERT_FLOAT_EQ(xs[0].t, 0.35355338);
+}
+
+TEST(ConeTest, ConesEndCaps) {
+
+	auto cyl = Cone();
+	cyl.minimum = -0.5;
+	cyl.maximum = 0.5;
+	cyl.closed = true;
+
+	std::vector<Tuple> origin = { Tuple::point(0, 0, -5), Tuple::point(0, 0, -0.25), Tuple::point(0, 0, -0.25) };
+	std::vector<Tuple> direction = { Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 1), Tuple::vector(0, 1, 0) };
+
+	int cnt[] = { 0, 2, 4 };
+
+	for (int i = 0; i < 3; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+
+		auto xs = cyl.intersect(r);
+
+		ASSERT_EQ(xs.size(), cnt[i]);
+	}
+}
+
+TEST(ConeTest, ConeNormal) {
+
+	auto cyl = Cone();
+	cyl.minimum = -0.5;
+	cyl.maximum = 0.5;
+	cyl.closed = true;
+
+	std::vector<Tuple> point = { Tuple::point(0, 0, 0), Tuple::point(1, 1, 1), Tuple::point(-1, -1, 0) };
+	std::vector<Tuple> normal = { Tuple::vector(0, 0, 0), Tuple::vector(1, -sqrt(2), 1), Tuple::vector(-1, 1, 0)};
+
+	for (int i = 0; i < 3; ++i) {
+		auto n = cyl.normalAt(point[i]);
 
 		ASSERT_EQ(n, normal[i]);
 	}
