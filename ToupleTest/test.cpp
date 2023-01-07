@@ -2419,3 +2419,106 @@ TEST(CylinderTest, RayMisses) {
 		ASSERT_EQ(xs.size(), 0);
 	}
 }
+
+TEST(CylinderTest, RayHits) {
+
+	auto cyl = Cylinder();
+	std::vector<Tuple> origin = { Tuple::point(1, 0, -5), Tuple::point(0, 0, -5), Tuple::point(0.5, 0, -5) };
+	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(0, 0, 1), Tuple::vector(0.1, 1, 1) };
+
+	double t0[] = {5, 4, 6.80798};
+	// TODO: small difference compared to the book smaller epsilon?
+	double t1[] = { 5, 6, 7.0887237 };
+
+	for (int i = 0; i < 3; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+		auto xs = cyl.intersect(r);
+
+		ASSERT_FLOAT_EQ(xs[0].t, t0[i]);
+		ASSERT_FLOAT_EQ(xs[1].t, t1[i]);
+	}
+}
+
+TEST(CylinderTest, NormalVector) {
+
+	auto cyl = Cylinder();
+	std::vector<Tuple> point = { Tuple::point(1, 0, 0), Tuple::point(0, 5, -1), Tuple::point(0, -2, 1), Tuple::point(-1, -1, 0) };
+	std::vector<Tuple> normal = { Tuple::vector(1, 0, 0), Tuple::vector(0, 0, -1), Tuple::vector(0, 0, 1), Tuple::vector(-1, 0, 0)};
+
+	for (int i = 0; i < 4; ++i) {
+		auto n = cyl.normalAt(point[i]);
+		ASSERT_EQ(n, normal[i]);
+	}
+}
+
+TEST(CylinderTest, DefaultMinMax) {
+
+	auto cyl = Cylinder();
+	ASSERT_FLOAT_EQ(cyl.minimum, -INFINITY);
+	ASSERT_FLOAT_EQ(cyl.maximum, INFINITY);
+}
+
+TEST(CylinderTest, IntersectingConstrained) {
+
+	auto cyl = Cylinder();
+	std::vector<Tuple> point = { Tuple::point(0, 1.5, 0), Tuple::point(0, 3, -5), Tuple::point(0, 0, -5), Tuple::point(0, 2, -5), Tuple::point(0, 1, -5), Tuple::point(0, 1.5, -2) };
+	std::vector<Tuple> direction = { Tuple::vector(0.1, 1, 0), Tuple::vector(0, 0, 1), Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) };
+
+	cyl.maximum = 2;
+	cyl.minimum = 1;
+
+	double count[] = { 0, 0, 0, 0, 0, 2 };
+
+	for (int i = 0; i < 5; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(point[i], dir);
+		auto xs = cyl.intersect(r);
+
+		ASSERT_EQ(xs.size(), count[i]);
+	}
+}
+
+TEST(CylinderTest, DefaultClosed) {
+
+	auto cyl = Cylinder();
+	ASSERT_EQ(cyl.closed, false);
+}
+
+TEST(CylinderTest, IntersectingClosedCaps) {
+
+	auto cyl = Cylinder();
+	cyl.minimum = 1;
+	cyl.maximum = 2;
+	cyl.closed = true;
+
+	std::vector<Tuple> point = { Tuple::point(0, 3, 0), Tuple::point(0, 3, -2), Tuple::point(0, 4, -2), Tuple::point(0, 0, -2), Tuple::point(0, -1, -2) };
+	std::vector<Tuple> direction = { Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 2), Tuple::vector(0, -1, 1) , Tuple::vector(0, 1, 2) , Tuple::vector(0, 1, 1) };
+
+	for (int i = 0; i < 5; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(point[i], dir);
+		auto xs = cyl.intersect(r);
+
+		ASSERT_EQ(xs.size(), 2);
+	}
+}
+
+TEST(CylinderTest, NormalVectorEndCaps) {
+
+	auto cyl = Cylinder();
+	cyl.minimum = 1;
+	cyl.maximum = 2;
+	cyl.closed = true;
+
+	std::vector<Tuple> point = { Tuple::point(0, 1, 0), Tuple::point(0.5, 1, 0), Tuple::point(0, 1, 0.5), Tuple::point(0, 2, 0), Tuple::point(0.5, 2, 0), Tuple::point(0, 2, 0.5) };
+	std::vector<Tuple> normal = { Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 0) , Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0) };
+
+	for (int i = 0; i < 6; ++i) {
+		
+		auto n = cyl.normalAt(point[i]);
+
+
+		ASSERT_EQ(n, normal[i]);
+	}
+}

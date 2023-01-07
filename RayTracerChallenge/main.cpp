@@ -20,6 +20,7 @@
 #include "RadialGradientPattern.h"
 #include "NestedPattern.h"
 #include "Cube.h"
+#include "Cylinder.h"
 
 #include <chrono>
 using namespace std::chrono;
@@ -349,9 +350,44 @@ int main() {
 	kanta.material.color = Color(0.1, 0.1, 0.1);
 	kanta.material.transparency = 1;
 	kanta.material.refractiveIndex = 1.5;
-	
+
+	auto cilindro = Cylinder();
+	cilindro.minimum = 0;
+	cilindro.maximum = 1;
+	cilindro.transform = translate(3, 0, -3.1) * scale(1, 0.1, 1);
+	cilindro.material.color = Color(1, 0, 0);
+
+	auto cilindro1 = Cylinder();
+	cilindro1.minimum = 0;
+	cilindro1.maximum = 1;
+	cilindro1.transform = translate(3, 0, -3.1) * scale(0.8, 0.1, 0.8);
+	cilindro1.material.color = Color(1, 0, 0);
+
+	auto cilindro2 = Cylinder();
+	cilindro2.minimum = 0;
+	cilindro2.maximum = 1;
+	cilindro2.transform = translate(3, 0, -3.1) * scale(0.6, 0.1, 0.6);
+	cilindro2.material.color = Color(1, 0.63529, 0);
+
+	auto cilindro3 = Cylinder();
+	cilindro3.minimum = 0;
+	cilindro3.maximum = 1;
+	cilindro3.transform = translate(3, 0, -3.1) * scale(0.4, 0.4, 0.4);
+	cilindro3.material.color = Color(0.99608, 0.96471, 0.06275);
+	cilindro3.closed = true;
+	cilindro3.material.pattern = new GradientPattern(Color(0.99608, 0.96471, 0.06275), Color(1, 0, 0));
+	cilindro3.material.pattern->transform = scale(1, 2, 1) * translate(1, 1.5, 1) * rotationZ(TEST_PI / 2);
+
+	auto cilindro4 = Cylinder();
+	cilindro4.minimum = 0;
+	cilindro4.maximum = 1;
+	cilindro4.transform = translate(3, 0, -3.1) * scale(0.2, 0.6, 0.2);
+	cilindro4.material.color = Color(0, 1, 0);
+	cilindro4.closed = true;
+
 	auto world = World();
-	world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
+	//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
+	world.light = Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1));
 	//world.objects.emplace_back(&floor);
 	//world.objects.emplace_back(&leftWall);
 	//world.objects.emplace_back(&rightWall);
@@ -362,6 +398,11 @@ int main() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&kanta);
 	world.objects.emplace_back(&cube);
+	world.objects.emplace_back(&cilindro);
+	world.objects.emplace_back(&cilindro1);
+	world.objects.emplace_back(&cilindro2);
+	world.objects.emplace_back(&cilindro3);
+	world.objects.emplace_back(&cilindro4);
 	//world.objects.emplace_back(&plane2);
 	//world.objects.emplace_back(&plane2);
 
