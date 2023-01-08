@@ -69,6 +69,9 @@
 #include "../RayTracerChallenge/Cone.h"
 #include "../RayTracerChallenge/Cone.cpp"
 
+#include "../RayTracerChallenge/Groups.h"
+#include "../RayTracerChallenge/Groups.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -2601,3 +2604,53 @@ TEST(ConeTest, ConeNormal) {
 		ASSERT_EQ(n, normal[i]);
 	}
 }
+
+TEST(GroupTest, DefaultGroup) {
+	auto g = Group();
+	ASSERT_EQ(g.transform, identityMatrix(4));
+	ASSERT_EQ(g.children.size(), 0);
+}
+
+TEST(GroupTest, ShapeParent) {
+	//TODO: test shape
+	auto s = Sphere();
+	ASSERT_EQ(s.parent, nullptr);
+}
+
+TEST(GroupTest, AddingAChild) {
+	auto g = Group();
+	auto s = Sphere();
+	g.addChild(s);
+
+	ASSERT_EQ(g.children.size(), 1);
+	ASSERT_EQ(g.children[0], &s);
+	ASSERT_EQ(s.parent, &g); 
+}
+
+TEST(GroupTest, IntersectingWihtEmptyGroup) {
+	auto g = Group();
+	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+
+	auto xs = g.intersect(r);
+	ASSERT_EQ(xs.size(), 0);
+}
+/*
+TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
+	auto g = Group();
+	auto s1 = Sphere();
+	auto s2 = Sphere();
+
+	s2.transform = translate(0, 0, -3);
+	auto s3 = Sphere();
+	s3.transform = translate(5, 0, 0);
+
+	g.addChild(s1);
+	g.addChild(s2);
+	g.addChild(s3);
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	auto xs = g.intersect(r);
+
+	ASSERT_EQ(xs.size(), 4);
+}*/

@@ -9,6 +9,8 @@
 class Shape {
 public:
 
+	Shape* parent = nullptr;
+
 	Matrix transform = identityMatrix(4);
 	Material material;
 	Tuple origin;
