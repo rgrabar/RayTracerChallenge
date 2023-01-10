@@ -31,7 +31,7 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 
 	for (auto object : objects) {
 
-		auto a = intersect(object, ray);
+		auto a = object->shapeIntersect(ray);
 
 		if (a.size() == 0)
 			continue;

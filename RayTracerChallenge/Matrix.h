@@ -25,7 +25,7 @@ public:
 	const double minor(int row, int col)const;
 	const double cofactor(int row, int col)const;
 	const double invertible()const;
-	const Matrix* inverse();
+	Matrix* inverse();
 
 	Matrix* aaa = nullptr;
 

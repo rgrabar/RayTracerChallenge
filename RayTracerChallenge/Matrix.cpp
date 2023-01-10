@@ -90,7 +90,7 @@ const double Matrix::invertible()const {
     return determinant() != 0;
 }
 
-const Matrix* Matrix::inverse() {
+Matrix* Matrix::inverse() {
     // TODO: return some error?
     if (!invertible()) {
         std::cout << "Not invertible!\n";
