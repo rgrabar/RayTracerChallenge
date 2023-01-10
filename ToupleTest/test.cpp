@@ -1261,7 +1261,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
 
-	auto xs = intersect(&s, r);
+	auto xs = intersectTest(&s, r);
 
 	ASSERT_EQ(xs.size(), 2);
 	ASSERT_EQ(xs[0].t, 3);
@@ -1274,7 +1274,7 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	auto xs = intersect(&s, r);
+	auto xs = intersectTest(&s, r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -1750,7 +1750,7 @@ TEST(PlaneRefactor, IntersectingParallel) {
 	auto p = Plane();
 	auto r = Ray(Tuple::point(0, 10, 0), Tuple::vector(0, 0, 0));
 
-	auto xs = intersect(&p, r);
+	auto xs = intersectTest(&p, r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -1759,7 +1759,7 @@ TEST(PlaneRefactor, IntersectingCoplanar) {
 	auto p = Plane();
 	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 
-	auto xs = intersect(&p, r);
+	auto xs = intersectTest(&p, r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -2634,7 +2634,7 @@ TEST(GroupTest, IntersectingWihtEmptyGroup) {
 	auto xs = g.intersect(r);
 	ASSERT_EQ(xs.size(), 0);
 }
-/*
+
 TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 	auto g = Group();
 	auto s1 = Sphere();
@@ -2651,6 +2651,64 @@ TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 
 	auto xs = g.intersect(r);
-
+	// TODO: sort
 	ASSERT_EQ(xs.size(), 4);
-}*/
+}
+
+TEST(GroupTest, IntersectingWihtTransformedGroup) {
+	auto g = Group();
+	g.transform = scale(2, 2, 2);
+	auto s = Sphere();
+	s.transform = translate(5, 0, 0);
+
+	g.addChild(s);
+	auto r = Ray(Tuple::point(10, 0, -10), Tuple::vector(0, 0, 1));
+
+	auto xs = g.shapeIntersect(r);
+
+	ASSERT_EQ(xs.size(), 2);
+}
+
+TEST(GroupTest, WorldToObjectSpace) {
+	auto g1 = Group();
+
+	g1.transform = rotationY(TEST_PI / 2);
+
+	auto g2 = Group();
+	g2.transform = scale(2, 2, 2);
+
+	g1.addChild(g2);
+
+	auto s = Sphere();
+
+	s.transform = translate(5, 0, 0);
+
+	g2.addChild(s);
+
+	auto p = s.worldToObject(Tuple::point(-2, 0, -10));
+
+	ASSERT_EQ(p, Tuple::point(0, 0, -1));
+}
+
+
+TEST(GroupTest, normalToWorldSpace) {
+	auto g1 = Group();
+
+	g1.transform = rotationY(TEST_PI / 2);
+
+	auto g2 = Group();
+	g2.transform = scale(1, 2, 3);
+
+	g1.addChild(g2);
+
+	auto s = Sphere();
+
+	s.transform = translate(5, 0, 0);
+
+	g2.addChild(s);
+
+	auto p = s.normalToWorld(Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+
+	//TODO: not the same as in the book smaller epsilon?
+	ASSERT_EQ(p, Tuple::vector(0.285714, 0.428571, - 0.857143));
+}

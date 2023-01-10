@@ -2,6 +2,7 @@
 #include "Shape.h"
 #include <vector>
 #include <iostream>
+#include "Normal.h"
 
 class Group : public Shape {
 public:
@@ -19,15 +20,13 @@ public:
 
 		for (auto shape : children) {
 			// TODO: do this somehow else, overload intersect to take a vector?
-			auto v = shape->intersect(ray);
+			auto v = shape->shapeIntersect(ray);
 				if(v.size() != 0)
 					for (auto objectIntersect : v) {
 						inter.emplace_back(objectIntersect);
 						i.intersections.insert(&objectIntersect);
 					}
 		}
-
-		std::cout << "SSSSSSSSSSSSSSSSS" << i.intersections.size() << "\n";
 
 		return inter;
 	}
