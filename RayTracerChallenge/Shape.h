@@ -5,6 +5,7 @@
 #include "Tuple.h"
 #include "Intersection.h"
 #include "Ray.h"
+#include <iostream>
 
 class Shape {
 public:
@@ -44,6 +45,12 @@ public:
 
 		return *(transform.inverse()) * worldPoint;
 	}
+
+	inline virtual std::vector<Intersection> shapeIntersect(const Ray& ray) {
+		return intersect(ray.transform(*transform.inverse()));
+	};
+
+	//TODO: not sure if this should return intersect objects
 	inline virtual std::vector<Intersection> intersect(const Ray& ray)= 0;
 	inline virtual Tuple normalAt(const Tuple& worldPoint)= 0;
 
