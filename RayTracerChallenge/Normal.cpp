@@ -21,13 +21,6 @@ Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }
 
-std::vector<Intersection> intersectTest(Shape* object, const Ray& ray) {
-
-	// put ray in object space needed before intersect function
-	auto rayCalc = ray.transform(*(object->transform.inverse()));
-	return object->intersect(rayCalc);
-}
-
 Color stripeAtObject(Shape* object, const Tuple& worldPoint) {
 	auto objectPoint = *(object->transform.inverse()) * worldPoint;
 	auto patternPoint = *(object->material.pattern->transform.inverse()) * objectPoint;

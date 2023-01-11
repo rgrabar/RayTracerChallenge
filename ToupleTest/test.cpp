@@ -1261,7 +1261,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
 
-	auto xs = intersectTest(&s, r);
+	auto xs = s.shapeIntersect(r);
 
 	ASSERT_EQ(xs.size(), 2);
 	ASSERT_EQ(xs[0].t, 3);
@@ -1274,7 +1274,7 @@ TEST(RayTest, TranslatedSphereAndRay) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	auto xs = intersectTest(&s, r);
+	auto xs = s.shapeIntersect(r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -1750,7 +1750,7 @@ TEST(PlaneRefactor, IntersectingParallel) {
 	auto p = Plane();
 	auto r = Ray(Tuple::point(0, 10, 0), Tuple::vector(0, 0, 0));
 
-	auto xs = intersectTest(&p, r);
+	auto xs = p.shapeIntersect(r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
@@ -1759,7 +1759,7 @@ TEST(PlaneRefactor, IntersectingCoplanar) {
 	auto p = Plane();
 	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 
-	auto xs = intersectTest(&p, r);
+	auto xs = p.shapeIntersect(r);
 
 	ASSERT_EQ(xs.size(), 0);
 }
