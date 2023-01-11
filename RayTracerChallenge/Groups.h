@@ -3,6 +3,12 @@
 #include <vector>
 #include <iostream>
 #include "Normal.h"
+#include <algorithm>
+
+// todo: do this nicer
+inline static bool compareIntersection(const Intersection& a, const Intersection& b) {
+	return a.t < b.t;
+}
 
 class Group : public Shape {
 public:
@@ -20,7 +26,6 @@ public:
 
 		for (auto shape : children) {
 			// TODO: do this somehow else, overload intersect to take a vector?
-			// sort this before return
 			auto v = shape->shapeIntersect(ray);
 				if(v.size() != 0)
 					for (auto objectIntersect : v) {
@@ -28,7 +33,7 @@ public:
 						i.intersections.insert(&objectIntersect);
 					}
 		}
-
+		sort(inter.begin(), inter.end(), compareIntersection);
 		return inter;
 	}
 

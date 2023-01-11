@@ -2651,8 +2651,13 @@ TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 
 	auto xs = g.intersect(r);
-	// TODO: sort
+	
 	ASSERT_EQ(xs.size(), 4);
+	ASSERT_EQ(xs[0].s, &s2);
+	ASSERT_EQ(xs[1].s, &s2);
+	ASSERT_EQ(xs[2].s, &s1);
+	ASSERT_EQ(xs[3].s, &s1);
+
 }
 
 TEST(GroupTest, IntersectingWihtTransformedGroup) {
