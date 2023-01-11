@@ -61,7 +61,7 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 	
 	point = ray.position(t);
 	eyev = -ray.direction;
-	normalv = normal_at(*shape,point);
+	normalv = shape->normal(point);
 
 	if (normalv.dotProduct(eyev) < 0) {
 		inside = true;

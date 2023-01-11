@@ -2,21 +2,6 @@
 #include <iostream>
 #include "Pattern.h"
 
-Tuple normal_at(Shape& s, const Tuple& worldPoint) {
-	/*
-	auto objectPoint = *(s.transform.inverse()) * worldPoint;
-	auto objectNormal = s.normalAt(objectPoint);
-	auto worldNormal = (*(s.transform.inverse())).transpose() * objectNormal;
-	worldNormal.w = 0;
-	return (worldNormal.normalize());
-	*/
-
-	auto localPoint = s.worldToObject(worldPoint);
-	auto localNormal = s.normalAt(localPoint);
-
-	return s.normalToWorld(localNormal);
-}
-
 Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }

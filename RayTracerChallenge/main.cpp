@@ -113,7 +113,7 @@ int main() {
 			if (xs.size() != 0) {
 
 				auto wPoint = r.position(xs[0].t);
-				auto normal = normal_at(*(xs[0].s), wPoint);
+				auto normal = normal(*(xs[0].s), wPoint);
 				auto eye = -r.direction;
 				Material tmp;
 				auto co =  (*xs[0].s).material.lighting(light, wPoint, eye, normal);
@@ -422,7 +422,7 @@ int main() {
 
 	ans.canvasToImage();
 
-	
+
 
 	/*
 	auto corner = Sphere();

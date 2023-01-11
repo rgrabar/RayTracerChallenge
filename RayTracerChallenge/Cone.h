@@ -93,7 +93,7 @@ public:
 		return inter;
 	}
 
-	Tuple normalAt(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint) {
 		auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 		if (dist < 1 && objectPoint.y >= maximum - EPSILON)
 			return Tuple::vector(0, 1, 0);

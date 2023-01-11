@@ -42,7 +42,7 @@ public:
 		*/
 		return { {t1, this}, {t2, this} };
 	}
-	Tuple normalAt(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint) {
 		return objectPoint - Tuple::point(0, 0, 0);
 	}
 };

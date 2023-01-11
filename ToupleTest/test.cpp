@@ -1281,17 +1281,17 @@ TEST(RayTest, TranslatedSphereAndRay) {
 
 TEST(NormalTest, NormalOnASphereXZYAxis) {
 	auto s = Sphere();
-	auto n = s.normalAt( Tuple::point(1, 0, 0));
+	auto n = s.objectNormal( Tuple::point(1, 0, 0));
 
 	ASSERT_EQ(n, Tuple::vector(1, 0, 0));
 
-	n = s.normalAt( Tuple::point(0, 1, 0));
+	n = s.objectNormal( Tuple::point(0, 1, 0));
 	ASSERT_EQ(n, Tuple::vector(0, 1, 0));
 
-	n = s.normalAt( Tuple::point(0, 0, 1));
+	n = s.objectNormal( Tuple::point(0, 0, 1));
 	ASSERT_EQ(n, Tuple::vector(0, 0, 1));
 
-	n = s.normalAt( Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	n = s.objectNormal( Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	ASSERT_EQ(n, Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
@@ -1299,7 +1299,7 @@ TEST(NormalTest, TranslatedSphere) {
 	auto s = Sphere();
 	s.transform = (translate(0, 1, 0));
 
-	auto n = normal_at(s, Tuple::point(0, 1.70711, -0.70711));
+	auto n = s.normal(Tuple::point(0, 1.70711, -0.70711));
 
 	ASSERT_EQ(n, Tuple::vector(0, 0.70711, -0.70711));
 }
@@ -1308,7 +1308,7 @@ TEST(NormalTest, TransformedSphere) {
 	auto s = Sphere();
 	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
 
-	auto n = normal_at(s, Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	auto n = s.normal(Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
 	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
 
 }
@@ -1736,13 +1736,13 @@ TEST(ShapesRefactor, DefaultMaterial) {
 TEST(PlaneRefactor, NormalIsConstant) {
 	auto p = Plane();
 	
-	auto n1 = normal_at(p, Tuple::point(0, 0, 0));
+	auto n1 = p.normal(Tuple::point(0, 0, 0));
 	ASSERT_EQ(Tuple::vector(0, 1, 0), n1);
 
-	auto n2 = normal_at(p, Tuple::point(10, 0, -10));
+	auto n2 = p.normal(Tuple::point(10, 0, -10));
 	ASSERT_EQ(Tuple::vector(0, 1, 0), n2);
 
-	auto n3 = normal_at(p, Tuple::point(-5, 0, 150));
+	auto n3 = p.normal(Tuple::point(-5, 0, 150));
 	ASSERT_EQ(Tuple::vector(0, 1, 0), n3);
 }
 
@@ -2404,7 +2404,7 @@ TEST(CubeTest, NormalCube) {
 	auto cnt = 0;
 
 	for (auto x : point) {
-		auto n = c.normalAt(x);
+		auto n = c.objectNormal(x);
 
 		ASSERT_EQ(n, normal[cnt]);
 		cnt++;
@@ -2453,7 +2453,7 @@ TEST(CylinderTest, NormalVector) {
 	std::vector<Tuple> normal = { Tuple::vector(1, 0, 0), Tuple::vector(0, 0, -1), Tuple::vector(0, 0, 1), Tuple::vector(-1, 0, 0)};
 
 	for (int i = 0; i < 4; ++i) {
-		auto n = cyl.normalAt(point[i]);
+		auto n = cyl.objectNormal(point[i]);
 		ASSERT_EQ(n, normal[i]);
 	}
 }
@@ -2522,7 +2522,7 @@ TEST(CylinderTest, NormalVectorEndCaps) {
 
 	for (int i = 0; i < 6; ++i) {
 		
-		auto n = cyl.normalAt(point[i]);
+		auto n = cyl.objectNormal(point[i]);
 
 
 		ASSERT_EQ(n, normal[i]);
@@ -2599,7 +2599,7 @@ TEST(ConeTest, ConeNormal) {
 	std::vector<Tuple> normal = { Tuple::vector(0, 0, 0), Tuple::vector(1, -sqrt(2), 1), Tuple::vector(-1, 1, 0)};
 
 	for (int i = 0; i < 3; ++i) {
-		auto n = cyl.normalAt(point[i]);
+		auto n = cyl.objectNormal(point[i]);
 
 		ASSERT_EQ(n, normal[i]);
 	}

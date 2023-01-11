@@ -46,12 +46,28 @@ public:
 		return *(transform.inverse()) * worldPoint;
 	}
 
-	inline virtual std::vector<Intersection> shapeIntersect(const Ray& ray) {
+	inline std::vector<Intersection> shapeIntersect(const Ray& ray) {
 		return intersect(ray.transform(*transform.inverse()));
 	};
 
+
+	inline Tuple normal(const Tuple& worldPoint) {
+		/*
+		auto objectPoint = *(s.transform.inverse()) * worldPoint;
+		auto objectNormal = s.objectNormal(objectPoint);
+		auto worldNormal = (*(s.transform.inverse())).transpose() * objectNormal;
+		worldNormal.w = 0;
+		return (worldNormal.normalize());
+		*/
+
+		auto localPoint = worldToObject(worldPoint);
+		auto localNormal = objectNormal(localPoint);
+
+		return normalToWorld(localNormal);
+	}
+
 	//TODO: not sure if this should return intersect objects
 	inline virtual std::vector<Intersection> intersect(const Ray& ray)= 0;
-	inline virtual Tuple normalAt(const Tuple& worldPoint)= 0;
+	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
 
 };

@@ -13,7 +13,7 @@ public:
 		double t = -ray.origin.y / ray.direction.y;
 		return { {t, this} };
 	}
-	Tuple normalAt(const Tuple& worldPoint) {
+	Tuple objectNormal(const Tuple& worldPoint) {
 		return Tuple::vector(0.0, 1.0, 0.0);
 	}
 };

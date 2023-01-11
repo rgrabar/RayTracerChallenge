@@ -20,6 +20,7 @@ public:
 
 		for (auto shape : children) {
 			// TODO: do this somehow else, overload intersect to take a vector?
+			// sort this before return
 			auto v = shape->shapeIntersect(ray);
 				if(v.size() != 0)
 					for (auto objectIntersect : v) {
@@ -31,7 +32,7 @@ public:
 		return inter;
 	}
 
-	Tuple normalAt(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint) {
 		return Tuple::vector(0, 0, 0);
 	}
 
