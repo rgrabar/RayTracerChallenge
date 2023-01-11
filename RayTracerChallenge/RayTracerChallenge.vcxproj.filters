@@ -200,5 +200,8 @@
     <ClInclude Include="Groups.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scenes\Scenes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
