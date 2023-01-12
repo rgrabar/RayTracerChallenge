@@ -396,6 +396,51 @@ void drawAllShapes() {
 		auto ans = cam.render(world);
 
 		ans.canvasToImage();
-		
+}
 
+Sphere* hexagonCorner() {
+	auto corner = new Sphere();
+	corner->transform = translate(0, 0, -1) * scale(0.25, 0.25, 0.25);
+	return corner;
+}
+
+Cylinder* hexagonEdge() {
+	auto edge = new Cylinder();
+	edge->minimum = 0;
+	edge->maximum = 1;
+	edge->transform = translate(0, 0, -1) * rotationY(-TEST_PI/6) * rotationZ(-TEST_PI/2) * scale(0.25, 1, 0.25);
+
+	return edge;
+}
+
+Group* hexagonSide() {
+	auto side = new Group();
+	side->addChild(*hexagonCorner());
+	side->addChild(*hexagonEdge());
+	return side;
+
+}
+
+void drawHexagon(){
+	
+	auto hex = Group();
+
+	for (int i = 0; i < 6; ++i) {
+		auto side = hexagonSide();
+		side->transform = rotationY(i * TEST_PI / 3);
+		hex.addChild(*side);
+	}
+
+	auto world = World();
+	//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
+	world.light = Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1));
+
+	world.objects.emplace_back(&hex);
+
+	Camera cam(1920, 1580, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 3.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+	
 }
