@@ -5,6 +5,7 @@
 #include <optional>
 #include <functional>
 #include <set>
+#include "Helper.h"
 
 class Intersection {
 public:
@@ -18,6 +19,8 @@ public:
 };
 
 const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
+	if (epsilonEqual(lhs->t, rhs->t))
+		return lhs->s < rhs->s;
 	return lhs->t < rhs->t;
 };
 

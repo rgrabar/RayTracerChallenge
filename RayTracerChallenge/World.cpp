@@ -32,20 +32,9 @@ std::set <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)
 	for (auto object : objects) {
 
 		auto a = object->shapeIntersect(ray);
-
-		if (a.size() == 0)
-			continue;
-		if (a.size() == 1) {
-			// TODO: ZASTO NE MOREDULEN SAMO &a[0]??
-			auto tmp = new Intersection(a[0].t, a[0].s);
+		//intersections.insert(a.intersections.begin(), a.intersections.end());
+		for (auto tmp : a.intersections) {
 			intersections.insert(tmp);
-			
-		}
-		else {
-			auto tmp = new Intersection(a[0].t, a[0].s);
-			auto tmp1 = new Intersection(a[1].t, a[1].s);
-			intersections.insert(tmp);
-			intersections.insert(tmp1);
 		}
 	}
 	return intersections;

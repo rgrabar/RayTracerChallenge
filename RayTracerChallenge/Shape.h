@@ -46,7 +46,7 @@ public:
 		return *(transform.inverse()) * worldPoint;
 	}
 
-	inline std::vector<Intersection> shapeIntersect(const Ray& ray) {
+	inline Intersections shapeIntersect(const Ray& ray) {
 		return intersect(ray.transform(*transform.inverse()));
 	};
 
@@ -67,7 +67,7 @@ public:
 	}
 
 	//TODO: not sure if this should return intersect objects
-	inline virtual std::vector<Intersection> intersect(const Ray& ray)= 0;
+	inline virtual Intersections intersect(const Ray& ray)= 0;
 	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
 
 };

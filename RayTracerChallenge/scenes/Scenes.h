@@ -85,19 +85,21 @@ void drawRedCircle() {
 
 			   auto xs = shape.shapeIntersect(r);
 
-			   if (xs.size() != 0) {
+			   for (auto test : xs.intersections) {
 
-				   auto wPoint = r.position(xs[0].t);
-				   auto normal = ((Shape*)xs[0].s)->normal(wPoint);
+				   auto wPoint = r.position(test->t);
+				   auto normal = ((Shape*)test->s)->normal(wPoint);
 				   auto eye = -r.direction;
 				   Material tmp;
-				   auto co = lighting( (Shape *)xs[0].s, light, wPoint, eye, normal, 0);
+				   auto co = lighting((Shape*)test->s, light, wPoint, eye, normal, 0);
 
 				   c.writePixel(x, y, co);
-
+				   //TODO: figure out why i need this break
+				   break;
+			   }
 				   //intersections.emplace_back(&xs[0]);
 				   //std::cout << "HIT! \n";
-			   }
+			   
 			   //if (Intersection::hit() != nullptr) {
 			   //}
 		   }
@@ -105,7 +107,6 @@ void drawRedCircle() {
 
 	   c.canvasToImage();	   
 }
-
 
 void drawShadowPatternsReflection() {
 	
@@ -415,8 +416,8 @@ Cylinder* hexagonEdge() {
 
 Group* hexagonSide() {
 	auto side = new Group();
-	side->addChild(*hexagonCorner());
 	side->addChild(*hexagonEdge());
+	side->addChild(*hexagonCorner());
 	return side;
 
 }

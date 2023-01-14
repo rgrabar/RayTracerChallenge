@@ -14,7 +14,7 @@ public:
 
 	bool operator==(const Sphere& other) const;
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
+	inline Intersections intersect(const Ray& ray) {
 
 		
 		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
@@ -27,20 +27,21 @@ public:
 		if (discriminant < 0)
 			return {};
 
-		//TODO: make the first t the non negative smaller value
-
 		double t1 = (-b - sqrt(discriminant)) / (2 * a);
 		double t2 = (-b + sqrt(discriminant)) / (2 * a);
 
-		//TODO: not sure if I should add each record 
-		//intersections.emplace_back(t1, s);
-		//intersections.emplace_back(t2, s);
+		Intersection* i1 = new Intersection(t1, this);
+		Intersection* i2 = new Intersection(t2, this);
+
+		Intersections inter;
+		inter.intersections.insert(i1);
+		inter.intersections.insert(i2);
 
 		/*std::vector<Intersection> retInter;
 		retInter.emplace_back(t1, s);
 		retInter.emplace_back(t2, s);
 		*/
-		return { {t1, this}, {t2, this} };
+		return inter;
 	}
 	Tuple objectNormal(const Tuple& objectPoint) {
 		return objectPoint - Tuple::point(0, 0, 0);

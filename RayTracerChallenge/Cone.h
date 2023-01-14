@@ -24,25 +24,27 @@ public:
 		return(x * x + z * z) <= radius;
 	}
 
-	void intersectCaps(const Ray& ray, std::vector<Intersection>& inter) {
+	void intersectCaps(const Ray& ray, Intersections& inter) {
 		if (!closed || epsilonEqual(ray.direction.y, 0)) {
 			return;
 		}
 		auto t = (minimum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t, std::fabs(minimum))) {
-			inter.emplace_back(t, this);
+			Intersection* i = new Intersection(t, this);
+			inter.intersections.insert(i);
 		}
 
 		t = (maximum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t, std::fabs(maximum))) {
-			inter.emplace_back(t, this);
+			Intersection* i = new Intersection(t, this);
+			inter.intersections.insert(i);
 		}
 		return;
 	}
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
+	inline Intersections intersect(const Ray& ray) {
 
 		bool cylinderBodyIntersection = true;
 		auto a = ray.direction.x * ray.direction.x - ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z;
@@ -57,13 +59,15 @@ public:
 		if (disc < 0)
 			cylinderBodyIntersection = false;
 
-		std::vector<Intersection> inter;
+		Intersections inter;
 
 		if (cylinderBodyIntersection) {
 
 			if (epsilonEqual(a, 0) && !epsilonEqual(b, 0)) {
 				auto t = -c / (2 * b);
-				inter.emplace_back(t, this);
+
+				Intersection* i = new Intersection(t, this);
+				inter.intersections.insert(i);
 			}
 			else {
 				auto t0 = (-b - sqrt(disc)) / (2 * a);
@@ -78,11 +82,13 @@ public:
 
 
 				if (minimum < y0 && y0 < maximum) {
-					inter.emplace_back(t0, this);
+					Intersection* i = new Intersection(t0, this);
+					inter.intersections.insert(i);
 				}
 
 				if (minimum < y1 && y1 < maximum) {
-					inter.emplace_back(t1, this);
+					Intersection* i = new Intersection(t1, this);
+					inter.intersections.insert(i);
 				}
 			}
 

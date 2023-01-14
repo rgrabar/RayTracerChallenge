@@ -19,22 +19,17 @@ public:
 		s.parent = this;
 	}
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
+	inline Intersections intersect(const Ray& ray) {
 
-		std::vector<Intersection> inter;
 		Intersections i;
 
 		for (auto shape : children) {
 			// TODO: do this somehow else, overload intersect to take a vector?
 			auto v = shape->shapeIntersect(ray);
-				if(v.size() != 0)
-					for (auto objectIntersect : v) {
-						inter.emplace_back(objectIntersect);
-						i.intersections.insert(&objectIntersect);
-					}
+			for (auto objectIntersect : v.intersections)
+				i.intersections.insert(objectIntersect);
 		}
-		sort(inter.begin(), inter.end(), compareIntersection);
-		return inter;
+		return i;
 	}
 
 	Tuple objectNormal(const Tuple& objectPoint) {

@@ -15,7 +15,7 @@ public:
 
 	Cube() : Shape(Tuple::point(0, 0, 0)) {}
 
-	inline std::vector<Intersection> intersect(const Ray& ray) {
+	inline Intersections intersect(const Ray& ray) {
 
 		MinMaxPoint tmp;
 		
@@ -34,7 +34,14 @@ public:
 		if (tmin > tmax)
 			return{};
 
-		return { {tmin, this}, {tmax, this} };
+		Intersection* i1 = new Intersection(tmin, this);
+		Intersection* i2 = new Intersection(tmax, this);
+
+		Intersections inter;
+		inter.intersections.insert(i1);
+		inter.intersections.insert(i2);
+
+		return inter;
 	}
 
 	void checkAxis(MinMaxPoint& value, double origin, double direction) {
