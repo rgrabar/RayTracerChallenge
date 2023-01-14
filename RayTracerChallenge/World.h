@@ -16,7 +16,7 @@ public:
 	std::vector<Shape*> objects;
 
 	Color shadeHit(const Precomputations& comps, int& remaining, int& remainingRefraction) const;
-	std::set <Intersection*, decltype(cmp)> worldIntersection(const Ray& ray)const;
+	std::multiset <Intersection*, decltype(cmp)> worldIntersection(const Ray& ray)const;
 
 	Color colorAt(const Ray& r, int remaining = 4, int remainingRefraction = 4)const;
 	bool isShadowed(const Tuple& point)const;

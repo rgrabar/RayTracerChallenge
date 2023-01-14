@@ -19,19 +19,17 @@ public:
 };
 
 const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
-	if (epsilonEqual(lhs->t, rhs->t))
-		return lhs->s < rhs->s;
-	return lhs->t < rhs->t;
+	return lhs->t <= rhs->t;
 };
 
 class Intersections {
 public:
 	Intersections() {};
-	Intersections(const std::set<Intersection*, decltype(cmp)>& i) : intersections(i) {
+	Intersections(const std::multiset<Intersection*, decltype(cmp)>& i) : intersections(i) {
 
 	}
 
 	Intersection* hit()const;
-	std::set<Intersection*, decltype(cmp)> intersections;
+	std::multiset<Intersection*, decltype(cmp)> intersections;
 };
 
