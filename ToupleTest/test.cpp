@@ -2365,7 +2365,7 @@ TEST(FresnelEffect, ReflectiveTransparentMaterial) {
 	ASSERT_EQ(color, Color(0.93391, 0.69643, 0.69243));
 
 }
-/*
+
 TEST(CubeTest, RayIntersectsCube) {
 
 	auto c = Cube();
@@ -2380,17 +2380,20 @@ TEST(CubeTest, RayIntersectsCube) {
 		Ray(Tuple::point(0, 0.5, 0), Tuple::vector(0, 0, 1))
 	};
 
-	double t1[] = {4, 4, 4, 4, 4, 4, -1};
+	double ans[] = {4, 6, 4, 6, 4, 6, 4, 6, 4, 6, 4, 6, -1, 1};
 	double t2[] = {6, 6, 6, 6, 6, 6, 1};
 
 	auto cnt = 0;
 
 	for (auto x : testRay) {
 		auto xs = c.intersect(x);
-		ASSERT_EQ(xs.size(), 2);
-		ASSERT_FLOAT_EQ(xs[0].t, t1[cnt]);
-		ASSERT_FLOAT_EQ(xs[1].t, t2[cnt]);
-		cnt++;
+		
+		for (auto inter : xs.intersections) {
+
+			ASSERT_EQ(xs.intersections.size(), 2);
+			ASSERT_FLOAT_EQ(inter->t, ans[cnt]);
+			cnt++;
+		}
 	}
 }
 
@@ -2409,7 +2412,7 @@ TEST(CubeTest, RayMissCube) {
 
 	for (auto x : testRay) {
 		auto xs = c.intersect(x);
-		ASSERT_EQ(xs.size(), 0);
+		ASSERT_EQ(xs.intersections.size(), 0);
 	}
 }
 
@@ -2460,7 +2463,7 @@ TEST(CylinderTest, RayMisses) {
 		auto r = Ray(origin[i], dir);
 		auto xs = cyl.intersect(r);
 
-		ASSERT_EQ(xs.size(), 0);
+		ASSERT_EQ(xs.intersections.size(), 0);
 	}
 }
 
@@ -2470,17 +2473,21 @@ TEST(CylinderTest, RayHits) {
 	std::vector<Tuple> origin = { Tuple::point(1, 0, -5), Tuple::point(0, 0, -5), Tuple::point(0.5, 0, -5) };
 	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(0, 0, 1), Tuple::vector(0.1, 1, 1) };
 
-	double t0[] = {5, 4, 6.80798};
+	double ans[] = {5, 5, 4, 6, 6.80798, 7.0887237};
 	// TODO: small difference compared to the book smaller epsilon?
 	double t1[] = { 5, 6, 7.0887237 };
+
+	auto cnt = 0;
 
 	for (int i = 0; i < 3; ++i) {
 		auto dir = direction[i].normalize();
 		auto r = Ray(origin[i], dir);
 		auto xs = cyl.intersect(r);
 
-		ASSERT_FLOAT_EQ(xs[0].t, t0[i]);
-		ASSERT_FLOAT_EQ(xs[1].t, t1[i]);
+		for (auto inter : xs.intersections) {
+			ASSERT_FLOAT_EQ(inter->t, ans[cnt]);
+			cnt++;
+		}
 	}
 }
 
@@ -2519,7 +2526,7 @@ TEST(CylinderTest, IntersectingConstrained) {
 		auto r = Ray(point[i], dir);
 		auto xs = cyl.intersect(r);
 
-		ASSERT_EQ(xs.size(), count[i]);
+		ASSERT_EQ(xs.intersections.size(), count[i]);
 	}
 }
 
@@ -2544,7 +2551,7 @@ TEST(CylinderTest, IntersectingClosedCaps) {
 		auto r = Ray(point[i], dir);
 		auto xs = cyl.intersect(r);
 
-		ASSERT_EQ(xs.size(), 2);
+		ASSERT_EQ(xs.intersections.size(), 2);
 	}
 }
 
@@ -2575,8 +2582,9 @@ TEST(ConeTest, ConeIntersection) {
 	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(1, 1, 1), Tuple::vector(-0.5, -1, 1) };
 
 	//TODO: small difference in number compared to the book, use a smaller epsilon?
-	double t0[] = { 5, 8.6602545, 4.5500555 };
+	double ans[] = { 5, 5, 8.6602545, 8.6602545, 4.5500555, 49.44994 };
 	double t1[] = { 5, 8.6602545, 49.44994 };
+	auto cnt = 0;
 
 	for (int i = 0; i < 3; ++i) {
 
@@ -2584,10 +2592,12 @@ TEST(ConeTest, ConeIntersection) {
 		auto r = Ray(origin[i], dir);
 		auto xs = cyl.intersect(r);
 
-		ASSERT_EQ(xs.size(), 2);
+		for (auto inter : xs.intersections) {
 
-		ASSERT_FLOAT_EQ(xs[0].t, t0[i]);
-		ASSERT_FLOAT_EQ(xs[1].t, t1[i]);
+			ASSERT_EQ(xs.intersections.size(), 2);
+			ASSERT_FLOAT_EQ(inter->t, ans[cnt]);
+			cnt++;
+		}
 	}
 }
 
@@ -2599,9 +2609,11 @@ TEST(ConeTest, ConeRayParralelToHalve) {
 
 	auto xs = cyl.intersect(r);
 
-	ASSERT_EQ(xs.size(), 1);
+	ASSERT_EQ(xs.intersections.size(), 1);
 	//TODO: small difference in number compared to the book, use a smaller epsilon?
-	ASSERT_FLOAT_EQ(xs[0].t, 0.35355338);
+	for (auto inter : xs.intersections) {
+		ASSERT_FLOAT_EQ(inter->t, 0.35355338);
+	}
 }
 
 TEST(ConeTest, ConesEndCaps) {
@@ -2622,7 +2634,7 @@ TEST(ConeTest, ConesEndCaps) {
 
 		auto xs = cyl.intersect(r);
 
-		ASSERT_EQ(xs.size(), cnt[i]);
+		ASSERT_EQ(xs.intersections.size(), cnt[i]);
 	}
 }
 
@@ -2670,7 +2682,7 @@ TEST(GroupTest, IntersectingWihtEmptyGroup) {
 	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 
 	auto xs = g.intersect(r);
-	ASSERT_EQ(xs.size(), 0);
+	ASSERT_EQ(xs.intersections.size(), 0);
 }
 
 TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
@@ -2690,11 +2702,15 @@ TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 
 	auto xs = g.intersect(r);
 	
-	ASSERT_EQ(xs.size(), 4);
-	ASSERT_EQ(xs[0].s, &s2);
-	ASSERT_EQ(xs[1].s, &s2);
-	ASSERT_EQ(xs[2].s, &s1);
-	ASSERT_EQ(xs[3].s, &s1);
+	ASSERT_EQ(xs.intersections.size(), 4);
+
+	Sphere* ans[] = { &s2, &s2, &s1, &s1 };
+	auto cnt = 0;
+
+	for (auto inter : xs.intersections) {
+		ASSERT_EQ(inter->s, ans[cnt]);
+		cnt++;
+	}
 
 }
 
@@ -2709,7 +2725,7 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 
 	auto xs = g.shapeIntersect(r);
 
-	ASSERT_EQ(xs.size(), 2);
+	ASSERT_EQ(xs.intersections.size(), 2);
 }
 
 TEST(GroupTest, WorldToObjectSpace) {
@@ -2754,4 +2770,4 @@ TEST(GroupTest, normalToWorldSpace) {
 
 	//TODO: not the same as in the book smaller epsilon?
 	ASSERT_EQ(p, Tuple::vector(0.285714, 0.428571, - 0.857143));
-}*/
+}
