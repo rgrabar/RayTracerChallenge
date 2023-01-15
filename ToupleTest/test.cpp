@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include <limits.h>
+
 #include "../RayTracerChallenge/Tuple.h"
 #include "../RayTracerChallenge/Tuple.cpp"
 
@@ -71,6 +73,9 @@
 
 #include "../RayTracerChallenge/Groups.h"
 #include "../RayTracerChallenge/Groups.cpp"
+
+#include "../RayTracerChallenge/BoundingBox.h"
+
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -2770,4 +2775,121 @@ TEST(GroupTest, normalToWorldSpace) {
 
 	//TODO: not the same as in the book smaller epsilon?
 	ASSERT_EQ(p, Tuple::vector(0.285714, 0.428571, - 0.857143));
+}
+
+TEST(BoundingBox, BoundingBoxDefault) {
+	auto box = BoundingBox();
+
+	// TODO: why doesn't this work
+	// check all infinity comparisons
+	//ASSERT_EQ(box.boxMin, Tuple::point(INFINITY, INFINITY, INFINITY));
+
+	ASSERT_FLOAT_EQ(box.boxMin.x, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.y, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.z, INFINITY);
+
+	ASSERT_FLOAT_EQ(box.boxMax.x, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.y, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.z, -INFINITY);
+}
+
+TEST(BoundingBox, BoundingBoxWithVolume) {
+	auto box = BoundingBox(Tuple::point(-1, -2, -3) , Tuple::point(3, 2, 1));
+	
+	ASSERT_EQ(box.boxMin, Tuple::point(-1, -2, -3));
+	ASSERT_EQ(box.boxMax, Tuple::point(3, 2, 1));
+}
+
+TEST(BoundingBox, AddingPointsToBoundingBox) {
+	auto box = BoundingBox();
+
+	Tuple p1 = Tuple::point(-5, 2, 0);
+	Tuple p2 = Tuple::point(7, 0, -3);
+
+	box.addPoint(p1);
+	box.addPoint(p2);
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-5.f, 0.f, -3.f));
+	ASSERT_EQ(box.boxMax, Tuple::point(7.f, 2.f, 0.f));
+
+}
+
+TEST(BoundingBox, SphereBoundingBox) {
+	auto shape = Sphere();
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Tuple::point(1, 1, 1));
+
+}
+
+TEST(BoundingBox, PlaneBoundingBox) {
+	auto shape = Plane();
+	auto box = shape.boundsOf();
+
+	//TODO: Why can't i compare points
+	ASSERT_FLOAT_EQ(box.boxMin.x, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.y, 0);
+	ASSERT_FLOAT_EQ(box.boxMin.z, -INFINITY);
+
+	ASSERT_FLOAT_EQ(box.boxMax.x, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.y, 0);
+	ASSERT_FLOAT_EQ(box.boxMax.z, INFINITY);
+}
+
+TEST(BoundingBox, CubeBoundingBox) {
+	auto shape = Cube();
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Tuple::point(1, 1, 1));
+}
+
+TEST(BoundingBox, UnboundCylinderBoundingBox) {
+	auto shape = Cylinder();
+	auto box = shape.boundsOf();
+
+	//TODO: Why can't i compare points
+	ASSERT_FLOAT_EQ(box.boxMin.x, -1);
+	ASSERT_FLOAT_EQ(box.boxMin.y, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.z, -1);
+
+	ASSERT_FLOAT_EQ(box.boxMax.x, 1);
+	ASSERT_FLOAT_EQ(box.boxMax.y, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.z, 1);
+}
+
+TEST(BoundingBox, BoundCylinderBoundingBox) {
+	auto shape = Cylinder();
+	shape.minimum = -5;
+	shape.maximum = 3;
+	auto box = shape.boundsOf();
+	
+	ASSERT_EQ(box.boxMin, Tuple::point(-1, -5, -1));
+	ASSERT_EQ(box.boxMax, Tuple::point(1, 3, 1));
+}
+
+TEST(BoundingBox, UnboundConeBoundingBox) {
+	auto shape = Cone();
+	auto box = shape.boundsOf();
+
+	//TODO: Why can't i compare points
+	ASSERT_FLOAT_EQ(box.boxMin.x, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.y, -INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMin.z, -INFINITY);
+
+	ASSERT_FLOAT_EQ(box.boxMax.x, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.y, INFINITY);
+	ASSERT_FLOAT_EQ(box.boxMax.z, INFINITY);
+
+}
+
+TEST(BoundingBox,BoundConeBoundingBox) {
+	auto shape = Cone();
+	shape.minimum = -5;
+	shape.maximum = 3;
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-5, -5, -5));
+	ASSERT_EQ(box.boxMax, Tuple::point(5, 3, 5));
 }
