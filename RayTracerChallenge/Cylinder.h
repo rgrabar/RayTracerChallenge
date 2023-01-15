@@ -102,4 +102,9 @@ public:
 
 		return Tuple::vector(objectPoint.x, 0, objectPoint.z);
 	}
+
+	BoundingBox boundsOf() {
+		return BoundingBox(Tuple::point(-1, minimum, -1), Tuple::point(1, maximum, 1));
+	}
+		
 };

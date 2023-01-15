@@ -46,6 +46,11 @@ public:
 	Tuple objectNormal(const Tuple& objectPoint) {
 		return objectPoint - Tuple::point(0, 0, 0);
 	}
+
+	BoundingBox boundsOf() {
+		return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+	}
+
 };
 
 inline Sphere glassSphere() {

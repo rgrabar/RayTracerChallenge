@@ -5,13 +5,10 @@
 #include "Normal.h"
 #include <algorithm>
 
-// todo: do this nicer
-inline static bool compareIntersection(const Intersection& a, const Intersection& b) {
-	return a.t < b.t;
-}
-
 class Group : public Shape {
 public:
+	//TODO: materials for groups
+
 	std::vector<Shape*> children;
 
 	void addChild(Shape& s) {
@@ -34,6 +31,11 @@ public:
 
 	Tuple objectNormal(const Tuple& objectPoint) {
 		return Tuple::vector(0, 0, 0);
+	}
+
+	BoundingBox boundsOf() {
+		//TODO: replace this placeholder
+		return BoundingBox(Tuple::point(0, 0, 0), Tuple::point(0, 0, 0));
 	}
 
 };

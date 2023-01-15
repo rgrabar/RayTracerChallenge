@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="Arena.h" />
     <ClInclude Include="BlendedPattern.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="CheckerPattern.h" />

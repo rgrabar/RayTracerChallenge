@@ -22,4 +22,9 @@ public:
 	Tuple objectNormal(const Tuple& worldPoint) {
 		return Tuple::vector(0.0, 1.0, 0.0);
 	}
+
+	BoundingBox boundsOf() {
+		return BoundingBox(Tuple::point(-INFINITY, 0, -INFINITY), Tuple::point(INFINITY, 0, INFINITY));
+	}
+
 };

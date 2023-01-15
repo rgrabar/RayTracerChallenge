@@ -114,4 +114,13 @@ public:
 
 		return Tuple::vector(objectPoint.x, y, objectPoint.z);
 	}
+
+	BoundingBox boundsOf() {
+		auto a = fabs(minimum);
+		auto b = fabs(maximum);
+
+		auto limit = std::max(a, b);
+
+		return BoundingBox(Tuple::point(-limit, minimum, -limit), Tuple::point(limit, maximum, limit));
+	}
 };

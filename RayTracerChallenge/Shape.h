@@ -6,6 +6,7 @@
 #include "Intersection.h"
 #include "Ray.h"
 #include <iostream>
+#include "BoundingBox.h"
 
 class Shape {
 public:
@@ -69,5 +70,6 @@ public:
 	//TODO: not sure if this should return intersect objects
 	inline virtual Intersections intersect(const Ray& ray)= 0;
 	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
+	inline virtual BoundingBox boundsOf()= 0;
 
 };
