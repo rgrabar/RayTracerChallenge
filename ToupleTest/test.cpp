@@ -2893,3 +2893,35 @@ TEST(BoundingBox,BoundConeBoundingBox) {
 	ASSERT_EQ(box.boxMin, Tuple::point(-5, -5, -5));
 	ASSERT_EQ(box.boxMax, Tuple::point(5, 3, 5));
 }
+
+TEST(BoundingBox, AddingBoxes) {
+	auto box1 = BoundingBox(Tuple::point(-5, -2, 0), Tuple::point(7, 4, 4));
+	auto box2 = BoundingBox(Tuple::point(8, -7, -2), Tuple::point(14, 2, 8));
+
+	box1.mergeBox(box2);
+
+	ASSERT_EQ(box1.boxMin, Tuple::point(-5, -7, -2));
+	ASSERT_EQ(box1.boxMax, Tuple::point(14, 4, 8));
+}
+
+TEST(BoundingBox, BoxContainsPoint) {
+	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+
+	Tuple points[] = {
+						Tuple::point(5, -2, 0),
+						Tuple::point(11, 4, 7),
+						Tuple::point(8, 1, 3),
+						Tuple::point(3, 0, 3),
+						Tuple::point(8, -4, 3),
+						Tuple::point(8, 1, -1),
+						Tuple::point(13, 1, 3),
+						Tuple::point(8, 5, 3),
+						Tuple::point(8, 1, 8)
+	};
+
+	bool ans[] = { true, true, true, false, false, false, false, false, false };
+	for (int i = 0; i < 9; ++i) {
+		auto tmp = box.boxContainsPoint(points[i]);
+		ASSERT_EQ(tmp, ans[i]);
+	}
+}

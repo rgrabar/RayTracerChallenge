@@ -39,4 +39,15 @@ public:
 			boxMax.z = newPoint.z;
 	}
 
+	void mergeBox(const BoundingBox& other) {
+		addPoint(other.boxMin);
+		addPoint(other.boxMax);
+	}
+
+	bool boxContainsPoint(const Tuple& point) {
+		return boxMin.x <= point.x && point.x <= boxMax.x
+			&& boxMin.y <= point.y && point.y <= boxMax.y
+			&& boxMin.z <= point.z && point.z <= boxMax.z;
+	}
+
 };
