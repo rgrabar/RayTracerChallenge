@@ -50,4 +50,9 @@ public:
 			&& boxMin.z <= point.z && point.z <= boxMax.z;
 	}
 
+	bool boxContainsBox(BoundingBox other) {
+		return boxContainsPoint(other.boxMin) &&
+			   boxContainsPoint(other.boxMax);
+	}
+
 };

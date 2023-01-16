@@ -2925,3 +2925,16 @@ TEST(BoundingBox, BoxContainsPoint) {
 		ASSERT_EQ(tmp, ans[i]);
 	}
 }
+
+TEST(BoundingBox, BoxContainsBox) {
+	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+	auto box1 = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+	auto box2 = BoundingBox(Tuple::point(6, -1, 1), Tuple::point(10, 3, 6));
+	auto box3 = BoundingBox(Tuple::point(4, -3, -1), Tuple::point(10, 3, 6));
+	auto box4 = BoundingBox(Tuple::point(6, -1, 1), Tuple::point(12, 5, 8));
+
+	EXPECT_TRUE(box.boxContainsBox(box1));
+	EXPECT_TRUE(box.boxContainsBox(box2));
+	EXPECT_FALSE(box.boxContainsBox(box3));
+	EXPECT_FALSE(box.boxContainsBox(box4));
+}
