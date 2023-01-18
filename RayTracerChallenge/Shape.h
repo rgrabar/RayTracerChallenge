@@ -67,6 +67,10 @@ public:
 		return normalToWorld(localNormal);
 	}
 
+	inline BoundingBox parentSpaceBoundsOf() {
+		return boundsOf().transform(transform);
+	}
+
 	//TODO: not sure if this should return intersect objects
 	inline virtual Intersections intersect(const Ray& ray)= 0;
 	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;

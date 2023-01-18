@@ -2938,3 +2938,165 @@ TEST(BoundingBox, BoxContainsBox) {
 	EXPECT_FALSE(box.boxContainsBox(box3));
 	EXPECT_FALSE(box.boxContainsBox(box4));
 }
+
+TEST(BoundingBox, TransformingBoundingBox) {
+	auto box = BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+	auto matrix = rotationX(TEST_PI / 4) * rotationY(TEST_PI / 4);
+	auto box2 = box.transform(matrix);
+
+	// TODO: not the same as in the book, smaller epsilon for tests?
+	ASSERT_EQ(box2.boxMin, Tuple::point(-1.41421, -1.70711, -1.70711));
+	ASSERT_EQ(box2.boxMax, Tuple::point(1.41421, 1.70711, 1.70711));
+}
+
+TEST(BoundingBox, BoundingBoxInParentSpace) {
+	auto shape = Sphere();
+	shape.transform = translate(1, -3, 5) * scale(0.5, 2, 4);
+	auto box = shape.parentSpaceBoundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(0.5, -5, 1));
+	ASSERT_EQ(box.boxMax, Tuple::point(1.5, -1, 9));
+}
+
+TEST(BoundingBox, GroupBoundingBoxWithChildren) {
+	auto s = Sphere();
+	s.transform = translate(2, 5, -3) * scale(2, 2, 2);
+	auto c = Cylinder();
+	c.minimum = -2;
+	c.maximum = 2;
+	c.transform = translate(-4, -1, 4) * scale(0.5, 1, 0.5);
+
+	auto shape = Group();
+
+	shape.addChild(s);
+	shape.addChild(c);
+
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-4.5, -3, -5));
+	ASSERT_EQ(box.boxMax, Tuple::point(4, 7, 4.5));
+}
+//TODO tests for CSG
+
+
+
+TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
+	auto box = BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+
+	Tuple origin[] = {
+		  Tuple::point(5, 0.5, 0),
+		  Tuple::point(-5, 0.5, 0),
+		  Tuple::point(0.5, 5, 0),
+		  Tuple::point(0.5, -5, 0),
+		  Tuple::point(0.5, 0, 5),
+		  Tuple::point(0.5, 0, -5),
+		  Tuple::point(0, 0.5, 0),
+		  Tuple::point(-2, 0, 0),
+		  Tuple::point(0, -2, 0),
+		  Tuple::point(0, 0, -2),
+		  Tuple::point(2, 0, 2),
+		  Tuple::point(0, 2, 2),
+		  Tuple::point(2, 2, 0)
+	};
+
+
+	Tuple direction[] = {
+		 Tuple::vector(-1, 0, 0),
+		 Tuple::vector(1, 0, 0),
+		 Tuple::vector(0, -1, 0),
+		 Tuple::vector(0, 1, 0),
+		 Tuple::vector(0, 0, -1),
+		 Tuple::vector(0, 0, 1),
+		 Tuple::vector(0, 0, 1),
+		 Tuple::vector(2, 4, 6),
+		 Tuple::vector(6, 2, 4),
+		 Tuple::vector(4, 6, 2),
+		 Tuple::vector(0, 0, -1),
+		 Tuple::vector(0, -1, 0),
+		 Tuple::vector(-1, 0, 0)
+	};
+
+
+	bool result[] = {
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	};
+
+	for (int i = 0; i < 13; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+		ASSERT_EQ(box.intersect(r), result[i]);
+	}
+}
+
+TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
+	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+
+	Tuple origin[] = {
+		  Tuple::point(15, 1, 2) ,
+		  Tuple::point(-5, -1, 4),
+		  Tuple::point(7, 6, 5),
+		  Tuple::point(9, -5, 6),
+		  Tuple::point(8, 2, 12),
+		  Tuple::point(6, 0, -5),
+		  Tuple::point(8, 1, 3.5),
+		  Tuple::point(9, -1, -8),
+		  Tuple::point(8, 3, -4),
+		  Tuple::point(9, -1, -2),
+		  Tuple::point(4, 0, 9),
+		  Tuple::point(8, 6, -1),
+		  Tuple::point(12, 5, 4)
+	};
+
+
+	Tuple direction[] = {
+		 Tuple::vector(-1, 0, 0),
+		 Tuple::vector(1, 0, 0),
+		 Tuple::vector(0, -1, 0),
+		 Tuple::vector(0, 1, 0),
+		 Tuple::vector(0, 0, -1),
+		 Tuple::vector(0, 0, 1),
+		 Tuple::vector(0, 0, 1),
+		 Tuple::vector(2, 4, 6),
+		 Tuple::vector(6, 2, 4),
+		 Tuple::vector(4, 6, 2),
+		 Tuple::vector(0, 0, -1),
+		 Tuple::vector(0, -1, 0),
+		 Tuple::vector(-1, 0, 0)
+	};
+
+
+	bool result[] = {
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	};
+
+	for (int i = 0; i < 13; ++i) {
+		auto dir = direction[i].normalize();
+		auto r = Ray(origin[i], dir);
+		ASSERT_EQ(box.intersect(r), result[i]);
+	}
+}
+// TODO: tests for Using the bounding box as an optimization

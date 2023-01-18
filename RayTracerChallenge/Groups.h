@@ -18,6 +18,11 @@ public:
 
 	inline Intersections intersect(const Ray& ray) {
 
+		if (!boundsOf().intersect(ray)) {
+			return {};
+		}
+
+
 		Intersections i;
 
 		for (auto shape : children) {
@@ -34,8 +39,13 @@ public:
 	}
 
 	BoundingBox boundsOf() {
-		//TODO: replace this placeholder
-		return BoundingBox(Tuple::point(0, 0, 0), Tuple::point(0, 0, 0));
+		auto box = BoundingBox();
+
+		for (auto shape : children) {
+			auto cbox = shape->parentSpaceBoundsOf();
+			box.mergeBox(cbox);
+		}
+		return box;
 	}
 
 };
