@@ -445,3 +445,110 @@ void drawHexagon(){
 	ans.canvasToImage();
 	
 }
+
+
+
+Sphere* createSphereX(double moveX, double moveY, double moveZ) {
+
+	auto sphere = new Sphere();
+	sphere->transform = translate(-2 + moveX, -1 + moveY, 0 + moveZ) * scale(0.2, 0.2, 0.2);
+	sphere->material = Material();
+	sphere->material.color = Color(0.1, 1, 0.5);
+	sphere->material.diffuse = 0.7;
+	sphere->material.specular = 0.3;
+	sphere->material.pattern = new StripePattern(Color(0.5123, 0.3426, 0.934906), Color(0.934906, 0.3426, 0.5123));
+	sphere->material.pattern->transform = rotationZ(TEST_PI / 8) * scale(0.25, 0.25, 0.25);
+
+	return sphere;
+}
+
+Group* createLayer() {
+	Group* g = new Group();
+	double moveX = 0;
+	double moveY = 0;
+	double moveZ = 0;
+
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < 5; ++j) {
+			for (int z = 0; z < 5; ++z) {
+				g->addChild(*createSphereX(moveX, moveY, moveZ));
+				moveZ += 0.5;
+			}
+			moveY += 0.5;
+			moveZ = 0;
+		}
+		moveY = 0;
+		moveX += 0.5;
+	}
+	moveX = 0;
+
+	return g;
+}
+
+void sphereCube() {
+
+	auto plane = Plane();
+	plane.transform = translate(0, -2, 0) * rotationZ(0.f);
+	plane.material.specular = 0.f;
+
+	auto plane1 = Plane();
+	plane1.transform = translate(0.0, 0.f, 5.f) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	plane1.material.color = Color(1.0, 1.0, 1.0);
+	plane1.material.specular = 0.f;
+
+	plane.material.color = Color(1, 1, 0);
+	auto world = World();
+
+	double move = 0;
+
+	auto grp = Group();
+	auto grp1 = Group();
+	auto grp2 = Group();
+
+
+	//for (int i = 0; i < 5; ++i) {
+		//grp.addChild(*createSphereX(move));
+		//world.objects.emplace_back(createSphereX(move));
+		//move += 0.5;
+    //}
+	world.objects.emplace_back(createLayer());
+
+	Group* g = createLayer();
+	g->transform = translate(2.5, 0, 0);
+
+	Group* g1 = createLayer();
+	g1->transform = translate(0, 2.5, 0);
+
+	Group* g2 = createLayer();
+	g2->transform = translate(2.5, 2.5, 0);
+
+	Group* g3 = createLayer();
+	g3->transform = translate(0, 0, 2.5);
+
+	Group* g4 = createLayer();
+	g4->transform = translate(2.5, 0, 2.5);
+
+	Group* g5 = createLayer();
+	g5->transform = translate(0, 2.5, 2.5);
+
+	Group* g6 = createLayer();
+	g6->transform = translate(2.5, 2.5, 2.5);
+
+	world.objects.emplace_back(g);
+	world.objects.emplace_back(g1);
+	world.objects.emplace_back(g2);
+	world.objects.emplace_back(g3);
+	world.objects.emplace_back(g4);
+	world.objects.emplace_back(g5);
+	world.objects.emplace_back(g6);
+
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&plane1);
+
+	Camera cam(1000, 1000, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
