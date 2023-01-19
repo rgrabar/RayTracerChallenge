@@ -22,7 +22,6 @@ public:
 			return {};
 		}
 
-
 		Intersections i;
 
 		for (auto shape : children) {

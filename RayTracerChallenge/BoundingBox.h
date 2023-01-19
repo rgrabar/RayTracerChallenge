@@ -124,5 +124,41 @@ public:
 		return true;
 	}
 
+	inline bool splitBounds(BoundingBox* left, BoundingBox* right) {
 
+		auto dx = boxMax.x - boxMin.x;
+		auto dy = boxMax.y - boxMin.y;
+		auto dz = boxMax.z - boxMin.z;
+
+		auto greatest = std::max({ dx, dy, dz });
+
+		auto x0 = boxMin.x;
+		auto y0 = boxMin.y;
+		auto z0 = boxMin.z;
+
+		auto x1 = boxMax.x;
+		auto y1 = boxMax.y;
+		auto z1 = boxMax.z;
+
+		if (epsilonEqual(greatest, dx)) {
+			x0 += dx / 2.0f;
+			x1 = x0;
+		}
+		else if (epsilonEqual(greatest, dy)) {
+			y0 += dy / 2.0f;
+			y1 = y0;
+		}
+		else {
+			z0 += dz / 2.0f;
+			z1 = z0;
+		}
+
+		auto midMin = Tuple::point(x0, y0, z0);
+		auto midMax = Tuple::point(x1, y1, z1);
+
+
+		*left = BoundingBox(boxMin, midMax);
+		*left = BoundingBox(midMax, boxMax);
+
+	}
 };
