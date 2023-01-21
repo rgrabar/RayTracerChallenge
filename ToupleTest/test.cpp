@@ -3100,3 +3100,56 @@ TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
 	}
 }
 // TODO: tests for Using the bounding box as an optimization
+
+
+TEST(BoundingBox, SplittingAPerfectCube) {
+	auto box = BoundingBox(Tuple::point(-1, -4, -5), Tuple::point(9, 6, 5));
+	BoundingBox left;
+	BoundingBox right;
+
+	box.splitBounds(&left, &right);
+
+	ASSERT_EQ(left.boxMin, Tuple::point(-1, -4, -5));
+	ASSERT_EQ(left.boxMax, Tuple::point(4, 6, 5));
+	ASSERT_EQ(right.boxMin, Tuple::point(4, -4, -5));
+	ASSERT_EQ(right.boxMax, Tuple::point(9, 6, 5));
+}
+
+TEST(BoundingBox, SplittingAnXWideBox) {
+	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(9, 5.5, 3));
+	BoundingBox left;
+	BoundingBox right;
+
+	box.splitBounds(&left, &right);
+
+	ASSERT_EQ(left.boxMin, Tuple::point(-1, -2, -3));
+	ASSERT_EQ(left.boxMax, Tuple::point(4, 5.5, 3));
+	ASSERT_EQ(right.boxMin, Tuple::point(4, -2, -3));
+	ASSERT_EQ(right.boxMax, Tuple::point(9, 5.5, 3));
+}
+
+TEST(BoundingBox, SplittingAnYWideBox) {
+	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(5, 8, 3));
+	BoundingBox left;
+	BoundingBox right;
+
+	box.splitBounds(&left, &right);
+
+	ASSERT_EQ(left.boxMin, Tuple::point(-1, -2, -3));
+	ASSERT_EQ(left.boxMax, Tuple::point(5, 3, 3));
+	ASSERT_EQ(right.boxMin, Tuple::point(- 1, 3, -3));
+	ASSERT_EQ(right.boxMax, Tuple::point(5, 8, 3));
+}
+
+TEST(BoundingBox, SplittingAnZWideBox) {
+	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(5, 3, 7));
+	BoundingBox left;
+	BoundingBox right;
+
+	box.splitBounds(&left, &right);
+
+	ASSERT_EQ(left.boxMin, Tuple::point(- 1, -2, -3));
+	ASSERT_EQ(left.boxMax, Tuple::point(5, 3, 2));
+	ASSERT_EQ(right.boxMin, Tuple::point(-1, -2, 2));
+	ASSERT_EQ(right.boxMax, Tuple::point(5, 3, 7));
+}

@@ -124,7 +124,7 @@ public:
 		return true;
 	}
 
-	inline bool splitBounds(BoundingBox* left, BoundingBox* right) {
+	inline void splitBounds(BoundingBox* left, BoundingBox* right) {
 
 		auto dx = boxMax.x - boxMin.x;
 		auto dy = boxMax.y - boxMin.y;
@@ -158,7 +158,7 @@ public:
 
 
 		*left = BoundingBox(boxMin, midMax);
-		*left = BoundingBox(midMax, boxMax);
+		*right = BoundingBox(midMin, boxMax);
 
 	}
 };
