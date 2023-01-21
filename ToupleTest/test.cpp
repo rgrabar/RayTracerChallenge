@@ -3153,3 +3153,32 @@ TEST(BoundingBox, SplittingAnZWideBox) {
 	ASSERT_EQ(right.boxMin, Tuple::point(-1, -2, 2));
 	ASSERT_EQ(right.boxMax, Tuple::point(5, 3, 7));
 }
+
+TEST(BoundingBox, PartitioningGroupsChildren) {
+	auto s1 = Sphere();
+	s1.transform = translate(-2, 0, 0);
+
+	auto s2 = Sphere();
+	s2.transform = translate(2, 0, 0);
+
+	auto s3 = Sphere();
+
+	auto g = Group();
+	g.addChild(s1);
+	g.addChild(s2);
+	g.addChild(s3);
+
+	auto left = Group();
+	auto right = Group();
+
+	g.partitionChildren(&left, &right);
+
+	ASSERT_EQ(1, g.children.size());
+	ASSERT_EQ(&s3, g.children[0]);
+
+	ASSERT_EQ(1, left.children.size());
+	ASSERT_EQ(&s1, left.children[0]);
+
+	ASSERT_EQ(1, right.children.size());
+	ASSERT_EQ(&s2, right.children[0]);
+}

@@ -48,6 +48,7 @@ public:
 		addPoint(other.boxMax);
 	}
 
+	// TODO: overload this funcitons
 	bool boxContainsPoint(const Tuple& point) {
 		return boxMin.x <= point.x && point.x <= boxMax.x
 			&& boxMin.y <= point.y && point.y <= boxMax.y

@@ -14,6 +14,8 @@ public:
 	void addChild(Shape& s) {
 		children.emplace_back(&s);
 		s.parent = this;
+	
+		// TODO: update bounds?
 	}
 
 	inline Intersections intersect(const Ray& ray) {
@@ -47,4 +49,26 @@ public:
 		return box;
 	}
 
+	// TODO: do this better
+	void inline partitionChildren(Group* leftG, Group* rightG) {
+		BoundingBox left, right;
+
+		auto bounds = boundsOf();
+		bounds.splitBounds(&left, &right);
+
+		std::vector<Shape*> newChildren;
+
+		for (auto child : children) {
+			auto childBounds = child->parentSpaceBoundsOf();
+			if (left.boxContainsBox(childBounds)) {
+				leftG->addChild(*child);
+			}
+			else if (right.boxContainsBox(childBounds)) {
+				rightG->addChild(*child);
+			}
+			else
+				newChildren.emplace_back(child);
+		}
+		children = newChildren;
+	}
 };
