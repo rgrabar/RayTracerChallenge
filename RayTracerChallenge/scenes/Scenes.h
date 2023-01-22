@@ -590,7 +590,7 @@ void sphereCubeDivide() {
 		moveX += 0.5;
 	}
 
-	g.divide(50);
+	g.divide(10);
 
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 	world.objects.emplace_back(&plane);

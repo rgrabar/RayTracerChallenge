@@ -23,7 +23,7 @@ public:
 		return Tuple::vector(0.0, 1.0, 0.0);
 	}
 
-	BoundingBox boundsOf() {
+	BoundingBox boundsOf(bool update = false) {
 		return BoundingBox(Tuple::point(-INFINITY, 0, -INFINITY), Tuple::point(INFINITY, 0, INFINITY));
 	}
 

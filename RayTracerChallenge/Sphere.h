@@ -47,7 +47,7 @@ public:
 		return objectPoint - Tuple::point(0, 0, 0);
 	}
 
-	BoundingBox boundsOf() {
+	BoundingBox boundsOf(bool update = false) {
 		return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 	}
 

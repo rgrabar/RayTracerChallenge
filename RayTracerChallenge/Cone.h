@@ -115,7 +115,7 @@ public:
 		return Tuple::vector(objectPoint.x, y, objectPoint.z);
 	}
 
-	BoundingBox boundsOf() {
+	BoundingBox boundsOf(bool update = false) {
 		auto a = fabs(minimum);
 		auto b = fabs(maximum);
 

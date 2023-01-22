@@ -10,6 +10,7 @@ public:
 	//TODO: materials for groups
 
 	std::vector<Shape*> children;
+	BoundingBox m_bounds;
 
 	// TODO: overload this? with Shape*
 	void addChild(Shape& s) {
@@ -17,12 +18,12 @@ public:
 		s.parent = this;
 	
 		// TODO: update bounds if needed
-		boundsOf();
+		boundsOf(true);
 	}
 
 	inline Intersections intersect(const Ray& ray) {
 
-		if (!boundsOf().intersect(ray)) {
+		if (!m_bounds.intersect(ray)) {
 			return {};
 		}
 
@@ -41,22 +42,26 @@ public:
 		return Tuple::vector(0, 0, 0);
 	}
 
-	BoundingBox boundsOf() {
+	BoundingBox boundsOf(bool update = false) {
 		// TODO: cache the box, don't update if not needed
-		auto box = BoundingBox();
+		if (update) {
+			auto box = BoundingBox();
 
-		for (auto shape : children) {
-			auto cbox = shape->parentSpaceBoundsOf();
-			box.mergeBox(cbox);
+			for (auto shape : children) {
+				auto cbox = shape->parentSpaceBoundsOf();
+				box.mergeBox(cbox);
+			}
+
+			m_bounds = box;
 		}
-		return box;
+		return m_bounds;
 	}
 
 	// TODO: do this better
 	void inline partitionChildren(Group& leftG, Group& rightG) {
 		BoundingBox left, right;
 
-		auto bounds = boundsOf();
+		auto bounds = m_bounds;
 		bounds.splitBounds(&left, &right);
 
 		std::vector<Shape*> newChildren;

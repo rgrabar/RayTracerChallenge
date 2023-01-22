@@ -14,7 +14,7 @@ public:
 
 	inline virtual Intersections intersect(const Ray& ray)= 0;
 	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
-	inline virtual BoundingBox boundsOf()= 0;
+	inline virtual BoundingBox boundsOf(bool update = false)= 0;
 	inline virtual void divide(int threashold = 1) = 0;
 
 	Shape* parent = nullptr;
@@ -72,7 +72,7 @@ public:
 		return normalToWorld(localNormal);
 	}
 
-	inline BoundingBox parentSpaceBoundsOf() {
+	inline BoundingBox parentSpaceBoundsOf(bool update = false) {
 		return boundsOf().transform(transform);
 	}
 
