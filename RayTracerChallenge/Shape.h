@@ -7,9 +7,15 @@
 #include "Ray.h"
 #include <iostream>
 #include "BoundingBox.h"
+#include <iostream>
 
 class Shape {
 public:
+
+	inline virtual Intersections intersect(const Ray& ray)= 0;
+	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
+	inline virtual BoundingBox boundsOf()= 0;
+	inline virtual void divide(int threashold = 1) = 0;
 
 	Shape* parent = nullptr;
 
@@ -19,7 +25,6 @@ public:
 
 	Shape() :origin(Tuple::point(0, 0, 0)) {}
 	Shape(Tuple _origin) : origin(_origin) {}
-
 
 	
 	inline Tuple normalToWorld(const Tuple& normal) {
@@ -71,9 +76,8 @@ public:
 		return boundsOf().transform(transform);
 	}
 
-	//TODO: not sure if this should return intersect objects
-	inline virtual Intersections intersect(const Ray& ray)= 0;
-	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
-	inline virtual BoundingBox boundsOf()= 0;
-
+	inline void shapeDivide(int threashold = 1) {
+		divide(threashold);
+		return;
+	}
 };

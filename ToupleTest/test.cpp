@@ -3171,7 +3171,7 @@ TEST(BoundingBox, PartitioningGroupsChildren) {
 	auto left = Group();
 	auto right = Group();
 
-	g.partitionChildren(&left, &right);
+	g.partitionChildren(left, right);
 
 	ASSERT_EQ(1, g.children.size());
 	ASSERT_EQ(&s3, g.children[0]);
@@ -3181,4 +3181,106 @@ TEST(BoundingBox, PartitioningGroupsChildren) {
 
 	ASSERT_EQ(1, right.children.size());
 	ASSERT_EQ(&s2, right.children[0]);
+}
+
+TEST(BoundingBox, SubGroupFromList) {
+	auto s1 = Sphere();
+	auto s2 = Sphere();
+	
+	auto g = Group();
+	
+	auto newG = Group();
+	newG.addChild(s1);
+	newG.addChild(s2);
+	
+	g.makeSubgroup(newG);
+
+	ASSERT_EQ(g.children.size(), 1);
+	
+	//TODO: do this without casting
+	Group* t = (Group *)g.children[0];
+	ASSERT_EQ(t->children.size(), 2);
+	ASSERT_EQ(t->children[0], &s1);
+	ASSERT_EQ(t->children[1], &s2);
+	
+}
+
+//TODO Subdividing a primitive does nothing
+
+TEST(BoundingBox, SubdividingAgroupPartitionsItsChildren) {
+	auto s1 = Sphere();
+	s1.transform = translate(-2, -2, 0);
+	auto s2 = Sphere();
+	s2.transform = translate(-2, 2, 0);
+	auto s3 = Sphere();
+	s3.transform = scale(4, 4, 4);
+
+	auto g = Group();
+	g.addChild(s1);
+	g.addChild(s2);
+	g.addChild(s3);
+
+
+	g.divide(1);
+
+	ASSERT_EQ(g.children.size(), 2);
+	ASSERT_EQ(g.children[0], &s3);
+
+	auto subgroup = (Group *)g.children[1];
+	ASSERT_EQ(subgroup->children.size(), 2);
+
+	auto sub0 = (Group*)subgroup->children[0];
+	ASSERT_EQ(sub0->children.size(), 1);
+	ASSERT_EQ(sub0->children[0], &s1);
+
+	auto sub1 = (Group*)subgroup->children[1];
+	ASSERT_EQ(sub1->children.size(), 1);
+	ASSERT_EQ(sub1->children[0], &s2);
+}
+
+
+
+TEST(BoundingBox, SubdividingAGroupWithTooFewChildren) {
+	auto s1 = Sphere();
+	s1.transform = translate(-2, 0, 0);
+	auto s2 = Sphere();
+	s2.transform = translate(2, 1, 0);
+	auto s3 = Sphere();
+	s3.transform = translate(2, -1, 0);
+
+	auto subGroup = Group();
+	subGroup.addChild(s1);
+	subGroup.addChild(s2);
+	subGroup.addChild(s3);
+
+	auto s4 = Sphere();
+
+	auto g = Group();
+	g.addChild(subGroup);
+	g.addChild(s4);
+
+	g.divide(3);
+
+	// TODO: write this in a less confusing way
+
+	ASSERT_EQ(g.children.size(), 2);
+	ASSERT_EQ(g.children[0], &subGroup);
+	ASSERT_EQ(g.children[1], &s4);
+
+	ASSERT_EQ(subGroup.children.size(), 2);
+
+
+	auto sub0 = (Group*)g.children[0];
+
+	auto sub0sub0 = (Group*)sub0->children[0];
+	auto sub0sub1 = (Group*)sub0->children[1];
+
+	ASSERT_EQ(sub0sub0->children.size(), 1);
+	ASSERT_EQ(sub0sub1->children.size(), 2);
+
+	ASSERT_EQ(sub0sub0->children[0], &s1);
+
+	ASSERT_EQ(sub0sub1->children[0], &s2);
+	ASSERT_EQ(sub0sub1->children[1], &s3);
+
 }

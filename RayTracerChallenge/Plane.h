@@ -27,4 +27,8 @@ public:
 		return BoundingBox(Tuple::point(-INFINITY, 0, -INFINITY), Tuple::point(INFINITY, 0, INFINITY));
 	}
 
+	inline void divide(int threashold = 1) {
+		return;
+	}
+
 };

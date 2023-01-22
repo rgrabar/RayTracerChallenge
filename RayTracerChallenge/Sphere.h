@@ -51,6 +51,10 @@ public:
 		return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 	}
 
+	inline void divide(int threashold = 1) {
+		return;
+	}
+
 };
 
 inline Sphere glassSphere() {

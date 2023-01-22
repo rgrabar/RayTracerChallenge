@@ -106,5 +106,9 @@ public:
 	BoundingBox boundsOf() {
 		return BoundingBox(Tuple::point(-1, minimum, -1), Tuple::point(1, maximum, 1));
 	}
-		
+
+	inline void divide(int threashold = 1) {
+		return;
+	}
+
 };

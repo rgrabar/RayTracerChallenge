@@ -123,4 +123,8 @@ public:
 
 		return BoundingBox(Tuple::point(-limit, minimum, -limit), Tuple::point(limit, maximum, limit));
 	}
+
+	inline void divide(int threashold = 1) {
+		return;
+	}
 };

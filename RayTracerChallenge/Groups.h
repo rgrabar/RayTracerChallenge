@@ -11,11 +11,13 @@ public:
 
 	std::vector<Shape*> children;
 
+	// TODO: overload this? with Shape*
 	void addChild(Shape& s) {
 		children.emplace_back(&s);
 		s.parent = this;
 	
-		// TODO: update bounds?
+		// TODO: update bounds if needed
+		boundsOf();
 	}
 
 	inline Intersections intersect(const Ray& ray) {
@@ -40,6 +42,7 @@ public:
 	}
 
 	BoundingBox boundsOf() {
+		// TODO: cache the box, don't update if not needed
 		auto box = BoundingBox();
 
 		for (auto shape : children) {
@@ -50,7 +53,7 @@ public:
 	}
 
 	// TODO: do this better
-	void inline partitionChildren(Group* leftG, Group* rightG) {
+	void inline partitionChildren(Group& leftG, Group& rightG) {
 		BoundingBox left, right;
 
 		auto bounds = boundsOf();
@@ -61,14 +64,44 @@ public:
 		for (auto child : children) {
 			auto childBounds = child->parentSpaceBoundsOf();
 			if (left.boxContainsBox(childBounds)) {
-				leftG->addChild(*child);
+				leftG.addChild(*child);
 			}
 			else if (right.boxContainsBox(childBounds)) {
-				rightG->addChild(*child);
+				rightG.addChild(*child);
 			}
 			else
 				newChildren.emplace_back(child);
 		}
 		children = newChildren;
+	}
+
+	inline void makeSubgroup(Group& sub) {
+		// TODO leak?
+		auto g = new Group();
+		for (auto s : sub.children) {
+			g->addChild(*s);
+		}
+		addChild(*g);
+	}
+
+	inline void divide(int threashold = 1)override {
+
+		if (threashold <= children.size()) {
+			auto left = Group();
+			auto right = Group();
+
+			partitionChildren(left, right);
+			if (left.children.size() != 0) {
+				makeSubgroup(left);
+			}
+			if (right.children.size() != 0) {
+				makeSubgroup(right);
+			}
+		}
+
+		for (auto child : children) {
+			child->shapeDivide(threashold);
+		}
+
 	}
 };

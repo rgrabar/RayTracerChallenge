@@ -552,3 +552,54 @@ void sphereCube() {
 
 	ans.canvasToImage();
 }
+
+void sphereCubeDivide() {
+
+	//TODO: double check everything in bounding-boxes it's a bit too slow
+
+	auto plane = Plane();
+	plane.transform = translate(0, -2, 0) * rotationZ(0.f);
+	plane.material.specular = 0.f;
+
+	auto plane1 = Plane();
+	plane1.transform = translate(0.0, 0.f, 5.f) * rotationY(-TEST_PI / 4.f) * rotationZ(TEST_PI / 2.f);
+	plane1.material.color = Color(1.0, 1.0, 1.0);
+	plane1.material.specular = 0.f;
+
+	plane.material.color = Color(1, 1, 0);
+	auto world = World();
+
+	double moveX = 0;
+	double moveY = 0;
+	double moveZ = 0;
+
+	auto g = Group();
+
+	for (int i = 0; i < 10; ++i) {
+		for (int j = 0; j < 10; ++j) {
+			for (int k = 0; k < 10; ++k) {
+				auto s = new Sphere();
+				s->transform = translate(-2 + moveX, -1 + moveY, 0 + moveZ) * scale(0.2, 0.2, 0.2);
+				g.addChild(*s);
+				moveZ += 0.5;
+			}
+			moveZ = 0;
+			moveY += 0.5;
+		}
+		moveY = 0;
+		moveX += 0.5;
+	}
+
+	g.divide(50);
+
+	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&plane1);
+	world.objects.emplace_back(&g);
+
+	Camera cam(1000, 1000, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
