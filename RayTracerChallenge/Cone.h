@@ -31,15 +31,13 @@ public:
 		auto t = (minimum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t, std::fabs(minimum))) {
-			Intersection* i = new Intersection(t, this);
-			inter.intersections.insert(i);
+			inter.intersections.insert(new Intersection(t, this));
 		}
 
 		t = (maximum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t, std::fabs(maximum))) {
-			Intersection* i = new Intersection(t, this);
-			inter.intersections.insert(i);
+			inter.intersections.insert(new Intersection(t, this));
 		}
 		return;
 	}
@@ -66,8 +64,7 @@ public:
 			if (epsilonEqual(a, 0) && !epsilonEqual(b, 0)) {
 				auto t = -c / (2 * b);
 
-				Intersection* i = new Intersection(t, this);
-				inter.intersections.insert(i);
+				inter.intersections.insert(new Intersection(t, this));
 			}
 			else {
 				auto t0 = (-b - sqrt(disc)) / (2 * a);
@@ -82,13 +79,11 @@ public:
 
 
 				if (minimum < y0 && y0 < maximum) {
-					Intersection* i = new Intersection(t0, this);
-					inter.intersections.insert(i);
+					inter.intersections.insert(new Intersection(t0, this));
 				}
 
 				if (minimum < y1 && y1 < maximum) {
-					Intersection* i = new Intersection(t1, this);
-					inter.intersections.insert(i);
+					inter.intersections.insert(new Intersection(t1, this));
 				}
 			}
 

@@ -34,12 +34,9 @@ public:
 		if (tmin > tmax)
 			return{};
 
-		Intersection* i1 = new Intersection(tmin, this);
-		Intersection* i2 = new Intersection(tmax, this);
-
 		Intersections inter;
-		inter.intersections.insert(i1);
-		inter.intersections.insert(i2);
+		inter.intersections.insert(new Intersection(tmin, this));
+		inter.intersections.insert(new Intersection(tmax, this));
 
 		return inter;
 	}

@@ -31,15 +31,13 @@ public:
 		auto t = (minimum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t)) {
-			Intersection* i = new Intersection(t, this);
-			inter.intersections.insert(i);
+			inter.intersections.insert(new Intersection(t, this));
 		}
 		
 		t = (maximum - ray.origin.y) / ray.direction.y;
 
 		if (checkCap(ray, t)) {
-			Intersection* i = new Intersection(t, this);
-			inter.intersections.insert(i);
+			inter.intersections.insert(new Intersection(t, this));
 		}
 		return;
 	}
@@ -76,13 +74,11 @@ public:
 
 
 			if (minimum < y0 && y0 < maximum) {
-				Intersection* i = new Intersection(t0, this);
-				inter.intersections.insert(i);
+				inter.intersections.insert(new Intersection(t0, this));
 			}
 
 			if (minimum < y1 && y1 < maximum) {
-				Intersection* i = new Intersection(t1, this);
-				inter.intersections.insert(i);
+				inter.intersections.insert(new Intersection(t1, this));
 			}
 
 		}
