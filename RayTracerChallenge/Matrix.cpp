@@ -40,7 +40,7 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
 Matrix::~Matrix() {
     // remove for arena
     free(matrix);
-    free(aaa);
+    free(cachedMatrix);
 }
 
 Matrix::Matrix(const Matrix& matrix) {
@@ -96,19 +96,19 @@ Matrix* Matrix::inverse() {
         std::cout << "Not invertible!\n";
     }
 
-    if (aaa == nullptr) {
+    if (cachedMatrix == nullptr) {
 
-        aaa = new Matrix(w, h);
+        cachedMatrix = new Matrix(w, h);
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; ++j) {
                 double c = cofactor(i, j);
-                aaa->matrix[j * w + i] = c / determinant();
+                cachedMatrix->matrix[j * w + i] = c / determinant();
             }
         }
-        return aaa;
+        return cachedMatrix;
 
     }
-    return aaa;
+    return cachedMatrix;
 }
 
 Matrix Matrix::submatrix(int row, int col)const {

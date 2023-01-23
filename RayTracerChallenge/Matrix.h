@@ -27,7 +27,7 @@ public:
 	const double invertible()const;
 	Matrix* inverse();
 
-	Matrix* aaa = nullptr;
+	Matrix* cachedMatrix = nullptr;
 
 };
 
