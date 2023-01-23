@@ -2921,7 +2921,7 @@ TEST(BoundingBox, BoxContainsPoint) {
 
 	bool ans[] = { true, true, true, false, false, false, false, false, false };
 	for (int i = 0; i < 9; ++i) {
-		auto tmp = box.boxContainsPoint(points[i]);
+		auto tmp = box.contains(points[i]);
 		ASSERT_EQ(tmp, ans[i]);
 	}
 }
@@ -2933,10 +2933,10 @@ TEST(BoundingBox, BoxContainsBox) {
 	auto box3 = BoundingBox(Tuple::point(4, -3, -1), Tuple::point(10, 3, 6));
 	auto box4 = BoundingBox(Tuple::point(6, -1, 1), Tuple::point(12, 5, 8));
 
-	EXPECT_TRUE(box.boxContainsBox(box1));
-	EXPECT_TRUE(box.boxContainsBox(box2));
-	EXPECT_FALSE(box.boxContainsBox(box3));
-	EXPECT_FALSE(box.boxContainsBox(box4));
+	EXPECT_TRUE(box.contains(box1));
+	EXPECT_TRUE(box.contains(box2));
+	EXPECT_FALSE(box.contains(box3));
+	EXPECT_FALSE(box.contains(box4));
 }
 
 TEST(BoundingBox, TransformingBoundingBox) {

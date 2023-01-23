@@ -68,10 +68,10 @@ public:
 
 		for (auto child : children) {
 			auto childBounds = child->parentSpaceBoundsOf();
-			if (left.boxContainsBox(childBounds)) {
+			if (left.contains(childBounds)) {
 				leftG.addChild(*child);
 			}
-			else if (right.boxContainsBox(childBounds)) {
+			else if (right.contains(childBounds)) {
 				rightG.addChild(*child);
 			}
 			else

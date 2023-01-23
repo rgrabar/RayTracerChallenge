@@ -48,16 +48,15 @@ public:
 		addPoint(other.boxMax);
 	}
 
-	// TODO: overload this funcitons
-	bool boxContainsPoint(const Tuple& point) {
+	bool contains(const Tuple& point) {
 		return boxMin.x <= point.x && point.x <= boxMax.x
 			&& boxMin.y <= point.y && point.y <= boxMax.y
 			&& boxMin.z <= point.z && point.z <= boxMax.z;
 	}
 
-	bool boxContainsBox(BoundingBox other) {
-		return boxContainsPoint(other.boxMin) &&
-			   boxContainsPoint(other.boxMax);
+	bool contains(BoundingBox other) {
+		return contains(other.boxMin) &&
+			   contains(other.boxMax);
 	}
 
 	BoundingBox transform(const Matrix& transformMatrix) {
