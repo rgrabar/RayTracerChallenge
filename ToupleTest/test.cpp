@@ -1884,7 +1884,7 @@ TEST(PatternTest, ObjectTransformation) {
 	object.transform = scale(2, 2, 2);
 	object.material.pattern = new StripePattern();
 
-	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
+	auto c = object.stripeAtObject(Tuple::point(1.5, 0, 0));
 	
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1894,7 +1894,7 @@ TEST(PatternTest, StripesWithPatternTransform) {
 	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = scale(2, 2, 2);
 
-	auto c = stripeAtObject(&object, Tuple::point(1.5, 0, 0));
+	auto c = object.stripeAtObject(Tuple::point(1.5, 0, 0));
 
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1941,7 +1941,7 @@ TEST(PatternTest, PatternWihtObjectAndPatternTransform) {
 	auto pattern = StripePattern();
 	pattern.transform = translate(0.5, 1, 1.5);
 	shape.material.pattern = &pattern;
-	auto c = stripeAtObject(&shape, Tuple::point(2.5, 3, 3.5));
+	auto c = shape.stripeAtObject(Tuple::point(2.5, 3, 3.5));
 	//ASSERT_EQ(c, Color(0.75, 0.75, 0.75));
 }
 
@@ -1950,10 +1950,10 @@ TEST(PatternTest, GradientPatternTest) {
 	auto object = Sphere();
 	object.material.pattern = new GradientPattern(Color(1, 1, 1), Color(0, 0, 0));
 
-	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
-	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
-	ASSERT_EQ(stripeAtObject(&object, Tuple::point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+	ASSERT_EQ(object.stripeAtObject(Tuple::point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(PatternTest, RingPatternTest) {

@@ -26,7 +26,13 @@ public:
 	Shape() :origin(Tuple::point(0, 0, 0)) {}
 	Shape(Tuple _origin) : origin(_origin) {}
 
-	
+	inline Color stripeAtObject(const Tuple& worldPoint) {
+		auto objectPoint = *transform.inverse() * worldPoint;
+		auto patternPoint = *material.pattern->transform.inverse() * objectPoint;
+
+		return material.pattern->patternColorAt(patternPoint);
+	}
+
 	inline Tuple normalToWorld(const Tuple& normal) {
 		Tuple worldNormal = normal;
 		worldNormal = transform.inverse()->transpose() * worldNormal;

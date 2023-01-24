@@ -6,19 +6,12 @@ Tuple reflect(const Tuple& in, const Tuple& normal) {
 	return in - normal * 2 * in.dotProduct(normal);
 }
 
-Color stripeAtObject(Shape* object, const Tuple& worldPoint) {
-	auto objectPoint = *(object->transform.inverse()) * worldPoint;
-	auto patternPoint = *(object->material.pattern->transform.inverse()) * objectPoint;
-
-	return object->material.pattern->patternColorAt(patternPoint);
-}
-
 Color lighting(Shape* object, const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow){
 
 	Color newColor = object->material.color;
 
 	if (object->material.pattern != nullptr)
-		newColor = stripeAtObject(object, point);
+		newColor = object->stripeAtObject(point);
 
 	auto effectiveColor = newColor * light.intesity;
 	auto lightv = (light.position - point).normalize();
