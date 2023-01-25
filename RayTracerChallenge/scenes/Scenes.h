@@ -1,7 +1,6 @@
 #pragma once
 #include "../Tuple.h"
 #include "../Canvas.h"
-#include "../Normal.h"
 
 # define TEST_PI           3.14159265358979323846
 
@@ -91,7 +90,7 @@ void drawRedCircle() {
 				   auto normal = ((Shape*)test->s)->normal(wPoint);
 				   auto eye = -r.direction;
 				   Material tmp;
-				   auto co = lighting((Shape*)test->s, light, wPoint, eye, normal, 0);
+				   auto co = ((Shape*)(test->s))->lighting(light, wPoint, eye, normal, 0);
 
 				   c.writePixel(x, y, co);
 				   //TODO: figure out why i need this break

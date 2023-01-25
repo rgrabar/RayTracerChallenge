@@ -7,7 +7,6 @@
 #include <set>
 #include "Intersection.h"
 #include "PreComputations.h"
-#include "Normal.h"
 
 class World {
 public:

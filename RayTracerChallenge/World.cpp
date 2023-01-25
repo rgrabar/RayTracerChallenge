@@ -7,7 +7,7 @@ Color World::shadeHit(const Precomputations& comps, int& remaining, int& remaini
 
 	auto shadowed = isShadowed(comps.overPoint);
 	// TODO: sending comps.point instead of comps.overPoint causes acne
-	auto surface = lighting(comps.shape, light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
+	auto surface = comps.shape->lighting(light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
 	auto reflected = reflectedColor(comps, remaining);
 	auto refracted = refractedColor(comps, remainingRefraction);
 	//std::cout << refracted.r << " " << refracted.g << " " << refracted.b << "\n";

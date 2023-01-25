@@ -2,7 +2,6 @@
 #include "Shape.h"
 #include <vector>
 #include <iostream>
-#include "Normal.h"
 #include <algorithm>
 
 class Group : public Shape {

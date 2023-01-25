@@ -1,5 +1,4 @@
 #include "Material.h"
-#include "Normal.h"
 #include <iostream>
 
 bool operator==(const Material& lhs, const Material& rhs) {

@@ -26,9 +26,6 @@
 #include "../RayTracerChallenge/Intersection.h"
 #include "../RayTracerChallenge/Intersection.cpp"
 
-#include "../RayTracerChallenge/Normal.h"
-#include "../RayTracerChallenge/Normal.cpp"
-
 #include "../RayTracerChallenge/Light.h"
 #include "../RayTracerChallenge/Light.cpp"
 
@@ -1390,7 +1387,7 @@ TEST(LightingTest, EyeBetweenLight) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1401,7 +1398,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1412,7 +1409,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1423,7 +1420,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -1434,7 +1431,7 @@ TEST(LightingTest, LightBehindSurface) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
-	auto result = lighting(new Sphere(), light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -1688,7 +1685,7 @@ TEST(ShadowTest, SurfaceInShadow) {
 	auto m = Material();
 	auto position = Tuple::point(0, 0, 0);
 
-	auto res = lighting(new Sphere(), light, position, eyev, normalv, 1);
+	auto res = Sphere().lighting(light, position, eyev, normalv, 1);
 
 	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
 }
@@ -1872,8 +1869,8 @@ TEST(PatternTest, LightingWithPattern) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto c1 = lighting(&sphere, light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
-	auto c2 = lighting(&sphere, light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
+	auto c1 = sphere.lighting(light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
+	auto c2 = sphere.lighting(light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
 
 	ASSERT_EQ(c1, Color(1, 1, 1));
 	ASSERT_EQ(c2, Color(0, 0, 0));

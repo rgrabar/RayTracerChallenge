@@ -86,4 +86,44 @@ public:
 		divide(threashold);
 		return;
 	}
+
+	inline Color lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
+
+		Color newColor = material.color;
+
+		if (material.pattern != nullptr)
+			newColor = stripeAtObject(point);
+
+		auto effectiveColor = newColor * light.intesity;
+		auto lightv = (light.position - point).normalize();
+		auto ambientColor = effectiveColor * material.ambient;
+		auto lightDotNormal = lightv.dotProduct(normalv);
+
+		Color diffuseColor(0, 0, 0);
+		Color specularColor(0, 0, 0);
+
+		if (lightDotNormal < 0) {
+			diffuseColor = Color(0, 0, 0);
+			specularColor = Color(0, 0, 0);
+		}
+		else {
+			diffuseColor = effectiveColor * material.diffuse * lightDotNormal;
+			auto reflectv = -lightv.reflect(normalv);
+			auto reflectDotEye = reflectv.dotProduct(eyev);
+
+			if (reflectDotEye <= 0)
+				specularColor = Color(0, 0, 0);
+			else {
+				auto factor = pow(reflectDotEye, material.shininess);
+				specularColor = light.intesity * material.specular * factor;
+			}
+		}
+
+		auto test = ambientColor + diffuseColor + specularColor;
+
+		if (inShadow)
+			return ambientColor;
+		else
+			return ambientColor + diffuseColor + specularColor;
+	}
 };

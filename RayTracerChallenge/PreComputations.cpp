@@ -1,5 +1,4 @@
 #include "PreComputations.h"
-#include "Normal.h"
 #include <iostream>
 
 Precomputations::Precomputations() :point(Tuple::point(0, 0, -1)),
