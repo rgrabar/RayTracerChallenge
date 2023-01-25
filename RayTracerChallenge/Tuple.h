@@ -19,7 +19,7 @@ struct Tuple {
 	Tuple normalize()const;
 	double dotProduct(const Tuple& v)const;
 	Tuple crossProduct(const Tuple& v)const;
-
+	Tuple reflect(const Tuple& normal);
 	double x, y, z, w;
 };
 

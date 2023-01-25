@@ -2,9 +2,6 @@
 #include <iostream>
 #include "Pattern.h"
 
-Tuple reflect(const Tuple& in, const Tuple& normal) {
-	return in - normal * 2 * in.dotProduct(normal);
-}
 
 Color lighting(Shape* object, const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow){
 
@@ -27,7 +24,7 @@ Color lighting(Shape* object, const Light& light, const Tuple& point, const Tupl
 	}
 	else {
 		diffuseColor = effectiveColor * object->material.diffuse * lightDotNormal;
-		auto reflectv = reflect(-lightv, normalv);
+		auto reflectv = -lightv.reflect(normalv);
 		auto reflectDotEye = reflectv.dotProduct(eyev);
 
 		if (reflectDotEye <= 0)

@@ -1354,7 +1354,7 @@ TEST(ReflectionTest, VectorAt45) {
 	auto v = Tuple::vector(1, -1, 0);
 	auto n = Tuple::vector(0, 1, 0);
 
-	auto r = reflect(v, n);
+	auto r = v.reflect(n);
 
 	ASSERT_EQ(r, Tuple::vector(1, 1, 0));
 }
@@ -1363,7 +1363,7 @@ TEST(ReflectionTest, SlantedSurface) {
 	auto v = Tuple::vector(0, -1, 0);
 	auto n = Tuple::vector(sqrt(2) / 2, sqrt(2) / 2, 0);
 
-	auto r = reflect(v, n);
+	auto r = v.reflect(n);
 
 	ASSERT_EQ(r, Tuple::vector(1, 0, 0));
 }

@@ -29,6 +29,10 @@ Tuple Tuple::crossProduct(const Tuple& v)const {
 	return Tuple::vector(y * v.z - z * v.y, z * v.x - x *v.z, x * v.y - y * v.x);
 }
 
+Tuple Tuple::reflect(const Tuple& normal) {
+	return *this - normal * 2 * dotProduct(normal);
+}
+
 bool operator==(const Tuple& lhs, const Tuple& rhs) {
 	return epsilonEqual(lhs.x, rhs.x) &&
 		   epsilonEqual(lhs.y, rhs.y) &&

@@ -70,7 +70,7 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 	else
 		inside = false;
 
-	reflectv = reflect(ray.direction, normalv);
+	reflectv = ray.direction.reflect(normalv);
 	
 	overPoint = point + normalv * (EPSILON);
 	underPoint = point - normalv * (EPSILON);
