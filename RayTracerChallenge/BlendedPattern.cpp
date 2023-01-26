@@ -4,8 +4,8 @@ Color BlendedPattern::patternColorAt(const Tuple& point) {
 
 	// TODO: this works but is it even correct? the transform part shouldn't it be transformed?
 
-	auto patternPointA = *(a->transform.inverse()) * point;
-	auto patternPointB = *(b->transform.inverse()) * point;
+	auto patternPointA = (a->transform) * point;
+	auto patternPointB = (b->transform) * point;
 
 	Color aCol = a->patternColorAt(patternPointA);
 	Color bCol = b->patternColorAt(patternPointB);
