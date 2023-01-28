@@ -11,6 +11,14 @@ public:
 	std::vector<Shape*> children;
 	BoundingBox m_bounds;
 
+	~Group() {
+		for (auto child : children) {
+			if (dynamic_cast<Group*>(child)) {
+				delete child;
+			}
+		}
+	}
+
 	// TODO: overload this? with Shape*
 	void addChild(Shape& s) {
 		children.emplace_back(&s);

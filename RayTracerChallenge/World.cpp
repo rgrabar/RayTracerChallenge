@@ -32,7 +32,6 @@ std::multiset <Intersection*, decltype(cmp)> World::worldIntersection(const Ray&
 	for (auto object : objects) {
 
 		auto a = object->shapeIntersect(ray);
-		//intersections.insert(a.intersections.begin(), a.intersections.end());
 		for (auto tmp : a.intersections) {
 			intersections.insert(tmp);
 		}
@@ -50,7 +49,16 @@ Color World::colorAt(const Ray& r, int remaining, int remainingRefraction)const 
 
 	Precomputations p(*ht, r, i);
 
-	return shadeHit(p, remaining, remainingRefraction);
+	Color c = shadeHit(p, remaining, remainingRefraction);
+
+	// TODO: leak?
+	for (auto tmp : i.intersections)
+		delete tmp;
+
+	i.intersections.clear();
+	
+	return c;
+
 }
 
 bool World::isShadowed(const Tuple& point)const {
