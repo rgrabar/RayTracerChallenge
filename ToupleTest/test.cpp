@@ -2672,7 +2672,7 @@ TEST(GroupTest, ShapeParent) {
 TEST(GroupTest, AddingAChild) {
 	auto g = Group();
 	auto s = Sphere();
-	g.addChild(s);
+	g.addChild(&s);
 
 	ASSERT_EQ(g.children.size(), 1);
 	ASSERT_EQ(g.children[0], &s);
@@ -2696,9 +2696,9 @@ TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 	auto s3 = Sphere();
 	s3.transform = translate(5, 0, 0);
 
-	g.addChild(s1);
-	g.addChild(s2);
-	g.addChild(s3);
+	g.addChild(&s1);
+	g.addChild(&s2);
+	g.addChild(&s3);
 
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 
@@ -2722,7 +2722,7 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
 
-	g.addChild(s);
+	g.addChild(&s);
 	auto r = Ray(Tuple::point(10, 0, -10), Tuple::vector(0, 0, 1));
 
 	auto xs = g.shapeIntersect(r);
@@ -2731,20 +2731,20 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 }
 
 TEST(GroupTest, WorldToObjectSpace) {
-	auto g1 = Group();
+	auto g1 = new Group();
 
-	g1.transform = rotationY(TEST_PI / 2);
+	g1->transform = rotationY(TEST_PI / 2);
 
-	auto g2 = Group();
-	g2.transform = scale(2, 2, 2);
+	auto g2 = new Group();
+	g2->transform = scale(2, 2, 2);
 
-	g1.addChild(g2);
+	g1->addChild(g2);
 
 	auto s = Sphere();
 
 	s.transform = translate(5, 0, 0);
 
-	g2.addChild(s);
+	g2->addChild(&s);
 
 	auto p = s.worldToObject(Tuple::point(-2, 0, -10));
 
@@ -2757,8 +2757,8 @@ TEST(GroupTest, normalToWorldSpace) {
 
 	g1.transform = rotationY(TEST_PI / 2);
 
-	auto g2 = Group();
-	g2.transform = scale(1, 2, 3);
+	auto g2 = new Group();
+	g2->transform = scale(1, 2, 3);
 
 	g1.addChild(g2);
 
@@ -2766,7 +2766,7 @@ TEST(GroupTest, normalToWorldSpace) {
 
 	s.transform = translate(5, 0, 0);
 
-	g2.addChild(s);
+	g2->addChild(&s);
 
 	auto p = s.normalToWorld(Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 
@@ -2965,8 +2965,8 @@ TEST(BoundingBox, GroupBoundingBoxWithChildren) {
 
 	auto shape = Group();
 
-	shape.addChild(s);
-	shape.addChild(c);
+	shape.addChild(&s);
+	shape.addChild(&c);
 
 	auto box = shape.boundsOf();
 
@@ -3161,9 +3161,9 @@ TEST(BoundingBox, PartitioningGroupsChildren) {
 	auto s3 = Sphere();
 
 	auto g = Group();
-	g.addChild(s1);
-	g.addChild(s2);
-	g.addChild(s3);
+	g.addChild(&s1);
+	g.addChild(&s2);
+	g.addChild(&s3);
 
 	auto left = Group();
 	auto right = Group();
@@ -3187,8 +3187,8 @@ TEST(BoundingBox, SubGroupFromList) {
 	auto g = Group();
 	
 	auto newG = Group();
-	newG.addChild(s1);
-	newG.addChild(s2);
+	newG.addChild(&s1);
+	newG.addChild(&s2);
 	
 	g.makeSubgroup(newG);
 
@@ -3213,9 +3213,9 @@ TEST(BoundingBox, SubdividingAgroupPartitionsItsChildren) {
 	s3.transform = scale(4, 4, 4);
 
 	auto g = Group();
-	g.addChild(s1);
-	g.addChild(s2);
-	g.addChild(s3);
+	g.addChild(&s1);
+	g.addChild(&s2);
+	g.addChild(&s3);
 
 
 	g.divide(1);
@@ -3245,26 +3245,26 @@ TEST(BoundingBox, SubdividingAGroupWithTooFewChildren) {
 	auto s3 = Sphere();
 	s3.transform = translate(2, -1, 0);
 
-	auto subGroup = Group();
-	subGroup.addChild(s1);
-	subGroup.addChild(s2);
-	subGroup.addChild(s3);
+	auto subGroup = new Group();
+	subGroup->addChild(&s1);
+	subGroup->addChild(&s2);
+	subGroup->addChild(&s3);
 
 	auto s4 = Sphere();
 
 	auto g = Group();
 	g.addChild(subGroup);
-	g.addChild(s4);
+	g.addChild(&s4);
 
 	g.divide(3);
 
 	// TODO: write this in a less confusing way
 
 	ASSERT_EQ(g.children.size(), 2);
-	ASSERT_EQ(g.children[0], &subGroup);
+	ASSERT_EQ(g.children[0], subGroup);
 	ASSERT_EQ(g.children[1], &s4);
 
-	ASSERT_EQ(subGroup.children.size(), 2);
+	ASSERT_EQ(subGroup->children.size(), 2);
 
 
 	auto sub0 = (Group*)g.children[0];

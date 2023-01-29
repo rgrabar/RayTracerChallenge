@@ -415,8 +415,8 @@ Cylinder* hexagonEdge() {
 
 Group* hexagonSide() {
 	auto side = new Group();
-	side->addChild(*hexagonEdge());
-	side->addChild(*hexagonCorner());
+	side->addChild(hexagonEdge());
+	side->addChild(hexagonCorner());
 	return side;
 
 }
@@ -428,7 +428,7 @@ void drawHexagon(){
 	for (int i = 0; i < 6; ++i) {
 		auto side = hexagonSide();
 		side->transform = rotationY(i * TEST_PI / 3);
-		hex.addChild(*side);
+		hex.addChild(side);
 	}
 
 	auto world = World();
@@ -470,7 +470,7 @@ Group* createLayer() {
 	for (int i = 0; i < 5; ++i) {
 		for (int j = 0; j < 5; ++j) {
 			for (int z = 0; z < 5; ++z) {
-				g->addChild(*createSphereX(moveX, moveY, moveZ));
+				g->addChild(createSphereX(moveX, moveY, moveZ));
 				moveZ += 0.5;
 			}
 			moveY += 0.5;
@@ -579,7 +579,7 @@ void sphereCubeDivide() {
 			for (int k = 0; k < 10; ++k) {
 				auto s = new Sphere();
 				s->transform = translate(-2 + moveX, -1 + moveY, 0 + moveZ) * scale(0.2, 0.2, 0.2);
-				g.addChild(*s);
+				g.addChild(s);
 				moveZ += 0.5;
 			}
 			moveZ = 0;

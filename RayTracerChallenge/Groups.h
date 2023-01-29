@@ -19,10 +19,11 @@ public:
 		}
 	}
 
-	// TODO: overload this? with Shape*
-	void addChild(Shape& s) {
-		children.emplace_back(&s);
-		s.parent = this;
+	//TODO: passing a local group variable as child
+	// breaks everything yay
+	void addChild(Shape* s) {
+		children.emplace_back(s);
+		s->parent = this;
 	
 		// TODO: update bounds if needed
 		boundsOf(true);
@@ -76,10 +77,10 @@ public:
 		for (auto child : children) {
 			auto childBounds = child->parentSpaceBoundsOf();
 			if (left.contains(childBounds)) {
-				leftG.addChild(*child);
+				leftG.addChild(child);
 			}
 			else if (right.contains(childBounds)) {
-				rightG.addChild(*child);
+				rightG.addChild(child);
 			}
 			else
 				newChildren.emplace_back(child);
@@ -91,9 +92,9 @@ public:
 		// TODO leak?
 		auto g = new Group();
 		for (auto s : sub.children) {
-			g->addChild(*s);
+			g->addChild(s);
 		}
-		addChild(*g);
+		addChild(g);
 	}
 
 	inline void divide(int threashold = 1)override {
