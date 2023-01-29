@@ -62,6 +62,8 @@ Color World::colorAt(const Ray& r, int remaining, int remainingRefraction)const 
 }
 
 bool World::isShadowed(const Tuple& point)const {
+	bool inShadow = false;
+	
 	auto v = light.position - point;
 	auto distance = v.magnitude();
 	auto direction = v.normalize();
@@ -73,8 +75,12 @@ bool World::isShadowed(const Tuple& point)const {
 
 	auto h = i.hit();
 	if (h != nullptr && h->t < distance)
-		return true;
-	return false;
+		inShadow = true;
+	
+	for (auto tmp : i.intersections)
+		delete tmp;
+	
+	return inShadow;
 }
 
 Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
