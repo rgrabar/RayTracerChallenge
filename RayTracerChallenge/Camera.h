@@ -22,5 +22,7 @@ public:
 	Camera(int _hSize, int _vSize, double _fieldOfView);
 	Ray rayForPixel(double px, double py);
 
-	Canvas render(const World& world);
+	Canvas render(World& world);
+
+	void splitArray(int start, int end, World* world, Canvas* image);
 };

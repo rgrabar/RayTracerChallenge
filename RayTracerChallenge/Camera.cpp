@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <ppl.h>
+#include <thread>
 
 using namespace concurrency;
 
@@ -35,7 +36,19 @@ Ray Camera::rayForPixel(double px, double py) {
 // TODO: maybe replace with something 
 // https://stackoverflow.com/questions/36246300/parallel-loops-in-c
 
-Canvas Camera::render(const World& world) {
+void Camera::splitArray(int start, int end, World* world, Canvas* image) {
+	for(auto y = start; y < end; ++y){
+		for (auto x = 0; x < hSize; ++x) {
+			auto ray = rayForPixel(x, y);
+			auto color = world->colorAt(ray);
+			image->writePixel(x, y, color);
+		}
+	}
+}
+
+
+
+Canvas Camera::render(World& world) {
 	Canvas image(hSize, vSize);
 
 	float totalSize = (float)(vSize * hSize);
@@ -43,20 +56,31 @@ Canvas Camera::render(const World& world) {
 	int countdown = increment5;   // decrement countdown instead of modulo
 	int percent5 = 0;  // number of elements in the progress bar (1 means 5%)
 
-	parallel_for(0, vSize, [&](size_t y) {
-		for (auto x = 0; x < hSize; ++x) {
-			auto ray = rayForPixel(x, y);
-			auto color = world.colorAt(ray);
-			image.writePixel(x, y, color);
 
-			if (--countdown == 0) {
-				percent5++;
-				std::cout << "\r" << std::string(percent5, '|') << percent5 * 5 << "%";
-				countdown = increment5;
-				std::cout.flush();
-			}
-		}
-	});
+
+	const unsigned n = std::thread::hardware_concurrency() + 30;
+
+	std::cout << "USING : " << n << " THREADS\n";
+
+	unsigned batch_size = vSize / n;
+	unsigned batch_remainder = (vSize) % n;
+
+
+
+	std::vector<std::thread> threads;
+	for (int i = 0; i < n; ++i) {
+		int start = i * batch_size;
+		threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_size, &world, &image));
+	}
+
+	int start = n * batch_size;
+	threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_remainder, &world, &image));
+
+	for (auto i = 0; i < n + 1; ++i) {
+		threads[i].join();
+	}
+	std::cout << "ENDED\n";
+
 	std::cout << "\n";
 
 	//image.canvasToImage();
