@@ -73,6 +73,8 @@
 
 #include "../RayTracerChallenge/BoundingBox.h"
 
+#include "../RayTracerChallenge/Triangle.h"
+#include "../RayTracerChallenge/Triangle.cpp"
 
 # define TEST_PI           3.14159265358979323846  /* pi */
 
@@ -3235,8 +3237,6 @@ TEST(BoundingBox, SubdividingAgroupPartitionsItsChildren) {
 	ASSERT_EQ(sub1->children[0], &s2);
 }
 
-
-
 TEST(BoundingBox, SubdividingAGroupWithTooFewChildren) {
 	auto s1 = Sphere();
 	s1.transform = translate(-2, 0, 0);
@@ -3279,5 +3279,23 @@ TEST(BoundingBox, SubdividingAGroupWithTooFewChildren) {
 
 	ASSERT_EQ(sub0sub1->children[0], &s2);
 	ASSERT_EQ(sub0sub1->children[1], &s3);
+
+}
+
+TEST(Triangle, ConstructingATriangle) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	ASSERT_EQ(t.p1, p1);
+	ASSERT_EQ(t.p2, p2);
+	ASSERT_EQ(t.p3, p3);
+
+	ASSERT_EQ(t.e1, Tuple::vector(-1, -1, 0));
+	ASSERT_EQ(t.e2, Tuple::vector(1, -1, 0));
+	ASSERT_EQ(t.normal, Tuple::vector(0, 0, -1));
 
 }

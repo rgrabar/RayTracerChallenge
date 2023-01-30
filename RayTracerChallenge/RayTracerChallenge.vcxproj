@@ -176,6 +176,7 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="StripePattern.cpp" />
     <ClCompile Include="Transformations.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tuple.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -210,6 +211,7 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="StripePattern.h" />
     <ClInclude Include="Transformations.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Tuple.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
