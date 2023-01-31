@@ -3297,5 +3297,101 @@ TEST(Triangle, ConstructingATriangle) {
 	ASSERT_EQ(t.e1, Tuple::vector(-1, -1, 0));
 	ASSERT_EQ(t.e2, Tuple::vector(1, -1, 0));
 	ASSERT_EQ(t.normal, Tuple::vector(0, 0, -1));
+}
 
+TEST(Triangle, NormalOnATriangle) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto n1 = t.objectNormal(Tuple::point(0, 0.5, 0));
+	auto n2 = t.objectNormal(Tuple::point(-0.5, 0.75, 0));
+	auto n3 = t.objectNormal(Tuple::point(0.5, 0.25, 0));
+
+
+	ASSERT_EQ(n1, t.normal);
+	ASSERT_EQ(n2, t.normal);
+	ASSERT_EQ(n3, t.normal);
+}
+
+TEST(Triangle, IntersectingARayParallelToTriangle) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto r = Ray(Tuple::point(0, -1, -2), Tuple::vector(0, 1, 0));
+
+	auto xs = t.intersect(r);
+
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(Triangle, RayMisssesP1P3Edge){
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto r = Ray(Tuple::point(1, 1, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = t.intersect(r);
+
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(Triangle, RayMisssesP1P2Edge) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto r = Ray(Tuple::point(-1, 1, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = t.intersect(r);
+
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(Triangle, RayMisssesP2P3Edge) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto r = Ray(Tuple::point(0, -1, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = t.intersect(r);
+
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(Triangle, RayStrikesTriangle) {
+
+	Tuple p1 = Tuple::point(0, 1, 0);
+	Tuple p2 = Tuple::point(-1, 0, 0);
+	Tuple p3 = Tuple::point(1, 0, 0);
+
+	Triangle t(p1, p2, p3);
+
+	auto r = Ray(Tuple::point(0, 0.5, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = t.intersect(r);
+
+	ASSERT_EQ(xs.intersections.size(), 1);
+
+	for (auto inter : xs.intersections) {
+		ASSERT_FLOAT_EQ(inter->t, 2);
+	}
 }
