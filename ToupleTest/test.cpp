@@ -76,6 +76,9 @@
 #include "../RayTracerChallenge/Triangle.h"
 #include "../RayTracerChallenge/Triangle.cpp"
 
+#include "../RayTracerChallenge/OBJParser.h"
+#include "../RayTracerChallenge/OBJParser.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -3394,4 +3397,66 @@ TEST(Triangle, RayStrikesTriangle) {
 	for (auto inter : xs.intersections) {
 		ASSERT_FLOAT_EQ(inter->t, 2);
 	}
+}
+
+TEST(OBJPARSER, TMPTEST) {
+	OBJParser o("Randomstring.obj");
+
+	ASSERT_EQ(o.skippedLines, 5);
+}
+
+TEST(OBJPARSER, VertexRecords) {
+	OBJParser o("VertexRecords1.obj");
+
+	Tuple ans[] = {Tuple::point(-1, 1, 0), Tuple::point(-1, 0.5, 0), Tuple::point(1, 0, 0), Tuple::point(1, 1, 0)};
+
+	int i = 0;
+
+	for (auto x : o.vertices) {
+		ASSERT_EQ(x, ans[i++]);
+	}
+}
+
+TEST(OBJPARSER, TriangleFaces) {
+	OBJParser o("TriangleFaces1.obj");
+
+	//TODO: Test for group and children
+
+	ASSERT_EQ(o.triangles[0]->p1, o.vertices[0]);
+	ASSERT_EQ(o.triangles[0]->p2, o.vertices[1]);
+	ASSERT_EQ(o.triangles[0]->p3, o.vertices[2]);
+
+	ASSERT_EQ(o.triangles[1]->p1, o.vertices[0]);
+	ASSERT_EQ(o.triangles[1]->p2, o.vertices[2]);
+	ASSERT_EQ(o.triangles[1]->p3, o.vertices[3]);
+
+	ASSERT_EQ(o.g.children.size(), 2);
+}
+
+TEST(OBJPARSER, TrianglePolygons) {
+	OBJParser o("TriangulatingPoligons.obj");
+
+	//TODO: Test for group and children
+
+	ASSERT_EQ(o.triangles[0]->p1, o.vertices[0]);
+	ASSERT_EQ(o.triangles[0]->p2, o.vertices[1]);
+	ASSERT_EQ(o.triangles[0]->p3, o.vertices[2]);
+
+	ASSERT_EQ(o.triangles[1]->p1, o.vertices[0]);
+	ASSERT_EQ(o.triangles[1]->p2, o.vertices[2]);
+	ASSERT_EQ(o.triangles[1]->p3, o.vertices[3]);
+
+	ASSERT_EQ(o.triangles[2]->p1, o.vertices[0]);
+	ASSERT_EQ(o.triangles[2]->p2, o.vertices[3]);
+	ASSERT_EQ(o.triangles[2]->p3, o.vertices[4]);
+}
+
+TEST(OBJPARSER, TrianglesInGroups) {
+
+	OBJParser o("trianglesingroups.obj");
+
+	//TODO: Test for group and children
+	ASSERT_EQ(o.namedGroup["FirstGroup"]->children[0], o.triangles[0]);
+	ASSERT_EQ(o.namedGroup["SecondGroup"]->children[0], o.triangles[1]);
+
 }
