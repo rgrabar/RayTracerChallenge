@@ -12,7 +12,7 @@ OBJParser::OBJParser(std::string path) {
 	std::ifstream myfile(path);
 
 	std::string line;
-	double n1, n2, n3;
+	double n1, n2, n3, n4;
 
 	while (std::getline(myfile, line)) {
 
@@ -24,7 +24,9 @@ OBJParser::OBJParser(std::string path) {
 		}
 		else if (line[0] == 'f') {
 
-			if (line.length() == 7) {
+			int matches = sscanf_s(line.c_str(), "%*s %lf %lf %lf %lf", &n1, &n2, &n3, &n4);
+
+			if(matches == 3) {
 
 				std::stringstream ss(line);
 
@@ -59,7 +61,7 @@ OBJParser::OBJParser(std::string path) {
 					}
 				}
 			}
-
+			
 			else {
 				std::stringstream ss(line);
 
@@ -79,8 +81,11 @@ OBJParser::OBJParser(std::string path) {
 			}
 		}
 		else if (line[0] == 'g') {
-			
-			sscanf_s(line.c_str(), "%*s %s", name);
+			char kanta[20];
+
+			int spac = line.find(" ", 0);
+			name = line.substr(spac + 1);
+
 			namedGroup[name] = new Group();
 
 			saveToNewGroup = 1;
@@ -89,4 +94,15 @@ OBJParser::OBJParser(std::string path) {
 		else
 			skippedLines++;
 	}
+}
+
+Group* OBJParser::ObjToGroup() {
+	auto gr = new Group();
+	for (auto x : namedGroup) {
+		gr->addChild(x.second);
+	}
+
+	gr->addChild(&g);
+
+	return gr;
 }

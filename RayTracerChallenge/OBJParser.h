@@ -10,7 +10,7 @@
 class OBJParser{
 public:
 	bool saveToNewGroup = 0;
-	char name[100];
+	std::string name;
 	std::map<std::string, Group*> namedGroup;
 
 	OBJParser(std::string path);
@@ -19,6 +19,9 @@ public:
 	std::vector<Triangle*> triangles;
 	std::vector<int> faceIndex;
 	int currVertice = 0;
+
+	Group* ObjToGroup();
+
 
 	Group g;
 };

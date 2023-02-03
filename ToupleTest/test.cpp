@@ -3459,4 +3459,11 @@ TEST(OBJPARSER, TrianglesInGroups) {
 	ASSERT_EQ(o.namedGroup["FirstGroup"]->children[0], o.triangles[0]);
 	ASSERT_EQ(o.namedGroup["SecondGroup"]->children[0], o.triangles[1]);
 
+	ASSERT_EQ(((Triangle *) o.namedGroup["FirstGroup"]->children[0])->p1, o.vertices[0]);
+	ASSERT_EQ(((Triangle *) o.namedGroup["FirstGroup"]->children[0])->p2, o.vertices[1]);
+	ASSERT_EQ(((Triangle *) o.namedGroup["FirstGroup"]->children[0])->p3, o.vertices[2]);
+
+	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p1, o.vertices[0]);
+	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p2, o.vertices[2]);
+	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p3, o.vertices[3]);
 }
