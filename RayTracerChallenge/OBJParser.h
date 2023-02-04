@@ -16,6 +16,7 @@ public:
 	OBJParser(std::string path);
 	int skippedLines = 0;
 	std::vector<Tuple> vertices;
+	std::vector<Tuple> normals;
 	std::vector<Triangle*> triangles;
 	std::vector<int> faceIndex;
 	int currVertice = 0;

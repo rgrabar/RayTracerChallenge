@@ -3537,3 +3537,12 @@ TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
  		 
 	ASSERT_EQ(n, Tuple::vector(-0.5547, 0.83205, 0));
 }
+
+TEST(OBJPARSER, VertexNormalRecords) {
+
+	OBJParser o("vertexNormalRecords.obj");
+
+	ASSERT_EQ(o.normals[0], Tuple::vector(0, 0, 1));
+	ASSERT_EQ(o.normals[1], Tuple::vector(0.707, 0, -0.707));
+	ASSERT_EQ(o.normals[2], Tuple::vector(1, 2, 3));
+}

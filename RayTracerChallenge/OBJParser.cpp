@@ -16,7 +16,14 @@ OBJParser::OBJParser(std::string path) {
 
 	while (std::getline(myfile, line)) {
 
-		if (line[0] == 'v') {
+		if (line[0] == 'v' && line[1] == 'n') {
+
+			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
+
+			normals.push_back(Tuple::vector(n1, n2, n3));
+		}
+
+		else if (line[0] == 'v') {
 		
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
 
@@ -27,41 +34,20 @@ OBJParser::OBJParser(std::string path) {
 			int matches = sscanf_s(line.c_str(), "%*s %lf %lf %lf %lf", &n1, &n2, &n3, &n4);
 
 			if(matches == 3) {
-
-				std::stringstream ss(line);
-
-				std::string s;
-				while (std::getline(ss, s, ' ')) {
-					if (s[0] != 'f') {
-						if (!saveToNewGroup) {
-							int tmp = std::stoi(s) - 1;
-							faceIndex.emplace_back(tmp);
-							currVertice++;
-							if (currVertice == 3) {
-								auto tmp = new Triangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]]);
-								triangles.emplace_back(tmp);
-								currVertice = 0;
-								faceIndex.clear();
-								g.addChild(tmp);
-							}
-						}
-						else {
-							int tmp = std::stoi(s) - 1;
-							faceIndex.emplace_back(tmp);
-							currVertice++;
-							if (currVertice == 3) {
-								auto tmp = new Triangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]]);
-								triangles.emplace_back(tmp);
-								currVertice = 0;
-								faceIndex.clear();
-								namedGroup[name]->addChild(tmp);
-								saveToNewGroup = 0;
-							}
-						}
-					}
+				if (!saveToNewGroup) {
+					auto tmp = new Triangle(vertices[(int)--n1], vertices[(int)--n2], vertices[(int)--n3]);
+					triangles.emplace_back(tmp);
+					faceIndex.clear();
+					g.addChild(tmp);
+				}
+				else {
+					auto tmp = new Triangle(vertices[(int)--n1], vertices[(int)--n2], vertices[(int)--n3]);
+					triangles.emplace_back(tmp);
+					faceIndex.clear();
+					namedGroup[name]->addChild(tmp);
+					saveToNewGroup = 0;
 				}
 			}
-			
 			else {
 				std::stringstream ss(line);
 
@@ -81,7 +67,6 @@ OBJParser::OBJParser(std::string path) {
 			}
 		}
 		else if (line[0] == 'g') {
-			char kanta[20];
 
 			int spac = line.find(" ", 0);
 			name = line.substr(spac + 1);
