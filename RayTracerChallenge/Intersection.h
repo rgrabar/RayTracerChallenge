@@ -12,9 +12,13 @@ public:
 
 	// di ga je hit
 	double t;
+	double u;
+	double v;
 	const void* s;
 
 	Intersection(double _t, const void* _s);
+
+	Intersection(double _t, const void* _s, double _u, double _v);
 
 };
 

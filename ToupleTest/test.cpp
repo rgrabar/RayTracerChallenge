@@ -3467,3 +3467,73 @@ TEST(OBJPARSER, TrianglesInGroups) {
 	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p2, o.vertices[2]);
 	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p3, o.vertices[3]);
 }
+
+TEST(OBJPARSER, ConstructingSmoothTriangle) {
+
+	auto p1 = Tuple::point(0, 1, 0);
+	auto p2 = Tuple::point(-1, 0, 0);
+	auto p3 = Tuple::point(1, 0, 0);
+	auto n1 = Tuple::point(0, 1, 0);
+	auto n2 = Tuple::point(-1, 0, 0);
+	auto n3 = Tuple::point(1, 0, 0);
+
+	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+
+	ASSERT_EQ(smooth.p1, p1);
+	ASSERT_EQ(smooth.p2, p2);
+	ASSERT_EQ(smooth.p3, p3);
+	ASSERT_EQ(smooth.n1, n1);
+	ASSERT_EQ(smooth.n2, n2);
+	ASSERT_EQ(smooth.n3, n3);
+}
+
+TEST(OBJPARSER, IntersectionEncapsulateUandV) {
+
+	auto s = Triangle(Tuple::point(0, 1, 0), Tuple::point(-1, 0, 0), Tuple::point(1, 0, 0));
+	auto i = Intersection(3.5, &s, 0.2, 0.4);
+
+	ASSERT_FLOAT_EQ(i.u, 0.2);
+	ASSERT_FLOAT_EQ(i.v, 0.4);
+}
+
+TEST(OBJPARSER, IntersectioNWithSmoothTriangle) {
+
+	auto p1 = Tuple::point(0, 1, 0);
+	auto p2 = Tuple::point(-1, 0, 0);
+	auto p3 = Tuple::point(1, 0, 0);
+	auto n1 = Tuple::point(0, 1, 0);
+	auto n2 = Tuple::point(-1, 0, 0);
+	auto n3 = Tuple::point(1, 0, 0);
+
+	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+
+	auto r = Ray(Tuple::point(-0.2, 0.3, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = smooth.intersect(r);
+
+
+	for (auto x : xs.intersections) {
+		ASSERT_FLOAT_EQ(x->u, 0.45);
+		ASSERT_FLOAT_EQ(x->v, 0.25);
+	}
+}
+
+TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
+
+	auto p1 = Tuple::point(0, 1, 0);
+	auto p2 = Tuple::point(-1, 0, 0);
+	auto p3 = Tuple::point(1, 0, 0);
+	auto n1 = Tuple::point(0, 1, 0);
+	auto n2 = Tuple::point(-1, 0, 0);
+	auto n3 = Tuple::point(1, 0, 0);
+
+	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+
+	auto r = Ray(Tuple::point(-0.2, 0.3, -2), Tuple::vector(0, 0, 1));
+
+	auto xs = smooth.intersect(r);
+
+	auto n = smooth.normal(Tuple::point(0, 0, 0));
+ 		 
+	ASSERT_EQ(n, Tuple::vector(-0.5547, 0.83205, 0));
+}
