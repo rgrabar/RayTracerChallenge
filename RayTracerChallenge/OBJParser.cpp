@@ -7,6 +7,8 @@
 #include <string>
 
 
+// TODO: FAILS FOR ASTRONAUT OBJ
+
 OBJParser::OBJParser(std::string path) {
 
 	std::ifstream myfile(path);
@@ -87,7 +89,7 @@ OBJParser::OBJParser(std::string path) {
 				}
 				else {
 					while (std::getline(ss, s, ' ')) {
-						if (s[0] != 'f') {
+						if (s[0] != 'f' && s[0]>= 48 && s[0] <= 57) {
 							int a, b;
 							sscanf_s(s.c_str(), "%d/%*d/%d", &a, &b);
 							faceIndex.push_back(--a);
@@ -96,6 +98,7 @@ OBJParser::OBJParser(std::string path) {
 					}
 				}
 				for (int i = 0; i < faceIndex.size() - 2; ++i) {
+					// TODO group names
 					auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[i + 1]], vertices[faceIndex[i + 2]],
 												  normals[normalIndex[0]], normals[normalIndex[i + 1]], normals[normalIndex[i + 2]]);
 					smoothTriangles.emplace_back(tmp);
