@@ -33,9 +33,6 @@ Ray Camera::rayForPixel(double px, double py) {
 	return Ray(origin, direction);
 }
 
-// TODO: maybe replace with something 
-// https://stackoverflow.com/questions/36246300/parallel-loops-in-c
-
 void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 	for(auto y = start; y < end; ++y){
 		for (auto x = 0; x < hSize; ++x) {
@@ -45,8 +42,21 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 			pixelCount++;
 
 			if (pixelCount % next == 0) {
+				int pos = 70 * pixelCount / ((double)hSize * vSize);
+				std::cout << "[";
+				
+				for (int i = 0; i < 70; ++i) {
 
-				std::cout << pixelCount / ((double)hSize * vSize) << "\n";
+					if (i < pos)
+						std::cout << "=";
+					else if (i == pos)
+						std::cout << ">";
+					else
+						std::cout << " ";
+					//std::cout << pixelCount / ((double)hSize * vSize) << "\n";
+				}
+				std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
+				std::cout.flush();
 			}
 		}
 	}
@@ -85,7 +95,8 @@ Canvas Camera::render(World& world) {
 	for (auto i = 0; i < n + 1; ++i) {
 		threads[i].join();
 	}
-	std::cout << "ENDED\n";
+
+	std::cout << "\nCOMPLETED\n";
 
 	std::cout << "\n";
 
