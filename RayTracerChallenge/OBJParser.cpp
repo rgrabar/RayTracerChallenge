@@ -49,21 +49,62 @@ OBJParser::OBJParser(std::string path) {
 				}
 			}
 			else {
+
 				std::stringstream ss(line);
 
 				std::string s;
-				while (std::getline(ss, s, ' ')) {
-					if (s[0] != 'f') {
-						int tmp = std::stoi(s) - 1;
-						faceIndex.emplace_back(tmp);
+
+				auto found = line.find("//");
+				auto found1 = line.find("/");
+
+				if (found == std::string::npos && found1 == std::string::npos) {
+
+					while (std::getline(ss, s, ' ')) {
+						if (s[0] != 'f') {
+							int tmp = std::stoi(s) - 1;
+							faceIndex.emplace_back(tmp);
+						}
+					}
+
+					for (int i = 1; i < faceIndex.size() - 1; ++i) {
+						auto tmp = new Triangle(vertices[faceIndex[0]], vertices[faceIndex[i]], vertices[faceIndex[i + 1]]);
+						triangles.emplace_back(tmp);
+						g.addChild(tmp);
+					}
+					faceIndex.clear();
+					continue;
+				}
+				
+				else if (found != std::string::npos) {
+					while (std::getline(ss, s, ' ')) {
+						if (s[0] != 'f') {
+							int a, b;
+							sscanf_s(s.c_str(), "%d//%d", &a, &b);
+							faceIndex.push_back(--a);
+							normalIndex.push_back(--b);
+						}
 					}
 				}
-
-				for (int i = 1; i < vertices.size() - 1; ++i) {
-					auto tmp = new Triangle(vertices[faceIndex[0]], vertices[faceIndex[i]], vertices[faceIndex[i + 1]]);
-					triangles.emplace_back(tmp);
+				else {
+					while (std::getline(ss, s, ' ')) {
+						if (s[0] != 'f') {
+							int a, b;
+							sscanf_s(s.c_str(), "%d/%*d/%d", &a, &b);
+							faceIndex.push_back(--a);
+							normalIndex.push_back(--b);
+						}
+					}
+				}
+				for (int i = 0; i < faceIndex.size() - 2; ++i) {
+					auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[i + 1]], vertices[faceIndex[i + 2]],
+												  normals[normalIndex[0]], normals[normalIndex[i + 1]], normals[normalIndex[i + 2]]);
+					smoothTriangles.emplace_back(tmp);
 					g.addChild(tmp);
 				}
+				
+				faceIndex.clear();
+				normalIndex.clear();
+				
 			}
 		}
 		else if (line[0] == 'g') {

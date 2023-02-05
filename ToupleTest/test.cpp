@@ -3532,10 +3532,12 @@ TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
 	auto r = Ray(Tuple::point(-0.2, 0.3, -2), Tuple::vector(0, 0, 1));
 
 	auto xs = smooth.intersect(r);
+	
 
-	auto n = smooth.normal(Tuple::point(0, 0, 0));
- 		 
-	ASSERT_EQ(n, Tuple::vector(-0.5547, 0.83205, 0));
+	for (auto x : xs.intersections) {
+		auto comps = Precomputations(*x, r, xs);
+		ASSERT_EQ(comps.normalv, Tuple::vector(-0.5547, 0.83205, 0));
+	}
 }
 
 TEST(OBJPARSER, VertexNormalRecords) {
@@ -3545,4 +3547,27 @@ TEST(OBJPARSER, VertexNormalRecords) {
 	ASSERT_EQ(o.normals[0], Tuple::vector(0, 0, 1));
 	ASSERT_EQ(o.normals[1], Tuple::vector(0.707, 0, -0.707));
 	ASSERT_EQ(o.normals[2], Tuple::vector(1, 2, 3));
+}
+
+TEST(OBJPARSER, a) {
+
+	OBJParser o("faceswithnormals.obj");
+
+	ASSERT_EQ(o.smoothTriangles[0]->p1, o.vertices[0]);
+	ASSERT_EQ(o.smoothTriangles[0]->p2, o.vertices[1]);
+	ASSERT_EQ(o.smoothTriangles[0]->p3, o.vertices[2]);
+
+	ASSERT_EQ(o.smoothTriangles[0]->n1, o.normals[2]);
+	ASSERT_EQ(o.smoothTriangles[0]->n2, o.normals[0]);
+	ASSERT_EQ(o.smoothTriangles[0]->n3, o.normals[1]);
+
+	ASSERT_EQ(o.smoothTriangles[1]->p1, o.vertices[0]);
+	ASSERT_EQ(o.smoothTriangles[1]->p2, o.vertices[1]);
+	ASSERT_EQ(o.smoothTriangles[1]->p3, o.vertices[2]);
+
+	ASSERT_EQ(o.smoothTriangles[1]->n1, o.normals[2]);
+	ASSERT_EQ(o.smoothTriangles[1]->n2, o.normals[0]);
+	ASSERT_EQ(o.smoothTriangles[1]->n3, o.normals[1]);
+
+	ASSERT_EQ(o.g.children.size(), 2);
 }

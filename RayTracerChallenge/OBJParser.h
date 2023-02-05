@@ -18,7 +18,9 @@ public:
 	std::vector<Tuple> vertices;
 	std::vector<Tuple> normals;
 	std::vector<Triangle*> triangles;
+	std::vector<SmoothTriangle*> smoothTriangles;
 	std::vector<int> faceIndex;
+	std::vector<int> normalIndex;
 	int currVertice = 0;
 
 	Group* ObjToGroup();
