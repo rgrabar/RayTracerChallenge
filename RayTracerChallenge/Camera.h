@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <mutex>
 #include "World.h"
 #include "Canvas.h"
 #include "Color.h"
@@ -15,6 +15,11 @@ public:
 	double halfWidth;
 	double halfheight;
 	double pixelSize;
+	std::mutex mutex_;
+
+
+	std::atomic_int pixelCount = 0;
+	std::atomic_int next = 5;
 
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);

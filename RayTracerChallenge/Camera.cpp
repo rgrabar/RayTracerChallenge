@@ -42,14 +42,20 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 			auto ray = rayForPixel(x, y);
 			auto color = world->colorAt(ray);
 			image->writePixel(x, y, color);
+			pixelCount++;
+
+			if (pixelCount % next == 0) {
+
+				std::cout << pixelCount / ((double)hSize * vSize) << "\n";
+			}
 		}
 	}
 }
 
-
-
 Canvas Camera::render(World& world) {
 	Canvas image(hSize, vSize);
+
+	next = hSize * vSize * 0.05;
 
 	float totalSize = (float)(vSize * hSize);
 	int increment5 = 0.05 * totalSize; // how many iterations does 5% represent ? 
@@ -58,7 +64,7 @@ Canvas Camera::render(World& world) {
 
 
 
-	const unsigned n = std::thread::hardware_concurrency() + 30;
+	const unsigned n = std::thread::hardware_concurrency();
 
 	std::cout << "USING : " << n << " THREADS\n";
 
