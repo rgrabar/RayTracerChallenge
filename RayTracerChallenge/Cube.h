@@ -61,7 +61,7 @@ public:
 		}
 	}
 
-	Tuple objectNormal(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
 		auto maxc = std::fmax(fabs(objectPoint.x), fabs(std::fmax(fabs(objectPoint.y), fabs(objectPoint.z))));
 		if (epsilonEqual(maxc, fabs(objectPoint.x))) {
 			return Tuple::vector(objectPoint.x, 0, 0);

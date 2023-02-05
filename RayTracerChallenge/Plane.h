@@ -19,7 +19,7 @@ public:
 
 		return inter;
 	}
-	Tuple objectNormal(const Tuple& worldPoint) {
+	Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
 		return Tuple::vector(0.0, 1.0, 0.0);
 	}
 

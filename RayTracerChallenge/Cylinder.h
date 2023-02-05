@@ -88,7 +88,7 @@ public:
 		return inter;
 	}
 
-	Tuple objectNormal(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
 		auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 		if (dist < 1 && objectPoint.y >= maximum - EPSILON)
 			return Tuple::vector(0, 1, 0);

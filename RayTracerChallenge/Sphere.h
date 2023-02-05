@@ -43,7 +43,7 @@ public:
 		*/
 		return inter;
 	}
-	Tuple objectNormal(const Tuple& objectPoint) {
+	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
 		return objectPoint - Tuple::point(0, 0, 0);
 	}
 

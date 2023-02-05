@@ -13,7 +13,7 @@ class Shape {
 public:
 
 	inline virtual Intersections intersect(const Ray& ray)= 0;
-	inline virtual Tuple objectNormal(const Tuple& worldPoint)= 0;
+	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)= 0;
 	inline virtual BoundingBox boundsOf(bool update = false)= 0;
 	inline virtual void divide(int threashold = 1) = 0;
 
@@ -63,7 +63,7 @@ public:
 	};
 
 
-	inline Tuple normal(const Tuple& worldPoint) {
+	inline Tuple normal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
 		/*
 		auto objectPoint = *(s.transform.inverse()) * worldPoint;
 		auto objectNormal = s.objectNormal(objectPoint);
@@ -73,7 +73,7 @@ public:
 		*/
 
 		auto localPoint = worldToObject(worldPoint);
-		auto localNormal = objectNormal(localPoint);
+		auto localNormal = objectNormal(localPoint, hit);
 
 		return normalToWorld(localNormal);
 	}

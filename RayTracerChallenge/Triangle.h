@@ -22,7 +22,7 @@ public:
 
 	}
 
-	inline virtual Tuple objectNormal(const Tuple& worldPoint) {
+	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
 		return normal;
 	}
 
@@ -79,15 +79,13 @@ public:
 	Tuple e1;
 	Tuple e2;
 
-	double u, v;
-
 	SmoothTriangle(const Tuple& _p1, const Tuple _p2, const Tuple _p3, const Tuple _n1, const Tuple _n2, const Tuple _n3) : 
 		p1(_p1), p2(_p2), p3(_p3), n1(_n1), n2(_n2), n3(_n3), e1(_p2 - _p1), e2(_p3 - _p1) {
 
 	}
 
-	inline virtual Tuple objectNormal(const Tuple& worldPoint) {
-		return n2 * u + n3 * v + n1 * (1 - u - v);
+	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
+		return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
 	}
 
 	inline virtual Intersections intersect(const Ray& ray) {
@@ -100,14 +98,14 @@ public:
 
 		auto f = 1.0 / det;
 		auto p1ToOrigin = ray.origin - p1;
-		u = f * p1ToOrigin.dotProduct(dirCrossE2);
+		auto u = f * p1ToOrigin.dotProduct(dirCrossE2);
 
 		if ((u < 0) || (u > 1) || epsilonEqual(0, u) || epsilonEqual(1, u))
 			return {};
 
 		auto originCrossE1 = p1ToOrigin.crossProduct(e1);
 
-		v = f * ray.direction.dotProduct(originCrossE1);
+		auto v = f * ray.direction.dotProduct(originCrossE1);
 
 		if ((v < 0) || (u + v > 1))
 			return {};
