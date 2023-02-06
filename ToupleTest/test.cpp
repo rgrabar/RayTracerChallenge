@@ -3571,3 +3571,13 @@ TEST(OBJPARSER, a) {
 
 	ASSERT_EQ(o.g.children.size(), 2);
 }
+
+TEST(BoundingBox, TriangleBox) {
+
+	auto shape = Triangle(Tuple::point(-3, 7, 2), Tuple::point(6, 2, -4), Tuple::point(2, -1, -1));
+
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-3, -1, -4));
+	ASSERT_EQ(box.boxMax, Tuple::point(6, 7, 2));
+}

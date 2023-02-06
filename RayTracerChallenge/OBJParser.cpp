@@ -8,6 +8,7 @@
 
 
 // TODO: FAILS FOR ASTRONAUT OBJ
+// in some places there are two spaces between variables
 
 OBJParser::OBJParser(std::string path) {
 

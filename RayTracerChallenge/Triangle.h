@@ -58,9 +58,17 @@ public:
 
 		return inter;
 	}
-	inline virtual BoundingBox boundsOf(bool update = false) {
-		return {};
+
+	BoundingBox boundsOf(bool update = false) {
+		auto box = BoundingBox();
+
+		box.addPoint(p1);
+		box.addPoint(p2);
+		box.addPoint(p3);
+
+		return box;
 	}
+	
 	inline virtual void divide(int threashold = 1) {}
 
 };
@@ -120,9 +128,17 @@ public:
 
 		return inter;
 	}
-	inline virtual BoundingBox boundsOf(bool update = false) {
-		return {};
+
+	BoundingBox boundsOf(bool update = false) {
+		auto box = BoundingBox();
+
+		box.addPoint(p1);
+		box.addPoint(p2);
+		box.addPoint(p3);
+
+		return box;
 	}
+
 	inline virtual void divide(int threashold = 1) {}
 
 };
