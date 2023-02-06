@@ -24,6 +24,7 @@
 #include "Groups.h"
 #include "scenes/scenes.h"
 #include "BoundingBox.h"
+#include "OBJParser.h"
 
 
 #include <chrono>
@@ -31,7 +32,7 @@ using namespace std::chrono;
 
 
 int main() {
-
+	
 	auto start = high_resolution_clock::now();
 
 	//drawProjectile();
@@ -43,7 +44,9 @@ int main() {
 	//drawAllShapes();
 	//drawHexagon();
 	//sphereCube();
-	sphereCubeDivide();
+	//sphereCubeDivide();
+    //drawAstronaut();
+	testScene();
 
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
@@ -56,8 +59,7 @@ int main() {
 	duration = duration_cast<microseconds>(stop - start);
 
 	std::cout << duration.count() << std::endl;
-
-
+	
 	std::getchar();
 	return 0;
 }
