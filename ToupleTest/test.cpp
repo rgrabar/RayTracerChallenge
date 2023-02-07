@@ -79,6 +79,9 @@
 #include "../RayTracerChallenge/OBJParser.h"
 #include "../RayTracerChallenge/OBJParser.cpp"
 
+#include "../RayTracerChallenge/CSGShape.h"
+#include "../RayTracerChallenge/CSGShape.cpp"
+
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
@@ -3580,4 +3583,79 @@ TEST(BoundingBox, TriangleBox) {
 
 	ASSERT_EQ(box.boxMin, Tuple::point(-3, -1, -4));
 	ASSERT_EQ(box.boxMax, Tuple::point(6, 7, 2));
+}
+
+TEST(CSG, CSGConstruct) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	ASSERT_EQ("union", c.operation);
+	ASSERT_EQ(c.left, &s1);
+	ASSERT_EQ(c.right, &s2);
+
+	ASSERT_EQ(s1.parent, &c);
+	ASSERT_EQ(s2.parent, &c);
+}
+
+TEST(CSG, RuleForACSGOperationUnion) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	bool lhit[] = { true, true, true, true, false, false, false, false };
+	bool inl[] = { true, true, false, false, true, true, false, false };
+	bool inr[] = { true, false, true, false, true, false, true, false };
+
+	bool ans[] = {false, true, false, true, false, false, true, true};
+
+	for (int i = 0; i < 8; ++i) {
+		ASSERT_EQ(ans[i], c.intersectionAllowed("union", lhit[i], inl[i], inr[i]));
+	}
+}
+
+TEST(CSG, RuleForACSGOperationIntersection) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	bool lhit[] = { true, true, true, true, false, false, false, false };
+	bool inl[] = { true, true, false, false, true, true, false, false };
+	bool inr[] = { true, false, true, false, true, false, true, false };
+
+	bool ans[] = { true, false, true, false, true, true, false, false };
+
+	for (int i = 0; i < 8; ++i) {
+		ASSERT_EQ(ans[i], c.intersectionAllowed("intersection", lhit[i], inl[i], inr[i]));
+
+	}
+}
+
+TEST(CSG, RuleForACSGOperationDifference) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	bool lhit[] = { true, true, true, true, false, false, false, false };
+	bool inl[] = { true, true, false, false, true, true, false, false };
+	bool inr[] = { true, false, true, false, true, false, true, false };
+
+	bool ans[] = { false, true, false, true, true, true, false, false};
+
+	for (int i = 0; i < 8; ++i) {
+		ASSERT_EQ(ans[i], c.intersectionAllowed("difference", lhit[i], inl[i], inr[i]));
+
+	}
 }
