@@ -18,9 +18,6 @@ public:
 
 	//TODO: replace tmp functions
 
-	inline Intersections intersect(const Ray& ray) {
-		return {};
-	}
 	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
 		return Tuple::vector(0, 0, 0);
 	}
@@ -44,6 +41,48 @@ public:
 		}
 
 		return false;
+	}
+
+	inline Intersections filterIntersections(const Intersections& xs) {
+		auto inl = false;
+		auto inr = false;
+
+		auto result = Intersections();
+
+		for (auto intersection : xs.intersections) {
+		
+			// TODO: page 235 implement Group and CSG serach
+			auto lhit = (left == (Shape *)intersection->s);
+
+			if (intersectionAllowed(operation, lhit, inl, inr)) {
+				result.intersections.insert(intersection);
+			}
+			if (lhit) {
+				inl = !inl;
+			}
+			else {
+				inr = !inr;
+			}	
+		}
+
+		return result;
+	}
+
+	inline Intersections intersect(const Ray& ray) {
+		auto leftxs = left->shapeIntersect(ray);
+		auto rightxs = right->shapeIntersect(ray);
+		
+		auto xs = Intersections();
+
+		for (auto x : leftxs.intersections) {
+			xs.intersections.insert(x);
+		}
+
+		for (auto x : rightxs.intersections) {
+			xs.intersections.insert(x);
+		}
+
+		return filterIntersections(xs);
 	}
 
 };

@@ -46,7 +46,8 @@ int main() {
 	//sphereCube();
 	//sphereCubeDivide();
     //drawAstronaut();
-	testScene();
+	CSGScene();
+	//testScene();
 
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);

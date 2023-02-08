@@ -3656,6 +3656,105 @@ TEST(CSG, RuleForACSGOperationDifference) {
 
 	for (int i = 0; i < 8; ++i) {
 		ASSERT_EQ(ans[i], c.intersectionAllowed("difference", lhit[i], inl[i], inr[i]));
+	}
+}
 
+TEST(CSG, FilteringAListOfIntersections) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	auto i1 = Intersection(1, &s1);
+	auto i2 = Intersection(2, &s2);
+	auto i3 = Intersection(3, &s1);
+	auto i4 = Intersection(4, &s2);
+
+	auto xs = Intersections();
+	xs.intersections.insert(&i1);
+	xs.intersections.insert(&i2);
+	xs.intersections.insert(&i3);
+	xs.intersections.insert(&i4);
+
+	auto result = c.filterIntersections(xs);
+
+	ASSERT_EQ(result.intersections.size(), 2);
+	//TODO: check why the results are not the same as in the book
+	int ans[] = { 1, 4 };
+
+	int i = 0;
+
+	for (auto res : result.intersections) {
+		ASSERT_EQ(res->t, ans[i]);
+		++i;
+	}
+
+	c.operation = "intersection";
+		
+	auto result1 = c.filterIntersections(xs);
+	int ans1[] = {2, 3};
+	
+	i = 0;
+
+	for (auto res : result1.intersections) {
+		ASSERT_EQ(res->t, ans1[i]);
+		++i;
+	}
+	
+
+	c.operation = "difference";
+
+	auto result2 = c.filterIntersections(xs);
+	int ans2[] = { 1, 2 };
+
+	i = 0;
+
+	for (auto res : result2.intersections) {
+		ASSERT_EQ(res->t, ans2[i]);
+		++i;
+	}
+
+}
+
+TEST(CSG, RayMissesCSGObject) {
+
+	auto s1 = Sphere();
+	auto s2 = Cube();
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	auto r = Ray(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
+
+	auto xs = c.intersect(r);
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(CSG, RayHitsCSGObject) {
+
+	auto s1 = Sphere();
+	auto s2 = Sphere();
+	s2.transform = translate(0, 0, 0.5);
+
+	std::string a = "union";
+
+	auto c = CSGShape(a, &s1, &s2);
+
+	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+
+	auto xs = c.intersect(r);
+	ASSERT_EQ(xs.intersections.size(), 2);
+
+	double points[] = { 4, 6.5 };
+	Shape* shapes[] = { &s1, &s2 };
+
+	int i = 0;
+
+	for (auto intersection : xs.intersections) {
+		ASSERT_EQ(intersection->t, points[i]);
+		ASSERT_EQ(intersection->s, shapes[i]);
+		i++;
 	}
 }
