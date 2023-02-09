@@ -122,4 +122,8 @@ public:
 	inline void divide(int threashold = 1) {
 		return;
 	}
+
+	inline bool includes(const Shape* s) {
+		return this == s;
+	}
 };

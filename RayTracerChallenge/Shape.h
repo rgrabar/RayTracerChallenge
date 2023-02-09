@@ -16,6 +16,7 @@ public:
 	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)= 0;
 	inline virtual BoundingBox boundsOf(bool update = false)= 0;
 	inline virtual void divide(int threashold = 1) = 0;
+	inline virtual bool includes(const Shape* s) = 0;
 
 	Shape* parent = nullptr;
 

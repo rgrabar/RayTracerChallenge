@@ -651,27 +651,29 @@ void CSGScene() {
 	cone.closed = true;
 	cone.material.color = Color(0.126587, 0.13865, 0.932786);
 
-	auto cylinder = Cylinder();
-	cylinder.minimum = -1;
-	cylinder.maximum = 1;
-	cylinder.closed = true;
-	cylinder.material.color = Color(0.126587, 0.13865, 0.932786);
-	cylinder.transform = translate(2, 2, 2) * rotationX(TEST_PI / 2);
-
 	auto cone1 = Cone();
 	cone1.minimum = -1;
 	cone1.maximum = 0;
 	cone1.closed = true;
 	cone1.transform = scale(1, 2, 1);
 
-	auto csg = CSGShape("difference", &sphere, &cone);
+
+
+	auto cylinder = Cylinder();
+	cylinder.minimum = -1;
+	cylinder.maximum = 1;
+	cylinder.closed = true;
+	cylinder.material.color = Color(0.126587, 0.13865, 0.932786);
+	cylinder.transform = scale(0.5, 0.5, 1) * rotationX(TEST_PI / 2);
+
+	auto csg = CSGShape("union", &cylinder, &cone);
+	auto csg1 = CSGShape("difference", &csg, &sphere);
 
 	auto world = World();
 
 	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
-	world.objects.emplace_back(&csg);
-	world.objects.emplace_back(&cone1);
-	world.objects.emplace_back(&cylinder);
+
+	world.objects.emplace_back(&csg1);
 
 	Camera cam(1280, 720, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));

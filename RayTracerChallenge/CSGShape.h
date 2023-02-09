@@ -26,6 +26,7 @@ public:
 		return {};
 	}
 
+	// TODO: divide CSG
 	inline void divide(int threashold = 1) {
 	}
 
@@ -52,7 +53,7 @@ public:
 		for (auto intersection : xs.intersections) {
 		
 			// TODO: page 235 implement Group and CSG serach
-			auto lhit = (left == (Shape *)intersection->s);
+			auto lhit = left->includes((Shape *)intersection->s);
 
 			if (intersectionAllowed(operation, lhit, inl, inr)) {
 				result.intersections.insert(intersection);
@@ -83,6 +84,10 @@ public:
 		}
 
 		return filterIntersections(xs);
+	}
+
+	inline bool includes(const Shape* s) {
+		return left->includes(s) || right->includes(s);
 	}
 
 };

@@ -31,4 +31,8 @@ public:
 		return;
 	}
 
+	inline bool includes(const Shape* s) {
+		return this == s;
+	}
+
 };

@@ -71,6 +71,10 @@ public:
 	
 	inline virtual void divide(int threashold = 1) {}
 
+	inline bool includes(const Shape* s) {
+		return this == s;
+	}
+
 };
 
 class SmoothTriangle : public Shape {
@@ -140,5 +144,9 @@ public:
 	}
 
 	inline virtual void divide(int threashold = 1) {}
+
+	inline bool includes(const Shape* s) {
+		return this == s;
+	}
 
 };

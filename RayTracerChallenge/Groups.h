@@ -88,6 +88,10 @@ public:
 		children = newChildren;
 	}
 
+	inline bool includes(const Shape* s) {
+		return std::find(children.begin(), children.end(), s) != children.end();
+	}
+
 	inline void makeSubgroup(Group& sub) {
 		// TODO leak?
 		auto g = new Group();
