@@ -9,6 +9,7 @@ public:
 	std::string operation;
 	Shape* left;
 	Shape* right;
+	BoundingBox m_bounds;
 
 	CSGShape(std::string _operation, Shape* _left, Shape* _right) : operation(_operation), left(_left), right(_right) {
 		left->parent = this;
@@ -24,6 +25,8 @@ public:
 
 	// TODO: divide CSG
 	inline void divide(int threashold = 1) {
+		right->divide();
+		left->divide();
 	}
 
 	inline bool intersectionAllowed(std::string op, bool lhit, bool inl, bool inr) {
@@ -66,18 +69,16 @@ public:
 	}
 
 	inline Intersections intersect(const Ray& ray) {
+		if (!m_bounds.intersect(ray)) {
+			return {};
+		}
 		auto leftxs = left->shapeIntersect(ray);
 		auto rightxs = right->shapeIntersect(ray);
 		
 		auto xs = Intersections();
 
-		for (auto x : leftxs.intersections) {
-			xs.intersections.insert(x);
-		}
-
-		for (auto x : rightxs.intersections) {
-			xs.intersections.insert(x);
-		}
+		xs.intersections.insert(leftxs.intersections.begin(), leftxs.intersections.end());
+		xs.intersections.insert(rightxs.intersections.begin(), rightxs.intersections.end());
 
 		return filterIntersections(xs);
 	}
@@ -97,7 +98,9 @@ public:
 		box.mergeBox(rBox);
 		box.mergeBox(lBox);
 
-		return box;
+		m_bounds = box;
+
+		return m_bounds;
 	}
 
 };

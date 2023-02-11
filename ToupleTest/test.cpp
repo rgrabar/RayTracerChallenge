@@ -3803,3 +3803,46 @@ TEST(CSG, RayHitsCSG) {
 
 	ASSERT_EQ(xs.intersections.size(), 2);
 }
+
+TEST(CSG, SubdividingCSGSubdividesChildren) {
+
+	auto s1 = Sphere();
+	s1.transform = translate(-1.5, 0, 0);
+
+	auto s2 = Sphere();
+	s2.transform = translate(1.5, 0, 0);
+
+	auto left = Group();
+	left.addChild(&s1);
+	left.addChild(&s2);
+
+	auto s3 = Sphere();
+	s3.transform = translate(0, 0, -1.5);
+
+	auto s4 = Sphere();
+	s4.transform = translate(0, 0, 1.5);
+
+	auto right = Group();
+	right.addChild(&s3);
+	right.addChild(&s4);
+
+	auto shape = CSGShape("difference", &left, &right);
+
+	shape.divide(1);
+
+	ASSERT_EQ(((Group *)shape.left)->children.size(), 2);
+
+	auto subGroup = (Group *)((Group*)shape.left)->children[0];
+	ASSERT_EQ(subGroup->children[0], &s1);
+
+	subGroup = (Group*)((Group*)shape.left)->children[1];
+	ASSERT_EQ(subGroup->children[0], &s2);
+
+
+	subGroup = (Group*)((Group*)shape.right)->children[0];
+	ASSERT_EQ(subGroup->children[0], &s3);
+
+	subGroup = (Group*)((Group*)shape.right)->children[1];
+	ASSERT_EQ(subGroup->children[0], &s4);
+
+}
