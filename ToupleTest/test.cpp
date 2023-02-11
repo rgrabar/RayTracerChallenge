@@ -3775,4 +3775,31 @@ TEST(CSG, BoundsOfCSG) {
 	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
 	ASSERT_EQ(box.boxMax, Tuple::point(3, 4, 5));
 }
+
+//TODO: set ray as in the book, testshape
+// hits too
+TEST(CSG, RayMissesCSG) {
+
+	auto left = Sphere();
+	auto right = Sphere();
+
+	auto shape = CSGShape("difference", &left, &right);
+
+	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
+	auto xs = shape.intersect(ray);
+
+	ASSERT_EQ(xs.intersections.size(), 0);
+}
+
+TEST(CSG, RayHitsCSG) {
+
+	auto left = Sphere();
+	auto right = Sphere();
+
+	auto shape = CSGShape("difference", &left, &right);
+
+	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto xs = shape.intersect(ray);
+
+	ASSERT_EQ(xs.intersections.size(), 2);
 }
