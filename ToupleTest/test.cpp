@@ -2899,6 +2899,8 @@ TEST(BoundingBox,BoundConeBoundingBox) {
 	ASSERT_EQ(box.boxMax, Tuple::point(5, 3, 5));
 }
 
+//TODO: test shape
+
 TEST(BoundingBox, AddingBoxes) {
 	auto box1 = BoundingBox(Tuple::point(-5, -2, 0), Tuple::point(7, 4, 4));
 	auto box2 = BoundingBox(Tuple::point(8, -7, -2), Tuple::point(14, 2, 8));
@@ -3757,4 +3759,20 @@ TEST(CSG, RayHitsCSGObject) {
 		ASSERT_EQ(intersection->s, shapes[i]);
 		i++;
 	}
+}
+
+TEST(CSG, BoundsOfCSG) {
+
+	auto left = Sphere();
+	auto right = Sphere();
+	
+	right.transform = translate(2, 3, 4);
+
+	auto shape = CSGShape("difference", &left, &right);
+
+	auto box = shape.boundsOf();
+
+	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Tuple::point(3, 4, 5));
+}
 }

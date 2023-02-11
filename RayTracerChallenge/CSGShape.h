@@ -22,10 +22,6 @@ public:
 		return Tuple::vector(0, 0, 0);
 	}
 
-	BoundingBox boundsOf(bool update = false) {
-		return {};
-	}
-
 	// TODO: divide CSG
 	inline void divide(int threashold = 1) {
 	}
@@ -88,6 +84,20 @@ public:
 
 	inline bool includes(const Shape* s) {
 		return left->includes(s) || right->includes(s);
+	}
+
+	BoundingBox boundsOf(bool update = false) {
+		// TODO: cache the box, don't update if not needed
+		// TODO: check if it works
+		auto box = BoundingBox();
+
+		auto rBox = right->parentSpaceBoundsOf();
+		auto lBox = left->parentSpaceBoundsOf();
+
+		box.mergeBox(rBox);
+		box.mergeBox(lBox);
+
+		return box;
 	}
 
 };
