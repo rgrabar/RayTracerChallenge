@@ -46,9 +46,10 @@ int main() {
 	//sphereCube();
 	//sphereCubeDivide();
     //drawAstronaut();
-	CSGScene();
+	drawDragon();
+	//CSGScene();
 	//testScene();
-
+	
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
 
@@ -62,5 +63,7 @@ int main() {
 	std::cout << duration.count() << std::endl;
 	
 	std::getchar();
+	
+	
 	return 0;
 }

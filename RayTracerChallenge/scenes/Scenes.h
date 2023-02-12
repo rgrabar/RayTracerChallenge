@@ -611,16 +611,21 @@ void drawAstronaut() {
 	OBJParser o("astronaut.obj");
 
 	auto g = o.ObjToGroup();
-	g->transform = translate(21, 25, -70);
+	// without normalizing the obj
+	//g->transform = translate(21, 25, -70);
+	g->transform = translate(1, -1, -40) * scale(20, 20, 20);
+	g->divide();
 
 	auto plane = Plane();
-	plane.transform = translate(1, -30, 1) * rotationY(TEST_PI / 4.9f) * scale(7, 7, 7);
+	plane.transform = translate(1, -20, 1) * rotationY(TEST_PI / 4.9f) * scale(7, 7, 7);
 	plane.material.specular = 0.f;
 	plane.material.reflective = 0.3f;
 	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
 
 	auto plane1 = Plane();
-	plane1.transform = translate(-20, -26, -171) * rotationX(TEST_PI / 2);
+	// without normalizing the obj
+	//plane1.transform = translate(-20, -26, -171) * rotationX(TEST_PI / 2);
+	plane1.transform = translate(1, 1, -100) * rotationX(TEST_PI / 2);
 	plane1.material.color = Color(1.0, 0.9, 0.9);
 	plane1.material.specular = 0.f;
 
@@ -629,9 +634,8 @@ void drawAstronaut() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	g->divide();
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(-20, 30, 20));
+	world.light = Light(Color(1, 1, 1), Tuple::point(10, 15, 20));
 
 
 	Camera cam(1000, 1000, TEST_PI / 3);
@@ -640,6 +644,66 @@ void drawAstronaut() {
 
 	ans.canvasToImage();
 }
+
+void drawDragon	() {
+	OBJParser o("dragon.obj");
+
+	auto g = o.ObjToGroup();
+	g->transform = scale(20, 20, 20);
+	std::cout << "dividing\n";
+	g->divide();
+
+	auto world = World();
+	world.objects.emplace_back(g);
+
+	world.light = Light(Color(1, 1, 1), Tuple::point(0, 15, 20));
+
+	Camera cam(1000, 1000, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
+
+/* 
+//TODO: does this scene have wrong shadows?
+void drawAstronaut() {
+	OBJParser o("astronaut.obj");
+
+	auto g = o.ObjToGroup();
+	//g->transform = translate(21, 25, -70);
+	g->transform = translate(1, -1, -10) * scale(20, 20, 20);
+	g->divide();
+
+	auto plane = Plane();
+	plane.transform = translate(1, -30, 1) * rotationY(TEST_PI / 4.9f) * scale(7, 7, 7);
+	plane.material.specular = 0.f;
+	plane.material.reflective = 0.3f;
+	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+
+	auto plane1 = Plane();
+	//plane1.transform = translate(-20, -26, -171) * rotationX(TEST_PI / 2);
+	plane1.transform = translate(1, 1, -50) * rotationX(TEST_PI / 2);
+	plane1.material.color = Color(1.0, 0.9, 0.9);
+	plane1.material.specular = 0.f;
+
+	auto world = World();
+	world.objects.emplace_back(g);
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&plane1);
+
+
+	world.light = Light(Color(1, 1, 1), Tuple::point(-20, 30, 20));
+
+
+	Camera cam(200, 200, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
+
+*/
 
 void CSGScene() {
 
