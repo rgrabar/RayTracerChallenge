@@ -7,8 +7,7 @@
 #include <string>
 
 
-// TODO: FAILS FOR ASTRONAUT OBJ
-// in some places there are two spaces between variables
+// TODO: groups
 
 OBJParser::OBJParser(std::string path) {
 
@@ -16,114 +15,126 @@ OBJParser::OBJParser(std::string path) {
 
 	std::string line;
 	double n1, n2, n3, n4;
+	int f1, f2, f3, f4;
 
 	while (std::getline(myfile, line)) {
 
+		if (line[0] == '#')
+			continue;
+
 		if (line[0] == 'v' && line[1] == 'n') {
-
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
-
-			normals.push_back(Tuple::vector(n1, n2, n3));
+			normals.emplace_back(Tuple::vector(n1, n2, n3));
 		}
 
-		else if (line[0] == 'v') {
-		
+		else if (line[0] == 'v' && line[1] != 't') {
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
-
-			vertices.push_back(Tuple::point(n1, n2, n3));
+			vertices.emplace_back(Tuple::point(n1, n2, n3));
 		}
-		else if (line[0] == 'f') {
-
-			int matches = sscanf_s(line.c_str(), "%*s %lf %lf %lf %lf", &n1, &n2, &n3, &n4);
-
-			if(matches == 3) {
-				if (!saveToNewGroup) {
-					auto tmp = new Triangle(vertices[(int)--n1], vertices[(int)--n2], vertices[(int)--n3]);
-					triangles.emplace_back(tmp);
-					faceIndex.clear();
-					g.addChild(tmp);
-				}
-				else {
-					auto tmp = new Triangle(vertices[(int)--n1], vertices[(int)--n2], vertices[(int)--n3]);
-					triangles.emplace_back(tmp);
-					faceIndex.clear();
-					namedGroup[name]->addChild(tmp);
-					saveToNewGroup = 0;
-				}
-			}
-			else {
-
-				std::stringstream ss(line);
-
-				std::string s;
-
-				auto found = line.find("//");
-				auto found1 = line.find("/");
-
-				if (found == std::string::npos && found1 == std::string::npos) {
-
-					while (std::getline(ss, s, ' ')) {
-						if (s[0] != 'f') {
-							int tmp = std::stoi(s) - 1;
-							faceIndex.emplace_back(tmp);
-						}
-					}
-
-					for (int i = 1; i < faceIndex.size() - 1; ++i) {
-						auto tmp = new Triangle(vertices[faceIndex[0]], vertices[faceIndex[i]], vertices[faceIndex[i + 1]]);
-						triangles.emplace_back(tmp);
-						g.addChild(tmp);
-					}
-					faceIndex.clear();
-					continue;
-				}
-				
-				else if (found != std::string::npos) {
-					while (std::getline(ss, s, ' ')) {
-						if (s[0] != 'f') {
-							int a, b;
-							sscanf_s(s.c_str(), "%d//%d", &a, &b);
-							faceIndex.push_back(--a);
-							normalIndex.push_back(--b);
-						}
-					}
-				}
-				else {
-					while (std::getline(ss, s, ' ')) {
-						if (s[0] != 'f' && s[0]>= 48 && s[0] <= 57) {
-							int a, b;
-							sscanf_s(s.c_str(), "%d/%*d/%d", &a, &b);
-							faceIndex.push_back(--a);
-							normalIndex.push_back(--b);
-						}
-					}
-				}
-				for (int i = 0; i < faceIndex.size() - 2; ++i) {
-					// TODO group names
-					auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[i + 1]], vertices[faceIndex[i + 2]],
-												  normals[normalIndex[0]], normals[normalIndex[i + 1]], normals[normalIndex[i + 2]]);
-					smoothTriangles.emplace_back(tmp);
-					g.addChild(tmp);
-				}
-				
-				faceIndex.clear();
-				normalIndex.clear();
-				
-			}
-		}
-		else if (line[0] == 'g') {
-
-			int spac = line.find(" ", 0);
-			name = line.substr(spac + 1);
-
-			namedGroup[name] = new Group();
-
-			saveToNewGroup = 1;
-		}
-
+		/*
 		else
 			skippedLines++;
+		*/
 	}
+
+
+	// normalize vertices from (-1, -1, -1) to (1, 1, 1)
+	// TODO: normalizing causes acne for dragon scene
+	auto bbox = BoundingBox();
+
+	for (const auto &x : vertices) {
+		bbox.addPoint(x);
+	}
+	
+	auto sx = bbox.boxMax.x - bbox.boxMin.x;
+	auto sy = bbox.boxMax.y - bbox.boxMin.y;
+	auto sz = bbox.boxMax.z - bbox.boxMin.z;
+
+	auto scale = (double)std::max({ sx, sy, sz }) / (double)2;
+
+	for (Tuple& normalized : vertices) {
+		normalized.x = (normalized.x - (bbox.boxMin.x + sx / (double)2)) / scale;
+		normalized.y = (normalized.y - (bbox.boxMin.y + sy / (double)2)) / scale;
+		normalized.z = (normalized.z - (bbox.boxMin.z + sz / (double)2)) / scale;
+	}
+	
+	std::ifstream testfile(path);
+
+	while (std::getline(testfile, line)) {
+
+		if (line[0] == '#')
+			continue;
+
+		volatile int matches = sscanf_s(line.c_str(), "%*s %d %d %d", &f1, &f2, &f3);
+
+		auto found = line.find("//");
+		auto found1 = line.find("/");
+
+		if (found == std::string::npos && found1 == std::string::npos)
+		{
+
+			if (matches == 3) {
+				if (line[0] == 'f') {
+					g.addChild(new Triangle(vertices[--f1], vertices[--f2], vertices[--f3]));
+				}
+			}
+			else if (matches == 4) {
+				std::stringstream ss(line);
+				std::string s;
+				while (std::getline(ss, s, ' ')) {
+					if (s[0] >= '0' && s[0] <= '9') {
+						int tmp = std::stoi(s) - 1;
+						faceIndexExtended.emplace_back(tmp);
+					}
+				}
+
+			}
+		}
+
+		if (found != std::string::npos) {
+			std::stringstream ss(line);
+			std::string s;
+			while (std::getline(ss, s, ' ')) {
+				int a, b;
+				int matches = sscanf_s(s.c_str(), "%d//%d", &a, &b);
+				if (matches == 2) {
+					faceIndex.emplace_back(--a);
+					normalIndex.emplace_back(--b);
+				}
+			}
+			auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
+				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
+			g.addChild(tmp);
+			faceIndex.clear();
+			normalIndex.clear();
+		}
+
+		else if (found1 != std::string::npos) {
+			std::stringstream ss(line);
+			std::string s;
+			while (std::getline(ss, s, ' ')) {
+				int a, b;
+				int matches = sscanf_s(s.c_str(), "%d/%*d/%d", &a, &b);
+				if (matches == 2) {
+					faceIndex.emplace_back(--a);
+					normalIndex.emplace_back(--b);
+				}
+			}
+			auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
+				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
+			g.addChild(tmp);
+			faceIndex.clear();
+			normalIndex.clear();
+		}
+	}
+	
+	if (faceIndexExtended.size() > 0) {
+
+		for (int i = 1; i < faceIndexExtended.size() - 1; ++i) {
+			g.addChild(new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]));
+		}
+	}
+
 }
 
 Group* OBJParser::ObjToGroup() {

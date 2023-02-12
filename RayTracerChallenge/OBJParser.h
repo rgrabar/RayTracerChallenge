@@ -20,8 +20,11 @@ public:
 	std::vector<Triangle*> triangles;
 	std::vector<SmoothTriangle*> smoothTriangles;
 	std::vector<int> faceIndex;
+	std::vector<int> faceIndexExtended;
 	std::vector<int> normalIndex;
 	int currVertice = 0;
+
+	std::map<std::string, std::vector<int>> mp;
 
 	Group* ObjToGroup();
 
