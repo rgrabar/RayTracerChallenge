@@ -16,30 +16,30 @@ OBJParser::OBJParser(std::string path) {
 	std::string line;
 	double n1, n2, n3, n4;
 	int f1, f2, f3, f4;
+	allLines = 0;
+	parsedLines = 0;
 
 	while (std::getline(myfile, line)) {
 
-		if (line[0] == '#')
+		if (line[0] == '#') {
 			continue;
-
+		}
 		if (line[0] == 'v' && line[1] == 'n') {
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
 			normals.emplace_back(Tuple::vector(n1, n2, n3));
+			parsedLines++;
 		}
 
 		else if (line[0] == 'v' && line[1] != 't') {
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
 			vertices.emplace_back(Tuple::point(n1, n2, n3));
+			parsedLines++;
 		}
-		/*
-		else
-			skippedLines++;
-		*/
+		allLines++;
 	}
 
 
 	// normalize vertices from (-1, -1, -1) to (1, 1, 1)
-	// TODO: normalizing causes acne for dragon scene
 	auto bbox = BoundingBox();
 
 	for (const auto &x : vertices) {
@@ -64,8 +64,8 @@ OBJParser::OBJParser(std::string path) {
 
 		if (line[0] == '#')
 			continue;
-
-		volatile int matches = sscanf_s(line.c_str(), "%*s %d %d %d", &f1, &f2, &f3);
+		int f4;
+		volatile int matches = sscanf_s(line.c_str(), "%*s %d %d %d %d", &f1, &f2, &f3, &f4);
 
 		auto found = line.find("//");
 		auto found1 = line.find("/");
@@ -75,7 +75,11 @@ OBJParser::OBJParser(std::string path) {
 
 			if (matches == 3) {
 				if (line[0] == 'f') {
-					g.addChild(new Triangle(vertices[--f1], vertices[--f2], vertices[--f3]));
+					parsedLines++;
+					auto tmp = new Triangle(vertices[--f1], vertices[--f2], vertices[--f3]);
+					g.addChild(tmp);
+					// TODO: triangles vector is used only for tests
+					triangles.emplace_back(tmp);
 				}
 			}
 			else if (matches == 4) {
@@ -87,7 +91,7 @@ OBJParser::OBJParser(std::string path) {
 						faceIndexExtended.emplace_back(tmp);
 					}
 				}
-
+				parsedLines++;
 			}
 		}
 
@@ -105,8 +109,12 @@ OBJParser::OBJParser(std::string path) {
 			auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
 				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
 			g.addChild(tmp);
+
+			// TODO: smoothTriangles vector only used for tests
+			smoothTriangles.emplace_back(tmp);
 			faceIndex.clear();
 			normalIndex.clear();
+			parsedLines++;
 		}
 
 		else if (found1 != std::string::npos) {
@@ -122,19 +130,25 @@ OBJParser::OBJParser(std::string path) {
 			}
 			auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
 				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
+			// TODO: smoothTriangles vector only used for tests
+			smoothTriangles.emplace_back(tmp);
 			g.addChild(tmp);
 			faceIndex.clear();
 			normalIndex.clear();
+			parsedLines++;
 		}
 	}
 	
 	if (faceIndexExtended.size() > 0) {
 
 		for (int i = 1; i < faceIndexExtended.size() - 1; ++i) {
-			g.addChild(new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]));
+			// TODO: triangles vector is used only for tests
+			auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
+			g.addChild(tmp);
+			triangles.emplace_back(tmp);
 		}
 	}
-
+	skippedLines = allLines - parsedLines;
 }
 
 Group* OBJParser::ObjToGroup() {

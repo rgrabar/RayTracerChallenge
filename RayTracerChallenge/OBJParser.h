@@ -14,6 +14,8 @@ public:
 	std::map<std::string, Group*> namedGroup;
 
 	OBJParser(std::string path);
+	int parsedLines = 0;
+	int allLines = 0;
 	int skippedLines = 0;
 	std::vector<Tuple> vertices;
 	std::vector<Tuple> normals;
