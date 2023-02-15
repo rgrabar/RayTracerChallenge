@@ -77,7 +77,11 @@ OBJParser::OBJParser(std::string path) {
 				if (line[0] == 'f') {
 					parsedLines++;
 					auto tmp = new Triangle(vertices[--f1], vertices[--f2], vertices[--f3]);
-					g.addChild(tmp);
+
+					if(saveToNewGroup)
+						namedGroup[name]->addChild(tmp);
+					else
+						g.addChild(tmp);
 					// TODO: triangles vector is used only for tests
 					triangles.emplace_back(tmp);
 				}
@@ -108,7 +112,10 @@ OBJParser::OBJParser(std::string path) {
 			}
 			auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
 				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
-			g.addChild(tmp);
+			if (saveToNewGroup)
+				namedGroup[name]->addChild(tmp);
+			else
+				g.addChild(tmp);
 
 			// TODO: smoothTriangles vector only used for tests
 			smoothTriangles.emplace_back(tmp);
@@ -132,10 +139,23 @@ OBJParser::OBJParser(std::string path) {
 				normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
 			// TODO: smoothTriangles vector only used for tests
 			smoothTriangles.emplace_back(tmp);
-			g.addChild(tmp);
+			if (saveToNewGroup)
+				namedGroup[name]->addChild(tmp);
+			else
+				g.addChild(tmp);
 			faceIndex.clear();
 			normalIndex.clear();
 			parsedLines++;
+		}
+		else if (line[0] == 'g') {
+
+			int spac = line.find(" ", 0);
+			name = line.substr(spac + 1);
+
+			if (namedGroup.find(name) == namedGroup.end()) {
+				namedGroup[name] = new Group();
+			}
+			saveToNewGroup = 1;
 		}
 	}
 	
@@ -144,7 +164,10 @@ OBJParser::OBJParser(std::string path) {
 		for (int i = 1; i < faceIndexExtended.size() - 1; ++i) {
 			// TODO: triangles vector is used only for tests
 			auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
-			g.addChild(tmp);
+			if (saveToNewGroup)
+				namedGroup[name]->addChild(tmp);
+			else
+				g.addChild(tmp);
 			triangles.emplace_back(tmp);
 		}
 	}

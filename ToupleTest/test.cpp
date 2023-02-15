@@ -3450,19 +3450,19 @@ TEST(OBJPARSER, TrianglePolygons) {
 
 	//TODO: Test for group and children
 
-	ASSERT_EQ(o.triangles[0]->p1, o.vertices[0]);
-	ASSERT_EQ(o.triangles[0]->p2, o.vertices[1]);
-	ASSERT_EQ(o.triangles[0]->p3, o.vertices[2]);
+	ASSERT_EQ(((Triangle *)(o.g.children[0]))->p1, o.vertices[0]);
+	ASSERT_EQ(((Triangle *)(o.g.children[0]))->p2, o.vertices[1]);
+	ASSERT_EQ(((Triangle *)(o.g.children[0]))->p3, o.vertices[2]);
 
-	ASSERT_EQ(o.triangles[1]->p1, o.vertices[0]);
-	ASSERT_EQ(o.triangles[1]->p2, o.vertices[2]);
-	ASSERT_EQ(o.triangles[1]->p3, o.vertices[3]);
+	ASSERT_EQ(((Triangle *)(o.g.children[1]))->p1, o.vertices[0]);
+	ASSERT_EQ(((Triangle *)(o.g.children[1]))->p2, o.vertices[2]);
+	ASSERT_EQ(((Triangle *)(o.g.children[1]))->p3, o.vertices[3]);
 
-	ASSERT_EQ(o.triangles[2]->p1, o.vertices[0]);
-	ASSERT_EQ(o.triangles[2]->p2, o.vertices[3]);
-	ASSERT_EQ(o.triangles[2]->p3, o.vertices[4]);
+	ASSERT_EQ(((Triangle *)(o.g.children[2]))->p1, o.vertices[0]);
+	ASSERT_EQ(((Triangle *)(o.g.children[2]))->p2, o.vertices[3]);
+	ASSERT_EQ(((Triangle *)(o.g.children[2]))->p3, o.vertices[4]);
 }
-/*
+
 TEST(OBJPARSER, TrianglesInGroups) {
 
 	OBJParser o("trianglesingroups.obj");
@@ -3479,7 +3479,7 @@ TEST(OBJPARSER, TrianglesInGroups) {
 	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p2, o.vertices[2]);
 	ASSERT_EQ(((Triangle *) o.namedGroup["SecondGroup"]->children[0])->p3, o.vertices[3]);
 }
-*/
+
 TEST(OBJPARSER, ConstructingSmoothTriangle) {
 
 	auto p1 = Tuple::point(0, 1, 0);
