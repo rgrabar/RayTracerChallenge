@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#define DEBUG
+
 #include <limits.h>
 
 #include "../RayTracerChallenge/Tuple.h"
@@ -85,7 +87,7 @@
 # define TEST_PI           3.14159265358979323846  /* pi */
 
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
-/*
+
 TEST(TupleTest, PointBasic) {
 	Tuple tuple = Tuple(4.3, -4.2, 3.1, 1.0);
 
@@ -3403,7 +3405,7 @@ TEST(Triangle, RayStrikesTriangle) {
 		ASSERT_FLOAT_EQ(inter->t, 2);
 	}
 }
-*/
+
 
 TEST(OBJPARSER, TMPTEST) {
 	OBJParser o("Randomstring.obj");
@@ -3527,7 +3529,7 @@ TEST(OBJPARSER, IntersectioNWithSmoothTriangle) {
 		ASSERT_FLOAT_EQ(x->v, 0.25);
 	}
 }
-/*
+
 // TODO: fix for floats
 TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
 
@@ -3551,7 +3553,7 @@ TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
 		ASSERT_EQ(comps.normalv, Tuple::vector(-0.5547, 0.83205, 0));
 	}
 }
-*/
+
 TEST(OBJPARSER, VertexNormalRecords) {
 
 	OBJParser o("vertexNormalRecords.obj");
