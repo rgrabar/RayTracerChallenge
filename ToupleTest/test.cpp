@@ -3549,7 +3549,6 @@ TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
 
 	for (auto x : xs.intersections) {
 		auto comps = Precomputations(*x, r, xs);
-		std::cout << comps.normalv.x << " " << comps.normalv.y << " " << comps.normalv.z << "\n";
 		ASSERT_EQ(comps.normalv, Tuple::vector(-0.5547, 0.83205, 0));
 	}
 }

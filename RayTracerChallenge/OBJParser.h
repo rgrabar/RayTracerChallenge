@@ -14,8 +14,6 @@ public:
 	std::map<std::string, Group*> namedGroup;
 
 	OBJParser(std::string path);
-	int parsedLines = 0;
-	int allLines = 0;
 	int skippedLines = 0;
 	std::vector<Tuple> vertices;
 	std::vector<Tuple> normals;
@@ -25,6 +23,8 @@ public:
 	std::vector<int> faceIndexExtended;
 	std::vector<int> normalIndex;
 	int currVertice = 0;
+
+	bool isNormalized = false;
 
 	std::map<std::string, std::vector<int>> mp;
 
