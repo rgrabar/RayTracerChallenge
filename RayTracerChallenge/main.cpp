@@ -46,7 +46,8 @@ int main() {
 	//sphereCube();
 	//sphereCubeDivide();
     //drawAstronaut();
-	drawDragon();
+	//drawDragon();
+	drawCSKnife();
 	//CSGScene();
 	//testScene();
 	

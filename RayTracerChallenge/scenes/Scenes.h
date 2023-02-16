@@ -665,6 +665,27 @@ void drawDragon	() {
 	ans.canvasToImage();
 }
 
+
+void drawCSKnife() {
+	OBJParser o("Bayonet.obj");
+
+	auto g = o.ObjToGroup();
+	g->transform = rotationY(TEST_PI / 2) * translate(-8, 10, 0) * scale(24, 24, 24);
+	std::cout << "dividing\n";
+	g->divide();
+
+	auto world = World();
+	world.objects.emplace_back(g);
+
+	world.light = Light(Color(1, 1, 1), Tuple::point(0, 15, 20));
+
+	Camera cam(1000, 1000, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
+
 /* 
 //TODO: does this scene have wrong shadows?
 void drawAstronaut() {
