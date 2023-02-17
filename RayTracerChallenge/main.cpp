@@ -45,9 +45,10 @@ int main() {
 	//drawHexagon();
 	//sphereCube();
 	//sphereCubeDivide();
-    //drawAstronaut();
+	drawTeapot();
+	//drawAstronaut();
 	//drawDragon();
-	drawCSKnife();
+	//drawCSKnife();
 	//CSGScene();
 	//testScene();
 	
