@@ -818,6 +818,7 @@ void testScene() {
 
 	Camera cam(1280, 720, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	cam.aliasing = 16;
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();

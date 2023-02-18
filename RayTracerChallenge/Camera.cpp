@@ -36,9 +36,25 @@ Ray Camera::rayForPixel(double px, double py) {
 void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 	for(auto y = start; y < end; ++y){
 		for (auto x = 0; x < hSize; ++x) {
-			auto ray = rayForPixel(x, y);
-			auto color = world->colorAt(ray);
-			image->writePixel(x, y, color);
+
+			auto pixelColor = Color(0, 0, 0);
+			double u = y, v = x;
+
+			if (aliasing != 0) {
+				for (int k = 0; k < aliasing; ++k) {
+
+					u = (y + random_double());
+					v = (x + random_double());
+
+					auto ray = rayForPixel(v, u);
+					pixelColor = pixelColor + world->colorAt(ray);
+				}
+			}
+			else {
+				auto ray = rayForPixel(v, u);
+				pixelColor = pixelColor + world->colorAt(ray);
+			}
+
 			pixelCount++;
 
 			if (pixelCount % next == 0) {
@@ -58,6 +74,11 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
 				std::cout.flush();
 			}
+
+			if(aliasing != 0)
+				image->writePixel(x, y, pixelColor / aliasing);
+			else
+				image->writePixel(x, y, pixelColor);
 		}
 	}
 }
