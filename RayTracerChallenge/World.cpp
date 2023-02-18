@@ -44,12 +44,12 @@ Color World::colorAt(const Ray& r, int remaining, int remainingRefraction)const 
 	Intersections i(intWorld);
 
 	Intersection* ht = i.hit();
-	if (ht == nullptr)
-		return Color(0, 0, 0);
-
-	Precomputations p(*ht, r, i);
-
-	Color c = shadeHit(p, remaining, remainingRefraction);
+	Color c = Color(0, 0, 0);
+	
+	if (ht != nullptr) {
+		Precomputations p(*ht, r, i);
+		c = shadeHit(p, remaining, remainingRefraction);
+	}
 
 	// TODO: leak?
 	for (auto tmp : i.intersections)
@@ -84,6 +84,7 @@ bool World::isShadowed(const Tuple& point)const {
 }
 
 Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
+	
 	if (remaining <= 0)
 		return Color(0, 0, 0);
 	
@@ -100,6 +101,7 @@ Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
 }
 
 Color World::refractedColor(const Precomputations& comps, int& remaining) const {
+
 	if (remaining <= 0) {
 		//std::cout << "remaining less than 0\n";
 		return Color(0, 0, 0);
