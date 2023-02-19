@@ -791,7 +791,7 @@ void testScene() {
 	//TODO: double check everything in bounding-boxes it's a bit too slow
 
 	auto plane = Plane();
-	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
+	//plane.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
 	plane.material.specular = 0.f;
 	plane.material.reflective = 0.3f;
 	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));

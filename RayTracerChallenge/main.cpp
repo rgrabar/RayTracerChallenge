@@ -45,12 +45,12 @@ int main() {
 	//drawHexagon();
 	//sphereCube();
 	//sphereCubeDivide();
-	drawTeapot();
+	//drawTeapot();
 	//drawAstronaut();
 	//drawDragon();
 	//drawCSKnife();
 	//CSGScene();
-	//testScene();
+	testScene();
 	
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);

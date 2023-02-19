@@ -34,20 +34,70 @@ Ray Camera::rayForPixel(double px, double py) {
 }
 
 void Camera::splitArray(int start, int end, World* world, Canvas* image) {
-	for(auto y = start; y < end; ++y){
+	for (auto y = start; y < end; ++y) {
 		for (auto x = 0; x < hSize; ++x) {
 
 			auto pixelColor = Color(0, 0, 0);
 			double u = y, v = x;
+			
+			// +-0.5 in canvas space moves the ray to the pixel edges
+			double topLeftX = v - 0.5;
+			double topLeftY = u - 0.5;
 
-			if (aliasing != 0) {
-				for (int k = 0; k < aliasing; ++k) {
+			double topRightX = v + 0.5;
+			double topRightY = u + 0.5;
 
-					u = (y + random_double());
-					v = (x + random_double());
+			double bottomLeftX = v - 0.5;
+			double bottomLeftY = u + 0.5;
 
-					auto ray = rayForPixel(v, u);
-					pixelColor = pixelColor + world->colorAt(ray);
+			double bottomRightX = v + 0.5;
+			double bottomRightY = u - 0.5;
+
+			auto rayTopLeft = rayForPixel(topLeftX, topLeftY);
+			Color topLeft = world->colorAt(rayTopLeft);
+
+			auto rayTopRight = rayForPixel(topRightX, topRightY);
+			Color topRight = world->colorAt(rayTopRight);
+
+			auto rayBottomLeft = rayForPixel(bottomLeftX, bottomLeftY);
+			Color bottomLeft = world->colorAt(rayBottomLeft);
+
+			auto rayBottomRight = rayForPixel(bottomRightX, bottomRightY);
+			Color bottomRight = world->colorAt(rayBottomRight);
+
+			auto rayCenter = rayForPixel(x, y);
+			Color center = world->colorAt(rayCenter);
+
+			int doStuff = 0;
+
+			if (std::abs(topLeft.r - center.r) > 0.3 || std::abs(topLeft.g - center.g) > 0.3 || std::abs(topLeft.b - center.b) > 0.3) {
+				doStuff = 1;
+			}
+
+			if (std::abs(topRight.r - center.r) > 0.3 || std::abs(topRight.g - center.g) > 0.3 || std::abs(topRight.b - center.b) > 0.3) {
+				doStuff = 1;
+			}
+
+			if (std::abs(bottomLeft.r - center.r) > 0.3 || std::abs(bottomLeft.g - center.g) > 0.3 || std::abs(bottomLeft.b - center.b) > 0.3) {
+				doStuff = 1;
+			}
+
+			if (std::abs(bottomRight.r - center.r) > 0.3 || std::abs(bottomRight.g - center.g) > 0.3 || std::abs(bottomRight.b - center.b) > 0.3) {
+				doStuff = 1;
+			}
+
+			//std::cout << std::abs(bottomRight.r - center.r) << "\n";
+
+			if (doStuff && aliasing != 0) {
+				if (aliasing != 0) {
+					for (int k = 0; k < aliasing; ++k) {
+
+						u = (y + random_double());
+						v = (x + random_double());
+
+						auto ray = rayForPixel(v, u);
+						pixelColor = pixelColor + world->colorAt(ray);
+					}
 				}
 			}
 			else {
@@ -60,7 +110,7 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 			if (pixelCount % next == 0) {
 				int pos = 70 * pixelCount / ((double)hSize * vSize);
 				std::cout << "[";
-				
+
 				for (int i = 0; i < 70; ++i) {
 
 					if (i < pos)
@@ -74,11 +124,15 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
 				std::cout.flush();
 			}
-
-			if(aliasing != 0)
-				image->writePixel(x, y, pixelColor / aliasing);
-			else
+			if (doStuff && aliasing != 0) {
+				if (aliasing != 0) {
+					image->writePixel(x, y, pixelColor / aliasing);
+				}
+			}
+			else {
 				image->writePixel(x, y, pixelColor);
+			//	std::cout << "pixlel  " << pixelColor.r << "\n";
+			}
 		}
 	}
 }
