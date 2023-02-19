@@ -74,7 +74,7 @@ void drawRedCircle() {
 
 	   shape.material.color = Color(1, 0.2, 1);
 
-	   Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	   Light* light = new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 
 	   //shape.transform = shearing(1, 0, 0, 0, 0, 0) * scale(0.5, 1, 1);
 
@@ -163,7 +163,7 @@ void drawShadowPatternsReflection() {
 		left.material.pattern = new StripePattern(Color(0, 0, 0), Color(1, 1, 0));
 
 		auto world = World();
-		world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+		world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 		//world.objects.emplace_back(&floor);
 		//world.objects.emplace_back(&leftWall);
 		//world.objects.emplace_back(&rightWall);
@@ -224,7 +224,7 @@ void drawBadSmiley() {
 
 
 	auto world = World();
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	world.objects.emplace_back(&middle);
 	world.objects.emplace_back(&left);
 	world.objects.emplace_back(&right);
@@ -242,7 +242,7 @@ void drawBadSmiley() {
 void drawRefractiveSphere() {
 
 	auto world = World();
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 
 	auto floor = Plane();
 	floor.material.pattern = new CheckerPattern(Color(1, 0.9, 0.9), Color(0, 0.1, 0.1));
@@ -377,7 +377,7 @@ void drawAllShapes() {
 
 		auto world = World();
 		//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
-		world.light = Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1));
+		world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1)));
 		//world.objects.emplace_back(&floor);
 		//world.objects.emplace_back(&leftWall);
 		//world.objects.emplace_back(&rightWall);
@@ -439,7 +439,7 @@ void drawHexagon(){
 
 	auto world = World();
 	//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
-	world.light = Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(4, 5, -4.1)));
 
 	world.objects.emplace_back(&hex);
 
@@ -547,7 +547,7 @@ void sphereCube() {
 	world.objects.emplace_back(g5);
 	world.objects.emplace_back(g6);
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
@@ -597,7 +597,7 @@ void sphereCubeDivide() {
 
 	g.divide(50);
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 	world.objects.emplace_back(&g);
@@ -619,7 +619,7 @@ void drawTeapot() {
 	auto world = World();
 	world.objects.emplace_back(g);
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(10, 15, 20));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
 	Camera cam(1000, 1000, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
@@ -656,7 +656,7 @@ void drawAstronaut() {
 	world.objects.emplace_back(&plane1);
 
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(10, 15, 20));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
 
 	Camera cam(1000, 1000, TEST_PI / 3);
@@ -677,7 +677,7 @@ void drawDragon	() {
 	auto world = World();
 	world.objects.emplace_back(g);
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(0, 15, 20));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
 	Camera cam(1000, 1000, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
@@ -698,7 +698,7 @@ void drawCSKnife() {
 	auto world = World();
 	world.objects.emplace_back(g);
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(0, 15, 20));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
 	Camera cam(1000, 1000, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
@@ -777,7 +777,7 @@ void CSGScene() {
 
 	auto world = World();
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 
 	world.objects.emplace_back(&csg1);
 
@@ -813,7 +813,8 @@ void testScene() {
 
 	auto world = World();
 
-	world.light = Light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(-10, 10, -10)));
+	world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);

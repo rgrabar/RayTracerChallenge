@@ -88,15 +88,15 @@ public:
 		return;
 	}
 
-	inline Color lighting(const Light& light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
+	inline Color lighting(const Light* light, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
 
 		Color newColor = material.color;
 
 		if (material.pattern != nullptr)
 			newColor = stripeAtObject(point);
 
-		auto effectiveColor = newColor * light.intesity;
-		auto lightv = (light.position - point).normalize();
+		auto effectiveColor = newColor * light->intesity;
+		auto lightv = (light->position - point).normalize();
 		auto ambientColor = effectiveColor * material.ambient;
 		auto lightDotNormal = lightv.dotProduct(normalv);
 
@@ -116,7 +116,7 @@ public:
 				specularColor = Color(0, 0, 0);
 			else {
 				auto factor = pow(reflectDotEye, material.shininess);
-				specularColor = light.intesity * material.specular * factor;
+				specularColor = light->intesity * material.specular * factor;
 			}
 		}
 

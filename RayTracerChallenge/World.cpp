@@ -5,9 +5,13 @@
 
 Color World::shadeHit(const Precomputations& comps, int& remaining, int& remainingRefraction) const{
 
-	auto shadowed = isShadowed(comps.overPoint);
+	auto surface = Color(0, 0, 0);
+	
 	// TODO: sending comps.point instead of comps.overPoint causes acne
-	auto surface = comps.shape->lighting(light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
+	for (auto light : lights) {
+		auto shadowed = isShadowed(comps.overPoint, light);
+		surface = surface + comps.shape->lighting(light, comps.overPoint, comps.eyev, comps.normalv, shadowed);
+	}
 	auto reflected = reflectedColor(comps, remaining);
 	auto refracted = refractedColor(comps, remainingRefraction);
 	//std::cout << refracted.r << " " << refracted.g << " " << refracted.b << "\n";
@@ -61,10 +65,10 @@ Color World::colorAt(const Ray& r, int remaining, int remainingRefraction)const 
 
 }
 
-bool World::isShadowed(const Tuple& point)const {
+bool World::isShadowed(const Tuple& point, const Light* light)const {
 	bool inShadow = false;
 	
-	auto v = light.position - point;
+	auto v = light->position - point;
 	auto distance = v.magnitude();
 	auto direction = v.normalize();
 
