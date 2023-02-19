@@ -140,7 +140,14 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 			}
 			if (aliasEdges) {
 				if (doStuff) {
-					image->writePixel(x, y, pixelColor / aliasingSamples);
+					if (edgeAliasHighlights) {
+						image->writePixel(x, y, Color(1, 1, 1));
+					}
+					else
+						image->writePixel(x, y, pixelColor / aliasingSamples);
+				}
+				else if(edgeAliasHighlights) {
+					image->writePixel(x, y, pixelColor / 8);
 				}
 				else {
 					image->writePixel(x, y, pixelColor);

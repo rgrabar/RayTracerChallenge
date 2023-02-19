@@ -20,6 +20,7 @@ public:
 	int aliasingSamples = 0;
 	double aliasingThreshold = 0.3;
 	bool aliasEdges = 0;
+	bool edgeAliasHighlights = 0;
 
 
 	std::atomic_int pixelCount = 0;
