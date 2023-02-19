@@ -8,6 +8,8 @@
 
 # define TEST_PI           3.14159265358979323846
 
+void drawAxes(World& world);
+
 void drawProjectile() {
 	
 	// CODE FOR THE PROJECTILE:
@@ -816,12 +818,48 @@ void testScene() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
+	drawAxes(world);
+
 	Camera cam(1280, 720, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	cam.aliasingSamples = 16;
+	//cam.aliasingSamples = 16;
+	//cam.aliasingSamples = 16;
 	//cam.aliasEdges = 1;
 	//cam.edgeAliasHighlights = 1;
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
+}
+
+void drawAxes(World& world) {
+	
+
+	auto x = new Cylinder();
+
+	x->minimum = 0;
+	x->maximum = 1;
+	x->transform = rotationZ(-TEST_PI / 2) * scale(0.05, 2, 0.05);
+	x->material.color = Color(1, 0, 0);
+	x->closed = true;
+
+	auto y = new Cylinder();
+
+	y->minimum = 0;
+	y->maximum = 1;
+	y->transform =  scale(0.05, 2, 0.05);
+	y->material.color = Color(0, 1, 0);
+	y->closed = true;
+
+	auto z = new Cylinder();
+
+	z->minimum = 0;
+	z->maximum = 1;
+	z->transform = rotationX(-TEST_PI / 2) * scale(0.05, 2, 0.05);
+	z->material.color = Color(0, 0, 1);
+	z->closed = true;
+
+	world.objects.emplace_back(x);
+	world.objects.emplace_back(y);
+	world.objects.emplace_back(z);
+
 }
