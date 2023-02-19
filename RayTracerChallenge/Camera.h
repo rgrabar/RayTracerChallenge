@@ -17,7 +17,9 @@ public:
 	double pixelSize;
 	std::mutex mutex_;
 
-	int aliasing = 0;
+	int aliasingSamples = 0;
+	double aliasingThreshold = 0.3;
+	bool aliasEdges = 0;
 
 
 	std::atomic_int pixelCount = 0;
