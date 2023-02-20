@@ -17,8 +17,12 @@ public:
 	int skippedLines = 0;
 	std::vector<Tuple> vertices;
 	std::vector<Tuple> normals;
+
+#ifdef DEBUG
 	std::vector<Triangle*> triangles;
 	std::vector<SmoothTriangle*> smoothTriangles;
+#endif // DEBUG
+
 	std::vector<int> faceIndex;
 	std::vector<int> faceIndexExtended;
 	std::vector<int> normalIndex;

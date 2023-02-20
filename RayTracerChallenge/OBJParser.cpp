@@ -6,9 +6,6 @@
 #include <sstream>
 #include <string>
 
-
-// TODO: groups
-
 OBJParser::OBJParser(std::string path) {
 
 	std::ifstream myfile(path);
@@ -73,8 +70,9 @@ OBJParser::OBJParser(std::string path) {
 							namedGroup[name]->addChild(tmp);
 						else
 							g.addChild(tmp);
-						// TODO: triangles vector is used only for tests
+#ifdef DEBUG
 						triangles.emplace_back(tmp);
+#endif // DEBUG
 					}
 				}
 				else if (matches == 4) {
@@ -106,9 +104,9 @@ OBJParser::OBJParser(std::string path) {
 					namedGroup[name]->addChild(tmp);
 				else
 					g.addChild(tmp);
-
-				// TODO: smoothTriangles vector only used for tests
+#ifdef DEBUG
 				smoothTriangles.emplace_back(tmp);
+#endif // DEBUG
 				faceIndex.clear();
 				normalIndex.clear();
 			}
@@ -126,8 +124,9 @@ OBJParser::OBJParser(std::string path) {
 				}
 				auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
 					normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
-				// TODO: smoothTriangles vector only used for tests
+#ifdef DEBUG
 				smoothTriangles.emplace_back(tmp);
+#endif // DEBUG
 				if (saveToNewGroup)
 					namedGroup[name]->addChild(tmp);
 				else
@@ -152,13 +151,14 @@ OBJParser::OBJParser(std::string path) {
 		if (faceIndexExtended.size() > 0) {
 
 			for (int i = 1; i < faceIndexExtended.size() - 1; ++i) {
-				// TODO: triangles vector is used only for tests
 				auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
 				if (saveToNewGroup)
 					namedGroup[name]->addChild(tmp);
 				else
 					g.addChild(tmp);
+#ifdef DEBUG
 				triangles.emplace_back(tmp);
+#endif // DEBUG
 			}
 			
 		}
