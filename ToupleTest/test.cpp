@@ -1397,7 +1397,7 @@ TEST(LightingTest, EyeBetweenLight) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1408,7 +1408,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1419,7 +1419,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1430,7 +1430,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -1441,7 +1441,7 @@ TEST(LightingTest, LightBehindSurface) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
-	auto result = Sphere().lighting(light, position, eyev, normalv, 0);
+	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -1455,15 +1455,15 @@ TEST(WorldTest, DefaultWorld) {
 
 	s2.transform = scale(0.5, 0.5, 0.5);
 
-	World w;
+	World w = defaultWorld();
 
-	ASSERT_EQ(w.light, light);
+	ASSERT_EQ(*w.lights[0], light);
 
 	w.objects.emplace_back(&s1);
 	w.objects.emplace_back(&s2);
 
-	ASSERT_EQ(w.objects[0], &s1);
-	ASSERT_EQ(w.objects[1], &s2);
+    ASSERT_EQ(*(Sphere *)w.objects[0], s1);
+	ASSERT_EQ(*(Sphere *)w.objects[1], s2);
 }
 
 TEST(WorldTest, WorldRayIntersect) {
@@ -1536,8 +1536,8 @@ TEST(PreCompute, ShadingAnIntersection) {
 TEST(PreCompute, FromInside) {
 	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
-
-	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
+	// replacing the default light for this test
+	w.lights[0] = (new Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0)));
 
 	Intersection i(0.5f, w.objects[1]);
 
@@ -1695,7 +1695,7 @@ TEST(ShadowTest, SurfaceInShadow) {
 	auto m = Material();
 	auto position = Tuple::point(0, 0, 0);
 
-	auto res = Sphere().lighting(light, position, eyev, normalv, 1);
+	auto res = Sphere().lighting(&light, position, eyev, normalv, 1);
 
 	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
 }
@@ -1706,7 +1706,7 @@ TEST(ShadowTest, TestingNotInShadow) {
 
 	Tuple p = Tuple::point(0, 10, 0);
 
-	ASSERT_FALSE(w.isShadowed(p));
+	ASSERT_FALSE(w.isShadowed(p, w.lights[0]));
 }
 
 TEST(ShadowTest, TestingInShadow) {
@@ -1715,21 +1715,27 @@ TEST(ShadowTest, TestingInShadow) {
 
 	Tuple p = Tuple::point(0, 10, 0);
 
-	ASSERT_FALSE(w.isShadowed(p));
+	ASSERT_FALSE(w.isShadowed(p, w.lights[0]));
 
 	auto p1 = Tuple::point(10, -10, 10);
-	ASSERT_TRUE(w.isShadowed(p1));
+	ASSERT_TRUE(w.isShadowed(p1, w.lights[0]));
 	
 	auto p2 = Tuple::point(-20, 20, -20);
-	ASSERT_FALSE(w.isShadowed(p2));
+	ASSERT_FALSE(w.isShadowed(p2, w.lights[0]));
 
 	auto p3 = Tuple::point(-2, 2, -2);
-	ASSERT_FALSE(w.isShadowed(p3));
+	ASSERT_FALSE(w.isShadowed(p3, w.lights[0]));
 }
 
 TEST(ShadowTest, ShadeHitAcne) {
-	World w = defaultWorld();
-	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	World w;
+	auto s1 = Sphere();
+	auto s2 = Sphere();
+	s2.transform = translate(0, 0, 10);
+
+	w.objects.emplace_back(&s1);
+	w.objects.emplace_back(&s2);
+	w.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 0, -10)));
 
 	auto r = Ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
 	auto i = Intersection(4.f, w.objects[1]);
@@ -1879,8 +1885,8 @@ TEST(PatternTest, LightingWithPattern) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto c1 = sphere.lighting(light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
-	auto c2 = sphere.lighting(light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
+	auto c1 = sphere.lighting(&light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
+	auto c2 = sphere.lighting(&light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
 
 	ASSERT_EQ(c1, Color(1, 1, 1));
 	ASSERT_EQ(c2, Color(0, 0, 0));
@@ -2072,7 +2078,7 @@ TEST(ReflectivityTest, TerminateInfiniteRecursion) {
 
 	World w = defaultWorld();
 
-	w.light = Light(Color(1, 1, 1), Tuple::point(0, 0, 0));
+	w.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 0, 0)));
 
 	auto lower = Plane();
 	lower.material.reflective = 1;

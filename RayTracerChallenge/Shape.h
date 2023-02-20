@@ -12,6 +12,8 @@
 class Shape {
 public:
 
+	// TODO: add == operator for all shapes
+
 	inline virtual Intersections intersect(const Ray& ray)= 0;
 	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)= 0;
 	inline virtual BoundingBox boundsOf(bool update = false)= 0;
