@@ -1397,7 +1397,10 @@ TEST(LightingTest, EyeBetweenLight) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
+
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material,&sphere, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1408,7 +1411,9 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1419,7 +1424,9 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1430,7 +1437,9 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
-	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
 
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -1441,7 +1450,9 @@ TEST(LightingTest, LightBehindSurface) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
-	auto result = Sphere().lighting(&light, position, eyev, normalv, 0);
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);;
 
 	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -1695,9 +1706,11 @@ TEST(ShadowTest, SurfaceInShadow) {
 	auto m = Material();
 	auto position = Tuple::point(0, 0, 0);
 
-	auto res = Sphere().lighting(&light, position, eyev, normalv, 1);
+	auto sphere = Sphere();
+	sphere.material = m;
+	auto result = light.lighting(sphere.material,&sphere, position, eyev, normalv, 1);
 
-	ASSERT_EQ(res, Color(0.1, 0.1, 0.1));
+	ASSERT_EQ(result, Color(0.1, 0.1, 0.1));
 }
 
 TEST(ShadowTest, TestingNotInShadow) {
@@ -1872,7 +1885,6 @@ TEST(PatternTest, PatternAt) {
 }
 
 TEST(PatternTest, LightingWithPattern) {
-	auto sphere = Sphere();
 	
 	auto material = Material();
 	material.pattern = new StripePattern();
@@ -1880,13 +1892,15 @@ TEST(PatternTest, LightingWithPattern) {
 	material.diffuse = 0;
 	material.specular = 0;
 
-	sphere.material = material;
-
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
 	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
-	auto c1 = sphere.lighting(&light, Tuple::point(0.9, 0, 0), eyev, normalv, false);
-	auto c2 = sphere.lighting(&light, Tuple::point(1.1, 0, 0), eyev, normalv, false);
+
+	auto sphere = Sphere();
+	sphere.material = material;
+	auto c1 = light.lighting(sphere.material, &sphere, Tuple::point(0.9, 0, 0), eyev, normalv, false);
+
+	auto c2 = light.lighting(sphere.material, &sphere, Tuple::point(1.1, 0, 0), eyev, normalv, false);
 
 	ASSERT_EQ(c1, Color(1, 1, 1));
 	ASSERT_EQ(c2, Color(0, 0, 0));
