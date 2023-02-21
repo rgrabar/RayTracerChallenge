@@ -1,6 +1,5 @@
 #pragma once
 #include "Color.h"
-#include "Light.h"
 #include "Tuple.h"
 #include "Pattern.h"
 //#include "Shape.h"

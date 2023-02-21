@@ -96,7 +96,7 @@ void drawRedCircle() {
 				   auto normal = ((Shape*)test->s)->normal(wPoint);
 				   auto eye = -r.direction;
 				   Material tmp;
-				   auto co = ((Shape*)(test->s))->lighting(light, wPoint, eye, normal, 0);
+				   auto co = light->lighting(shape.material, &shape, wPoint, eye, normal, 0);
 
 				   c.writePixel(x, y, co);
 				   //TODO: figure out why i need this break
@@ -819,14 +819,14 @@ void testScene() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	//drawAxes(world);
+	drawAxes(world);
 
 	Camera cam(1280, 720, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	cam.aliasingSamples = 16;
+	cam.aliasingSamples = 4;
 	cam.aliasEdges = 1;
 	cam.edgeAliasHighlights = 1;
-	cam.aliasingThreshold = 0.01;
+	//cam.aliasingThreshold = 0.01;
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();

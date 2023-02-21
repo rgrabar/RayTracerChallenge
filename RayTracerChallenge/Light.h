@@ -2,6 +2,7 @@
 
 #include "Color.h"
 #include "Tuple.h"
+#include "Shape.h"
 
 class Light {
 public:
@@ -12,5 +13,7 @@ public:
 
 	Color intesity;
 	Tuple position;
+
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
 
 };
