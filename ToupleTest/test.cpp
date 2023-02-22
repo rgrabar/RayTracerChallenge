@@ -1378,7 +1378,7 @@ TEST(ReflectionTest, SlantedSurface) {
 TEST(LightTest, PointLightPositionIntensity) {
 	auto intensity = Color(1, 1, 1);
 	auto position = Tuple::point(0, 0, 0);
-	Light light(intensity, position);
+	PointLight light(intensity, position);
 
 	ASSERT_EQ(light.position, position);
 	ASSERT_EQ(light.intesity, intensity);
@@ -1396,7 +1396,7 @@ TEST(LightingTest, EyeBetweenLight) {
 	Tuple position = Tuple::point(0, 0, 0);
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
-	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, -10));
 
 	auto sphere = Sphere();
 	sphere.material = m;
@@ -1410,7 +1410,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	Tuple position = Tuple::point(0, 0, 0);
 	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
-	Light light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
@@ -1423,7 +1423,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	Tuple position = Tuple::point(0, 0, 0);
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
-	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
@@ -1436,7 +1436,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	Tuple position = Tuple::point(0, 0, 0);
 	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	auto normalv = Tuple::vector(0, 0, -1);
-	Light light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
@@ -1449,7 +1449,7 @@ TEST(LightingTest, LightBehindSurface) {
 	Tuple position = Tuple::point(0, 0, 0);
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
-	Light light(Color(1, 1, 1), Tuple::point(0, 0, 10));
+	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, 10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);;
@@ -1458,7 +1458,7 @@ TEST(LightingTest, LightBehindSurface) {
 }
 
 TEST(WorldTest, DefaultWorld) {
-	Light light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	PointLight light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
 	Sphere s1, s2;
 	s1.material.color = Color(0.8, 1.0, 0.6);
 	s1.material.diffuse = 0.7;
@@ -1548,7 +1548,7 @@ TEST(PreCompute, FromInside) {
 	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
 	// replacing the default light for this test
-	w.lights[0] = (new Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0)));
+	w.lights[0] = (new PointLight(Color(1, 1, 1), Tuple::point(0, 0.25, 0)));
 
 	Intersection i(0.5f, w.objects[1]);
 
@@ -1701,7 +1701,7 @@ TEST(CameraTest, RenderingWithCamera) {
 TEST(ShadowTest, SurfaceInShadow) {
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv= Tuple::vector(0, 0, -1);
-	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
+	auto light = PointLight(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
 	
 	auto m = Material();
 	auto position = Tuple::point(0, 0, 0);
@@ -1748,7 +1748,7 @@ TEST(ShadowTest, ShadeHitAcne) {
 
 	w.objects.emplace_back(&s1);
 	w.objects.emplace_back(&s2);
-	w.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 0, -10)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10)));
 
 	auto r = Ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
 	auto i = Intersection(4.f, w.objects[1]);
@@ -1894,7 +1894,7 @@ TEST(PatternTest, LightingWithPattern) {
 
 	auto eyev = Tuple::vector(0, 0, -1);
 	auto normalv = Tuple::vector(0, 0, -1);
-	auto light = Light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	auto light = PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10));
 
 	auto sphere = Sphere();
 	sphere.material = material;
@@ -2092,7 +2092,7 @@ TEST(ReflectivityTest, TerminateInfiniteRecursion) {
 
 	World w = defaultWorld();
 
-	w.lights.emplace_back(new Light(Color(1, 1, 1), Tuple::point(0, 0, 0)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, 0)));
 
 	auto lower = Plane();
 	lower.material.reflective = 1;

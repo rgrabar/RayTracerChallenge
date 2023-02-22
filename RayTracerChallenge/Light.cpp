@@ -1,12 +1,12 @@
 #include "Light.h"
 
-Light::Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
+PointLight::PointLight(const Color& _intensity, const Tuple& _position) : Light(_intensity, _position) {}
 
-bool Light::operator==(const Light& other)const {
+bool PointLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
 }
 
-Color Light::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
+Color PointLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
 
 	Color newColor = material.color;
 
