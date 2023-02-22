@@ -11,12 +11,12 @@ public:
 	Pattern();
 	Pattern(const Color& _a, const Color& _b);
 
-	virtual Color patternColorAt(const Tuple& point) = 0;
+	virtual Color patternColorAt(const Tuple& point)const = 0;
 };
 
 class TestPatern :public Pattern{
 public:
-	 Color patternColorAt(const Tuple& object_point) {
+	 Color patternColorAt(const Tuple& object_point)const override {
 		return Color(object_point.x, object_point.y, object_point.z);
 	}
 };

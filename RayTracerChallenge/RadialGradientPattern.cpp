@@ -1,7 +1,7 @@
 #include "RadialGradientPattern.h"
 #include <iostream>
 
-Color RadialGradientPattern::patternColorAt(const Tuple& point) {
+Color RadialGradientPattern::patternColorAt(const Tuple& point)const {
 	if (!type) {
 
 		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0) {

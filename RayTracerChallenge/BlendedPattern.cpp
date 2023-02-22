@@ -1,6 +1,6 @@
 #include "BlendedPattern.h"
 
-Color BlendedPattern::patternColorAt(const Tuple& point) {
+Color BlendedPattern::patternColorAt(const Tuple& point) const{
 
 	// TODO: this works but is it even correct? the transform part shouldn't it be transformed?
 
