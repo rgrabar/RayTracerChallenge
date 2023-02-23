@@ -19,6 +19,9 @@ public:
 	inline virtual void divide(int threashold = 1) = 0;
 	inline virtual bool includes(const Shape* s) = 0;
 
+	//TODO: make it a bit more clear that group overrides all other materials
+	inline virtual void setMaterial(const Material& s) = 0;
+
 	Shape* parent = nullptr;
 
 	Matrix transform = identityMatrix(4);

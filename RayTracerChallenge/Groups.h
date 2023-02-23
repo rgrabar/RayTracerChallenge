@@ -121,4 +121,10 @@ public:
 		}
 
 	}
+
+	inline void setMaterial(const Material& s) {
+		for (auto child : children) {
+			child->setMaterial(s);
+		}
+	}
 };

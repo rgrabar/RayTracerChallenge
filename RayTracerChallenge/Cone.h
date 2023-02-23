@@ -126,4 +126,8 @@ public:
 	inline bool includes(const Shape* s) {
 		return this == s;
 	}
+
+	inline void setMaterial(const Material& s) {
+		material = s;
+	}
 };

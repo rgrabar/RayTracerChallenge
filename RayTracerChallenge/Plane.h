@@ -35,4 +35,7 @@ public:
 		return this == s;
 	}
 
+	inline void setMaterial(const Material& s) {
+		material = s;
+	}
 };

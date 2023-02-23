@@ -103,4 +103,9 @@ public:
 		return m_bounds;
 	}
 
+	inline void setMaterial(const Material& s) {
+		right->material = s;
+		left->material = s;
+	}
+
 };

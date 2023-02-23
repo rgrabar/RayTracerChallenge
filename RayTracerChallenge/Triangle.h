@@ -75,6 +75,10 @@ public:
 		return this == s;
 	}
 
+	inline void setMaterial(const Material& s) {
+		material = s;
+	}
+
 };
 
 class SmoothTriangle : public Shape {
@@ -149,4 +153,7 @@ public:
 		return this == s;
 	}
 
+	inline void setMaterial(const Material& s) {
+		material = s;
+	}
 };
