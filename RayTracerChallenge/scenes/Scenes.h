@@ -579,6 +579,7 @@ void sphereCubeDivide() {
 	double moveZ = 0;
 
 	auto g = Group();
+	g.material.color = Color(0, 0.63922, 0.42353);
 
 	for (int i = 0; i < 10; ++i) {
 		for (int j = 0; j < 10; ++j) {
@@ -673,6 +674,11 @@ void drawDragon	() {
 	g->transform = scale(20, 20, 20);
 	std::cout << "dividing\n";
 	g->divide();
+	//g->material.color = Color(0, 0.63922, 0.42353);
+	Material m;
+	m.color = Color(0, 0.63922, 0.42353);
+
+	g->setMaterial(m);
 
 	auto world = World();
 	world.objects.emplace_back(g);
