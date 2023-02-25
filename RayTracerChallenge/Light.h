@@ -29,3 +29,21 @@ public:
 	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
 
 };
+
+class SpotLight : public Light {
+
+public:
+
+	//const  const Vector3& direction, double angle, const Vector3& color
+
+	SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle);
+
+	bool operator==(const Light& other)const;
+
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
+
+	Tuple direction;
+	double angle;
+
+};
+

@@ -801,7 +801,7 @@ void testScene() {
 	auto plane = Plane();
 	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
 	plane.material.specular = 0.f;
-	plane.material.reflective = 0.3f;
+//	plane.material.reflective = 0.3f;
 	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
 
 	auto plane1 = Plane();
@@ -819,8 +819,9 @@ void testScene() {
 
 	auto world = World();
 
-	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
+	//world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	//world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
+	world.lights.emplace_back(new SpotLight(Color(1, 1, 1), Tuple::point(0, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 10));
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
@@ -828,10 +829,10 @@ void testScene() {
 	drawAxes(world);
 
 	Camera cam(1280, 720, TEST_PI / 3);
-	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	cam.aliasingSamples = 16;
-	cam.aliasEdges = 1;
-	cam.edgeAliasHighlights = 1;
+	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.aliasingSamples = 16;
+	//cam.aliasEdges = 1;
+	//cam.edgeAliasHighlights = 1;
 	//cam.aliasingThreshold = 0.01;
 	auto ans = cam.render(world);
 
