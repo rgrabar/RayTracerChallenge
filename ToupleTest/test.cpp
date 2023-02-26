@@ -1719,7 +1719,7 @@ TEST(ShadowTest, TestingNotInShadow) {
 
 	Tuple p = Tuple::point(0, 10, 0);
 
-	ASSERT_FALSE(w.isShadowed(p, w.lights[0]));
+	ASSERT_FALSE(w.isShadowed(p, w.lights[0]->position));
 }
 
 TEST(ShadowTest, TestingInShadow) {
@@ -1728,16 +1728,16 @@ TEST(ShadowTest, TestingInShadow) {
 
 	Tuple p = Tuple::point(0, 10, 0);
 
-	ASSERT_FALSE(w.isShadowed(p, w.lights[0]));
+	ASSERT_FALSE(w.isShadowed(p, w.lights[0]->position));
 
 	auto p1 = Tuple::point(10, -10, 10);
-	ASSERT_TRUE(w.isShadowed(p1, w.lights[0]));
+	ASSERT_TRUE(w.isShadowed(p1, w.lights[0]->position));
 	
 	auto p2 = Tuple::point(-20, 20, -20);
-	ASSERT_FALSE(w.isShadowed(p2, w.lights[0]));
+	ASSERT_FALSE(w.isShadowed(p2, w.lights[0]->position));
 
 	auto p3 = Tuple::point(-2, 2, -2);
-	ASSERT_FALSE(w.isShadowed(p3, w.lights[0]));
+	ASSERT_FALSE(w.isShadowed(p3, w.lights[0]->position));
 }
 
 TEST(ShadowTest, ShadeHitAcne) {
@@ -3872,5 +3872,9 @@ TEST(CSG, SubdividingCSGSubdividesChildren) {
 
 	subGroup = (Group*)((Group*)shape.right)->children[1];
 	ASSERT_EQ(subGroup->children[0], &s4);
+
+}
+
+TEST(AreaLight, isShadowForOcclusion) {
 
 }
