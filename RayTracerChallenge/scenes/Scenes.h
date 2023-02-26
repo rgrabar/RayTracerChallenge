@@ -819,9 +819,12 @@ void testScene() {
 
 	auto world = World();
 
+	auto spotlight = new SpotLight(Color(1, 1, 1), Tuple::point(0, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 6);
+	spotlight->fadeIntensity = 1;
+
 	//world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	//world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
-	world.lights.emplace_back(new SpotLight(Color(1, 1, 1), Tuple::point(0, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 10));
+	world.lights.emplace_back(spotlight);
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);

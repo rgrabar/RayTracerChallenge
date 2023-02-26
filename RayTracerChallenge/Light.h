@@ -34,7 +34,6 @@ class SpotLight : public Light {
 
 public:
 
-	//const  const Vector3& direction, double angle, const Vector3& color
 
 	SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle);
 
@@ -44,6 +43,7 @@ public:
 
 	Tuple direction;
 	double angle;
+	double fadeIntensity = 1;
 
 };
 

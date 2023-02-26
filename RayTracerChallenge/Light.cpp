@@ -56,23 +56,12 @@ bool SpotLight::operator==(const Light& other)const {
 Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
 	
 	Tuple light_dir = (point - position).normalize();
-
 	double cos_theta = light_dir.dotProduct(direction);
-	
-	//std::cout << cos_theta << " " << std::cos(angle) << "\n";
 
 	if (cos_theta < std::cos(angle)) {
 		return Color (0, 0, 0);
 	}
 
-
-	double diff = std::max(0.0, normalv.dotProduct(light_dir)) * material.diffuse;
-	Tuple reflect_dir = light_dir - normalv * 2 * light_dir.dotProduct(normalv);
-	double spec = std::pow(std::max(0.0, reflect_dir.dotProduct(eyev)), material.shininess) * material.specular;
-	Color light_color = material.color * intesity;
-	Color final_color = material.color * diff + light_color * spec;
-
-	
 	Color newColor = material.color;
 
 	if (material.pattern != nullptr)
@@ -103,10 +92,8 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		}
 	}
 
-	auto test = ambientColor + diffuseColor + specularColor;
-
 	if (inShadow)
 		return ambientColor;
 	else
-		return ambientColor + diffuseColor + specularColor;
+		return (ambientColor + diffuseColor + specularColor) * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
 }
