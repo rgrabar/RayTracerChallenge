@@ -1,5 +1,8 @@
 #include "Light.h"
 
+// TODO: this is here because of intensityAt can i move it somewhere?
+#include "World.h"
+
 PointLight::PointLight(const Color& _intensity, const Tuple& _position) : Light(_intensity, _position) {}
 
 bool PointLight::operator==(const Light& other)const {
@@ -44,6 +47,11 @@ Color PointLight::lighting(Material& material, Shape* object, const Tuple& point
 		return ambientColor;
 	else
 		return ambientColor + diffuseColor + specularColor;
+}
+
+double PointLight::intensityAt(const Tuple& point, const World& world) {
+
+	return world.isShadowed(point, position);
 }
 
 
@@ -96,4 +104,9 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		return ambientColor;
 	else
 		return (ambientColor + diffuseColor + specularColor) * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
+}
+
+double SpotLight::intensityAt(const Tuple& point, const World& world) {
+	// TODO: move * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity) here
+	return 0;
 }

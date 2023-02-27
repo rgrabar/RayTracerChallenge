@@ -801,7 +801,7 @@ void testScene() {
 	auto plane = Plane();
 	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
 	plane.material.specular = 0.f;
-//	plane.material.reflective = 0.3f;
+	plane.material.reflective = 0.3f;
 	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
 
 	auto plane1 = Plane();
@@ -833,6 +833,7 @@ void testScene() {
 
 	Camera cam(1280, 720, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.aliasingSamples = 16;
 	//cam.aliasEdges = 1;
 	//cam.edgeAliasHighlights = 1;

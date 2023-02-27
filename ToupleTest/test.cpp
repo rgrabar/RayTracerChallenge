@@ -3876,5 +3876,16 @@ TEST(CSG, SubdividingCSGSubdividesChildren) {
 }
 
 TEST(AreaLight, isShadowForOcclusion) {
+	auto w = defaultWorld();
+	auto lightPosition = Tuple::point(-10, -10, -10);
 
+	bool ans[] = { false, true, false, false };
+	std::vector<Tuple> points{ Tuple::point(-10, -10, 10), Tuple::point(10, 10, 10) ,Tuple::point(-20, -20, -20),Tuple::point(-5, -5, -5) };
+
+	int cnt = 0;
+
+	for (auto point : points) {
+		ASSERT_EQ(w.isShadowed(point, lightPosition), ans[cnt]);
+		cnt++;
+	}
 }

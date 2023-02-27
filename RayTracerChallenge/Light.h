@@ -4,6 +4,9 @@
 #include "Tuple.h"
 #include "Shape.h"
 
+// TODO: this is here because of intensityAt can i move it somewhere?
+class World;
+
 class Light {
 public:
 
@@ -14,7 +17,7 @@ public:
 	Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
 
 	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) = 0;
-
+	virtual double intensityAt(const Tuple& point, const World& world) = 0;
 };
 
 
@@ -27,7 +30,7 @@ public:
 	bool operator==(const Light& other)const;
 
 	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
-
+	double intensityAt(const Tuple& point, const World& world);
 };
 
 class SpotLight : public Light {
@@ -40,6 +43,7 @@ public:
 	bool operator==(const Light& other)const;
 
 	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
+	double intensityAt(const Tuple& point, const World& world);
 
 	Tuple direction;
 	double angle;
