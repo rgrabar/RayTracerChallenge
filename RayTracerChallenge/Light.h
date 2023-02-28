@@ -16,7 +16,7 @@ public:
 	Tuple position;
 	Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
 
-	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) = 0;
+	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity) = 0;
 	virtual double intensityAt(const Tuple& point, const World& world) = 0;
 };
 
@@ -29,7 +29,7 @@ public:
 
 	bool operator==(const Light& other)const;
 
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity);
 	double intensityAt(const Tuple& point, const World& world);
 };
 
@@ -42,7 +42,7 @@ public:
 
 	bool operator==(const Light& other)const;
 
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow);
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity);
 	double intensityAt(const Tuple& point, const World& world);
 
 	Tuple direction;

@@ -1391,6 +1391,7 @@ TEST(MaterialTest, SphereMaterial) {
 	ASSERT_EQ(s.material, material);
 }
 
+// NOTE: this lighting tests use intensity instead of bool in shadow value
 TEST(LightingTest, EyeBetweenLight) {
 	Material m;
 	Tuple position = Tuple::point(0, 0, 0);
@@ -1400,7 +1401,7 @@ TEST(LightingTest, EyeBetweenLight) {
 
 	auto sphere = Sphere();
 	sphere.material = m;
-	auto result = light.lighting(sphere.material,&sphere, position, eyev, normalv, 0);
+	auto result = light.lighting(sphere.material,&sphere, position, eyev, normalv, 1);
 
 	ASSERT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -1413,7 +1414,7 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
-	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
 
 	ASSERT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -1426,7 +1427,7 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
-	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
 
 	ASSERT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -1439,7 +1440,7 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
-	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);
+	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
 
 	ASSERT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -3887,5 +3888,56 @@ TEST(AreaLight, isShadowForOcclusion) {
 	for (auto point : points) {
 		ASSERT_EQ(w.isShadowed(point, lightPosition), ans[cnt]);
 		cnt++;
+	}
+}
+
+TEST(AreaLight, PointLightIntensity) {
+	auto w = defaultWorld();
+	
+	auto light = w.lights[0];
+
+	std::vector<Tuple> points{
+
+		Tuple::point(0, 1.0001, 0) ,
+		Tuple::point(-1.0001, 0, 0),
+		Tuple::point(0, 0, -1.0001),
+		Tuple::point(0, 0, 1.0001) ,
+		Tuple::point(1.0001, 0, 0) ,
+		Tuple::point(0, -1.0001, 0),
+		Tuple::point(0, 0, 0)
+	};
+
+	double arr[] = { 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 };
+
+	int cnt = 0;
+
+	for (auto point : points) {
+		ASSERT_FLOAT_EQ(light->intensityAt(point, w), arr[cnt++]);
+	}
+}
+
+TEST(AreaLight, IntensityToAttenuateColor) {
+	auto w = defaultWorld();
+	w.lights.clear();
+
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10)));
+
+	auto shape = w.objects[0];
+	shape->material.ambient = 0.1;
+	shape->material.diffuse = 0.9;
+	shape->material.specular = 0.;
+	shape->material.color = Color(1, 1, 1);
+
+	auto pt = Tuple::point(0, 0, -1);
+	auto eyev = Tuple::vector(0, 0, -1);
+	auto normalv = Tuple::vector(0, 0, -1);
+
+	std::vector<double> intensity = { 1.0, 0.5, 0.0 };
+	std::vector<Color> ans = { Color(1, 1, 1), Color(0.55, 0.55, 0.55), Color(0.1, 0.1, 0.1) };
+
+	int i = 0;
+
+	for (auto in : intensity) {
+		ASSERT_EQ(w.lights[0]->lighting(shape->material, shape, pt, eyev, normalv, in), ans[i++]);
 	}
 }

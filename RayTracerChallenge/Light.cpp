@@ -9,7 +9,7 @@ bool PointLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
 }
 
-Color PointLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
+Color PointLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity) {
 
 	Color newColor = material.color;
 
@@ -43,15 +43,15 @@ Color PointLight::lighting(Material& material, Shape* object, const Tuple& point
 
 	auto test = ambientColor + diffuseColor + specularColor;
 
-	if (inShadow)
-		return ambientColor;
-	else
-		return ambientColor + diffuseColor + specularColor;
+
+	return ambientColor + (diffuseColor + specularColor) * (intensity);
 }
 
 double PointLight::intensityAt(const Tuple& point, const World& world) {
 
-	return world.isShadowed(point, position);
+	if(world.isShadowed(point, position))
+		return 0.0;
+	return 1.0;
 }
 
 
@@ -61,7 +61,7 @@ bool SpotLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
 }
 
-Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const bool inShadow) {
+Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity) {
 	
 	Tuple light_dir = (point - position).normalize();
 	double cos_theta = light_dir.dotProduct(direction);
@@ -100,7 +100,7 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		}
 	}
 
-	if (inShadow)
+	if (intensity)
 		return ambientColor;
 	else
 		return (ambientColor + diffuseColor + specularColor) * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
