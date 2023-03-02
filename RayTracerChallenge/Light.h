@@ -72,6 +72,8 @@ public:
 	int vSteps;
 	int samples;
 
+	std::vector<Tuple> lightSamples;
+
 };
 
 

@@ -120,7 +120,14 @@ AreaLight::AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, 
 	samples(_uSteps * _vSteps),
 	uSteps(_uSteps),
 	vSteps(_vSteps)
-{}
+{
+	for (int v = 0; v < vSteps; ++v) {
+		for (int u = 0; u < uSteps; ++u) {
+			lightSamples.emplace_back(pointOnLight(u, v));
+		}
+	}
+
+}
 
 
 
@@ -131,34 +138,41 @@ Color AreaLight::lighting(Material& material, Shape* object, const Tuple& point,
 		newColor = object->stripeAtObject(point);
 
 	auto effectiveColor = newColor * intesity;
-	auto lightv = (position - point).normalize();
 	auto ambientColor = effectiveColor * object->material.ambient;
-	auto lightDotNormal = lightv.dotProduct(normalv);
 
-	Color diffuseColor(0, 0, 0);
-	Color specularColor(0, 0, 0);
+	Color sum = Color(0, 0, 0);
 
-	if (lightDotNormal < 0) {
-		diffuseColor = Color(0, 0, 0);
-		specularColor = Color(0, 0, 0);
-	}
-	else {
-		diffuseColor = effectiveColor * object->material.diffuse * lightDotNormal;
-		auto reflectv = -lightv.reflect(normalv);
-		auto reflectDotEye = reflectv.dotProduct(eyev);
+	for (auto sample : lightSamples) {
 
-		if (reflectDotEye <= 0)
+		Color diffuseColor(0, 0, 0);
+		Color specularColor(0, 0, 0);
+
+		auto lightv = (sample - point).normalize();
+		auto lightDotNormal = lightv.dotProduct(normalv);
+		
+		if (lightDotNormal < 0) {
+			diffuseColor = Color(0, 0, 0);
 			specularColor = Color(0, 0, 0);
-		else {
-			auto factor = pow(reflectDotEye, object->material.shininess);
-			specularColor = intesity * object->material.specular * factor;
 		}
+		else {
+			diffuseColor = effectiveColor * object->material.diffuse * lightDotNormal;
+			auto reflectv = -lightv.reflect(normalv);
+			auto reflectDotEye = reflectv.dotProduct(eyev);
+
+			if (reflectDotEye <= 0)
+				specularColor = Color(0, 0, 0);
+			else {
+				auto factor = pow(reflectDotEye, object->material.shininess);
+				specularColor = intesity * object->material.specular * factor;
+			}
+		}
+
+		sum = sum + diffuseColor;
+		sum = sum + specularColor;
 	}
+	//auto test = ambientColor + diffuseColor + specularColor;
 
-	auto test = ambientColor + diffuseColor + specularColor;
-
-
-	return ambientColor + (diffuseColor + specularColor) * (intensityAt);
+	return ambientColor + (sum / samples) * (intensityAt);
 }
 double AreaLight::intensityAt(const Tuple& point, const World& world) {
 	auto total = 0.0;
@@ -181,6 +195,6 @@ bool AreaLight::operator==(const Light& other)const {
 
 Tuple AreaLight::pointOnLight(int u, int v) {
 	return corner +
-		uVec * (u + 0.5) +
-		vVec * (v + 0.5);
+		uVec * (u + random_double()) +
+		vVec * (v + random_double());
 }
