@@ -9,7 +9,7 @@ bool PointLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
 }
 
-Color PointLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity) {
+Color PointLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) {
 
 	Color newColor = material.color;
 
@@ -44,7 +44,7 @@ Color PointLight::lighting(Material& material, Shape* object, const Tuple& point
 	auto test = ambientColor + diffuseColor + specularColor;
 
 
-	return ambientColor + (diffuseColor + specularColor) * (intensity);
+	return ambientColor + (diffuseColor + specularColor) * (intensityAt);
 }
 
 double PointLight::intensityAt(const Tuple& point, const World& world) {
@@ -61,7 +61,7 @@ bool SpotLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
 }
 
-Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensity) {
+Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) {
 	
 	Tuple light_dir = (point - position).normalize();
 	double cos_theta = light_dir.dotProduct(direction);
@@ -100,7 +100,7 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		}
 	}
 
-	if (intensity)
+	if (intensityAt)
 		return ambientColor;
 	else
 		return (ambientColor + diffuseColor + specularColor) * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
@@ -109,4 +109,78 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
 	// TODO: move * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity) here
 	return 0;
+}
+
+
+AreaLight::AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity) :
+	Light(_intensity, _corner + (_fullUvec + _fullVvec) / 2.0f),
+	corner(_corner),
+	uVec(_fullUvec / _uSteps),
+	vVec(_fullVvec / _vSteps),
+	samples(_uSteps * _vSteps),
+	uSteps(_uSteps),
+	vSteps(_vSteps)
+{}
+
+
+
+Color AreaLight::lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) {
+	Color newColor = material.color;
+
+	if (material.pattern != nullptr)
+		newColor = object->stripeAtObject(point);
+
+	auto effectiveColor = newColor * intesity;
+	auto lightv = (position - point).normalize();
+	auto ambientColor = effectiveColor * object->material.ambient;
+	auto lightDotNormal = lightv.dotProduct(normalv);
+
+	Color diffuseColor(0, 0, 0);
+	Color specularColor(0, 0, 0);
+
+	if (lightDotNormal < 0) {
+		diffuseColor = Color(0, 0, 0);
+		specularColor = Color(0, 0, 0);
+	}
+	else {
+		diffuseColor = effectiveColor * object->material.diffuse * lightDotNormal;
+		auto reflectv = -lightv.reflect(normalv);
+		auto reflectDotEye = reflectv.dotProduct(eyev);
+
+		if (reflectDotEye <= 0)
+			specularColor = Color(0, 0, 0);
+		else {
+			auto factor = pow(reflectDotEye, object->material.shininess);
+			specularColor = intesity * object->material.specular * factor;
+		}
+	}
+
+	auto test = ambientColor + diffuseColor + specularColor;
+
+
+	return ambientColor + (diffuseColor + specularColor) * (intensityAt);
+}
+double AreaLight::intensityAt(const Tuple& point, const World& world) {
+	auto total = 0.0;
+
+	for (int v = 0; v < vSteps; ++v) {
+		for (int u = 0; u < uSteps; ++u) {
+			auto lightPosition = pointOnLight(u, v);
+
+			if (!world.isShadowed(lightPosition, point)) {
+				total = total + 1.0;
+			}
+		}
+	}
+	return total / samples;
+}
+
+bool AreaLight::operator==(const Light& other)const {
+	return other.intesity == intesity && other.position == position;
+}
+
+Tuple AreaLight::pointOnLight(int u, int v) {
+	return corner +
+		uVec * (u + 0.5) +
+		vVec * (v + 0.5);
 }
