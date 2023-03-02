@@ -3941,3 +3941,74 @@ TEST(AreaLight, IntensityToAttenuateColor) {
 		ASSERT_EQ(w.lights[0]->lighting(shape->material, shape, pt, eyev, normalv, in), ans[i++]);
 	}
 }
+
+TEST(AreaLight, CreatingAreaLight) {
+	auto corner = Tuple::point(0, 0, 0);
+	auto v1 = Tuple::vector(2, 0, 0);
+	auto v2 = Tuple::vector(0, 0, 1);
+
+	auto light = AreaLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
+
+	ASSERT_EQ(light.corner, corner);
+	ASSERT_EQ(light.uVec, Tuple::vector(0.5, 0, 0));
+	ASSERT_EQ(light.uSteps, 4);
+	ASSERT_EQ(light.vVec, Tuple::vector(0, 0, 0.5));
+	ASSERT_EQ(light.vSteps, 2);
+	ASSERT_EQ(light.samples, 8);
+	ASSERT_EQ(light.position, Tuple::point(1, 0, 0.5));
+}
+
+TEST(AreaLight, SinglePointOnAreaLight) {
+	auto corner = Tuple::point(0, 0, 0);
+	auto v1 = Tuple::vector(2, 0, 0);
+	auto v2 = Tuple::vector(0, 0, 1);
+
+	auto light = AreaLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
+
+	int u[] = { 0, 1, 0, 2, 3 };
+	int v[] = { 0, 0, 1, 0, 1 };
+
+	std::vector<Tuple> result{
+		Tuple::point(0.25, 0, 0.25),
+		Tuple::point(0.75, 0, 0.25),
+		Tuple::point(0.25, 0, 0.75),
+		Tuple::point(1.25, 0, 0.25),
+		Tuple::point(1.75, 0, 0.75)
+	};
+
+	int i = 0;
+
+	for (auto res : result) {
+		ASSERT_EQ(light.pointOnLight(u[i], v[i]), res);
+
+		++i;
+	}
+}
+
+TEST(AreaLight, AreaLightIntensity) {
+	auto w = defaultWorld();
+	w.lights.clear();
+	
+	auto corner = Tuple::point(-0.5, -0.5, -5);
+	auto v1 = Tuple::vector(1, 0, 0);
+	auto v2 = Tuple::vector(0, 1, 0);
+
+	auto light = AreaLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
+
+	std::vector<Tuple> points{
+	Tuple::point(0, 0, 2),
+	Tuple::point(1, -1, 2),
+	Tuple::point(1.5, 0, 2),
+	Tuple::point(1.25, 1.25, 3),
+	Tuple::point(0, 0, -2)
+	};
+
+	double result[] = { 0.0, 0.25, 0.5, 0.75, 1 };
+
+	int i = 0;
+
+	for (auto point : points) {
+		ASSERT_EQ(light.intensityAt(point, w), result[i++]);
+	}
+
+}
