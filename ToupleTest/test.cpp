@@ -4012,3 +4012,47 @@ TEST(AreaLight, AreaLightIntensity) {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+TEST(AreaLight, lightingsamplesarealight) {
+	auto corner = Tuple::point(-0.5, -0.5, -5);
+	auto v1 = Tuple::vector(1, 0, 0);
+	auto v2 = Tuple::vector(0, 1, 0);
+
+	auto light = AreaLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
+
+	auto shape = Sphere();
+	shape.material.ambient = 0.1;
+	shape.material.diffuse = 0.9;
+	shape.material.specular = 0.;
+	shape.material.color = Color(1, 1, 1);
+
+	auto eye = Tuple::point(0, 0, -5);
+	
+	std::vector<Tuple> pt{ Tuple::point(0, 0, -1), Tuple::point(0, 0.7071, -0.7071) };
+
+	Color ans[] = { Color(0.9965, 0.9965, 0.9965), Color(0.6232, 0.6232, 0.6232) };
+
+	int i = 0;
+
+	for (auto p : pt) {
+		auto eyev = (eye - p).normalize();
+		auto normalv = Tuple::vector(p.x, p.y, p.z);
+
+		auto result = light.lighting(shape.material, &shape, p, eyev, normalv, 1.0);
+
+		std::cout << result.r << " " << result.g << " " << result.b << "\n";
+		ASSERT_EQ(result, ans[i++]);
+	}
+
+}
+
