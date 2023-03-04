@@ -15,7 +15,7 @@ public:
 	Color intesity;
 	Tuple position;
 	Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
-
+	// TODO: remove duplicated code for lighting
 	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) = 0;
 	virtual double intensityAt(const Tuple& point, const World& world) = 0;
 };
@@ -71,8 +71,41 @@ public:
 	int uSteps;
 	int vSteps;
 	int samples;
+	bool jitter = 1;
 
 	std::vector<Tuple> lightSamples;
+
+};
+
+
+// Test light for arealight jitter tests
+class TestLight : public Light {
+
+public:
+
+
+	TestLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity);
+	// TODO: change compare operator
+	bool operator==(const Light& other)const;
+
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
+	double intensityAt(const Tuple& point, const World& world);
+
+	Tuple pointOnLight(int u, int v);
+
+	double next();
+
+	Tuple corner;
+	Tuple uVec;
+	Tuple vVec;
+	int uSteps;
+	int vSteps;
+	int samples;
+	bool jitter = 1;
+	int cur = 0;
+
+	std::vector<Tuple> lightSamples;
+	std::vector<double>* seq;
 
 };
 
