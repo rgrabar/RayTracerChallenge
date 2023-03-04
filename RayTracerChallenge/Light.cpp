@@ -100,15 +100,14 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		}
 	}
 
-	if (intensityAt)
-		return ambientColor;
-	else
-		return (ambientColor + diffuseColor + specularColor) * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
+	return ambientColor + (diffuseColor + specularColor) * intensityAt * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
 }
 
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
 	// TODO: move * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity) here
-	return 0;
+	if (world.isShadowed(point, position))
+		return 0.0;
+	return 1.0;
 }
 
 
