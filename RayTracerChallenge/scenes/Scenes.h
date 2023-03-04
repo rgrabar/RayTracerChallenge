@@ -841,6 +841,58 @@ void testScene() {
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();
+void areaLightScene() {
+
+
+	auto world = World();
+
+	auto corner = Tuple::point(-1, 2, 4);
+	auto v1 = Tuple::vector(2, 0, 0);
+	auto v2 = Tuple::vector(0, 2, 0);
+
+	auto light = AreaLight(corner, v1, 10, v2, 10, Color(1.5, 1.5, 1.5));
+	light.jitter = true;
+
+	auto plane = Plane();
+	plane.material.color = Color(1, 1, 1);
+	plane.material.ambient = 0.025;
+	plane.material.diffuse = 0.67;
+	plane.material.specular = 0.;
+
+	auto sphere = Sphere();
+	sphere.transform = translate(0.5, 0.5, 0) * scale(0.5, 0.5, 0.5);
+	sphere.material.color = Color(1, 0, 0);
+	sphere.material.ambient = 0.1;
+	sphere.material.diffuse = 0.6;
+	sphere.material.specular = 0.;
+	sphere.material.reflective = 0.3;
+
+	auto sphere1 = Sphere();
+	sphere1.transform = translate(-0.25, 0.33, 0) * scale(0.33, 0.33, 0.33);
+	sphere1.material.color = Color(0.5, 0.5, 1);
+	sphere1.material.ambient = 0.1;
+	sphere1.material.diffuse = 0.6;
+	sphere1.material.specular = 0.;
+	sphere1.material.reflective = 0.3;
+
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&sphere);
+	world.objects.emplace_back(&sphere1);
+
+	world.lights.emplace_back(&light);
+
+	//drawAxes(world);
+
+	Camera cam(1280, 720, 0.7854);
+	cam.transform = viewTransformation(Tuple::point(-3, 1, 2.5), Tuple::point(0, 0.5, 0), Tuple::vector(0, 1, 0));
+	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.aliasingSamples = 16;
+	//cam.aliasEdges = 1;
+	//cam.edgeAliasHighlights = 1;
+	//cam.aliasingThreshold = 0.01;
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
 }
 
 void drawAxes(World& world) {
