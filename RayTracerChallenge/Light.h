@@ -38,16 +38,19 @@ class SpotLight : public Light {
 public:
 
 
-	SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle);
+	SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle, int _samples, double _radius);
 	// TODO: change compare operator
 	bool operator==(const Light& other)const;
 
 	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	double intensityAt(const Tuple& point, const World& world);
+	Tuple pointOnLight();
 
 	Tuple direction;
 	double angle;
 	double fadeIntensity = 1;
+	int samples;
+	double radius;
 
 };
 

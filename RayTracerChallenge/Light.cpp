@@ -55,7 +55,10 @@ double PointLight::intensityAt(const Tuple& point, const World& world) {
 }
 
 
-SpotLight::SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle) : Light(_intensity, _position), direction((_direction - _position).normalize()), angle(_angle){}
+SpotLight::SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle, int _samples, double _radius) : 
+	Light(_intensity, _position), direction((_direction - _position).normalize()), angle(_angle), samples(_samples), radius(_radius)
+
+{}
 
 bool SpotLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
@@ -104,11 +107,44 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 }
 
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
-	// TODO: move * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity) here
-	if (world.isShadowed(point, position))
-		return 0.0;
-	return 1.0;
+	
+	auto total = 0.0;
+
+	for (int v = 0; v < samples; ++v) {
+			
+		auto lightPosition = pointOnLight();
+			if (!world.isShadowed(lightPosition, point)) {
+				total = total + 1.0;
+			}
+	}
+	return total / samples;
 }
+
+Tuple SpotLight::pointOnLight() {
+
+	// https://mathworld.wolfram.com/DiskPointPicking.html
+	// random points in a uniform circle form -1 to 1
+	
+	auto r = random_double();
+	auto phi = random_double() * 2 * 3.1415926536;
+
+	auto x = sqrt(r) * cos(phi);
+	auto y = sqrt(r) * sin(phi);
+
+	// https://stackoverflow.com/questions/41275311/a-good-way-to-find-a-vector-perpendicular-to-another-vector
+	// random non collinear vector
+	Tuple randomDir = (Tuple::vector(random_double(), random_double(), random_double())).normalize();
+
+	// 2 vectors both ortogonal to the normal and ortogonal to each other to define the circle
+	Tuple ortogonalToDirection = randomDir.crossProduct(direction).normalize();
+	Tuple ortogonalToBoth = (ortogonalToDirection.crossProduct(direction)).normalize();
+
+	auto randomPoint = ortogonalToDirection * x + ortogonalToBoth * y;
+
+	return position + randomPoint * radius;
+
+}
+
 
 
 AreaLight::AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity) :
