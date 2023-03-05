@@ -15,10 +15,11 @@ public:
 	Color intesity;
 	Tuple position;
 	std::vector<Tuple> lightSamples;
+	int samples = 1;
 
-	Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
+	Light(const Color& _intensity, const Tuple& _position, const int _samples) : intesity(_intensity), position(_position), samples(_samples) {}
 	// TODO: remove duplicated code for lighting
-	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) = 0;
+	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	virtual double intensityAt(const Tuple& point, const World& world) = 0;
 };
 
@@ -30,8 +31,6 @@ public:
 	PointLight(const Color& _intensity, const Tuple& _position);
 
 	bool operator==(const Light& other)const;
-
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	double intensityAt(const Tuple& point, const World& world);
 };
 
@@ -44,14 +43,12 @@ public:
 	// TODO: change compare operator
 	bool operator==(const Light& other)const;
 
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	double intensityAt(const Tuple& point, const World& world);
 	Tuple pointOnLight();
 
 	Tuple direction;
 	double angle;
 	double fadeIntensity = 1;
-	int samples;
 	double radius;
 	bool isSoft = 0;
 
@@ -66,7 +63,6 @@ public:
 	// TODO: change compare operator
 	bool operator==(const Light& other)const;
 
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	double intensityAt(const Tuple& point, const World& world);
 
 	Tuple pointOnLight(int u, int v);
@@ -76,7 +72,6 @@ public:
 	Tuple vVec;
 	int uSteps;
 	int vSteps;
-	int samples;
 	bool jitter = 1;
 };
 
