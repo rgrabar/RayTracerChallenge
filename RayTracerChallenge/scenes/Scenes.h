@@ -96,7 +96,7 @@ void drawRedCircle() {
 				   auto normal = ((Shape*)test->s)->normal(wPoint);
 				   auto eye = -r.direction;
 				   Material tmp;
-				   auto co = light->lighting(shape.material, &shape, wPoint, eye, normal, 0);
+				   auto co = light->lighting(shape.material, &shape, wPoint, eye, normal, 1);
 
 				   c.writePixel(x, y, co);
 				   //TODO: figure out why i need this break
@@ -794,55 +794,7 @@ void CSGScene() {
 	ans.canvasToImage();
 }
 
-void testScene() {
-
-	//TODO: double check everything in bounding-boxes it's a bit too slow
-
-	auto plane = Plane();
-	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
-	plane.material.specular = 0.f;
-	plane.material.reflective = 0.3f;
-	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
-
-	auto plane1 = Plane();
-	plane1.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
-	plane1.material.color = Color(1.0, 0.9, 0.9);
-	plane1.material.specular = 0.f;
-
-	auto sphere = Sphere();
-	sphere.transform = translate(-0.5, 1, 0.5);
-	sphere.material.color = Color(0.1, 0.4, 0.9);
-	sphere.material.diffuse = 0.7;
-	sphere.material.specular = 0.3;
-	sphere.material.reflective = 0.8;
-
-
-	auto world = World();
-
-	auto spotlight = new SpotLight(Color(1, 1, 1), Tuple::point(0, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 6);
-	spotlight->fadeIntensity = 1;
-
-	//world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
-	//world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
-	world.lights.emplace_back(spotlight);
-	world.objects.emplace_back(&sphere);
-	world.objects.emplace_back(&plane);
-	world.objects.emplace_back(&plane1);
-
-	drawAxes(world);
-
-	Camera cam(1280, 720, TEST_PI / 3);
-	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	//cam.aliasingSamples = 16;
-	//cam.aliasEdges = 1;
-	//cam.edgeAliasHighlights = 1;
-	//cam.aliasingThreshold = 0.01;
-	auto ans = cam.render(world);
-
-	ans.canvasToImage();
 void areaLightScene() {
-
 
 	auto world = World();
 
@@ -852,6 +804,7 @@ void areaLightScene() {
 
 	auto light = AreaLight(corner, v1, 10, v2, 10, Color(1.5, 1.5, 1.5));
 	light.jitter = true;
+	light.isSoft = true;
 
 	auto plane = Plane();
 	plane.material.color = Color(1, 1, 1);
@@ -895,9 +848,116 @@ void areaLightScene() {
 	ans.canvasToImage();
 }
 
-void drawAxes(World& world) {
+void spotLightScene() {
+	auto plane = Plane();
+	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
+	plane.material.color = Color(1, 1, 1);
+	plane.material.ambient = 0.025;
+	plane.material.diffuse = 0.67;
+	plane.material.specular = 0.;
+
+	auto sphere = Sphere();
+	sphere.transform = translate(0, 2, 0);
+	sphere.material.color = Color(0.1, 0.4, 0.9);
+
+	auto world = World();
+
+	auto spotlight = new SpotLight(Color(1, 1, 1), Tuple::point(-10, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 6, 100, 1);
+	spotlight->isSoft = 1;
+	spotlight->fadeIntensity = 1;
+
+	auto spotlight1 = new SpotLight(Color(1, 0, 0), Tuple::point(10, 10, 0), Tuple::point(10., 0., 6.), TEST_PI / 20, 100, 1);
+	spotlight1->fadeIntensity = 100;
+	spotlight1->isSoft = 0;
+
+	auto spotlight2 = new SpotLight(Color(0, 1, 0), Tuple::point(10, 10, 0), Tuple::point(11., 0., 6.), TEST_PI / 20, 100, 1);
+	spotlight2->fadeIntensity = 100;
+	spotlight2->isSoft = 0;
+
+	auto spotlight3 = new SpotLight(Color(0, 0, 1), Tuple::point(10, 10, 0), Tuple::point(10., 0., 5.), TEST_PI / 20, 100, 1);
+	spotlight3->fadeIntensity = 100;
+	spotlight3->isSoft = 1;
+
+	auto cube = Cube();
+
+	cube.transform = translate(10.5, 1, 5.5) * scale(0.25, 0.25, 0.25);
+
+	world.lights.emplace_back(spotlight);
+	world.lights.emplace_back(spotlight1);
+	world.lights.emplace_back(spotlight2);
+	world.lights.emplace_back(spotlight3);
+
+	world.objects.emplace_back(&cube);
+	world.objects.emplace_back(&sphere);
+	world.objects.emplace_back(&plane);
+
+	//drawAxes(world);
+
+	Camera cam(1280, 720, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.aliasingSamples = 16;
+	//cam.aliasEdges = 1;
+	//cam.edgeAliasHighlights = 1;
+	//cam.aliasingThreshold = 0.01;
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
+}
+
+void testScene() {
+
+	//TODO: double check everything in bounding-boxes it's a bit too slow
+	
+	auto plane = Plane();
+	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
+	plane.material.specular = 0.f;
+	plane.material.reflective = 0.3f;
+	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+
+	auto plane1 = Plane();
+	plane1.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
+	plane1.material.color = Color(1.0, 0.9, 0.9);
+	plane1.material.specular = 0.f;
+
+	auto sphere = Sphere();
+	sphere.transform = translate(-0.5, 1, 0.5);
+	sphere.material.color = Color(0.1, 0.4, 0.9);
+	sphere.material.diffuse = 0.7;
+	sphere.material.specular = 0.3;
+	sphere.material.reflective = 0.8;
+
+
+	auto world = World();
+
+	//auto spotlight = new SpotLight(Color(1, 1, 1), Tuple::point(0, 10, 0), Tuple::point(0., 0., 0.), TEST_PI / 6);
+//	spotlight->fadeIntensity = 1;
+
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
+	//world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
+	//world.lights.emplace_back(spotlight);
+	world.objects.emplace_back(&sphere);
+	world.objects.emplace_back(&plane);
+	world.objects.emplace_back(&plane1);
+
+	drawAxes(world);
+
+	Camera cam(1280, 720, TEST_PI / 3);
+	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	cam.aliasingSamples = 16;
+	cam.aliasEdges = 1;
+	cam.edgeAliasHighlights = 1;
+	cam.aliasingThreshold = 0.01;
+	auto ans = cam.render(world);
+
+	ans.canvasToImage();
 	
 
+}
+
+void drawAxes(World& world) {
+	
 	auto x = new Cylinder();
 
 	x->minimum = 0;
