@@ -79,14 +79,14 @@ double SpotLight::intensityAt(const Tuple& point, const World& world) {
 	Tuple light_dir = (point - position).normalize();
 	double cos_theta = light_dir.dotProduct(direction);
 
+	if (cos_theta < std::cos(angle)) {
+		return 0.f;
+	}
+
 	if (!isSoft) {
 		if (world.isShadowed(point, position))
 			return 0.0;
 		return 1.0 * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
-	}
-
-	if (cos_theta < std::cos(angle)) {
-		return 0.f;
 	}
 
 	auto total = 0.0;
