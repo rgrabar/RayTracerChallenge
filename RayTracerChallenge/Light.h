@@ -51,6 +51,7 @@ public:
 	double fadeIntensity = 1;
 	int samples;
 	double radius;
+	bool isSoft = 0;
 
 };
 

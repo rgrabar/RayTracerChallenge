@@ -108,6 +108,12 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
 	
+	if (!isSoft) {
+		if (world.isShadowed(point, position))
+			return 0.0;
+		return 1.0;
+	}
+
 	auto total = 0.0;
 
 	for (int v = 0; v < samples; ++v) {
