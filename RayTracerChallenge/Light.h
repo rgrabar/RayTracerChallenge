@@ -50,14 +50,13 @@ public:
 	double angle;
 	double fadeIntensity = 1;
 	double radius;
-	bool isSoft = 0;
+	bool isSoft = 1;
 
 };
 
 class AreaLight : public Light {
 
 public:
-
 
 	AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity);
 	// TODO: change compare operator
@@ -73,14 +72,13 @@ public:
 	int uSteps;
 	int vSteps;
 	bool jitter = 1;
+	bool isSoft = 1;
 };
-
 
 // Test light for arealight jitter tests
 class TestLight : public Light {
 
 public:
-
 
 	TestLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity);
 	// TODO: change compare operator

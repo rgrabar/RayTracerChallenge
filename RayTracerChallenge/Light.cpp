@@ -142,6 +142,13 @@ AreaLight::AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, 
 }
 
 double AreaLight::intensityAt(const Tuple& point, const World& world) {
+	
+	if (!isSoft) {
+		if (world.isShadowed(point, position))
+			return 0.0;
+		return 1.0;
+	}
+	
 	auto total = 0.0;
 
 	for (int v = 0; v < vSteps; ++v) {
