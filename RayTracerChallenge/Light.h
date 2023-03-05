@@ -14,6 +14,8 @@ public:
 
 	Color intesity;
 	Tuple position;
+	std::vector<Tuple> lightSamples;
+
 	Light(const Color& _intensity, const Tuple& _position) : intesity(_intensity), position(_position) {}
 	// TODO: remove duplicated code for lighting
 	virtual Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt) = 0;
@@ -76,9 +78,6 @@ public:
 	int vSteps;
 	int samples;
 	bool jitter = 1;
-
-	std::vector<Tuple> lightSamples;
-
 };
 
 

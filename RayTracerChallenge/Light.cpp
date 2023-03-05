@@ -3,7 +3,10 @@
 // TODO: this is here because of intensityAt can i move it somewhere?
 #include "World.h"
 
-PointLight::PointLight(const Color& _intensity, const Tuple& _position) : Light(_intensity, _position) {}
+PointLight::PointLight(const Color& _intensity, const Tuple& _position) : Light(_intensity, _position) {
+	lightSamples.emplace_back(position);
+
+}
 
 bool PointLight::operator==(const Light& other)const {
 	return other.intesity == intesity && other.position == position;
@@ -103,15 +106,17 @@ Color SpotLight::lighting(Material& material, Shape* object, const Tuple& point,
 		}
 	}
 
-	return ambientColor + (diffuseColor + specularColor) * intensityAt * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
+	return ambientColor + (diffuseColor + specularColor) * intensityAt ;
 }
 
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
-	
+	Tuple light_dir = (point - position).normalize();
+	double cos_theta = light_dir.dotProduct(direction);
+
 	if (!isSoft) {
 		if (world.isShadowed(point, position))
 			return 0.0;
-		return 1.0;
+		return 1.0 * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
 	}
 
 	auto total = 0.0;
@@ -123,7 +128,7 @@ double SpotLight::intensityAt(const Tuple& point, const World& world) {
 				total = total + 1.0;
 			}
 	}
-	return total / samples;
+	return total / samples * (1 - std::pow((std::acos(cos_theta) / angle), fadeIntensity));
 }
 
 Tuple SpotLight::pointOnLight() {
