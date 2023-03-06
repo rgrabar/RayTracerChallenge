@@ -12,6 +12,9 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 	auto effectiveColor = newColor * intesity;
 	auto ambientColor = effectiveColor * object->material.ambient;
 
+	if (epsilonEqual(intensityAt, 0.0))
+		return ambientColor;
+
 	Color sum = Color(0, 0, 0);
 
 	for (const Tuple& sample : lightSamples) {
