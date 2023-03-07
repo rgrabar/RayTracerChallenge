@@ -50,7 +50,10 @@ int main() {
 	//drawDragon();
 	//drawCSKnife();
 	//CSGScene();
-	testScene();
+	//areaLightScene();
+	//spotLightScene();
+	aliasingScene();
+	//testScene();
 	//drawAxes();
 	
 	auto stop = high_resolution_clock::now();
