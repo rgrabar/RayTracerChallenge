@@ -13,9 +13,12 @@ Color World::shadeHit(const Precomputations& comps, int& remaining, int& remaini
 		auto intensityAt = light->intensityAt(comps.overPoint, *this);
 		surface = surface + light->lighting(comps.shape->material, comps.shape, comps.overPoint, comps.eyev, comps.normalv, intensityAt);
 	}
+
+	//TODO: should i divide? don't think so 
+	//surface = surface / (double)lights.size();
+	
 	auto reflected = reflectedColor(comps, remaining);
 	auto refracted = refractedColor(comps, remainingRefraction);
-	//std::cout << refracted.r << " " << refracted.g << " " << refracted.b << "\n";
 
 	auto material = comps.shape->material;
 
@@ -85,6 +88,13 @@ bool World::isShadowed(const Tuple& point, const Tuple& lightPosition)const {
 	for (auto tmp : i.intersections)
 		delete tmp;
 	
+	if (h != nullptr) {
+		auto s = (Shape*)h->s;
+
+		// TODO can i do this somewhere else?
+		if (s->optOutShadow)
+			return 0;
+	}
 	return inShadow;
 }
 

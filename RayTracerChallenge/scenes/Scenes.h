@@ -859,6 +859,7 @@ void spotLightScene() {
 	auto sphere = Sphere();
 	sphere.transform = translate(0, 2, 0);
 	sphere.material.color = Color(0.1, 0.4, 0.9);
+	//sphere.optOutShadow = true;
 
 	auto world = World();
 

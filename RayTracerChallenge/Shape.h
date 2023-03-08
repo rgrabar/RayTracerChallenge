@@ -22,6 +22,7 @@ public:
 	//TODO: make it a bit more clear that group overrides all other materials
 	inline virtual void setMaterial(const Material& s) = 0;
 
+	bool optOutShadow = 0;
 	Shape* parent = nullptr;
 
 	Matrix transform = identityMatrix(4);
