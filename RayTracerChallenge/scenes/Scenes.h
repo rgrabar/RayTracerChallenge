@@ -945,9 +945,9 @@ void aliasingScene() {
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = 16;
-	//cam.aliasEdges = 1;
-	//cam.edgeAliasHighlights = 1;
-	//cam.aliasingThreshold = 0.01;
+	cam.aliasEdges = 1;
+	cam.edgeAliasHighlights = 1;
+	cam.aliasingThreshold = 0.01;
 	auto ans = cam.render(world);
 
 	ans.canvasToImage();

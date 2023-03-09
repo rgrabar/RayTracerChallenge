@@ -86,9 +86,7 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				if (std::abs(bottomRight.r - center.r) > aliasingThreshold || std::abs(bottomRight.g - center.g) > aliasingThreshold || std::abs(bottomRight.b - center.b) > aliasingThreshold) {
 					doStuff = 1;
 				}
-			}
 
-			if (aliasEdges && aliasingSamples > 4) {
 				if (doStuff) {
 					for (int k = 0; k < aliasingSamples; ++k) {
 
@@ -98,10 +96,21 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 						auto ray = rayForPixel(v, u);
 						pixelColor = pixelColor + world->colorAt(ray);
 					}
+					if (edgeAliasHighlights) {
+						image->writePixel(x, y, Color(1, 1, 1));
+					}
+					else
+						image->writePixel(x, y, pixelColor / aliasingSamples);
+				}
+				else if (edgeAliasHighlights) {
+					auto ray = rayForPixel(v, u);
+					pixelColor = pixelColor + world->colorAt(ray);
+					image->writePixel(x, y, pixelColor / 2);
 				}
 				else {
 					auto ray = rayForPixel(v, u);
 					pixelColor = pixelColor + world->colorAt(ray);
+					image->writePixel(x, y, pixelColor);
 				}
 			}
 			else if (aliasingSamples != 0) {
@@ -113,10 +122,12 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 					auto ray = rayForPixel(v, u);
 					pixelColor = pixelColor + world->colorAt(ray);
 				}
+				image->writePixel(x, y, pixelColor / aliasingSamples);
 			}
 			else {
 				auto ray = rayForPixel(v, u);
 				pixelColor = pixelColor + world->colorAt(ray);
+				image->writePixel(x, y, pixelColor);
 			}
 
 			pixelCount++;
@@ -137,30 +148,6 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				}
 				std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
 				std::cout.flush();
-			}
-			if (aliasEdges) {
-				if (doStuff) {
-					if (edgeAliasHighlights) {
-						image->writePixel(x, y, Color(1, 1, 1));
-					}
-					else
-						image->writePixel(x, y, pixelColor / aliasingSamples);
-				}
-				else if(edgeAliasHighlights) {
-					image->writePixel(x, y, pixelColor / 8);
-				}
-				else {
-					image->writePixel(x, y, pixelColor);
-				}
-			}
-			else if (aliasingSamples != 0) {
-				if (aliasingSamples != 0) {
-					image->writePixel(x, y, pixelColor / aliasingSamples);
-				}
-			}
-			else {
-				image->writePixel(x, y, pixelColor);
-			//	std::cout << "pixlel  " << pixelColor.r << "\n";
 			}
 		}
 	}
