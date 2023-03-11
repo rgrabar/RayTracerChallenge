@@ -16,14 +16,13 @@ public:
 		right->parent = this;
 	}
 
-
-	//TODO: replace tmp functions
-
 	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
+		// CSG returns normal of primitive shape, this shouldn't happen
+		assert(false);
 		return Tuple::vector(0, 0, 0);
 	}
 
-	// TODO: divide CSG
+	// TODO: cache bounds?
 	inline void divide(int threashold = 1) {
 		right->divide();
 		left->divide();

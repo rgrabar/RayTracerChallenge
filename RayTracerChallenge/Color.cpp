@@ -1,7 +1,7 @@
 #include "Color.h"
 #include "Helper.h"
 
-Color::Color(double x, double y, double z) : r(x), g(y), b(z) {};
+Color::Color(double _r, double _g, double _b) : r(_r), g(_g), b(_b) {};
 
 Color operator+(const Color& firstColor, const Color& secondColor) {
 	return Color(firstColor.r + secondColor.r, firstColor.g + secondColor.g, firstColor.b + secondColor.b);

@@ -104,16 +104,16 @@ public:
 
 	inline bool intersect(const Ray& ray) {
 
-		MinMaxPoint tmp;
+		MinMaxPoint tmpMinMax;
 
-		checkAxis(tmp, ray.origin.x, ray.direction.x, boxMin.x, boxMax.x);
-		auto [xTmin, xTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.x, ray.direction.x, boxMin.x, boxMax.x);
+		auto [xTmin, xTmax] = tmpMinMax;
 
-		checkAxis(tmp, ray.origin.y, ray.direction.y, boxMin.y, boxMax.y);
-		auto [yTmin, yTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.y, ray.direction.y, boxMin.y, boxMax.y);
+		auto [yTmin, yTmax] = tmpMinMax;
 
-		checkAxis(tmp, ray.origin.z, ray.direction.z, boxMin.z, boxMax.z);
-		auto [zTmin, zTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.z, ray.direction.z, boxMin.z, boxMax.z);
+		auto [zTmin, zTmax] = tmpMinMax;
 
 		auto tmin = std::fmax(xTmin, std::fmax(yTmin, zTmin));
 		auto tmax = std::fmin(xTmax, std::fmin(yTmax, zTmax));
@@ -156,9 +156,7 @@ public:
 		auto midMin = Tuple::point(x0, y0, z0);
 		auto midMax = Tuple::point(x1, y1, z1);
 
-
 		*left = BoundingBox(boxMin, midMax);
 		*right = BoundingBox(midMin, boxMax);
-
 	}
 };

@@ -12,7 +12,4 @@ public:
 
 	Tuple position(double t)const;
 	Ray transform(const Matrix& m)const;
-
-
-
 };

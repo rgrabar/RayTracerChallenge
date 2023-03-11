@@ -39,7 +39,7 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 
 			auto pixelColor = Color(0, 0, 0);
 			double u = y, v = x;
-			int doStuff = 0;
+			bool isEdge = 0;
 
 			if (aliasingSamples > 4 && aliasEdges) {
 
@@ -72,22 +72,22 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				Color center = world->colorAt(rayCenter);
 
 				if (std::abs(topLeft.r - center.r) > aliasingThreshold || std::abs(topLeft.g - center.g) > aliasingThreshold || std::abs(topLeft.b - center.b) > aliasingThreshold) {
-					doStuff = 1;
+					isEdge = 1;
 				}
 
 				if (std::abs(topRight.r - center.r) > aliasingThreshold || std::abs(topRight.g - center.g) > aliasingThreshold || std::abs(topRight.b - center.b) > aliasingThreshold) {
-					doStuff = 1;
+					isEdge = 1;
 				}
 
 				if (std::abs(bottomLeft.r - center.r) > aliasingThreshold || std::abs(bottomLeft.g - center.g) > aliasingThreshold || std::abs(bottomLeft.b - center.b) > aliasingThreshold) {
-					doStuff = 1;
+					isEdge = 1;
 				}
 
 				if (std::abs(bottomRight.r - center.r) > aliasingThreshold || std::abs(bottomRight.g - center.g) > aliasingThreshold || std::abs(bottomRight.b - center.b) > aliasingThreshold) {
-					doStuff = 1;
+					isEdge = 1;
 				}
 
-				if (doStuff) {
+				if (isEdge) {
 					for (int k = 0; k < aliasingSamples; ++k) {
 
 						u = (y + random_double());
@@ -163,16 +163,12 @@ Canvas Camera::render(World& world) {
 	int countdown = increment5;   // decrement countdown instead of modulo
 	int percent5 = 0;  // number of elements in the progress bar (1 means 5%)
 
-
-
 	const unsigned n = std::thread::hardware_concurrency();
 
 	std::cout << "USING : " << n << " THREADS\n";
 
 	unsigned batch_size = vSize / n;
 	unsigned batch_remainder = (vSize) % n;
-
-
 
 	std::vector<std::thread> threads;
 	for (int i = 0; i < n; ++i) {
@@ -188,9 +184,5 @@ Canvas Camera::render(World& world) {
 	}
 
 	std::cout << "\nCOMPLETED\n";
-
-	std::cout << "\n";
-
-	//image.canvasToImage();
 	return image;
 }

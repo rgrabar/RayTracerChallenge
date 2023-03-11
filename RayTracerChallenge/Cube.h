@@ -17,16 +17,16 @@ public:
 
 	inline Intersections intersect(const Ray& ray) {
 
-		MinMaxPoint tmp;
+		MinMaxPoint tmpMinMax;
 		
-		checkAxis(tmp, ray.origin.x, ray.direction.x);
-		auto [xTmin, xTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.x, ray.direction.x);
+		auto [xTmin, xTmax] = tmpMinMax;
 
-		checkAxis(tmp, ray.origin.y, ray.direction.y);
-		auto [yTmin, yTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.y, ray.direction.y);
+		auto [yTmin, yTmax] = tmpMinMax;
 
-		checkAxis(tmp, ray.origin.z, ray.direction.z);
-		auto [zTmin, zTmax] = tmp;
+		checkAxis(tmpMinMax, ray.origin.z, ray.direction.z);
+		auto [zTmin, zTmax] = tmpMinMax;
 
 		auto tmin = std::fmax( xTmin, std::fmax(yTmin, zTmin));
 		auto tmax = std::fmin(xTmax, std::fmin(yTmax, zTmax ));

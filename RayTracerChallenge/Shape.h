@@ -69,7 +69,6 @@ public:
 		return intersect(ray.transform(*transform.inverse()));
 	};
 
-
 	inline Tuple normal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
 		/*
 		auto objectPoint = *(s.transform.inverse()) * worldPoint;

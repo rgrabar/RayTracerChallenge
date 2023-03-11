@@ -93,7 +93,6 @@ public:
 	}
 
 	inline void makeSubgroup(Group& sub) {
-		// TODO leak?
 		auto g = new Group();
 		for (auto s : sub.children) {
 			g->addChild(s);

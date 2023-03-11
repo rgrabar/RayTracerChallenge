@@ -5,6 +5,5 @@ Tuple Ray::position(double t)const{
 }
 
 Ray Ray::transform(const Matrix& m)const {
-
 	return Ray(m * origin, m * direction);
 }

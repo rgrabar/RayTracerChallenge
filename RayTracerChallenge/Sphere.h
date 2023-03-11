@@ -16,7 +16,6 @@ public:
 
 	inline Intersections intersect(const Ray& ray) {
 
-		
 		auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
 		auto a = ray.direction.dotProduct(ray.direction);
 		auto b = 2 * ray.direction.dotProduct(shapeToRay);
