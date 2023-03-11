@@ -14,7 +14,8 @@ public:
 	~Group() {
 		for (auto child : children) {
 			if (dynamic_cast<Group*>(child)) {
-				delete child;
+				// cast only to avoid warning
+				delete (Group*)child;
 			}
 		}
 	}
@@ -29,7 +30,7 @@ public:
 		boundsOf(true);
 	}
 
-	inline Intersections intersect(const Ray& ray) {
+	inline Intersections intersect(const Ray& ray)override {
 
 		if (!m_bounds.intersect(ray)) {
 			return {};
@@ -46,11 +47,11 @@ public:
 		return i;
 	}
 
-	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr) {
+	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr)override {
 		return Tuple::vector(0, 0, 0);
 	}
 
-	BoundingBox boundsOf(bool update = false) {
+	BoundingBox boundsOf(bool update = false)override {
 		// TODO: cache the box, don't update if not needed
 		if (update) {
 			auto box = BoundingBox();
@@ -88,7 +89,7 @@ public:
 		children = newChildren;
 	}
 
-	inline bool includes(const Shape* s) {
+	inline bool includes(const Shape* s)override {
 		return std::find(children.begin(), children.end(), s) != children.end();
 	}
 
@@ -121,7 +122,7 @@ public:
 
 	}
 
-	inline void setMaterial(const Material& s) {
+	inline void setMaterial(const Material& s)override {
 		for (auto child : children) {
 			child->setMaterial(s);
 		}
