@@ -91,7 +91,7 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 						v = (x + random_double());
 
 						auto ray = rayForPixel(v, u);
-						pixelColor = pixelColor + world->colorAt(ray);
+						pixelColor += world->colorAt(ray);
 					}
 					if (edgeAliasHighlights) {
 						image->writePixel(x, y, Color(1, 1, 1));
@@ -101,12 +101,12 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 				}
 				else if (edgeAliasHighlights) {
 					auto ray = rayForPixel(v, u);
-					pixelColor = pixelColor + world->colorAt(ray);
+					pixelColor += world->colorAt(ray);
 					image->writePixel(x, y, pixelColor / 2);
 				}
 				else {
 					auto ray = rayForPixel(v, u);
-					pixelColor = pixelColor + world->colorAt(ray);
+					pixelColor += world->colorAt(ray);
 					image->writePixel(x, y, pixelColor);
 				}
 			}
@@ -117,13 +117,13 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 					v = (x + random_double());
 
 					auto ray = rayForPixel(v, u);
-					pixelColor = pixelColor + world->colorAt(ray);
+					pixelColor += world->colorAt(ray);
 				}
 				image->writePixel(x, y, pixelColor / aliasingSamples);
 			}
 			else {
 				auto ray = rayForPixel(v, u);
-				pixelColor = pixelColor + world->colorAt(ray);
+				pixelColor += world->colorAt(ray);
 				image->writePixel(x, y, pixelColor);
 			}
 

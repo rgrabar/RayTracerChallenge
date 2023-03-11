@@ -42,8 +42,7 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 			}
 		}
 
-		sum = sum + diffuseColor;
-		sum = sum + specularColor;
+		sum += diffuseColor + specularColor;
 	}
 	//auto test = ambientColor + diffuseColor + specularColor;
 
