@@ -17,12 +17,11 @@
 #include "CheckerPattern.h"
 #include "BlendedPattern.h"
 #include "RadialGradientPattern.h"
-#include "NestedPattern.h"
 #include "Cube.h"
 #include "Cylinder.h"
 #include "Cone.h"
 #include "Groups.h"
-#include "scenes/scenes.h"
+#include "scenes/Scenes.h"
 #include "BoundingBox.h"
 #include "OBJParser.h"
 
@@ -41,7 +40,7 @@ int main() {
 	//drawShadowPatternsReflection();
 	//drawBadSmiley();
 	//drawRefractiveSphere();
-	//drawAllShapes();
+	drawAllShapes();
 	//drawHexagon();
 	//sphereCube();
 	//sphereCubeDivide();
@@ -52,7 +51,7 @@ int main() {
 	//CSGScene();
 	//areaLightScene();
 	//spotLightScene();
-	aliasingScene();
+	//aliasingScene();
 	//testScene();
 	//drawAxes();
 	

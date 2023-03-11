@@ -1,8 +1,5 @@
 #include "Camera.h"
-#include <ppl.h>
 #include <thread>
-
-using namespace concurrency;
 
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);

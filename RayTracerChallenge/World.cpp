@@ -33,9 +33,9 @@ Color World::shadeHit(const Precomputations& comps, int& remaining, int& remaini
 }
 //TODO: not sure if this should return intersect objects
 
-std::multiset <Intersection*, decltype(cmp)> World::worldIntersection(const Ray& ray)const{
+std::multiset <Intersection*, cmp> World::worldIntersection(const Ray& ray)const {
 
-	std::multiset<Intersection*, decltype(cmp)> intersections(cmp);
+	std::multiset<Intersection*, cmp> intersections;
 
 	for (auto object : objects) {
 

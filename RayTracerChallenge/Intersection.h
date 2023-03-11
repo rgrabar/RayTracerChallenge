@@ -22,18 +22,19 @@ public:
 
 };
 
-const auto cmp = [](const Intersection* lhs, const Intersection* rhs) {
-	return lhs->t <= rhs->t;
+struct cmp {
+    bool operator()(const Intersection* lhs, const Intersection* rhs) const {
+        return lhs->t <= rhs->t;
+    }
 };
 
 class Intersections {
 public:
-	Intersections() {};
-	Intersections(const std::multiset<Intersection*, decltype(cmp)>& i) : intersections(i) {
+    Intersections() {};
+    Intersections(const std::multiset<Intersection*, cmp>& i) : intersections(i) {
 
-	}
+    }
 
-	Intersection* hit()const;
-	std::multiset<Intersection*, decltype(cmp)> intersections;
+    Intersection* hit()const;
+    std::multiset<Intersection*, cmp> intersections;
 };
-

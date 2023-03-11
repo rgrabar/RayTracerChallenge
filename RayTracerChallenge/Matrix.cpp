@@ -2,9 +2,6 @@
 #include "Helper.h"
 #include <iostream>
 #include <vector>
-#include <ppl.h>
-
-using namespace concurrency;
 
 // arena code
 //Arena Matrix::a {0};

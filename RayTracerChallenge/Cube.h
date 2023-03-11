@@ -4,6 +4,7 @@
 #include <algorithm>    // std::swap
 #include <iostream>
 #include <cmath>
+#include <climits>
 
 class Cube : public Shape {
 

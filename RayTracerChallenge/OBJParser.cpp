@@ -6,6 +6,10 @@
 #include <sstream>
 #include <string>
 
+#ifdef __linux__
+#define sscanf_s sscanf
+#endif
+
 OBJParser::OBJParser(std::string path) {
 
 	std::ifstream myfile(path);

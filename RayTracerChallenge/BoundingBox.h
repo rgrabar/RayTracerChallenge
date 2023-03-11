@@ -2,6 +2,7 @@
 
 #include <limits>
 #include "Tuple.h"
+#include <climits>
 
 class BoundingBox {
 	// TODO: revise the bounding box code after adding triangles and CSG

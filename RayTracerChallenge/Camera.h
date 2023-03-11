@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "Matrix.h"
 #include "Ray.h"
+#include <atomic>
 
 class Camera {
 public:
