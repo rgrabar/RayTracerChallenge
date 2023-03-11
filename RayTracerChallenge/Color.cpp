@@ -3,28 +3,40 @@
 
 Color::Color(double _r, double _g, double _b) : r(_r), g(_g), b(_b) {};
 
-Color operator+(const Color& firstColor, const Color& secondColor) {
-	return Color(firstColor.r + secondColor.r, firstColor.g + secondColor.g, firstColor.b + secondColor.b);
+Color Color::operator*(const double scalar)const {
+	return Color(r * scalar, g * scalar, b * scalar);
 }
 
-Color operator-(const Color& firstColor, const Color& secondColor) {
-	return Color(firstColor.r - secondColor.r, firstColor.g - secondColor.g, firstColor.b - secondColor.b);
+Color Color::operator*(const Color& secondColor)const {
+	return Color(r * secondColor.r, g * secondColor.g, b * secondColor.b);
 }
 
-Color operator*(const Color& c, const double scalar) {
-	return Color(c.r * scalar, c.g * scalar, c.b * scalar);
+Color& Color::operator*=(const double scalar) {
+	r *= scalar; g *= scalar; b *= scalar; return *this;
 }
 
-Color operator/(const Color& c, const double scalar) {
-	return Color(c.r / scalar, c.g / scalar, c.b / scalar);
+Color& Color::operator*=(const Color& secondColor) {
+	r *= secondColor.r; g *= secondColor.g; b *= secondColor.b; return *this;
 }
 
-Color operator*(const Color& firstColor, const Color& secondColor) {
-	return Color(firstColor.r * secondColor.r, firstColor.g * secondColor.g, firstColor.b * secondColor.b);
+Color Color::operator/(const double scalar)const {
+	return operator*(1 / scalar);
 }
 
-bool operator==(const Color& firstColor, const Color& secondColor) {
-	return epsilonEqual(firstColor.r, secondColor.r) && 
-		   epsilonEqual(firstColor.g, secondColor.g) && 
-		   epsilonEqual(firstColor.b, secondColor.b);
+Color Color::operator+(const Color& secondColor)const {
+	return Color(r + secondColor.r, g + secondColor.g, b + secondColor.b);
+}
+
+Color Color::operator+=(const Color& secondColor) {
+	r += secondColor.r; g += secondColor.g; b += secondColor.b; return *this;
+}
+
+Color Color::operator-(const Color& secondColor)const {
+	return Color(r - secondColor.r, g - secondColor.g, b - secondColor.b);
+}
+
+bool Color::operator==(const Color& secondColor)const {
+	return epsilonEqual(r, secondColor.r) && 
+		   epsilonEqual(g, secondColor.g) && 
+		   epsilonEqual(b, secondColor.b);
 }
