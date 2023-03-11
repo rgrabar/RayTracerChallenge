@@ -15,7 +15,6 @@ public:
 	double* matrix;
 	// arena code
 	//static struct Arena a;
-	Matrix(const Matrix& matrix);
 	Matrix& operator=(const Matrix& matrix);
 	
 	void setElement(int y, int x, double value);

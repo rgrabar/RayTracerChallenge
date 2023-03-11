@@ -43,14 +43,6 @@ Matrix::~Matrix() {
     free(cachedMatrix);
 }
 
-Matrix::Matrix(const Matrix& matrix) {
-    this->w = matrix.w;
-    this->h = matrix.h;
-
-    this->matrix = (double*)malloc(w * h * sizeof(double));
-    memcpy(this->matrix, matrix.matrix, w * h * sizeof(double));
-}
-
 void Matrix::setElement(int y, int x, double value) {
     matrix[y * w + x] = value;
 }
