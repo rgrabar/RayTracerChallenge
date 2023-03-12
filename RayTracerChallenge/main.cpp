@@ -6,7 +6,6 @@
 #include "Transformations.h"
 #include "Sphere.h"
 #include "Intersection.h"
-#include "Arena.h"
 #include "World.h"
 #include "Camera.h"
 #include "Plane.h"

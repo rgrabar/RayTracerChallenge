@@ -3,7 +3,6 @@
 #include "Tuple.h"
 #include <stdlib.h>     /* malloc, calloc, realloc, free */
 #include <memory>
-#include "Arena.h"
 
 class Matrix {
 
@@ -13,8 +12,6 @@ public:
 	~Matrix();
 	int h, w;
 	double* matrix;
-	// arena code
-	//static struct Arena a;
 	Matrix& operator=(const Matrix& matrix);
 	
 	void setElement(int y, int x, double value);

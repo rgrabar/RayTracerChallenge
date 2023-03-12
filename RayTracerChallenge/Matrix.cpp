@@ -3,22 +3,7 @@
 #include <iostream>
 #include <vector>
 
-// arena code
-//Arena Matrix::a {0};
-
 Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
-    /*
-    // arena code
-    if (a.buf == nullptr) {
-        //std::cout << "NULLPRT\n";
-        //1002640576
-        void* backing_buffer = malloc(100024 * 100024);
-        arena_init(&a, backing_buffer, 100024 * 100024);
-    }
-   
-    matrix = (double*)arena_alloc(&a, w * h * sizeof(double));
-    */
-
     matrix = (double*)calloc(h * w, sizeof(double));
     if (matrix) {
         //std::cout << "allocated\n";
@@ -35,7 +20,6 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
 };
 
 Matrix::~Matrix() {
-    // remove for arena
     free(matrix);
     free(cachedMatrix);
 }
