@@ -32,6 +32,8 @@ public:
 	Shape() :origin(Tuple::point(0, 0, 0)) {}
 	Shape(Tuple _origin) : origin(_origin) {}
 
+	virtual ~Shape() = default;
+
 	// TODO: shoud stripeatobject be part of material?
 	inline Color stripeAtObject(const Tuple& worldPoint) {
 		auto objectPoint = *transform.inverse() * worldPoint;
