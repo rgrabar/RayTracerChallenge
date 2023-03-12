@@ -27,7 +27,7 @@ Color Color::operator+(const Color& secondColor)const {
 	return Color(r + secondColor.r, g + secondColor.g, b + secondColor.b);
 }
 
-Color Color::operator+=(const Color& secondColor) {
+Color& Color::operator+=(const Color& secondColor) {
 	r += secondColor.r; g += secondColor.g; b += secondColor.b; return *this;
 }
 
@@ -39,4 +39,8 @@ bool Color::operator==(const Color& secondColor)const {
 	return epsilonEqual(r, secondColor.r) && 
 		   epsilonEqual(g, secondColor.g) && 
 		   epsilonEqual(b, secondColor.b);
+}
+
+bool Color::operator!=(const Color& secondColor)const {
+	return !operator ==(secondColor);
 }

@@ -1,5 +1,6 @@
 #include "Tuple.h"
 #include "Helper.h"
+#include <iostream>
 
 Tuple::Tuple(double _x, double _y, double _z, double _w) : x(_x), y(_y), z(_z), w(_w) {
 };
@@ -33,29 +34,45 @@ Tuple Tuple::reflect(const Tuple& normal) {
 	return *this - normal * 2 * dotProduct(normal);
 }
 
-bool operator==(const Tuple& lhs, const Tuple& rhs) {
-	return epsilonEqual(lhs.x, rhs.x) &&
-		   epsilonEqual(lhs.y, rhs.y) &&
-		   epsilonEqual(lhs.z, rhs.z) &&
-		   epsilonEqual(lhs.w, rhs.w);
+
+
+
+
+Tuple Tuple::operator*(double scalar)const {
+	return Tuple(x * scalar, y * scalar, z * scalar, w * scalar);
 }
 
-Tuple operator+(const Tuple& lhs, const Tuple& rhs) {
-	return Tuple(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
+Tuple& Tuple::operator*=(const double scalar) {
+	x *= scalar; y *= scalar; z *= scalar; w *= scalar; return *this;
 }
 
-Tuple operator-(const Tuple& lhs, const Tuple& rhs) {
-	return Tuple(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
+Tuple Tuple::operator/(double scalar)const {
+	return operator*(1 / scalar);
 }
 
-Tuple operator-(const Tuple& negate) {
-	return Tuple(-negate.x, -negate.y, -negate.z, -negate.w);
+Tuple& Tuple::operator+=(const Tuple& rhs) {
+	x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w; return *this;
 }
 
-Tuple operator*(const Tuple& tuple, double scalar) {
-	return Tuple(tuple.x * scalar, tuple.y * scalar, tuple.z * scalar, tuple.w * scalar);
+Tuple operator+(Tuple lhs, const Tuple& rhs) {
+	return lhs += rhs;
 }
 
-Tuple operator/(const Tuple& tuple, double scalar) {
-	return Tuple(tuple.x / scalar, tuple.y / scalar, tuple.z / scalar, tuple.w / scalar);
+Tuple Tuple::operator-(const Tuple& rhs)const {
+	return Tuple(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+}
+
+Tuple Tuple::operator-()const {
+	return Tuple(-x, -y, -z, -w);
+}
+
+bool Tuple::operator==(const Tuple& rhs)const {
+	return epsilonEqual(x, rhs.x) &&
+		   epsilonEqual(y, rhs.y) &&
+		   epsilonEqual(z, rhs.z) &&
+		   epsilonEqual(w, rhs.w);
+}
+
+bool Tuple::operator!=(const Tuple& rhs)const {
+	return !operator==(rhs);
 }

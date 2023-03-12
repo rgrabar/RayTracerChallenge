@@ -21,11 +21,17 @@ struct Tuple {
 	Tuple crossProduct(const Tuple& v)const;
 	Tuple reflect(const Tuple& normal);
 	double x, y, z, w;
+	
+	Tuple operator*(double scalar)const;
+	Tuple& operator*=(const double scalar);
+	Tuple operator/(double scalar)const;
+
+	Tuple& operator+=(const Tuple& rhs);
+	Tuple operator-(const Tuple& rhs)const;
+	Tuple operator-()const;
+	bool operator==(const Tuple& rhs)const;
+	bool operator!=(const Tuple& rhs)const;
 };
 
-bool operator==(const Tuple& lhs, const Tuple& rhs);
-Tuple operator+(const Tuple& lhs, const Tuple& rhs);
-Tuple operator-(const Tuple& lhs, const Tuple& rhs);
-Tuple operator-(const Tuple& negate);
-Tuple operator*(const Tuple& negate, double scalar);
-Tuple operator/(const Tuple& negate, double scalar);
+// TODO: why does this not work when it's a member variable
+Tuple operator+(Tuple lhs, const Tuple& rhs);

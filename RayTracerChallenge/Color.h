@@ -13,9 +13,10 @@ public:
 	Color operator/(double scalar)const;
 
 	Color operator+(const Color& secondColor)const;
-	Color operator+=(const Color& secondColor);
+	Color& operator+=(const Color& secondColor);
 	
 	Color operator-(const Color& secondColor)const;
 	
 	bool operator==(const Color& secondColor)const;
+	bool operator!=(const Color& secondColor)const;
 };
