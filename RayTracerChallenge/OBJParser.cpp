@@ -15,8 +15,8 @@ OBJParser::OBJParser(std::string path) {
 	std::ifstream myfile(path);
 
 	std::string line;
-	double n1, n2, n3, n4;
-	int f1, f2, f3, f4;
+	double n1, n2, n3;
+	int f1, f2, f3;
 
 	while (std::getline(myfile, line)) {
 

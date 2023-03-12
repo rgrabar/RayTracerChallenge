@@ -4,7 +4,7 @@
 class Canvas {
 public:
 	Canvas(int _w, int _h);
-	int h, w;
+	int w, h;
 	Color* canvas;
 	void writePixel(int x, int y, const Color& c)const;
 	void canvasToImage()const;

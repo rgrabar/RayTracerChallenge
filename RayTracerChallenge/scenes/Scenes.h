@@ -36,7 +36,6 @@ void drawProjectile() {
 	Tuple gravity = Tuple::vector(0.0, -0.1, 0.0);
 	Tuple wind = Tuple::vector(-0.01, 0.0, 0.0);
 
-	int i = 0;
 	while(start.y >= 0.0){
 		//std::cout << "x: " << (int)start.x << " " << " y: " << c.h - (int)start.y << std::endl;
 		c.writePixel((int)start.x, c.h - (int)start.y, Color(1, 0.8, 0.6));
@@ -517,8 +516,6 @@ void sphereCube() {
 
 	plane.material.color = Color(1, 1, 0);
 	auto world = World();
-
-	double move = 0;
 
 	auto grp = Group();
 	auto grp1 = Group();

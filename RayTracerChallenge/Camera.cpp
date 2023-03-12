@@ -155,11 +155,6 @@ Canvas Camera::render(World& world) {
 
 	next = hSize * vSize * 0.05;
 
-	float totalSize = (float)(vSize * hSize);
-	int increment5 = 0.05 * totalSize; // how many iterations does 5% represent ? 
-	int countdown = increment5;   // decrement countdown instead of modulo
-	int percent5 = 0;  // number of elements in the progress bar (1 means 5%)
-
 	const unsigned n = std::thread::hardware_concurrency();
 
 	std::cout << "USING : " << n << " THREADS\n";

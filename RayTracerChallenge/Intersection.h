@@ -8,9 +8,9 @@ public:
 
 	// di ga je hit
 	double t;
+	const void* s;
 	double u;
 	double v;
-	const void* s;
 
 	Intersection(double _t, const void* _s);
 
