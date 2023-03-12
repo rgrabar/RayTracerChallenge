@@ -85,16 +85,17 @@ bool World::isShadowed(const Tuple& point, const Tuple& lightPosition)const {
 	if (h != nullptr && h->t < distance)
 		inShadow = true;
 	
-	for (auto tmp : i.intersections)
-		delete tmp;
-	
 	if (h != nullptr) {
 		auto s = (Shape*)h->s;
 
 		// TODO can i do this somewhere else?
 		if (s->optOutShadow)
-			return 0;
+			inShadow = false;
 	}
+
+	for (auto tmp : i.intersections)
+		delete tmp;
+
 	return inShadow;
 }
 
