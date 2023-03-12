@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Matrix.h"
-#include "Material.h"
-#include "Tuple.h"
-#include "Intersection.h"
-#include "Ray.h"
-#include <iostream>
 #include "BoundingBox.h"
+#include "Intersection.h"
+#include "Material.h"
+#include "Matrix.h"
+#include "Ray.h"
+#include "Tuple.h"
+#include <iostream>
 
 class Shape {
 public:

@@ -1,6 +1,4 @@
 #include "Pattern.h"
-#include <iostream>
-#include <math.h>
 
 Pattern::Pattern() : a(Color(1, 1, 1)), b(Color(0, 0, 0)) {}
 

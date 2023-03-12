@@ -1,7 +1,7 @@
 #pragma once
+#include "Helper.h"
 #include "Shape.h"
 #include <math.h>
-#include "Helper.h"
 
 class Plane : public Shape{
 public:

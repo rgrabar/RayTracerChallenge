@@ -1,8 +1,6 @@
 #pragma once
 #include "Color.h"
-#include "Tuple.h"
 #include "Pattern.h"
-//#include "Shape.h"
 
 struct Material {
 

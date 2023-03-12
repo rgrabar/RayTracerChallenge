@@ -1,31 +1,7 @@
-#include <iostream>
-#include "Tuple.h"
-#include "Canvas.h"
-#include "Tuple.h"
-#include "Matrix.h"
-#include "Transformations.h"
-#include "Sphere.h"
-#include "Intersection.h"
-#include "World.h"
-#include "Camera.h"
-#include "Plane.h"
-#include <cstdio>
-#include "StripePattern.h"
-#include "GradientPattern.h"
-#include "RingPattern.h"
-#include "CheckerPattern.h"
-#include "BlendedPattern.h"
-#include "RadialGradientPattern.h"
-#include "Cube.h"
-#include "Cylinder.h"
-#include "Cone.h"
-#include "Groups.h"
-#include "scenes/Scenes.h"
-#include "BoundingBox.h"
-#include "OBJParser.h"
-
-
 #include <chrono>
+#include <iostream>
+#include "scenes/Scenes.h"
+
 using namespace std::chrono;
 
 

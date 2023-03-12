@@ -1,5 +1,4 @@
 #include "RadialGradientPattern.h"
-#include <iostream>
 
 Color RadialGradientPattern::patternColorAt(const Tuple& point)const {
 	if (!type) {

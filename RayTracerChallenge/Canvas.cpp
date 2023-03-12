@@ -1,7 +1,7 @@
 #include "Canvas.h"
-#include <stdlib.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <stdlib.h>
 #include <string> 
 
 Canvas::Canvas(int _w, int _h): w(_w), h(_h) {

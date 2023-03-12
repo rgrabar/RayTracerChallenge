@@ -3,6 +3,7 @@
 #include "Color.h"
 #include "Tuple.h"
 #include "Shape.h"
+#include <vector>
 
 // TODO: this is here because of intensityAt can i move it somewhere?
 class World;

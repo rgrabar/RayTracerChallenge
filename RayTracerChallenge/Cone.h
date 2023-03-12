@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Shape.h"
-#include "Tuple.h"
-#include "Ray.h"
-#include "Matrix.h"
-#include "Material.h"
 #include <iostream>
 #include "Helper.h"
+#include "Matrix.h"
+#include "Shape.h"
+#include "Tuple.h"
 
 class Cone : public Shape {
 

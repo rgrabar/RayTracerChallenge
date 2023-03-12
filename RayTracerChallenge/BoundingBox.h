@@ -1,8 +1,12 @@
 #pragma once
 
-#include <limits>
+#include "Helper.h"
+#include "Ray.h"
 #include "Tuple.h"
+
+#include <algorithm>
 #include <climits>
+#include <limits>
 
 class BoundingBox {
 	// TODO: revise the bounding box code after adding triangles and CSG

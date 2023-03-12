@@ -1,6 +1,5 @@
 #include "Tuple.h"
 #include "Helper.h"
-#include <iostream>
 
 Tuple::Tuple(double _x, double _y, double _z, double _w) : x(_x), y(_y), z(_z), w(_w) {
 };

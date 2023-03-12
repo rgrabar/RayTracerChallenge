@@ -1,12 +1,12 @@
 #pragma once
+#include "Color.h"
+#include "Intersection.h"
 #include "Light.h"
-#include <vector>
+#include "PreComputations.h"
 #include "Sphere.h"
 #include "Tuple.h"
-#include "Color.h"
 #include <set>
-#include "Intersection.h"
-#include "PreComputations.h"
+#include <vector>
 
 class World {
 public:

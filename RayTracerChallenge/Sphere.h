@@ -1,11 +1,6 @@
 #pragma once
 
 #include "Shape.h"
-#include "Tuple.h"
-#include "Ray.h"
-#include "Matrix.h"
-#include "Material.h"
-#include <iostream>
 
 class Sphere : public Shape {
 

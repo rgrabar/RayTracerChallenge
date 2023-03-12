@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Ray.h"
-#include "Sphere.h"
+#include "Shape.h"
 #include "Intersection.h"
 #include "Tuple.h"
 #include "Helper.h"

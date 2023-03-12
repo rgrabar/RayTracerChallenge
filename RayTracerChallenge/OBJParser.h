@@ -1,11 +1,11 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 #include "Tuple.h"
 #include "Triangle.h"
 #include "Groups.h"
-#include <map>
 
 class OBJParser{
 public:

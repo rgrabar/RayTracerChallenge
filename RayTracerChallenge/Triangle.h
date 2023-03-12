@@ -1,8 +1,7 @@
 #pragma once
-#include "Tuple.h"
+
 #include "Shape.h"
 #include <math.h>
-#include "Helper.h"
 
 class Triangle : public Shape{
 	

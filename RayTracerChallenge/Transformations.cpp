@@ -1,5 +1,4 @@
 #include "Transformations.h"
-#include <iostream>
 
 Matrix translate(double x, double y, double z) {
 	Matrix translation = Matrix(4, 4);

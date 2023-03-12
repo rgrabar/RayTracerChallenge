@@ -1,10 +1,24 @@
 #pragma once
-#include "../Tuple.h"
-#include "../Canvas.h"
-#include "../Shape.h"
+#include "../BlendedPattern.h"
 #include "../CSGShape.h"
-
-#include "OBJParser.h"
+#include "../Camera.h"
+#include "../Canvas.h"
+#include "../CheckerPattern.h"
+#include "../Cone.h"
+#include "../Cube.h"
+#include "../Cylinder.h"
+#include "../GradientPattern.h"
+#include "../Groups.h"
+#include "../OBJParser.h"
+#include "../Plane.h"
+#include "../RadialGradientPattern.h"
+#include "../RingPattern.h"
+#include "../Shape.h"
+#include "../Sphere.h"
+#include "../StripePattern.h"
+#include "../Transformations.h"
+#include "../Tuple.h"
+#include "../World.h"
 
 # define TEST_PI           3.14159265358979323846
 

@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include "Helper.h"
+#include <cstring>
 #include <iostream>
 #include <vector>
 

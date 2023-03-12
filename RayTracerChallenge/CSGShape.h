@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 #include "Shape.h"
-#include "Sphere.h"
-#include "Cube.h"
 
 class CSGShape : public Shape{
 public:

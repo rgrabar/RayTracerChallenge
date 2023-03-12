@@ -1,8 +1,6 @@
 #pragma once
 #include "Shape.h"
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 class Group : public Shape {
 public:
