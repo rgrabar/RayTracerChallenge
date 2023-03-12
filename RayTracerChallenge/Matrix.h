@@ -15,12 +15,12 @@ public:
 	Matrix& operator=(const Matrix& matrix);
 	
 	void setElement(int y, int x, double value);
-	const Matrix transpose()const;
-	const double determinant()const;
+	Matrix transpose()const;
+	double determinant()const;
 	Matrix submatrix(int row, int col)const;
-	const double minor(int row, int col)const;
-	const double cofactor(int row, int col)const;
-	const double invertible()const;
+	double minor(int row, int col)const;
+	double cofactor(int row, int col)const;
+	double invertible()const;
 	Matrix* inverse();
 
 	Matrix* cachedMatrix = nullptr;

@@ -101,7 +101,7 @@ public:
 
 	inline void divide(int threashold = 1)override {
 
-		if (threashold <= children.size()) {
+		if (threashold <= (int)children.size()) {
 			auto left = Group();
 			auto right = Group();
 

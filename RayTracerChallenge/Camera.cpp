@@ -163,7 +163,7 @@ Canvas Camera::render(World& world) {
 	unsigned batch_remainder = (vSize) % n;
 
 	std::vector<std::thread> threads;
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < (int)n; ++i) {
 		int start = i * batch_size;
 		threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_size, &world, &image));
 	}
@@ -171,7 +171,7 @@ Canvas Camera::render(World& world) {
 	int start = n * batch_size;
 	threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_remainder, &world, &image));
 
-	for (auto i = 0; i < n + 1; ++i) {
+	for (auto i = 0; i < (int)(n + 1); ++i) {
 		threads[i].join();
 	}
 

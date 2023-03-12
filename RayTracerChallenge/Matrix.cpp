@@ -29,7 +29,7 @@ void Matrix::setElement(int y, int x, double value) {
     matrix[y * w + x] = value;
 }
 
-const Matrix Matrix::transpose() const {
+Matrix Matrix::transpose() const {
     Matrix transposed(w, h);
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
@@ -39,7 +39,7 @@ const Matrix Matrix::transpose() const {
     return transposed;
 }
 
-const double Matrix::determinant()const {
+double Matrix::determinant()const {
     if(w == 2)
         return matrix[0] * matrix[3] - matrix[1] * matrix[2];
     double det = 0;
@@ -49,18 +49,18 @@ const double Matrix::determinant()const {
     return det;
 }
 
-const double Matrix::minor(int row, int col)const {
+double Matrix::minor(int row, int col)const {
     return submatrix(row, col).determinant();
 }
 
-const double Matrix::cofactor(int row, int col)const {
+double Matrix::cofactor(int row, int col)const {
     if ((row + col) % 2 == 0) {
         return minor(row, col);
     }
     return minor(row, col) * -1;
 }
 
-const double Matrix::invertible()const {
+double Matrix::invertible()const {
     return determinant() != 0;
 }
 

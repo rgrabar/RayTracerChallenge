@@ -154,7 +154,7 @@ OBJParser::OBJParser(std::string path) {
 
 		if (faceIndexExtended.size() > 0) {
 
-			for (int i = 1; i < faceIndexExtended.size() - 1; ++i) {
+			for (int i = 1; i < (int)faceIndexExtended.size() - 1; ++i) {
 				auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
 				if (saveToNewGroup)
 					namedGroup[name]->addChild(tmp);
