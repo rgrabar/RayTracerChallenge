@@ -1,0 +1,1 @@
+g++ RayTracerChallenge/*.cpp -o RayTracerChallenge -O2 -std=gnu++17 -IRayTracerChallenge -pthread
