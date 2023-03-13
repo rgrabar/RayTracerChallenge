@@ -47,19 +47,6 @@
 #include "../RayTracerChallenge/Plane.cpp"
 
 #include "../RayTracerChallenge/Pattern.h"
-#include "../RayTracerChallenge/Pattern.cpp"
-
-#include "../RayTracerChallenge/StripePattern.h"
-#include "../RayTracerChallenge/StripePattern.cpp"
-
-#include "../RayTracerChallenge/GradientPattern.h"
-#include "../RayTracerChallenge/GradientPattern.cpp"
-
-#include "../RayTracerChallenge/CheckerPattern.h"
-#include "../RayTracerChallenge/CheckerPattern.cpp"
-
-#include "../RayTracerChallenge/RingPattern.h"
-#include "../RayTracerChallenge/RingPattern.cpp"
 
 #include "../RayTracerChallenge/Cube.h"
 #include "../RayTracerChallenge/Cube.cpp"
