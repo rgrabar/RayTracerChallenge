@@ -17,8 +17,8 @@ Color World::shadeHit(const Precomputations& comps, int& remaining, int& remaini
 	//TODO: should i divide? don't think so 
 	//surface = surface / (double)lights.size();
 	
-	auto reflected = reflectedColor(comps, remaining);
-	auto refracted = refractedColor(comps, remainingRefraction);
+	auto reflected = reflectedColor(comps, remaining, remainingRefraction);
+	auto refracted = refractedColor(comps, remaining, remainingRefraction);
 
 	auto material = comps.shape->material;
 
@@ -99,7 +99,7 @@ bool World::isShadowed(const Tuple& point, const Tuple& lightPosition)const {
 	return inShadow;
 }
 
-Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
+Color World::reflectedColor(const Precomputations& comps, int& remaining, int remainingRefraction)const {
 	
 	if (remaining <= 0)
 		return Color(0, 0, 0);
@@ -109,16 +109,16 @@ Color World::reflectedColor(const Precomputations& comps, int& remaining)const {
 	}
 
 	auto reflectedRay = Ray(comps.overPoint, comps.reflectv);
-	auto color = colorAt(reflectedRay, remaining - 1);
+	auto color = colorAt(reflectedRay, remaining - 1, remainingRefraction);
 
 	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
 
 	return color * comps.shape->material.reflective;
 }
 
-Color World::refractedColor(const Precomputations& comps, int& remaining) const {
+Color World::refractedColor(const Precomputations& comps, int& remaining, int remainingRefraction) const {
 
-	if (remaining <= 0) {
+	if (remainingRefraction <= 0) {
 		//std::cout << "remaining less than 0\n";
 		return Color(0, 0, 0);
 	}
@@ -141,7 +141,7 @@ Color World::refractedColor(const Precomputations& comps, int& remaining) const 
 
 	auto refractRay = Ray(comps.underPoint, direction);
 
-	auto refractColor = colorAt(refractRay, remaining - 1) * comps.shape->material.transparency;
+	auto refractColor = colorAt(refractRay, remaining, remainingRefraction - 1) * comps.shape->material.transparency;
 
 	//std::cout << "legit color\n";
 	//std::cout << refractColor.r << " " << refractColor.g << " " << refractColor.b << "\n";

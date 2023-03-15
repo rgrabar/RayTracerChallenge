@@ -20,8 +20,8 @@ public:
 	Color colorAt(const Ray& r, int remaining = 4, int remainingRefraction = 4)const;
 	bool isShadowed(const Tuple& point, const Tuple& lightPosition)const;
 
-	Color reflectedColor(const Precomputations& comps, int& remaining) const;
-	Color refractedColor(const Precomputations& comps, int& remaining) const;
+	Color reflectedColor(const Precomputations& comps, int& remaining, int remainingRefraction) const;
+	Color refractedColor(const Precomputations& comps, int& remaining, int remainingRefraction) const;
 };
 
 World defaultWorld();

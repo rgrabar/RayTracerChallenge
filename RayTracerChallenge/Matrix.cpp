@@ -86,7 +86,7 @@ Matrix* Matrix::inverse() {
 }
 
 Matrix Matrix::submatrix(int row, int col)const {
-    Matrix sub(w - 1, h - 1);
+    Matrix sub(h - 1, w - 1);
     int tmp = 0 , tmp1 = 0;
     for (int i = 0; i < h; ++i) {
         if (i == row)

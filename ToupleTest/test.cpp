@@ -2025,7 +2025,7 @@ TEST(ReflectivityTest, NonReflectiveMaterial) {
 	auto comps = Precomputations(i, r);
 
 	int tmp = 1;
-	auto color = w.reflectedColor(comps, tmp);
+	auto color = w.reflectedColor(comps, tmp, tmp);
 
 	ASSERT_EQ(color, Color(0, 0, 0));
 }
@@ -2047,7 +2047,7 @@ TEST(ReflectivityTest, ReflectiveMaterial) {
 
 	int tmp = 1;
 
-	auto color = w.reflectedColor(comps, tmp);
+	auto color = w.reflectedColor(comps, tmp, tmp);
 
 	// TODO: test seems fine a bigger epsilon for tests?
 	//ASSERT_EQ(color, Color(0.19032, 0.2379, 0.14274));
@@ -2118,7 +2118,7 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterialMaxDepth) {
 	auto comps = Precomputations(i, r);
 
 	int tmp = 0;
-	auto color = w.reflectedColor(comps, tmp);
+	auto color = w.reflectedColor(comps, tmp, tmp);
 
 	// TODO: test seems fine a bigger epsilon for tests?
 	//std::cout << color.r << " " << color.g << " " << color.b << "\n";
@@ -2217,7 +2217,7 @@ TEST(RefractionTest, opaqueSurface) {
 	auto comps = Precomputations(tmp, r, xs);
 
 	int cnt = 5;
-	auto c = w.refractedColor(comps, cnt);
+	auto c = w.refractedColor(comps, cnt, cnt);
 	
 	ASSERT_EQ(c, Color(0, 0, 0));
 }
@@ -2240,7 +2240,7 @@ TEST(RefractionTest, maxRecursiveDepth) {
 	auto comps = Precomputations(tmp, r, xs);
 
 	int cnt = 0;
-	auto c = w.refractedColor(comps, cnt);
+	auto c = w.refractedColor(comps, cnt, cnt);
 
 	ASSERT_EQ(c, Color(0, 0, 0));
 }
@@ -2272,7 +2272,7 @@ TEST(RefractionTest, totalInternalReflection) {
 	auto comps = Precomputations(tmp2, r, xs);
 
 	int cnt = 5;
-	auto c = w.refractedColor(comps, cnt);
+	auto c = w.refractedColor(comps, cnt, cnt);
 
 	//TODO: not the same color as in the book (but really really close) smaller epsilon?
 	ASSERT_EQ(c, Color(0, 0.998875, 0.047219));
