@@ -22,7 +22,7 @@ void drawAxes(World& world);
 void drawProjectile() {
 	
 	// CODE FOR THE PROJECTILE:
-	Canvas c(900, 550);
+	Canvas c(900, 900);
 
 	Tuple start = Tuple::point(0.f, 1.f, 0.f);
 	Tuple velocity = Tuple::vector(1.f, 1.8f, 0.f);
@@ -48,7 +48,7 @@ void drawClock() {
 
 	double radius = 10;
 
-	Canvas c(900, 550);
+	Canvas c(900, 900);
 
 	c.writePixel(900 / 2, 550 / 2, Color(1, 0, 0));
 
@@ -70,7 +70,7 @@ void drawClock() {
 
 void drawRedCircle() {
 	// Code for the red circle and for the shaded circle with reflection
-	   int canvas_Size = 500;
+	   int canvas_Size = 900;
 
 	   Canvas c(canvas_Size, canvas_Size);
 	   auto ray_origin = Tuple::point(0, 0, -5);
@@ -182,7 +182,7 @@ void drawShadowPatternsReflection() {
 		world.objects.emplace_back(&plane);
 		//world.objects.emplace_back(&plane2);
 
-		Camera cam(550, 450, TEST_PI / 3);
+		Camera cam(900, 900, TEST_PI / 3);
 		cam.transform = viewTransformation(Tuple::point(1, 1.5, -8), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 		auto ans = cam.render(world);
 
@@ -240,7 +240,7 @@ void drawBadSmiley() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	Camera cam(800, 800, TEST_PI / 1.5);
+	Camera cam(900, 900, TEST_PI / 1.5);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -272,7 +272,7 @@ void drawRefractiveSphere() {
 	world.objects.emplace_back(&shape);
 
 
-	Camera cam(600, 300, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -405,7 +405,7 @@ void drawAllShapes() {
 		//world.objects.emplace_back(&plane2);
 		//world.objects.emplace_back(&plane2);
 
-		Camera cam(1920, 1580, TEST_PI / 3);
+		Camera cam(900, 900, TEST_PI / 3);
 		cam.transform = viewTransformation(Tuple::point(5.0, 1.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 		auto ans = cam.render(world);
 
@@ -451,7 +451,7 @@ void drawHexagon(){
 
 	world.objects.emplace_back(&hex);
 
-	Camera cam(1920, 1580, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 3.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -557,7 +557,7 @@ void sphereCube() {
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -609,7 +609,7 @@ void sphereCubeDivide() {
 	world.objects.emplace_back(&plane1);
 	world.objects.emplace_back(&g);
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -628,7 +628,7 @@ void drawTeapot() {
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -666,7 +666,7 @@ void drawAstronaut() {
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -691,7 +691,7 @@ void drawDragon	() {
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -712,7 +712,7 @@ void drawCSKnife() {
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
-	Camera cam(1000, 1000, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -793,7 +793,7 @@ void CSGScene() {
 
 	world.objects.emplace_back(&csg1);
 
-	Camera cam(1280, 720, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	auto ans = cam.render(world);
 
@@ -842,7 +842,7 @@ void areaLightScene() {
 
 	//drawAxes(world);
 
-	Camera cam(1280, 720, 0.7854);
+	Camera cam(900, 900, 0.7854);
 	cam.transform = viewTransformation(Tuple::point(-3, 1, 2.5), Tuple::point(0, 0.5, 0), Tuple::vector(0, 1, 0));
 	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.aliasingSamples = 16;
@@ -900,7 +900,7 @@ void spotLightScene() {
 
 	//drawAxes(world);
 
-	Camera cam(1280, 720, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.aliasingSamples = 16;
@@ -947,7 +947,7 @@ void aliasingScene() {
 
 	drawAxes(world);
 
-	Camera cam(1280, 720, TEST_PI / 3);
+	Camera cam(900, 900, TEST_PI / 3);
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = 16;
