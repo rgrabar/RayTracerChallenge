@@ -1368,7 +1368,7 @@ TEST(LightTest, PointLightPositionIntensity) {
 	PointLight light(intensity, position);
 
 	ASSERT_EQ(light.position, position);
-	ASSERT_EQ(light.intesity, intensity);
+	ASSERT_EQ(light.intensity, intensity);
 }
 
 TEST(MaterialTest, SphereMaterial) {

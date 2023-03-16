@@ -13,12 +13,12 @@ public:
 
 	virtual bool operator==(const Light& other)const = 0;
 
-	Color intesity;
+	Color intensity;
 	Tuple position;
 	std::vector<Tuple> lightSamples;
 	int samples = 1;
 
-	Light(const Color& _intensity, const Tuple& _position, const int _samples) : intesity(_intensity), position(_position), samples(_samples) {}
+	Light(const Color& _intensity, const Tuple& _position, const int _samples) : intensity(_intensity), position(_position), samples(_samples) {}
 	// TODO: remove duplicated code for lighting
 	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	virtual double intensityAt(const Tuple& point, const World& world) = 0;

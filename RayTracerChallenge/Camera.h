@@ -3,7 +3,6 @@
 #include "World.h"
 #include <atomic>
 #include <iostream>
-#include <mutex>
 
 class Camera {
 public:
@@ -13,13 +12,11 @@ public:
 	double halfWidth;
 	double halfheight;
 	double pixelSize;
-	std::mutex mutex_;
 
 	int aliasingSamples = 0;
 	double aliasingThreshold = 0.3;
 	bool aliasEdges = 0;
 	bool edgeAliasHighlights = 0;
-
 
 	std::atomic_int pixelCount = 0;
 	std::atomic_int next = 5;

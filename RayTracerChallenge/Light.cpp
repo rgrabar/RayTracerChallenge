@@ -9,7 +9,7 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 	if (material.pattern != nullptr)
 		newColor = object->stripeAtObject(point);
 
-	auto effectiveColor = newColor * intesity;
+	auto effectiveColor = newColor * intensity;
 	auto ambientColor = effectiveColor * object->material.ambient;
 
 	if (epsilonEqual(intensityAt, 0.0))
@@ -38,7 +38,7 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 				specularColor = Color(0, 0, 0);
 			else {
 				auto factor = pow(reflectDotEye, object->material.shininess);
-				specularColor = intesity * object->material.specular * factor;
+				specularColor = intensity * object->material.specular * factor;
 			}
 		}
 
@@ -54,7 +54,7 @@ PointLight::PointLight(const Color& _intensity, const Tuple& _position) : Light(
 }
 
 bool PointLight::operator==(const Light& other)const {
-	return other.intesity == intesity && other.position == position;
+	return other.intensity == intensity && other.position == position;
 }
 
 double PointLight::intensityAt(const Tuple& point, const World& world) {
@@ -74,7 +74,7 @@ SpotLight::SpotLight(const Color& _intensity, const Tuple& _position, const Tupl
 }
 
 bool SpotLight::operator==(const Light& other)const {
-	return other.intesity == intesity && other.position == position;
+	return other.intensity == intensity && other.position == position;
 }
 
 double SpotLight::intensityAt(const Tuple& point, const World& world) {
@@ -166,7 +166,7 @@ double AreaLight::intensityAt(const Tuple& point, const World& world) {
 }
 
 bool AreaLight::operator==(const Light& other)const {
-	return other.intesity == intesity && other.position == position;
+	return other.intensity == intensity && other.position == position;
 }
 
 Tuple AreaLight::pointOnLight(int u, int v) {
@@ -213,7 +213,7 @@ double TestLight::intensityAt(const Tuple& point, const World& world) {
 }
 
 bool TestLight::operator==(const Light& other)const {
-	return other.intesity == intesity && other.position == position;
+	return other.intensity == intensity && other.position == position;
 }
 
 Tuple TestLight::pointOnLight(int u, int v) {
