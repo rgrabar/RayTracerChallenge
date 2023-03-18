@@ -2,10 +2,6 @@
 
 Triangle::Triangle(const Tuple& _p1, const Tuple _p2, const Tuple _p3) : p1(_p1), p2(_p2), p3(_p3), e1(_p2 - _p1), e2(_p3 - _p1), normal(e2.crossProduct(e1).normalize()) {}
 
- Tuple Triangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
-	return normal;
-}
-
 Intersections Triangle::intersect(const Ray& ray)const {
 
 	auto dirCrossE2 = ray.direction.crossProduct(e2);
@@ -39,6 +35,10 @@ Intersections Triangle::intersect(const Ray& ray)const {
 	return inter;
 }
 
+ Tuple Triangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
+	return normal;
+}
+
 BoundingBox Triangle::boundsOf(bool update) {
 	auto box = BoundingBox();
 
@@ -64,10 +64,6 @@ void Triangle::setMaterial(const Material& s) {
 SmoothTriangle::SmoothTriangle(const Tuple& _p1, const Tuple _p2, const Tuple _p3, const Tuple _n1, const Tuple _n2, const Tuple _n3) :
 	p1(_p1), p2(_p2), p3(_p3), n1(_n1), n2(_n2), n3(_n3), e1(_p2 - _p1), e2(_p3 - _p1) {
 
-}
-
-Tuple SmoothTriangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
-	return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
 }
 
 Intersections SmoothTriangle::intersect(const Ray& ray)const {
@@ -101,6 +97,10 @@ Intersections SmoothTriangle::intersect(const Ray& ray)const {
 	inter.intersections.insert(i1);
 
 	return inter;
+}
+
+Tuple SmoothTriangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
+	return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
 }
 
 BoundingBox SmoothTriangle::boundsOf(bool update) {

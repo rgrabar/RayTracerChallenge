@@ -87,12 +87,6 @@ BoundingBox Group::boundsOf(bool update) {
 	return m_bounds;
 }
 
-
-bool Group::includes(const Shape* s)const {
-	return std::find(children.begin(), children.end(), s) != children.end();
-}
-
-
 void Group::divide(int threashold) {
 
 	if (threashold <= (int)children.size()) {
@@ -111,6 +105,10 @@ void Group::divide(int threashold) {
 	for (auto child : children) {
 		child->shapeDivide(threashold);
 	}
+}
+
+bool Group::includes(const Shape* s)const {
+	return std::find(children.begin(), children.end(), s) != children.end();
 }
 
 void Group::setMaterial(const Material& s) {
