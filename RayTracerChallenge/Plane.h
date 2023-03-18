@@ -5,37 +5,12 @@
 
 class Plane : public Shape{
 public:
-	Plane() : Shape(Tuple::point(0, 0, 0)) {}
+	Plane();
 
-	inline Intersections intersect(const Ray& ray) {
-		if (fabs(ray.direction.y) < EPSILON)
-			return {};
-		double t = -ray.origin.y / ray.direction.y;
-
-		Intersection* i1 = new Intersection(t, this) ;
-
-		Intersections inter;
-		inter.intersections.insert(i1);
-
-		return inter;
-	}
-	Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr) {
-		return Tuple::vector(0.0, 1.0, 0.0);
-	}
-
-	BoundingBox boundsOf(bool update = false) {
-		return BoundingBox(Tuple::point(-INFINITY, 0, -INFINITY), Tuple::point(INFINITY, 0, INFINITY));
-	}
-
-	inline void divide(int threashold = 1) {
-		return;
-	}
-
-	inline bool includes(const Shape* s) {
-		return this == s;
-	}
-
-	inline void setMaterial(const Material& s) {
-		material = s;
-	}
+	Intersections intersect(const Ray& ray)const override;
+	Tuple objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr)const override;
+	BoundingBox boundsOf(bool update = false)override;
+	void divide(int threashold = 1)override;
+	bool includes(const Shape* s)const override;
+	void setMaterial(const Material& s)override;
 };
