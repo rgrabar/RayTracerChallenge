@@ -35,15 +35,15 @@ Intersections Sphere::intersect(const Ray& ray)const {
 	*/
 	return inter;
 }
-Tuple Sphere::objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr)const {
+Tuple Sphere::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
 	return objectPoint - Tuple::point(0, 0, 0);
 }
 
-BoundingBox Sphere::boundsOf(bool update = false) {
+BoundingBox Sphere::boundsOf(bool update) {
 	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 }
 
-inline void Sphere::divide(int threashold = 1) {
+inline void Sphere::divide(int threashold) {
 	return;
 }
 

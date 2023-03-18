@@ -68,11 +68,11 @@ Intersections Group::intersect(const Ray& ray)const {
 	return i;
 }
 
-Tuple Group::objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr)const {
+Tuple Group::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
 	return Tuple::vector(0, 0, 0);
 }
 
-BoundingBox Group::boundsOf(bool update = false) {
+BoundingBox Group::boundsOf(bool update) {
 	// TODO: cache the box, don't update if not needed
 	if (update) {
 		auto box = BoundingBox();
@@ -93,7 +93,7 @@ bool Group::includes(const Shape* s)const {
 }
 
 
-void Group::divide(int threashold = 1) {
+void Group::divide(int threashold) {
 
 	if (threashold <= (int)children.size()) {
 		auto left = Group();

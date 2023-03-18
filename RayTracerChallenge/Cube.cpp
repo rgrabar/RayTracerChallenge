@@ -49,7 +49,7 @@ Intersections Cube::intersect(const Ray& ray)const {
 	return inter;
 }
 
-Tuple Cube::objectNormal(const Tuple& objectPoint, const Intersection* hit = nullptr)const {
+Tuple Cube::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
 	auto maxc = std::fmax(fabs(objectPoint.x), fabs(std::fmax(fabs(objectPoint.y), fabs(objectPoint.z))));
 	if (epsilonEqual(maxc, fabs(objectPoint.x))) {
 		return Tuple::vector(objectPoint.x, 0, 0);
@@ -60,11 +60,11 @@ Tuple Cube::objectNormal(const Tuple& objectPoint, const Intersection* hit = nul
 	return Tuple::vector(0, 0, objectPoint.z);
 }
 
-BoundingBox Cube::boundsOf(bool update = false) {
+BoundingBox Cube::boundsOf(bool update) {
 	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 }
 
-inline void Cube::divide(int threashold = 1) {
+inline void Cube::divide(int threashold) {
 	return;
 }
 

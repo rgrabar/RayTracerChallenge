@@ -14,15 +14,15 @@ Intersections Plane::intersect(const Ray& ray)const {
 
 	return inter;
 }
-Tuple Plane::objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)const {
+Tuple Plane::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
 	return Tuple::vector(0.0, 1.0, 0.0);
 }
 
-BoundingBox Plane::boundsOf(bool update = false) {
+BoundingBox Plane::boundsOf(bool update) {
 	return BoundingBox(Tuple::point(-INFINITY, 0, -INFINITY), Tuple::point(INFINITY, 0, INFINITY));
 }
 
-void Plane::divide(int threashold = 1) {
+void Plane::divide(int threashold) {
 	return;
 }
 

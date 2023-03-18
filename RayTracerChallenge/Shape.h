@@ -13,14 +13,14 @@ public:
 
 	// TODO: add == operator for all shapes
 
-	inline virtual Intersections intersect(const Ray& ray)= 0;
-	inline virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)= 0;
-	inline virtual BoundingBox boundsOf(bool update = false)= 0;
-	inline virtual void divide(int threashold = 1) = 0;
-	inline virtual bool includes(const Shape* s) = 0;
+	virtual Intersections intersect(const Ray& ray)const = 0;
+	virtual Tuple objectNormal(const Tuple& worldPoint, const Intersection* hit = nullptr)const = 0;
+	virtual BoundingBox boundsOf(bool update = false) = 0;
+	virtual void divide(int threashold = 1) = 0;
+	virtual bool includes(const Shape* s)const = 0;
 
 	//TODO: make it a bit more clear that group overrides all other materials
-	inline virtual void setMaterial(const Material& s) = 0;
+	virtual void setMaterial(const Material& s) = 0;
 
 	bool optOutShadow = 0;
 	Shape* parent = nullptr;
