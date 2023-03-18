@@ -89,7 +89,7 @@ BoundingBox Cylinder::boundsOf(bool update = false) {
 	return BoundingBox(Tuple::point(-1, minimum, -1), Tuple::point(1, maximum, 1));
 }
 
-inline void Cylinder::divide(int threashold = 1)const {
+inline void Cylinder::divide(int threashold = 1) {
 	return;
 }
 

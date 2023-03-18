@@ -64,7 +64,7 @@ BoundingBox Cube::boundsOf(bool update = false) {
 	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 }
 
-inline void Cube::divide(int threashold = 1)const {
+inline void Cube::divide(int threashold = 1) {
 	return;
 }
 

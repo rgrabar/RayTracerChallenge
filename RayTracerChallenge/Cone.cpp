@@ -104,7 +104,7 @@ BoundingBox Cone::boundsOf(bool update) {
 	return BoundingBox(Tuple::point(-limit, minimum, -limit), Tuple::point(limit, maximum, limit));
 }
 
-void Cone::divide(int threashold)const {
+void Cone::divide(int threashold) {
 	return;
 }
 

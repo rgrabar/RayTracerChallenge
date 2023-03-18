@@ -80,7 +80,7 @@ BoundingBox CSGShape::boundsOf(bool update = false) {
 	return m_bounds;
 }
 // TODO: cache bounds?
-void CSGShape::divide(int threashold = 1)const {
+void CSGShape::divide(int threashold = 1) {
 	right->divide();
 	left->divide();
 }
