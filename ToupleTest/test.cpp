@@ -61,6 +61,7 @@
 #include "../RayTracerChallenge/Groups.cpp"
 
 #include "../RayTracerChallenge/BoundingBox.h"
+#include "../RayTracerChallenge/BoundingBox.cpp"
 
 #include "../RayTracerChallenge/Triangle.h"
 #include "../RayTracerChallenge/Triangle.cpp"
