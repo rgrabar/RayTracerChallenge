@@ -812,6 +812,8 @@ void areaLightScene() {
 	light.jitter = true;
 	light.isSoft = true;
 
+	//auto light = PointLight(Color(1.5, 1.5, 1.5), Tuple::point(-1, 2, 4));
+
 	auto plane = Plane();
 	plane.material.color = Color(1, 1, 1);
 	plane.material.ambient = 0.025;
@@ -834,9 +836,20 @@ void areaLightScene() {
 	sphere1.material.specular = 0.;
 	sphere1.material.reflective = 0.3;
 
+	auto cube = Cube();
+
+	cube.material.color = Color(1.5, 1.5, 1.5);
+	cube.material.ambient = 1;
+	cube.material.diffuse = 0;
+	cube.material.specular = 0;
+
+	cube.transform = translate(0, 3, 4) * scale(1, 1, 0.01);
+	cube.optOutShadow = true;
+
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&sphere1);
+	world.objects.emplace_back(&cube);
 
 	world.lights.emplace_back(&light);
 

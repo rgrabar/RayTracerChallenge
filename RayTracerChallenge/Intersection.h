@@ -31,6 +31,6 @@ public:
 
     }
 
-    Intersection* hit()const;
+    Intersection* hit(const bool optOutShadow = false)const;
     std::multiset<Intersection*, cmp> intersections;
 };

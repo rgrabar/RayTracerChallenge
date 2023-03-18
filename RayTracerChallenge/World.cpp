@@ -81,7 +81,7 @@ bool World::isShadowed(const Tuple& point, const Tuple& lightPosition)const {
 	auto intersections = worldIntersection(r);
 	Intersections i(intersections);
 
-	auto h = i.hit();
+	auto h = i.hit(true);
 	if (h != nullptr && h->t < distance)
 		inShadow = true;
 	
