@@ -85,7 +85,6 @@ public:
 	// TODO: change compare operator
 	bool operator==(const Light& other)const;
 
-	Color lighting(Material& material, Shape* object, const Tuple& point, const Tuple& eyev, const Tuple& normalv, const double intensityAt);
 	double intensityAt(const Tuple& point, const World& world);
 
 	Tuple pointOnLight(int u, int v);
@@ -97,11 +96,9 @@ public:
 	Tuple vVec;
 	int uSteps;
 	int vSteps;
-	int samples;
-	bool jitter = 1;
+	bool jitter = 0;
 	int cur = 0;
 
-	std::vector<Tuple> lightSamples;
 	std::vector<double>* seq;
 
 };

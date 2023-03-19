@@ -182,12 +182,13 @@ Tuple AreaLight::pointOnLight(int u, int v) {
 }
 
 TestLight::TestLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity) :
-	Light(_intensity, _corner + (_fullUvec + _fullVvec) / 2.0f, _uSteps* _vSteps),
+	Light(_intensity, _corner + (_fullUvec + _fullVvec) / 2.0f, _uSteps * _vSteps),
 	corner(_corner),
 	uVec(_fullUvec / _uSteps),
 	vVec(_fullVvec / _vSteps),
 	uSteps(_uSteps),
-	vSteps(_vSteps)
+	vSteps(_vSteps),
+	jitter(false)
 {
 	// TODO: why do some tests pass with this and some don't?
 	for (int v = 0; v < vSteps; ++v) {

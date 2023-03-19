@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <string>
+#include <cctype>
 
 #ifdef __linux__
 #define sscanf_s sscanf
@@ -142,6 +143,10 @@ OBJParser::OBJParser(std::string path) {
 
 				int spac = line.find(" ", 0);
 				name = line.substr(spac + 1);
+
+				while (std::isspace(name.back())) {
+					name.pop_back();
+				}
 
 				if (namedGroup.find(name) == namedGroup.end()) {
 					namedGroup[name] = new Group();

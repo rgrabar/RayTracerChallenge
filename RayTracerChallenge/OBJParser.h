@@ -34,6 +34,5 @@ public:
 
 	Group* ObjToGroup();
 
-
 	Group g;
 };

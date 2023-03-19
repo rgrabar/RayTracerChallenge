@@ -3,6 +3,7 @@
 #include "scenes/Scenes.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h> 
 
 using namespace std::chrono;
 
@@ -10,6 +11,8 @@ using namespace std::chrono;
 int main(int argc, char* argv[]) {
 	
 	auto start = high_resolution_clock::now();
+
+	srand(time(NULL));
 /*
 	printf("You have entered %d arguments:\n", argc);
 
@@ -71,11 +74,11 @@ int main(int argc, char* argv[]) {
 	//drawShadowPatternsReflection();
 	//drawBadSmiley();
 	//drawRefractiveSphere();
-	drawAllShapes();
+	//drawAllShapes();
 	//drawHexagon();
 	//sphereCube();
 	//sphereCubeDivide();
-	//CSGScene();
+	CSGScene();
 	//areaLightScene();
 	//spotLightScene();
 	//aliasingScene();

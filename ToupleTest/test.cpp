@@ -3935,7 +3935,7 @@ TEST(AreaLight, CreatingAreaLight) {
 	auto v1 = Tuple::vector(2, 0, 0);
 	auto v2 = Tuple::vector(0, 0, 1);
 
-	auto light = AreaLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
+	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 
 	ASSERT_EQ(light.corner, corner);
 	ASSERT_EQ(light.uVec, Tuple::vector(0.5, 0, 0));
@@ -3951,8 +3951,7 @@ TEST(AreaLight, SinglePointOnAreaLight) {
 	auto v1 = Tuple::vector(2, 0, 0);
 	auto v2 = Tuple::vector(0, 0, 1);
 
-	auto light = AreaLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
-	light.jitter = false;
+	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 
 	int u[] = { 0, 1, 0, 2, 3 };
 	int v[] = { 0, 0, 1, 0, 1 };
@@ -3982,7 +3981,9 @@ TEST(AreaLight, AreaLightIntensity) {
 	auto v1 = Tuple::vector(1, 0, 0);
 	auto v2 = Tuple::vector(0, 1, 0);
 
-	auto light = AreaLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
+	auto light = TestLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
+
+	light.jitter = false;
 
 	std::vector<Tuple> points{
 	Tuple::point(0, 0, 2),
@@ -4011,7 +4012,7 @@ TEST(AreaLight, NumberGEneratorCyclicSequence) {
 	// TODO: why do i need to do this here but not in the test below
 	light.cur = 0;
 
-	light.seq = new  std::vector<double>{ 0.1, 0.5, 1.0 };
+	light.seq = new std::vector<double>{ 0.1, 0.5, 1.0 };
 
 	ASSERT_FLOAT_EQ(0.1, light.next());
 	ASSERT_FLOAT_EQ(0.5, light.next());
@@ -4027,6 +4028,7 @@ TEST(AreaLight, SinglePointONaJitteredLight) {
 
 	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 	light.seq = new std::vector<double>{ 0.3, 0.7 };
+	light.jitter = true;
 	
 	int u[] = { 0, 1, 0, 2, 3 };
 	int v[] = { 0, 0, 1, 0, 1 };
@@ -4050,11 +4052,12 @@ TEST(AreaLight, SinglePointONaJitteredLight) {
 
 
 TEST(AreaLight, lightingsamplesarealight) {
+	
 	auto corner = Tuple::point(-0.5, -0.5, -5);
 	auto v1 = Tuple::vector(1, 0, 0);
 	auto v2 = Tuple::vector(0, 1, 0);
 
-	auto light = AreaLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
+	auto light = TestLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
 
 	auto shape = Sphere();
 	shape.material.ambient = 0.1;
@@ -4067,7 +4070,7 @@ TEST(AreaLight, lightingsamplesarealight) {
 	std::vector<Tuple> pt{ Tuple::point(0, 0, -1), Tuple::point(0, 0.7071, -0.7071) };
 
 	//TODO: small difference to the book because of random?
-	Color ans[] = { Color(0.996876, 0.996876, 0.996876), Color(0.624382, 0.624382, 0.624382) };
+	Color ans[] = { Color(0.996505, 0.996505, 0.996505), Color(0.623183, 0.623183, 0.623183) };
 
 	int i = 0;
 
