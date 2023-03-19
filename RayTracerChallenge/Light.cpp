@@ -219,9 +219,11 @@ bool TestLight::operator==(const Light& other)const {
 
 Tuple TestLight::pointOnLight(int u, int v) {
 	if (jitter) {
-		return corner +
-			vVec * (v + next())+
-			uVec * (u + next());
+		// order is important
+		auto res = corner;
+		res += uVec * (u + next());
+		res += vVec * (v + next());
+		return res;
 	}
 
 	return corner +
