@@ -38,7 +38,7 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 			double u = y, v = x;
 			bool isEdge = 0;
 
-			if (aliasingSamples > 4 && aliasEdges) {
+			if (aliasingSamples > 4 && (aliasEdges || edgeAliasHighlights)) {
 
 				// +-0.5 in canvas space moves the ray to the pixel edges
 				double topLeftX = v - 0.5;
