@@ -68,7 +68,7 @@ Intersections Group::intersect(const Ray& ray)const {
 	return i;
 }
 
-Tuple Group::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
+Tuple Group::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	return Tuple::vector(0, 0, 0);
 }
 

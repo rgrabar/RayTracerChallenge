@@ -86,7 +86,7 @@ public:
 		return normalToWorld(localNormal);
 	}
 
-	inline BoundingBox parentSpaceBoundsOf(bool update = false) {
+	inline BoundingBox parentSpaceBoundsOf([[maybe_unused]] bool update = false) {
 		return boundsOf().transform(transform);
 	}
 

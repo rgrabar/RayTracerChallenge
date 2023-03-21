@@ -74,7 +74,7 @@ Intersections Cylinder::intersect(const Ray& ray)const {
 	return inter;
 }
 
-Tuple Cylinder::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
+Tuple Cylinder::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 	if (dist < 1 && objectPoint.y >= maximum - EPSILON)
 		return Tuple::vector(0, 1, 0);
@@ -85,11 +85,11 @@ Tuple Cylinder::objectNormal(const Tuple& objectPoint, const Intersection* hit)c
 	return Tuple::vector(objectPoint.x, 0, objectPoint.z);
 }
 
-BoundingBox Cylinder::boundsOf(bool update) {
+BoundingBox Cylinder::boundsOf([[maybe_unused]] bool update) {
 	return BoundingBox(Tuple::point(-1, minimum, -1), Tuple::point(1, maximum, 1));
 }
 
-inline void Cylinder::divide(int threashold) {
+inline void Cylinder::divide([[maybe_unused]] int threashold) {
 	return;
 }
 

@@ -35,11 +35,11 @@ Intersections Triangle::intersect(const Ray& ray)const {
 	return inter;
 }
 
- Tuple Triangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
+ Tuple Triangle::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	return normal;
 }
 
-BoundingBox Triangle::boundsOf(bool update) {
+BoundingBox Triangle::boundsOf([[maybe_unused]] bool update) {
 	auto box = BoundingBox();
 
 	box.addPoint(p1);
@@ -49,7 +49,7 @@ BoundingBox Triangle::boundsOf(bool update) {
 	return box;
 }
 
-void Triangle::divide(int threashold) {}
+void Triangle::divide([[maybe_unused]] int threashold) {}
 
 bool Triangle::includes(const Shape* s)const {
 	return this == s;
@@ -99,11 +99,11 @@ Intersections SmoothTriangle::intersect(const Ray& ray)const {
 	return inter;
 }
 
-Tuple SmoothTriangle::objectNormal(const Tuple& worldPoint, const Intersection* hit)const {
+Tuple SmoothTriangle::objectNormal([[maybe_unused]] const Tuple& worldPoint, const Intersection* hit)const {
 	return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
 }
 
-BoundingBox SmoothTriangle::boundsOf(bool update) {
+BoundingBox SmoothTriangle::boundsOf([[maybe_unused]] bool update) {
 	auto box = BoundingBox();
 
 	box.addPoint(p1);
@@ -113,7 +113,7 @@ BoundingBox SmoothTriangle::boundsOf(bool update) {
 	return box;
 }
 
-void SmoothTriangle::divide(int threashold) {}
+void SmoothTriangle::divide([[maybe_unused]] int threashold) {}
 
 bool SmoothTriangle::includes(const Shape* s)const {
 	return this == s;

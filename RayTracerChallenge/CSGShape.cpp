@@ -59,12 +59,12 @@ Intersections CSGShape::intersect(const Ray& ray)const {
 	return filterIntersections(xs);
 }
 
-Tuple CSGShape::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
+Tuple CSGShape::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	// CSG returns normal of primitive shape, this shouldn't happen
 	return Tuple::vector(0, 0, 0);
 }
 
-BoundingBox CSGShape::boundsOf(bool update) {
+BoundingBox CSGShape::boundsOf([[maybe_unused]] bool update) {
 	// TODO: cache the box, don't update if not needed
 	// TODO: check if it works
 	auto box = BoundingBox();
@@ -80,7 +80,7 @@ BoundingBox CSGShape::boundsOf(bool update) {
 	return m_bounds;
 }
 // TODO: cache bounds?
-void CSGShape::divide(int threashold) {
+void CSGShape::divide([[maybe_unused]] int threashold) {
 	right->divide();
 	left->divide();
 }

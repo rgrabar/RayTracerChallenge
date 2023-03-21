@@ -79,7 +79,7 @@ Intersections Cone::intersect(const Ray& ray)const {
 	return inter;
 }
 
-Tuple Cone::objectNormal(const Tuple& objectPoint, const Intersection* hit)const {
+Tuple Cone::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 	if (dist < 1 && objectPoint.y >= maximum - EPSILON)
 		return Tuple::vector(0, 1, 0);
@@ -95,7 +95,7 @@ Tuple Cone::objectNormal(const Tuple& objectPoint, const Intersection* hit)const
 	return Tuple::vector(objectPoint.x, y, objectPoint.z);
 }
 
-BoundingBox Cone::boundsOf(bool update) {
+BoundingBox Cone::boundsOf([[maybe_unused]] bool update) {
 	auto a = fabs(minimum);
 	auto b = fabs(maximum);
 
@@ -104,7 +104,7 @@ BoundingBox Cone::boundsOf(bool update) {
 	return BoundingBox(Tuple::point(-limit, minimum, -limit), Tuple::point(limit, maximum, limit));
 }
 
-void Cone::divide(int threashold) {
+void Cone::divide([[maybe_unused]] int threashold) {
 	return;
 }
 
