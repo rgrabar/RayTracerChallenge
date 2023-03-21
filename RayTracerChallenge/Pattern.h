@@ -17,10 +17,22 @@ public:
 
 class StripePattern :public Pattern {
 public:
+	Pattern* patternA = nullptr;
+	Pattern* patternB = nullptr;
+	bool isNested = false;
+
 	StripePattern() {}
 	StripePattern(const Color& _a, const Color& _b) : Pattern(_a, _b) {}
+	StripePattern(Pattern* _a, Pattern* _b) : patternA(_a), patternB(_b), isNested(true) {}
 
 	Color patternColorAt(const Tuple& point)const override {
+
+		if (isNested) {
+			if ((int)floor(point.x) % 2 == 0)
+				return patternA->patternColorAt(point);
+			else
+				return patternB->patternColorAt(point);
+		}
 
 		//TODO: why can't i do just (int), negative numbers?
 		if ((int)floor(point.x) % 2 == 0)
@@ -45,10 +57,22 @@ public:
 
 class CheckerPattern : public Pattern {
 public:
+	// use for nested patterns e.g. have a checkered pattern with different nested stripe patterns
+	Pattern* patternA = nullptr;
+	Pattern* patternB = nullptr;
+	bool isNested = false;
+
 	CheckerPattern() {}
 	CheckerPattern(const Color& _a, const Color& _b) : Pattern(_a, _b) {}
+	CheckerPattern(Pattern* _a, Pattern* _b) : patternA(_a), patternB(_b), isNested(true) {}
 
 	Color patternColorAt(const Tuple& point)const override {
+		if (isNested) {
+			if (((int)(floor(point.x) + floor(point.y) + floor(point.z))) % 2 == 0)
+				return patternA->patternColorAt(point);
+			else
+				return patternB->patternColorAt(point);
+		}
 
 		if (((int)(floor(point.x) + floor(point.y) + floor(point.z))) % 2 == 0)
 			return a;
@@ -59,10 +83,22 @@ public:
 
 class RingPattern : public Pattern {
 public:
+	Pattern* patternA = nullptr;
+	Pattern* patternB = nullptr;
+	bool isNested = false;
+
 	RingPattern() {}
 	RingPattern(const Color& _a, const Color& _b) : Pattern(_a, _b) {}
+	RingPattern(Pattern* _a, Pattern* _b) : patternA(_a), patternB(_b), isNested(true) {}
 
 	Color patternColorAt(const Tuple& point)const override {
+		if (isNested) {
+			if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
+				return patternA->patternColorAt(point);
+			else
+				return patternB->patternColorAt(point);
+		}
+
 		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
 			return a;
 		else
