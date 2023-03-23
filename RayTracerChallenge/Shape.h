@@ -34,7 +34,7 @@ public:
 
 	virtual ~Shape() = default;
 
-	// TODO: shoud stripeatobject be part of material?
+	// TODO: shoud stripeatobject be part of material?  rename this 
 	inline Color stripeAtObject(const Tuple& worldPoint) {
 		auto objectPoint = *transform.inverse() * worldPoint;
 		auto patternPoint = *material.pattern->transform.inverse() * objectPoint;
