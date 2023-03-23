@@ -21,6 +21,8 @@ public:
 
 	//TODO: make it a bit more clear that group overrides all other materials
 	virtual void setMaterial(const Material& s) = 0;
+	//TODO: should this be = 0?
+	virtual void UVmap(const Tuple& p, double* u, double* v) const {}
 
 	bool optOutShadow = 0;
 	Shape* parent = nullptr;
@@ -39,7 +41,7 @@ public:
 		auto objectPoint = *transform.inverse() * worldPoint;
 		auto patternPoint = *material.pattern->transform.inverse() * objectPoint;
 
-		return material.pattern->patternColorAt(patternPoint);
+		return material.pattern->patternColorAt(patternPoint, this);
 	}
 
 	inline Tuple normalToWorld(const Tuple& normal) {

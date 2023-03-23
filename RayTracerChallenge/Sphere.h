@@ -15,6 +15,21 @@ public:
 	void divide([[maybe_unused]] int threashold = 1)override;
 	bool includes(const Shape* s)const override;
 	void setMaterial(const Material& s)override;
+
+
+	void UVmap(const Tuple& p, double* u, double* v) const {
+		auto theta = atan2(p.x, p.z);
+
+		Tuple vec = Tuple::vector(p.x, p.y, p.z);
+		auto radius = vec.magnitude();
+
+		auto phi = acos(p.y / radius);
+		auto rawU = theta / (2.0 * acos(-1));
+
+		*u = 1.0 - (rawU + 0.5);
+		*v = 1.0 - (phi / acos(-1));
+	}
+
 };
 
 inline Sphere glassSphere() {
