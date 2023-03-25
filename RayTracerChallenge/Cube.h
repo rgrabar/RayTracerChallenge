@@ -23,4 +23,6 @@ public:
 	void divide([[maybe_unused]] int threashold = 1) override;
 	bool includes(const Shape* s)const override;
 	void setMaterial(const Material& s)override;
+
+
 };

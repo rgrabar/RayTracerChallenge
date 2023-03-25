@@ -113,6 +113,35 @@ public:
 	Color b;
 };
 
+class AlignCheck :public Pattern {
+public:
+	AlignCheck(Color _main, Color _ul, Color _ur, Color _bl, Color _br) : main(_main), ul(_ul), ur(_ur), bl(_bl), br(_br) {}
+
+	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
+
+	Color uvPatternAt(double u, double v) const {
+		if (v > 0.8) {
+			if (u < 0.2)
+				return ul;
+			if (u > 0.8)
+				return ur;
+		}
+		else if (v < 0.2) {
+			if (u < 0.2)
+				return bl;
+			if (u > 0.8)
+				return br;
+		}
+		return main;
+	}
+
+	Color main;
+	Color ul;
+	Color ur;
+	Color bl;
+	Color br;
+};
+
 
 class TestPatern :public Pattern{
 public:

@@ -114,6 +114,13 @@ Color UVCheckers::patternColorAt(const Tuple& point, const Shape* shape)const  {
 	return uvPatternAt(a, b);
 }
 
+Color AlignCheck::patternColorAt(const Tuple& point, const Shape* shape)const {
+	double a, b;
+	// TODO: check if null or somehting
+	shape->UVmap(point, &a, &b);
+	return uvPatternAt(a, b);
+}
+
 Color TestPatern::patternColorAt(const Tuple& object_point, const Shape* shape)const {
 	return Color(object_point.x, object_point.y, object_point.z);
 }
