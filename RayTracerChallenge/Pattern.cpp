@@ -7,6 +7,7 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Cylinder.h"
+#include "Cube.h"
 
 Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 
@@ -119,6 +120,14 @@ Color AlignCheck::patternColorAt(const Tuple& point, const Shape* shape)const {
 	// TODO: check if null or somehting
 	shape->UVmap(point, &a, &b);
 	return uvPatternAt(a, b);
+}
+
+Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
+	double a, b;
+	// TODO: check if null or somehting
+	shape->UVmap(point, &a, &b);
+	int face = Cube::faceFromPoint(point);
+	return faces[face]->patternColorAt(point, shape);
 }
 
 Color TestPatern::patternColorAt(const Tuple& object_point, const Shape* shape)const {

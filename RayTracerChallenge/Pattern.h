@@ -100,7 +100,6 @@ public:
 		int v2 = floor(v * height);
 
 		if ((u2 + v2) % 2 == 0) {
-			
 			return a;
 		}
 		else {
@@ -141,6 +140,21 @@ public:
 	Color bl;
 	Color br;
 };
+
+class CubeMap :public Pattern {
+public:
+	CubeMap(Pattern* _front, Pattern* _back, Pattern* _left, Pattern* _right, Pattern* _up, Pattern* _down) : faces{ _front, _back, _left, _right, _up, _down } {
+
+	}
+
+	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
+
+	Color uvPatternAt(double u, double v) const {
+		
+	}
+	Pattern* faces[6];
+};
+
 
 
 class TestPatern :public Pattern{
