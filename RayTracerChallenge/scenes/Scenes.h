@@ -1020,6 +1020,69 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 	ans.canvasToImage();
 }
 
+void cubeTest() {
+	
+
+
+	auto world = World();
+
+	world.lights.emplace_back(new PointLight(Color(0.25, 0.25, 0.25), Tuple::point(0, 100, -100)));
+	world.lights.emplace_back(new PointLight(Color(0.25, 0.25, 0.25), Tuple::point(0, -100, -100)));
+	world.lights.emplace_back(new PointLight(Color(0.25, 0.25, 0.25), Tuple::point(-100, 0, -100)));
+	world.lights.emplace_back(new PointLight(Color(0.25, 0.25, 0.25), Tuple::point(100, 0, -100)));
+	
+	AlignCheck front = AlignCheck(Color(0, 1, 1), Color(1, 0, 0), Color(1, 1, 0), Color(1, 0.5, 0), Color(0, 1, 0));
+	AlignCheck back = AlignCheck(Color(0, 1, 0), Color(1, 0, 1), Color(0, 1, 1), Color(1, 1, 1), Color(0, 0, 1));
+	AlignCheck left = AlignCheck(Color(1, 1, 0), Color(0, 1, 1), Color(1, 0, 0), Color(0, 0, 1), Color(1, 0.5, 0));
+	AlignCheck right = AlignCheck(Color(1, 0, 0), Color(1, 1, 0), Color(1, 0, 1), Color(0, 1, 0), Color(1, 1, 1));
+	AlignCheck up = AlignCheck(Color(1, 0.5, 0), Color(0, 1, 1), Color(1, 0, 1), Color(1, 0, 0), Color(1, 1, 0));
+	AlignCheck down = AlignCheck(Color(1, 0, 1), Color(1, 0.5, 0), Color(0, 1, 0), Color(0, 0, 1), Color(1, 1, 1));
+
+	CubeMap map = CubeMap(&front, &back, &left, &right, &up, &down);
+
+
+	auto cube = Cube();
+	auto cube1 = Cube();
+	auto cube2 = Cube();
+	auto cube3 = Cube();
+	auto cube4 = Cube();
+	auto cube5 = Cube();
+	auto cube6 = Cube();
+	auto cube7 = Cube();
+
+	cube.material.pattern = &map;
+	cube1.material.pattern = &map;
+	cube2.material.pattern = &map;
+	cube3.material.pattern = &map;
+	cube4.material.pattern = &map;
+	cube5.material.pattern = &map;
+	cube6.material.pattern = &map;
+	cube7.material.pattern = &map;
+
+	cube.transform = translate(-6, 2, 0) * rotationX(0.7854) * rotationY(0.7854);
+	cube1.transform = translate(-2, 2, 0) * rotationX(0.7854) * rotationY(2.3562);
+	cube2.transform = translate(2, 2, 0) * rotationX(0.7854) * rotationY(3.927);
+	cube3.transform = translate(6, 2, 0) * rotationX(0.7854) * rotationY(5.4978);
+	cube4.transform = translate(-6, -2, 0) * rotationX(-0.7854) * rotationY(0.7854);
+	cube5.transform = translate(-2, -2, 0) * rotationX(-0.7854) * rotationY(2.3562);
+	cube6.transform = translate(2, -2, 0) * rotationX(-0.7854) * rotationY(3.927);
+	cube7.transform = translate(6, -2, 0) * rotationX(-0.7854) * rotationY(5.4978);
+
+	world.objects.emplace_back(&cube);
+	world.objects.emplace_back(&cube1);
+	world.objects.emplace_back(&cube2);
+	world.objects.emplace_back(&cube3);
+	world.objects.emplace_back(&cube4);
+	world.objects.emplace_back(&cube5);
+	world.objects.emplace_back(&cube6);
+	world.objects.emplace_back(&cube7);
+
+	Camera cam(800, 400, 0.8);
+	cam.transform = viewTransformation(Tuple::point(0, 0, -20), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+	ans.canvasToImage();
+
+}
 void testScene() {
 
 	//TODO: double check everything in bounding-boxes it's a bit too slow
