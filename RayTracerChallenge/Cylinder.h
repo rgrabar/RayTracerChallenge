@@ -36,6 +36,8 @@ public:
 
 		auto theta = atan2(p.x, p.z);
 		auto rawU = theta / (2 * acos(-1));
+
+		// we can scale u by 2 * pi to make the checker pattern square, but should I?
 		*u = 1 - (rawU + 0.5);
 		*v = fmod(p.y, 1);
 

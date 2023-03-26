@@ -47,6 +47,7 @@
 #include "../RayTracerChallenge/Plane.cpp"
 
 #include "../RayTracerChallenge/Pattern.h"
+#include "../RayTracerChallenge/Pattern.cpp"
 
 #include "../RayTracerChallenge/Cube.h"
 #include "../RayTracerChallenge/Cube.cpp"
@@ -4051,7 +4052,7 @@ TEST(AreaLight, SinglePointONaJitteredLight) {
 }
 
 
-TEST(AreaLight, lightingsamplesarealight) {
+TEST(AreaLight, LightingSamplesAreaLight) {
 	
 	auto corner = Tuple::point(-0.5, -0.5, -5);
 	auto v1 = Tuple::vector(1, 0, 0);
@@ -4082,5 +4083,330 @@ TEST(AreaLight, lightingsamplesarealight) {
 
 		ASSERT_EQ(result, ans[i++]);
 	}
+}
+
+TEST(UVPatterns, CheckerPatternIn2D) {
+	auto checkers = UVCheckers(2, 2, Color(0, 0, 0), Color(1, 1, 1));
+	std::vector<std::pair<double, double>> points = { 
+														{ 0.0, 0.0 }, { 0.5, 0.0 }, { 0.0, 0.5 },
+														{ 0.5, 0.5 }, { 1.0, 1.0 }
+													};
+
+	std::vector<Color> ans = { Color(0, 0, 0), Color(1, 1, 1) , Color(1, 1, 1) , Color(0, 0, 0) , Color(0, 0, 0) };
+
+	int i = 0;
+
+	for (auto point : points) {
+		ASSERT_EQ(checkers.uvPatternAt(point.first, point.second), ans[i]);
+		++i;
+	}
+}
+
+TEST(UVPatterns, SphericalMap) {
+	std::vector<std::pair<double, double>> uv = {
+													{ 0.0, 0.5 }, { 0.25, 0.5 }, { 0.5, 0.5 },
+													{ 0.75, 0.5 }, { 0.5, 1.0 }, { 0.5, 0.0 }, { 0.25, 0.75 } 
+												};
+
+	std::vector<Tuple> points = {
+									Tuple::point(0, 0, -1), Tuple::point(1, 0, 0), Tuple::point(0, 0, 1),
+									Tuple::point(-1, 0, 0), Tuple::point(0, 1, 0), Tuple::point(0, -1, 0),
+									Tuple::point(sqrt(2) / 2, sqrt(2) / 2, 0)
+								};
+
+	int i = 0;
+
+	auto sphere = Sphere();
+
+	for (auto point : points) {
+		double u, v;
+		sphere.UVmap(point, &u, &v);
+
+		ASSERT_FLOAT_EQ(uv[i].first, u);
+		ASSERT_FLOAT_EQ(uv[i].second, v);
+		++i;
+	}
+
+}
+
+TEST(UVPatterns, TextureMapAndSpherical) {
+	auto checkers = UVCheckers(16, 8, Color(0, 0, 0), Color(1, 1, 1));
+
+
+
+	std::vector<Tuple> points = {
+									Tuple::point(0.4315, 0.4670, 0.7719) ,
+									Tuple::point(-0.9654, 0.2552, -0.0534),
+									Tuple::point(0.1039, 0.7090, 0.6975),
+									Tuple::point(-0.4986, -0.7856, -0.3663),
+									Tuple::point(-0.0317, -0.9395, 0.3411),
+									Tuple::point(0.4809, -0.7721, 0.4154),
+									Tuple::point(0.0285, -0.9612, -0.2745),
+									Tuple::point(-0.5734, -0.2162, -0.7903),
+									Tuple::point(0.7688, -0.1470, 0.6223),
+									Tuple::point(-0.7652, 0.2175, 0.6060)
+	};
+
+	Color ans[] = {
+						Color(1, 1, 1), Color(0, 0, 0),  Color(1, 1, 1),
+						Color(0, 0, 0), Color(0, 0, 0), Color(0, 0, 0),
+						Color(0, 0, 0),Color(1, 1, 1), Color(0, 0, 0),
+						Color(0, 0, 0)
+				  };
+
+	int i = 0;
+	auto sphere = Sphere();
+
+	for (auto point : points) {
+		ASSERT_EQ(checkers.patternColorAt(point, &sphere), ans[i]);
+		++i;
+	}
+}
+
+TEST(UVPatterns, PlanarMapping) {
+	std::vector<std::pair<double, double>> ans = {
+														{ 0.25, 0.5 }, { 0.25, 0.75 }, { 0.25, 0.75 },
+														{ 0.25, 0.5 }, { 0.25, 0.25 }, { 0., 0. }, { 0., 0. }
+													};
+
+	std::vector<Tuple> points = {
+									 Tuple::point(0.25, 0, 0.5),	
+									 Tuple::point(0.25, 0, -0.25),	
+									 Tuple::point(0.25, 0.5, -0.25),	
+									 Tuple::point(1.25, 0, 0.5),	
+									 Tuple::point(0.25, 0, -1.75),	
+									 Tuple::point(1, 0, -1),	
+									 Tuple::point(0, 0, 0)
+								};
+
+	auto plane = Plane();
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+		plane.UVmap(point, &u, &v);
+
+		ASSERT_EQ(u, ans[i].first);
+		ASSERT_EQ(v, ans[i].second);
+
+		++i;
+	}
+}
+
+TEST(UVPatterns, CylindricalMapping) {
+	std::vector<std::pair<double, double>> ans = {
+													{ 0., 0. }, { 0., 0.5 }, { 0., 0. },
+													{ 0.125, 0.5  }, { 0.25, 0.5 }, { 0.375, 0.5 }, 
+													{ 0.5, 0.75 }, { 0.625, 0.5 }, { 0.75, 0.25 },
+													{ 0.875, 0.5 },
+												 };
+
+	std::vector<Tuple> points = {
+									Tuple::point(0, 0, -1),
+									Tuple::point(0, 0.5, -1),
+									Tuple::point(0, 1, -1),
+									Tuple::point(0.70711, 0.5, -0.70711),
+									Tuple::point(1, 0.5, 0),
+									Tuple::point(0.70711, 0.5, 0.70711),
+									Tuple::point(0, -0.25, 1),
+									Tuple::point(-0.70711, 0.5, 0.70711),
+									Tuple::point(-1, 1.25, 0),
+									Tuple::point(-0.70711, 0.5, -0.70711)
+								};
+
+	auto cylinder = Cylinder();
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+		cylinder.UVmap(point, &u, &v);
+
+		ASSERT_EQ(u, ans[i].first);
+		ASSERT_EQ(v, ans[i].second);
+
+		++i;
+	}
+}
+
+TEST(UVPatterns, FaceFromPoint) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+		Tuple::point(-1, 0.5, -0.25),
+		Tuple::point(1.1, -0.75, 0.8),
+		Tuple::point(0.1, 0.6, 0.9),
+		Tuple::point(-0.7, 0, -2),
+		Tuple::point(0.5, 1, 0.9),
+		Tuple::point(-0.2, -1.3, 1.1)
+	};
+
+	cubeFace::FACE ans[] = { cubeFace::LEFT, cubeFace::RIGHT, cubeFace::FRONT, cubeFace::BACK, cubeFace::UP, cubeFace::DOWN };
+
+	int i = 0;
+
+	for (auto point : points) {
+		ASSERT_EQ(cube.faceFromPoint(point), ans[i++]);
+	}
+}
+
+TEST(UVPatterns, UVMapFacesFront) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+		Tuple::point(-0.5, 0.5, 1),
+		Tuple::point(0.5, -0.5, 1),
+	};
+
+
+	std::vector<std::pair<double, double>> ans = {{ 0.25, 0.75 }, { 0.75, 0.25 }};
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVFront(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+TEST(UVPatterns, UVMapFacesBack) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+		
+		Tuple::point(0.5, 0.5, -1),
+		Tuple::point(-0.5, -0.5, -1)
+	};
+
+	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVBack(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+TEST(UVPatterns, UVMapFacesLeft) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+
+		Tuple::point(-1, 0.5, -0.5),
+		Tuple::point(-1, -0.5, 0.5),
+	};
+
+
+	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVLeft(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+
+TEST(UVPatterns, UVMapFacesRight) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+
+		Tuple::point(1, 0.5, 0.5),
+		Tuple::point(1, -0.5, -0.5),
+	};
+
+
+	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVRight(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+TEST(UVPatterns, UVMapFacesUP) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+		Tuple::point(-0.5, 1, -0.5),
+		Tuple::point(0.5, 1, 0.5)
+	};
+
+
+	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVUp(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+TEST(UVPatterns, UVMapFacesDown) {
+	auto cube = Cube();
+
+	std::vector<Tuple> points = {
+		Tuple::point(-0.5, -1, 0.5),
+		Tuple::point(0.5, -1, -0.5)
+		
+	};
+
+
+	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
+
+	int i = 0;
+
+	for (auto point : points) {
+		double u, v;
+
+		cube.cubeUVDown(point, &u, &v);
+		ASSERT_FLOAT_EQ(ans[i].first, u);
+		ASSERT_FLOAT_EQ(ans[i].second, v);
+		i++;
+	}
+}
+
+TEST(UVPatterns, FindingColorsOnMappedCube) {
+	Color red    = Color(1, 0, 0);
+	Color yellow = Color(1, 1, 0);
+	Color brown  = Color(1, 0.5, 0);
+	Color green  = Color(0, 1, 0);
+	Color cyan   = Color(0, 1, 1);
+	Color blue   = Color(0, 0, 1);
+	Color purple = Color(1, 0, 1);
+	Color white  = Color(1, 1, 1);
+
+	auto left    = AlignCheck(yellow, cyan, red, blue, brown);
+	auto front   = AlignCheck(cyan, red, yellow, brown, green);
+	auto right   = AlignCheck(red, yellow, purple, green, white);
+	auto back    = AlignCheck(green, purple, cyan, white, blue);
+	auto up      = AlignCheck(brown, cyan, purple, red, yellow);
+	auto down    = AlignCheck(purple, brown, green, blue, white);
+	auto pattern = CubeMap(&left, &front, &right, &back, &up, &down);
 
 }
