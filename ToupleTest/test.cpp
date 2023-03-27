@@ -4407,6 +4407,91 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	auto back    = AlignCheck(green, purple, cyan, white, blue);
 	auto up      = AlignCheck(brown, cyan, purple, red, yellow);
 	auto down    = AlignCheck(purple, brown, green, blue, white);
-	auto pattern = CubeMap(&left, &front, &right, &back, &up, &down);
+
+	auto pattern = CubeMap(&front, &back, &left, &right, &up, &down);
+	auto cube = Cube();
+	cube.material.pattern = &pattern;
+
+
+
+	std::vector<Tuple> LPoints = {
+									Tuple::point(-1, 0, 0), Tuple::point(-1, 0.9, -0.9), Tuple::point(-1, 0.9, 0.9),
+									Tuple::point(-1, -0.9, -0.9), Tuple::point(-1, -0.9, 0.9)
+								 };
+
+
+	std::vector<Color> LAns = { yellow, cyan, red, blue, brown };
+	int i = 0;
+
+	for (auto point : LPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), LAns[i++]);
+	}
+
+	std::vector<Tuple> FPoints = {
+								Tuple::point(0, 0, 1), Tuple::point(-0.9, 0.9, 1), Tuple::point(0.9, 0.9, 1),
+								Tuple::point(-0.9, -0.9, 1), Tuple::point(0.9, -0.9, 1)
+	};
+
+	std::vector<Color> FAns = { cyan, red, yellow, brown, green };
+	i = 0;
+
+	for (auto point : FPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), FAns[i++]);
+	}
+
+	std::vector<Tuple> RPoints = {
+							Tuple::point(1, 0, 0), Tuple::point(1, 0.9, 0.9), Tuple::point(1, 0.9, -0.9),
+							Tuple::point(1, -0.9, 0.9), Tuple::point(1, -0.9, -0.9)
+	};
+
+	std::vector<Color> RAns = { red, yellow, purple, green, white };
+	i = 0;
+
+	for (auto point : RPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), RAns[i++]);
+	}
+
+	std::vector<Tuple> BPoints = {
+						Tuple::point(0, 0, -1), Tuple::point(0.9, 0.9, -1), Tuple::point(-0.9, 0.9, -1),
+						Tuple::point(0.9, -0.9, -1), Tuple::point(-0.9, -0.9, -1)
+	};
+
+	std::vector<Color> BAns = { green, purple, cyan, white, blue };
+	i = 0;
+
+	for (auto point : BPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), BAns[i++]);
+	}
+
+
+	std::vector<Tuple> UPoints = {
+						Tuple::point(0, 1, 0), Tuple::point(-0.9, 1, -0.9), Tuple::point(0.9, 1, -0.9),
+						Tuple::point(-0.9, 1, 0.9), Tuple::point(0.9, 1, 0.9)
+	};
+
+	std::vector<Color> UAns = { brown, cyan, purple, red, yellow };
+	i = 0;
+
+	for (auto point : UPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), UAns[i++]);
+	}
+
+	std::vector<Tuple> DPoints = {
+					Tuple::point(0, -1, 0), Tuple::point(-0.9, -1, 0.9), Tuple::point(0.9, -1, 0.9),
+					Tuple::point(-0.9, -1, -0.9), Tuple::point(0.9, -1, -0.9)
+	};
+
+	std::vector<Color> DAns = { purple, brown, green, blue, white };
+	i = 0;
+
+	for (auto point : DPoints) {
+		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		ASSERT_EQ(pattern.patternColorAt(point, &cube), DAns[i++]);
+	}
 
 }
