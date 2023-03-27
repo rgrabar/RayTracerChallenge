@@ -7,6 +7,7 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 	Color newColor = material.color;
 
 	if (material.pattern != nullptr)
+		// TODO: rename stripeatobject to something that makes more sense
 		newColor = object->stripeAtObject(point);
 
 	auto effectiveColor = newColor * intensity;

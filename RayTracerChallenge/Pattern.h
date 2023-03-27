@@ -143,12 +143,14 @@ public:
 
 class CubeMap :public Pattern {
 public:
+	// TODO: is there a way to guarantee order?
 	CubeMap(Pattern* _front, Pattern* _back, Pattern* _left, Pattern* _right, Pattern* _up, Pattern* _down) : faces{ _front, _back, _left, _right, _up, _down } {
 
 	}
 
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 
+	// TODO: this should never be called
 	Color uvPatternAt(double u, double v) const {
 		
 	}
