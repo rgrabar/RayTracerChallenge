@@ -10,3 +10,5 @@ public:
 	void canvasToImage()const;
 	int scaleColor(double c)const;
 };
+
+Canvas canvasFromPPM();

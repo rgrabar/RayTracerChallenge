@@ -3,6 +3,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string> 
+#include <vector>
+#include <fstream>
+#include <sstream>
 
 Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 	canvas = (Color*)calloc(w * h, sizeof(Color));
@@ -56,4 +59,64 @@ void Canvas::canvasToImage()const {
 	}
 
 	writer.close();
+}
+
+Canvas canvasFromPPM(const std::string& fileName) {
+    std::ifstream ppmFile(fileName);
+    std::string line;
+    std::vector<int> numbers;
+    std::string flavor;
+    int width, height, scale;
+
+    // TODO: check if file exists
+
+    while (std::getline(ppmFile, line)) {
+        if (line[0] != '#') { // skip comment lines
+            break;
+        }
+    }
+    // trim the string
+    std::stringstream trimmer;
+    trimmer << line;
+    line.clear();
+    trimmer >> line;
+
+    flavor = line;
+    if (flavor != "P3") {
+        // TODO: some assert?
+        std::cout << "Wrong PPM format\n";
+    }
+
+
+    while (std::getline(ppmFile, line)) {
+        if (line[0] != '#') { // skip comment lines
+            break;
+        }
+    }
+
+    std::stringstream ss(line);
+    ss >> width >> height;
+
+    while (std::getline(ppmFile, line)) {
+        if (line[0] == '#') { // skip comment lines
+            continue;
+        }
+        std::stringstream ss(line);
+        int n;
+        while (ss >> n) {
+            numbers.push_back(n);
+        }
+    }
+
+    scale = numbers[0];
+
+    auto canvas = Canvas(width, height);
+
+    int cur = 0;
+
+    for (int i = 3; i < numbers.size(); i += 3) {
+        canvas.canvas[cur++] = Color(numbers[i - 2] / (double)scale, numbers[i - 1] / (double)scale, numbers[i] / (float)scale);
+    }
+
+	return canvas;
 }
