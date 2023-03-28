@@ -4495,3 +4495,65 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	}
 
 }
+
+TEST(PPMParsing, WrongMagicNumber) {
+	auto canvas = canvasFromPPM("WrongMagicNumber.ppm");
+}
+
+TEST(PPMParsing, PPMDimensions) {
+	auto canvas = canvasFromPPM("PPMDimensions.ppm");
+
+	ASSERT_EQ(canvas.w, 10);
+	ASSERT_EQ(canvas.h, 2);
+}
+
+TEST(PPMParsing, PPMPixelData) {
+	auto canvas = canvasFromPPM("PixelData.ppm");
+	std::vector<Color> ans = {
+		Color(1, 0.498039, 0),
+		Color(0, 0.498039, 1),
+		Color(0.498039, 1, 0),
+		Color(1, 1, 1),
+		Color(0, 0, 0),
+		Color(1, 0, 0),
+		Color(0, 1, 0),
+		Color(0, 0, 1),
+		Color(1, 1, 0),
+		Color(0, 1, 1),
+		Color(1, 0, 1),
+		Color(0.498039, 0.498039, 0.498039)
+	};
+
+	for (int x = 0; x < canvas.h * canvas.w; ++x) {
+			ASSERT_EQ(canvas.canvas[x], ans[x]);
+	}
+}
+
+TEST(PPMParsing, IgnoringCommentsInPPM) {
+	auto canvas = canvasFromPPM("IgnoringComments.ppm");
+	std::vector<Color> ans = {
+		Color(1, 1, 1),
+		Color(1, 0, 1)
+	};
+
+	ASSERT_EQ(canvas.canvas[0], ans[0]);
+	ASSERT_EQ(canvas.canvas[1], ans[1]);
+}
+
+TEST(PPMParsing, PPMRGBSpanningLines) {
+	auto canvas = canvasFromPPM("PPMRGBSpansLines.ppm");
+	std::vector<Color> ans = {
+		Color(0.2, 0.6, 0.8),
+	};
+
+	ASSERT_EQ(canvas.canvas[0], ans[0]);
+}
+
+TEST(PPMParsing, PPMRespectScale) {
+	auto canvas = canvasFromPPM("RespectScale.ppm");
+	std::vector<Color> ans = {
+		Color(0.75, 0.5, 0.25),
+	};
+	// The test is wrong i think should be (1, 0)
+	ASSERT_EQ(canvas.canvas[2], ans[0]);
+}
