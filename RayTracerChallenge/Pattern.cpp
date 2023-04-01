@@ -130,6 +130,15 @@ Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
 	return faces[face]->patternColorAt(point, shape);
 }
 
+Color UVImagePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+	double a, b;
+	// TODO: check if null or somehting
+	if (shape == nullptr)
+		return Color(0, 0, 0);
+	shape->UVmap(point, &a, &b);
+	return uvPatternAt(a, b);
+}
+
 Color TestPatern::patternColorAt(const Tuple& object_point, const Shape* shape)const {
 	return Color(object_point.x, object_point.y, object_point.z);
 }

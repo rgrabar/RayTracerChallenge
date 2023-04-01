@@ -4557,3 +4557,29 @@ TEST(PPMParsing, PPMRespectScale) {
 	// The test is wrong i think should be (1, 0)
 	ASSERT_EQ(canvas.canvas[2], ans[0]);
 }
+
+TEST(PPMParsing, CheckerPatternIn2d) {
+	auto canvas = canvasFromPPM("CheckerPatternIn2d.ppm");
+	std::vector<Color> ans = {
+		 Color(0.9, 0.9, 0.9),
+		 Color(0.2, 0.2, 0.2),
+		 Color(0.1, 0.1, 0.1),
+		 Color(0.9, 0.9, 0.9)
+	};
+
+	auto pattern = UVImagePattern(&canvas);
+
+	auto sphere = Sphere();
+
+	auto c = pattern.uvPatternAt(0, 0);
+	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+
+	c = pattern.uvPatternAt(0.3, 0);
+	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+
+	c = pattern.uvPatternAt(0.6, 0.3);
+	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+
+	c = pattern.uvPatternAt(1, 1);
+	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+}

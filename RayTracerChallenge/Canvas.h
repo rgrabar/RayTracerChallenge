@@ -1,5 +1,12 @@
 #pragma once
 #include"Color.h"
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
+#include <string> 
+#include <vector>
+#include <fstream>
+#include <sstream>
 
 class Canvas {
 public:
@@ -11,4 +18,4 @@ public:
 	int scaleColor(double c)const;
 };
 
-Canvas canvasFromPPM();
+Canvas canvasFromPPM(const std::string& fileName);
