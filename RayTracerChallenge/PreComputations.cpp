@@ -1,11 +1,11 @@
 #include "PreComputations.h"
 
 Precomputations::Precomputations() :
-ray(Tuple::point(0, 0, -4), Tuple::vector(0, 0, 1)),
+ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 0)),
 // TODO: fix default constructor
-point(Tuple::point(0, 0, -1)),
-eyev(Tuple::vector(0, 0, -1)),
-normalv(Tuple::vector(0, 0, -1)),
+point(Tuple::point(0, 0, 0)),
+eyev(Tuple::vector(0, 0, 0)),
+normalv(Tuple::vector(0, 0, 0)),
 // TODO: this should not be a default
 reflectv(Tuple::point(0, 0, 0)),
 overPoint(Tuple::vector(0, 0, 0)),
@@ -14,11 +14,11 @@ underPoint(Tuple::vector(0, 0, 0))
 
 Precomputations::Precomputations(const Intersection& _intersection, const Ray& _ray, const Intersections& intersections) :
 	ray(_ray),
-	point(Tuple::point(0, 0, -1)),
-	eyev(Tuple::vector(0, 0, -1)),
-	normalv(Tuple::vector(0, 0, -1)),
+	point(Tuple::point(0, 0, 0)),
+	eyev(Tuple::vector(0, 0, 0)),
+	normalv(Tuple::vector(0, 0, 0)),
 	// TODO: this should not be a default
-	reflectv(Tuple::point(0, 0, 0)),
+	reflectv(Tuple::vector(0, 0, 0)),
 	overPoint(Tuple::vector(0, 0, 0)),
 	underPoint(Tuple::vector(0, 0, 0))
 {
