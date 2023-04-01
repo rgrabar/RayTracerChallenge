@@ -13,7 +13,7 @@ bool Tuple::isVector() {
 }
 
 double Tuple::magnitude()const{
-	return std::sqrt(x * x + y * y + z * z + w + w);
+	return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
 Tuple Tuple::normalize()const {
