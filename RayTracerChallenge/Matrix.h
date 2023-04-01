@@ -9,6 +9,8 @@ class Matrix {
 public:
 
 	Matrix(int _h, int _w);
+	Matrix(Matrix& other);
+	
 	~Matrix();
 	int h, w;
 	double* matrix;

@@ -14,15 +14,26 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
             }
         }
     }
-
     else {
         std::cout << "Can't allocate memory for the matrix!";
     }
 };
 
+Matrix::Matrix(Matrix& other) {
+    h = other.h;
+    w = other.w;
+
+    matrix = (double*)malloc(w * h * sizeof(double));
+    memcpy(matrix, other.matrix, w * h * sizeof(double));
+ 
+    cachedMatrix = other.cachedMatrix;
+};
+
+
 Matrix::~Matrix() {
     free(matrix);
-    free(cachedMatrix);
+    if(cachedMatrix != nullptr)
+        delete(cachedMatrix);
 }
 
 void Matrix::setElement(int y, int x, double value) {
@@ -66,6 +77,7 @@ double Matrix::invertible()const {
 
 Matrix* Matrix::inverse() {
     // TODO: return some error?
+
     if (!invertible()) {
         std::cout << "Not invertible!\n";
     }
@@ -152,7 +164,6 @@ const Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
 
 const Tuple operator*(const Matrix& lhs, const Tuple& rhs) {
     return Tuple(
-        //m(0, 0) * t.x() + m(0, 1) * t.y() + m(0, 2) * t.z() + m(0, 3) * t.w(),
         lhs.matrix[0] * rhs.x + lhs.matrix[1] * rhs.y + lhs.matrix[2] * rhs.z + lhs.matrix[3] * rhs.w,
         lhs.matrix[4] * rhs.x + lhs.matrix[5] * rhs.y + lhs.matrix[6] * rhs.z + lhs.matrix[7] * rhs.w,
         lhs.matrix[8] * rhs.x + lhs.matrix[9] * rhs.y + lhs.matrix[10] * rhs.z + lhs.matrix[11] * rhs.w,
