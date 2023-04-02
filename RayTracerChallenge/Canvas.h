@@ -20,7 +20,7 @@ public:
 	Color* canvas;
 	void writePixel(int x, int y, const Color& c)const;
 	void canvasToImage()const;
-	int scaleColor(double c)const;
+	unsigned char scaleColor(double c)const;
 	mutable Raylib::Image rayImage;
 };
 

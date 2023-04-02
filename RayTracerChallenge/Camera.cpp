@@ -47,11 +47,8 @@ void Camera::splitArray(World* world, Canvas* image) {
 	int curIndex = 0;
 	while (shuffleIndex < shufflePoints.size()) {
 
-		
 		curIndex = shuffleIndex++;
 		
-		
-
 		//m.unlock();
 
 		int x = shufflePoints[curIndex].first;
@@ -187,7 +184,7 @@ void Camera::drawRayImage(Canvas* image) {
 		Raylib::BeginDrawing();
 		//x, y, Raylib::Color(image->scaleColor(pixelColor.r), image->scaleColor(pixelColor.g), image->scaleColor(pixelColor.b), 255)
 		auto rayTexture = Raylib::LoadTextureFromImage(image->rayImage);
-		Raylib::DrawTexture(rayTexture, 0, 0, Raylib::Color(255, 255, 255, 255));
+		Raylib::DrawTexture(rayTexture, 0, 0, Raylib::Color{ 255, 255, 255, 255 });
 		Raylib::EndDrawing();
 	}
 	Raylib::CloseWindow();
@@ -221,13 +218,17 @@ Canvas Camera::render(World& world) {
 
 	std::cout << "USING : " << n << " THREADS\n";
 
-
 	std::thread rayThread(&Camera::drawRayImage, this, &image);
+
+	while (!Raylib::IsWindowReady()) {
+		// wait for window
+	}
+
 
 	std::vector<std::thread> threads;
 	for (int i = 0; i < (int)n; ++i) {
 		// give a bit of time for each tread to start otherwise some pixels get skipped
-		std::this_thread::sleep_for(1us);
+		Raylib::WaitTime(0.001);
 		threads.push_back(std::thread(&Camera::splitArray, this, &world, &image));
 	}
 

@@ -22,7 +22,7 @@ Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 		exit(0);
 	}
 
-    rayImage = Raylib::GenImageColor(w, h, Raylib::Color(0, 0, 0, 255));
+    rayImage = Raylib::GenImageColor(w, h, Raylib::Color{ 0, 0, 0, 255 });
 };
 
 void Canvas::writePixel(int x, int y, const Color& c)const {
@@ -30,11 +30,11 @@ void Canvas::writePixel(int x, int y, const Color& c)const {
 	if(y * w + x < w * h)
 		canvas[y * w + x] = c;
 
-    Raylib::ImageDrawPixel(&rayImage, x, y, Raylib::Color(scaleColor(c.r), scaleColor(c.g), scaleColor(c.b), 255));
+    Raylib::ImageDrawPixel(&rayImage, x, y, Raylib::Color{ scaleColor(c.r), scaleColor(c.g), scaleColor(c.b), 255 });
 
 }
 
-int Canvas::scaleColor(double c)const {
+unsigned char Canvas::scaleColor(double c)const {
 	if (c < 0)
 		return 0;
 	else if (c > 1)
@@ -52,13 +52,14 @@ void Canvas::canvasToImage()const {
 	// PPM flavoir identifier
 	writer << "P3\n";
 	writer << std::to_string(w) << " " << std::to_string(h) << "\n";
+
 	// maximum color value
 	writer << "255\n";
 	for (int i = 0; i < h; ++i) {
 		for (int j = 0; j < w; ++j) {
-			writer << scaleColor(canvas[i * w + j].r) << " " 
-				   << scaleColor(canvas[i * w + j].g) << " " 
-				   << scaleColor(canvas[i * w + j].b) << " ";
+			writer << (int)scaleColor(canvas[i * w + j].r) << " " 
+				   << (int)scaleColor(canvas[i * w + j].g) << " " 
+				   << (int)scaleColor(canvas[i * w + j].b) << " ";
 		}
 		writer << "\n";
 	}
