@@ -3,6 +3,7 @@
 #include "World.h"
 #include <atomic>
 #include <iostream>
+#include <mutex>
 
 class Camera {
 public:
@@ -29,5 +30,10 @@ public:
 
 	Canvas render(World& world);
 
-	void splitArray(int start, int end, World* world, Canvas* image);
+	void splitArray(World* world, Canvas* image);
+
+	void drawRayImage(Canvas* image);
+
+	std::vector<std::pair<int, int>> shufflePoints;
+	std::atomic_int shuffleIndex = 0;
 };

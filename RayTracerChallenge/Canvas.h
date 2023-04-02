@@ -8,6 +8,11 @@
 #include <fstream>
 #include <sstream>
 
+namespace Raylib {
+	#include "raylib.h"
+};
+
+
 class Canvas {
 public:
 	Canvas(int _w, int _h);
@@ -16,6 +21,7 @@ public:
 	void writePixel(int x, int y, const Color& c)const;
 	void canvasToImage()const;
 	int scaleColor(double c)const;
+	mutable Raylib::Image rayImage;
 };
 
 Canvas canvasFromPPM(const std::string& fileName);

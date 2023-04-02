@@ -1,6 +1,17 @@
 #include "Camera.h"
 #include <thread>
 
+#include <algorithm>
+#include <random>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+namespace Raylib {
+	#include "raylib.h"
+};
+
+
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);
 	auto aspect = hSize / (double)vSize;
@@ -30,87 +41,73 @@ Ray Camera::rayForPixel(double px, double py) {
 	return Ray(origin, direction);
 }
 
-void Camera::splitArray(int start, int end, World* world, Canvas* image) {
-	for (auto y = start; y < end; ++y) {
-		for (auto x = 0; x < hSize; ++x) {
+void Camera::splitArray(World* world, Canvas* image) {	
+	//for (auto y = start; y < end; ++y) {
+	//	for (auto x = 0; x < hSize; ++x) {
+	int curIndex = 0;
+	while (shuffleIndex < shufflePoints.size()) {
 
-			auto pixelColor = Color(0, 0, 0);
-			double u = y, v = x;
-			bool isEdge = 0;
+		
+		curIndex = shuffleIndex++;
+		
+		
 
-			if (aliasingSamples > 4 && (aliasEdges || edgeAliasHighlights)) {
+		//m.unlock();
 
-				// +-0.5 in canvas space moves the ray to the pixel edges
-				double topLeftX = v - 0.5;
-				double topLeftY = u - 0.5;
+		int x = shufflePoints[curIndex].first;
+		int y = shufflePoints[curIndex].second;
 
-				double topRightX = v + 0.5;
-				double topRightY = u + 0.5;
+		auto pixelColor = Color(0, 0, 0);
+		double u = y, v = x;
+		bool isEdge = 0;
 
-				double bottomLeftX = v - 0.5;
-				double bottomLeftY = u + 0.5;
+		if (aliasingSamples > 4 && (aliasEdges || edgeAliasHighlights)) {
 
-				double bottomRightX = v + 0.5;
-				double bottomRightY = u - 0.5;
+			// +-0.5 in canvas space moves the ray to the pixel edges
+			double topLeftX = v - 0.5;
+			double topLeftY = u - 0.5;
 
-				auto rayTopLeft = rayForPixel(topLeftX, topLeftY);
-				Color topLeft = world->colorAt(rayTopLeft);
+			double topRightX = v + 0.5;
+			double topRightY = u + 0.5;
 
-				auto rayTopRight = rayForPixel(topRightX, topRightY);
-				Color topRight = world->colorAt(rayTopRight);
+			double bottomLeftX = v - 0.5;
+			double bottomLeftY = u + 0.5;
 
-				auto rayBottomLeft = rayForPixel(bottomLeftX, bottomLeftY);
-				Color bottomLeft = world->colorAt(rayBottomLeft);
+			double bottomRightX = v + 0.5;
+			double bottomRightY = u - 0.5;
 
-				auto rayBottomRight = rayForPixel(bottomRightX, bottomRightY);
-				Color bottomRight = world->colorAt(rayBottomRight);
+			auto rayTopLeft = rayForPixel(topLeftX, topLeftY);
+			Color topLeft = world->colorAt(rayTopLeft);
 
-				auto rayCenter = rayForPixel(x, y);
-				Color center = world->colorAt(rayCenter);
+			auto rayTopRight = rayForPixel(topRightX, topRightY);
+			Color topRight = world->colorAt(rayTopRight);
 
-				if (std::abs(topLeft.r - center.r) > aliasingThreshold || std::abs(topLeft.g - center.g) > aliasingThreshold || std::abs(topLeft.b - center.b) > aliasingThreshold) {
-					isEdge = 1;
-				}
+			auto rayBottomLeft = rayForPixel(bottomLeftX, bottomLeftY);
+			Color bottomLeft = world->colorAt(rayBottomLeft);
 
-				if (std::abs(topRight.r - center.r) > aliasingThreshold || std::abs(topRight.g - center.g) > aliasingThreshold || std::abs(topRight.b - center.b) > aliasingThreshold) {
-					isEdge = 1;
-				}
+			auto rayBottomRight = rayForPixel(bottomRightX, bottomRightY);
+			Color bottomRight = world->colorAt(rayBottomRight);
 
-				if (std::abs(bottomLeft.r - center.r) > aliasingThreshold || std::abs(bottomLeft.g - center.g) > aliasingThreshold || std::abs(bottomLeft.b - center.b) > aliasingThreshold) {
-					isEdge = 1;
-				}
+			auto rayCenter = rayForPixel(x, y);
+			Color center = world->colorAt(rayCenter);
 
-				if (std::abs(bottomRight.r - center.r) > aliasingThreshold || std::abs(bottomRight.g - center.g) > aliasingThreshold || std::abs(bottomRight.b - center.b) > aliasingThreshold) {
-					isEdge = 1;
-				}
-
-				if (isEdge) {
-					for (int k = 0; k < aliasingSamples; ++k) {
-
-						u = (y + random_double());
-						v = (x + random_double());
-
-						auto ray = rayForPixel(v, u);
-						pixelColor += world->colorAt(ray);
-					}
-					if (edgeAliasHighlights) {
-						image->writePixel(x, y, Color(1, 1, 1));
-					}
-					else
-						image->writePixel(x, y, pixelColor / aliasingSamples);
-				}
-				else if (edgeAliasHighlights) {
-					auto ray = rayForPixel(v, u);
-					pixelColor += world->colorAt(ray);
-					image->writePixel(x, y, pixelColor / 2);
-				}
-				else {
-					auto ray = rayForPixel(v, u);
-					pixelColor += world->colorAt(ray);
-					image->writePixel(x, y, pixelColor);
-				}
+			if (std::abs(topLeft.r - center.r) > aliasingThreshold || std::abs(topLeft.g - center.g) > aliasingThreshold || std::abs(topLeft.b - center.b) > aliasingThreshold) {
+				isEdge = 1;
 			}
-			else if (aliasingSamples != 0) {
+
+			if (std::abs(topRight.r - center.r) > aliasingThreshold || std::abs(topRight.g - center.g) > aliasingThreshold || std::abs(topRight.b - center.b) > aliasingThreshold) {
+				isEdge = 1;
+			}
+
+			if (std::abs(bottomLeft.r - center.r) > aliasingThreshold || std::abs(bottomLeft.g - center.g) > aliasingThreshold || std::abs(bottomLeft.b - center.b) > aliasingThreshold) {
+				isEdge = 1;
+			}
+
+			if (std::abs(bottomRight.r - center.r) > aliasingThreshold || std::abs(bottomRight.g - center.g) > aliasingThreshold || std::abs(bottomRight.b - center.b) > aliasingThreshold) {
+				isEdge = 1;
+			}
+
+			if (isEdge) {
 				for (int k = 0; k < aliasingSamples; ++k) {
 
 					u = (y + random_double());
@@ -119,39 +116,97 @@ void Camera::splitArray(int start, int end, World* world, Canvas* image) {
 					auto ray = rayForPixel(v, u);
 					pixelColor += world->colorAt(ray);
 				}
-				image->writePixel(x, y, pixelColor / aliasingSamples);
+				if (edgeAliasHighlights) {
+					image->writePixel(x, y, Color(1, 1, 1));
+				}
+				else
+					image->writePixel(x, y, pixelColor / aliasingSamples);
+			}
+			else if (edgeAliasHighlights) {
+				auto ray = rayForPixel(v, u);
+				pixelColor += world->colorAt(ray);
+				image->writePixel(x, y, pixelColor / 2);
 			}
 			else {
 				auto ray = rayForPixel(v, u);
 				pixelColor += world->colorAt(ray);
 				image->writePixel(x, y, pixelColor);
 			}
+		}
+		else if (aliasingSamples != 0) {
+			for (int k = 0; k < aliasingSamples; ++k) {
 
-			pixelCount++;
+				u = (y + random_double());
+				v = (x + random_double());
 
-			if (pixelCount % next == 0) {
-				int pos = 70 * pixelCount / ((double)hSize * vSize);
-				std::cout << "[";
-
-				for (int i = 0; i < 70; ++i) {
-
-					if (i < pos)
-						std::cout << "=";
-					else if (i == pos)
-						std::cout << ">";
-					else
-						std::cout << " ";
-					//std::cout << pixelCount / ((double)hSize * vSize) << "\n";
-				}
-				std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
-				std::cout.flush();
+				auto ray = rayForPixel(v, u);
+				pixelColor += world->colorAt(ray);
 			}
+			image->writePixel(x, y, pixelColor / aliasingSamples);
+		}
+		else {
+			auto ray = rayForPixel(v, u);
+			pixelColor += world->colorAt(ray);
+			image->writePixel(x, y, pixelColor);
+		}
+
+		pixelCount++;
+
+		if (pixelCount % next == 0) {
+			int pos = 70 * pixelCount / ((double)hSize * vSize);
+			std::cout << "[";
+
+			for (int i = 0; i < 70; ++i) {
+
+				if (i < pos)
+					std::cout << "=";
+				else if (i == pos)
+					std::cout << ">";
+				else
+					std::cout << " ";
+				//std::cout << pixelCount / ((double)hSize * vSize) << "\n";
+			}
+			std::cout << "] " << (int)(pixelCount / ((double)hSize * vSize) * 100) << " %\r";
+			std::cout.flush();
 		}
 	}
+	//	}
+	//}
 }
+
+void Camera::drawRayImage(Canvas* image) {
+
+	Raylib::InitWindow(image->w, image->h, "raylib [core] example - basic window");
+	Raylib::SetTargetFPS(30);
+	Raylib::SetTraceLogLevel(4);
+
+		//Raylib::DrawText("Congrats! You created your first window!", 190, 200, 20, Raylib::Color(100, 100, 100, 255));
+	while (!Raylib::WindowShouldClose())
+	{
+		//Raylib::ClearBackground(Raylib::Color(255, 255, 255, 255));
+		Raylib::BeginDrawing();
+		//x, y, Raylib::Color(image->scaleColor(pixelColor.r), image->scaleColor(pixelColor.g), image->scaleColor(pixelColor.b), 255)
+		auto rayTexture = Raylib::LoadTextureFromImage(image->rayImage);
+		Raylib::DrawTexture(rayTexture, 0, 0, Raylib::Color(255, 255, 255, 255));
+		Raylib::EndDrawing();
+	}
+	Raylib::CloseWindow();
+
+}
+
+using namespace std::chrono_literals;
 
 Canvas Camera::render(World& world) {
 	Canvas image(hSize, vSize);
+
+	for (auto y = 0; y < vSize; ++y) {
+		for (auto x = 0; x < hSize; ++x) {
+			shufflePoints.emplace_back(x, y);
+		}
+	}
+
+	auto rng = std::default_random_engine{};
+	std::shuffle(std::begin(shufflePoints), std::end(shufflePoints), rng);
 
 	next = hSize * vSize * 0.05;
 	// transfrom before any calculations to avoid thread racing in matrix inverse
@@ -162,25 +217,26 @@ Canvas Camera::render(World& world) {
 		object->transform.inverse();
 	}
 
-	const unsigned n = 12;
+	const unsigned n = std::thread::hardware_concurrency();
 
 	std::cout << "USING : " << n << " THREADS\n";
 
-	unsigned batch_size = vSize / n;
-	unsigned batch_remainder = (vSize) % n;
+
+	std::thread rayThread(&Camera::drawRayImage, this, &image);
 
 	std::vector<std::thread> threads;
 	for (int i = 0; i < (int)n; ++i) {
-		int start = i * batch_size;
-		threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_size, &world, &image));
+		// give a bit of time for each tread to start otherwise some pixels get skipped
+		std::this_thread::sleep_for(1us);
+		threads.push_back(std::thread(&Camera::splitArray, this, &world, &image));
 	}
 
-	int start = n * batch_size;
-	threads.push_back(std::thread(&Camera::splitArray, this, start, start + batch_remainder, &world, &image));
+	rayThread.join();
 
-	for (auto i = 0; i < (int)(n + 1); ++i) {
-		threads[i].join();
+	for (auto& thread:threads) {
+		thread.join();
 	}
+
 
 	std::cout << "\nCOMPLETED\n";
 	return image;
