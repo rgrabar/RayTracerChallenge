@@ -62,7 +62,7 @@ void Canvas::canvasToImage()const {
 }
 
 Canvas canvasFromPPM(const std::string& fileName) {
-    std::ifstream ppmFile(fileName);
+    std::ifstream ppmFile(fileName, std::ios::binary);
     std::string line;
     std::vector<int> numbers;
     std::string flavor;
@@ -82,12 +82,12 @@ Canvas canvasFromPPM(const std::string& fileName) {
     trimmer >> line;
 
     flavor = line;
-    if (flavor != "P3") {
+    if (flavor != "P3" && flavor != "P6") {
         // TODO: some assert?
         std::cout << "Wrong PPM format\n";
     }
 
-
+   
     while (std::getline(ppmFile, line)) {
         if (line[0] != '#') { // skip comment lines
             break;
@@ -97,26 +97,58 @@ Canvas canvasFromPPM(const std::string& fileName) {
     std::stringstream ss(line);
     ss >> width >> height;
 
-    while (std::getline(ppmFile, line)) {
-        if (line[0] == '#') { // skip comment lines
-            continue;
+    if (flavor == "P3") {
+
+        while (std::getline(ppmFile, line)) {
+            if (line[0] == '#') { // skip comment lines
+                continue;
+            }
+            std::stringstream ss(line);
+            int n;
+            while (ss >> n) {
+                numbers.push_back(n);
+            }
         }
-        std::stringstream ss(line);
-        int n;
-        while (ss >> n) {
-            numbers.push_back(n);
+
+        scale = numbers[0];
+
+        auto canvas = Canvas(width, height);
+
+        int cur = 0;
+
+        for (int i = 3; i < numbers.size(); i += 3) {
+            canvas.canvas[cur++] = Color(numbers[i - 2] / (double)scale, numbers[i - 1] / (double)scale, numbers[i] / (float)scale);
         }
+
+        return canvas;
     }
+    else {
+        const int num_pixels = width * height;
+        std::vector<unsigned char>data(num_pixels * 3);
+        int max_value;
+        ppmFile >> max_value;
 
-    scale = numbers[0];
+        ppmFile.read(reinterpret_cast<char*>(data.data()), num_pixels * 3);
 
-    auto canvas = Canvas(width, height);
+        // Print some information about the image
+        std::cout << "Magic number: " << flavor << std::endl;
+        std::cout << "Width: " << width << std::endl;
+        std::cout << "Height: " << height << std::endl;
+        std::cout << "Max value: " << max_value << std::endl;
 
-    int cur = 0;
+        // Print the pixel values
+        int cur = 0;
+        auto canvas = Canvas(width, height);
+        for (int i = 0; i < num_pixels; ++i) {
+            //std::cout << static_cast<int>(data[i * 3]) << ",";
+            //std::cout << static_cast<int>(data[i * 3 + 1]) << ",";
+            //std::cout << static_cast<int>(data[i * 3 + 2]) << " ";
+            canvas.canvas[cur++] = Color(static_cast<int>(data[i * 3 + 1]) / (double)max_value, static_cast<int>(data[i * 3 + 2]) / (double)max_value, static_cast<int>(data[i * 3]) / (double)max_value);
+        }
+        std::cout << std::endl;
 
-    for (int i = 3; i < numbers.size(); i += 3) {
-        canvas.canvas[cur++] = Color(numbers[i - 2] / (double)scale, numbers[i - 1] / (double)scale, numbers[i] / (float)scale);
+        // Close the file
+        ppmFile.close();
+        return canvas;
     }
-
-	return canvas;
 }
