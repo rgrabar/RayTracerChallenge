@@ -156,7 +156,13 @@ Canvas Camera::render(World& world) {
 	next = hSize * vSize * 0.05;
 	// transfrom before any calculations to avoid thread racing in matrix inverse
 	transform.inverse();
-	const unsigned n = std::thread::hardware_concurrency();
+
+	// TODO: this is dumb but is done for the same reason as above
+	for (auto object : world.objects) {
+		object->transform.inverse();
+	}
+
+	const unsigned n = 12;
 
 	std::cout << "USING : " << n << " THREADS\n";
 
