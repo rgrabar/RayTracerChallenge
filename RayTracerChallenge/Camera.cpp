@@ -186,6 +186,7 @@ void Camera::drawRayImage(Canvas* image) {
 		auto rayTexture = Raylib::LoadTextureFromImage(image->rayImage);
 		Raylib::DrawTexture(rayTexture, 0, 0, Raylib::Color{ 255, 255, 255, 255 });
 		Raylib::EndDrawing();
+		Raylib::UnloadTexture(rayTexture);
 	}
 	Raylib::CloseWindow();
 
