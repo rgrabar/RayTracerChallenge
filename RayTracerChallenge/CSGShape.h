@@ -6,15 +6,23 @@
 #include "Tuple.h"
 #include "Shape.h"
 
+namespace CSGOperation {
+	enum OPERATION {
+		UNION,
+		INTERSECTION,
+		DIFFERENCE
+	};
+}
+
 class CSGShape : public Shape{
 public:
-	std::string operation;
+	CSGOperation::OPERATION operation;
 	Shape* left;
 	Shape* right;
 	BoundingBox m_bounds;
 
-	CSGShape(std::string _operation, Shape* _left, Shape* _right);
-	bool intersectionAllowed(std::string op, bool lhit, bool inl, bool inr)const;
+	CSGShape(CSGOperation::OPERATION _operation, Shape* _left, Shape* _right);
+	bool intersectionAllowed(CSGOperation::OPERATION op, bool lhit, bool inl, bool inr)const;
 	Intersections filterIntersections(const Intersections& xs)const;
 
 	Intersections intersect(const Ray& ray)const override;

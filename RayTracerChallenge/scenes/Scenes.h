@@ -828,8 +828,8 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 	cylinder.material.color = Color(0.126587, 0.13865, 0.932786);
 	cylinder.transform = scale(0.5, 0.5, 1) * rotationX(TEST_PI / 2);
 
-	auto csg = CSGShape("union", &cylinder, &cone);
-	auto csg1 = CSGShape("difference", &csg, &sphere);
+	auto csg = CSGShape(CSGOperation::OPERATION::UNION, &cylinder, &cone);
+	auto csg1 = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &csg, &sphere);
 
 	auto world = World();
 

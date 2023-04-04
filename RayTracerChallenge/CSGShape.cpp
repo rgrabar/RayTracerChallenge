@@ -1,18 +1,18 @@
 #include "CSGShape.h"
 
-CSGShape::CSGShape(std::string _operation, Shape* _left, Shape* _right) : operation(_operation), left(_left), right(_right) {
+CSGShape::CSGShape(CSGOperation::OPERATION _operation, Shape* _left, Shape* _right) : operation(_operation), left(_left), right(_right) {
 	left->parent = this;
 	right->parent = this;
 }
 
-bool CSGShape::intersectionAllowed(std::string op, bool lhit, bool inl, bool inr)const {
-	if (op == "union") {
+bool CSGShape::intersectionAllowed(CSGOperation::OPERATION op, bool lhit, bool inl, bool inr)const {
+	if (op == CSGOperation::OPERATION::UNION) {
 		return (lhit && !inr) || (!lhit && !inl);
 	}
-	else if (op == "intersection") {
+	else if (op == CSGOperation::OPERATION::INTERSECTION) {
 		return (lhit && inr) || (!lhit && inl);
 	}
-	else if (op == "difference") {
+	else if (op == CSGOperation::OPERATION::DIFFERENCE) {
 		return (lhit && !inr) || (!lhit && inl);
 	}
 
