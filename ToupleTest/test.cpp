@@ -3609,11 +3609,10 @@ TEST(CSG, CSGConstruct) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
-	ASSERT_EQ("union", c.operation);
+	ASSERT_EQ(CSGOperation::OPERATION::UNION, c.operation);
 	ASSERT_EQ(c.left, &s1);
 	ASSERT_EQ(c.right, &s2);
 
@@ -3625,9 +3624,8 @@ TEST(CSG, RuleForACSGOperationUnion) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	bool lhit[] = { true, true, true, true, false, false, false, false };
 	bool inl[] = { true, true, false, false, true, true, false, false };
@@ -3636,7 +3634,7 @@ TEST(CSG, RuleForACSGOperationUnion) {
 	bool ans[] = {false, true, false, true, false, false, true, true};
 
 	for (int i = 0; i < 8; ++i) {
-		ASSERT_EQ(ans[i], c.intersectionAllowed("union", lhit[i], inl[i], inr[i]));
+		ASSERT_EQ(ans[i], c.intersectionAllowed(CSGOperation::OPERATION::UNION, lhit[i], inl[i], inr[i]));
 	}
 }
 
@@ -3644,9 +3642,8 @@ TEST(CSG, RuleForACSGOperationIntersection) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	bool lhit[] = { true, true, true, true, false, false, false, false };
 	bool inl[] = { true, true, false, false, true, true, false, false };
@@ -3655,7 +3652,7 @@ TEST(CSG, RuleForACSGOperationIntersection) {
 	bool ans[] = { true, false, true, false, true, true, false, false };
 
 	for (int i = 0; i < 8; ++i) {
-		ASSERT_EQ(ans[i], c.intersectionAllowed("intersection", lhit[i], inl[i], inr[i]));
+		ASSERT_EQ(ans[i], c.intersectionAllowed(CSGOperation::OPERATION::INTERSECTION, lhit[i], inl[i], inr[i]));
 
 	}
 }
@@ -3664,9 +3661,8 @@ TEST(CSG, RuleForACSGOperationDifference) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	bool lhit[] = { true, true, true, true, false, false, false, false };
 	bool inl[] = { true, true, false, false, true, true, false, false };
@@ -3675,7 +3671,7 @@ TEST(CSG, RuleForACSGOperationDifference) {
 	bool ans[] = { false, true, false, true, true, true, false, false};
 
 	for (int i = 0; i < 8; ++i) {
-		ASSERT_EQ(ans[i], c.intersectionAllowed("difference", lhit[i], inl[i], inr[i]));
+		ASSERT_EQ(ans[i], c.intersectionAllowed(CSGOperation::OPERATION::DIFFERENCE, lhit[i], inl[i], inr[i]));
 	}
 }
 
@@ -3683,9 +3679,8 @@ TEST(CSG, FilteringAListOfIntersections) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	auto i1 = Intersection(1, &s1);
 	auto i2 = Intersection(2, &s2);
@@ -3711,7 +3706,7 @@ TEST(CSG, FilteringAListOfIntersections) {
 		++i;
 	}
 
-	c.operation = "intersection";
+	c.operation = CSGOperation::OPERATION::INTERSECTION;
 		
 	auto result1 = c.filterIntersections(xs);
 	int ans1[] = {2, 3};
@@ -3724,7 +3719,7 @@ TEST(CSG, FilteringAListOfIntersections) {
 	}
 	
 
-	c.operation = "difference";
+	c.operation = CSGOperation::OPERATION::DIFFERENCE;
 
 	auto result2 = c.filterIntersections(xs);
 	int ans2[] = { 1, 2 };
@@ -3742,9 +3737,8 @@ TEST(CSG, RayMissesCSGObject) {
 
 	auto s1 = Sphere();
 	auto s2 = Cube();
-	std::string a = "union";
 
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	auto r = Ray(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
 
@@ -3758,9 +3752,7 @@ TEST(CSG, RayHitsCSGObject) {
 	auto s2 = Sphere();
 	s2.transform = translate(0, 0, 0.5);
 
-	std::string a = "union";
-
-	auto c = CSGShape(a, &s1, &s2);
+	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
 	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 
@@ -3786,7 +3778,7 @@ TEST(CSG, BoundsOfCSG) {
 	
 	right.transform = translate(2, 3, 4);
 
-	auto shape = CSGShape("difference", &left, &right);
+	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
 	auto box = shape.boundsOf();
 
@@ -3801,7 +3793,7 @@ TEST(CSG, RayMissesCSG) {
 	auto left = Sphere();
 	auto right = Sphere();
 
-	auto shape = CSGShape("difference", &left, &right);
+	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
 	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
 	auto xs = shape.intersect(ray);
@@ -3814,7 +3806,7 @@ TEST(CSG, RayHitsCSG) {
 	auto left = Sphere();
 	auto right = Sphere();
 
-	auto shape = CSGShape("difference", &left, &right);
+	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
 	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 	auto xs = shape.intersect(ray);
@@ -3844,7 +3836,7 @@ TEST(CSG, SubdividingCSGSubdividesChildren) {
 	right.addChild(&s3);
 	right.addChild(&s4);
 
-	auto shape = CSGShape("difference", &left, &right);
+	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
 	shape.divide(1);
 
