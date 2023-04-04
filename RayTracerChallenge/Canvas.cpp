@@ -1,8 +1,6 @@
 #include "Canvas.h"
-#include <fstream>
+
 #include <iostream>
-#include <stdlib.h>
-#include <string> 
 #include <vector>
 #include <fstream>
 #include <sstream>

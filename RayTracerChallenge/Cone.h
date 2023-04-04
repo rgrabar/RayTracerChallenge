@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+
+#include "Intersection.h"
 #include "Helper.h"
 #include "Matrix.h"
 #include "Shape.h"

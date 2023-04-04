@@ -1,17 +1,11 @@
 #pragma once
 #include"Color.h"
-#include <fstream>
-#include <iostream>
-#include <stdlib.h>
+
 #include <string> 
-#include <vector>
-#include <fstream>
-#include <sstream>
 
 namespace Raylib {
 	#include "raylib.h"
 };
-
 
 class Canvas {
 public:

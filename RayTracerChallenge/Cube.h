@@ -2,7 +2,6 @@
 #include "Shape.h"
 #include "Helper.h"
 #include <algorithm>    // std::swap
-#include <iostream>
 #include <cmath>
 #include <climits>
 

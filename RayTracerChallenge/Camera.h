@@ -1,8 +1,9 @@
 #pragma once
 #include "Canvas.h"
+#include "Ray.h"
 #include "World.h"
+
 #include <atomic>
-#include <iostream>
 #include <mutex>
 
 class Camera {

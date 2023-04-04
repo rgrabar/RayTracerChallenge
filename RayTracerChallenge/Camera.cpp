@@ -1,10 +1,7 @@
 #include "Camera.h"
-#include <thread>
 
 #include <algorithm>
 #include <random>
-#include <iostream>
-#include <chrono>
 #include <thread>
 
 namespace Raylib {

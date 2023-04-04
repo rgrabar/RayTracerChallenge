@@ -1,4 +1,8 @@
 #pragma once
+
+#include "BoundingBox.h"
+#include "Intersection.h"
+#include "Tuple.h"
 #include "Shape.h"
 #include <vector>
 

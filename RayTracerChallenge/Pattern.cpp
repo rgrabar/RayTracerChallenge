@@ -1,12 +1,6 @@
 #include "Pattern.h"
 #include "Shape.h"
 
-
-
-// TODO: remove this
-#include "Sphere.h"
-#include "Plane.h"
-#include "Cylinder.h"
 #include "Cube.h"
 
 Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
@@ -18,7 +12,6 @@ Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const
 			return patternB->patternColorAt(point);
 	}
 
-	//TODO: why can't i do just (int), negative numbers?
 	if ((int)floor(point.x) % 2 == 0)
 		return a;
 	return b;

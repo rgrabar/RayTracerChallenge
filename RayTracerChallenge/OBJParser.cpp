@@ -1,10 +1,7 @@
 #include "OBJParser.h"
 #include <string>
-#include <iostream>
 #include <fstream>
-#include <stdio.h>
 #include <sstream>
-#include <string>
 #include <cctype>
 
 #ifdef __linux__

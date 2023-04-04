@@ -1,9 +1,9 @@
 #pragma once
+#include "Canvas.h"
 #include "Color.h"
 #include "Tuple.h"
 #include "Matrix.h"
 #include <math.h>
-#include "Canvas.h"
 
 class Shape;
 

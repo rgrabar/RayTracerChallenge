@@ -1,6 +1,9 @@
 #pragma once
 
+#include "BoundingBox.h"
+#include "Intersection.h"
 #include "Shape.h"
+#include "Tuple.h"
 #include "Helper.h"
 #include <iostream>
 #include <cmath>

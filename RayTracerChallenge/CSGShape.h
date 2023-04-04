@@ -1,5 +1,9 @@
 #pragma once
 #include <string>
+
+#include "BoundingBox.h"
+#include "Intersection.h"
+#include "Tuple.h"
 #include "Shape.h"
 
 class CSGShape : public Shape{
