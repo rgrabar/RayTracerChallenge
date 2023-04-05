@@ -1,5 +1,6 @@
 #include "BoundingBox.h"
 
+#include <algorithm>
 
 BoundingBox::BoundingBox() : boxMin(Tuple::point(INFINITY, INFINITY, INFINITY)),
 boxMax(Tuple::point(-INFINITY, -INFINITY, -INFINITY)) {}

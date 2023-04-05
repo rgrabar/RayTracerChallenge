@@ -1,8 +1,9 @@
 #include "OBJParser.h"
-#include <string>
+#include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <sstream>
-#include <cctype>
+#include <string>
 
 #ifdef __linux__
 #define sscanf_s sscanf

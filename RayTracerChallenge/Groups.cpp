@@ -1,4 +1,5 @@
 #include "Groups.h"
+#include <algorithm>
 
 Group::~Group() {
 	for (auto child : children) {

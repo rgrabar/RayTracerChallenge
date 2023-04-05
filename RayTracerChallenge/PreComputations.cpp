@@ -1,5 +1,7 @@
 #include "PreComputations.h"
 
+#include <algorithm>
+
 Precomputations::Precomputations() :
 ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 0)),
 // TODO: fix default constructor
