@@ -256,8 +256,22 @@ void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge
 	ans.canvasToImage();
 }
 
-void drawRefractiveSphere(int aliasing, int width, int height, int highlights, int edge, double threshold) {
 
+Shape* createRandomSphere(double moveX, double moveZ) {
+	auto shape = new Sphere();
+	shape->transform = translate(moveX, 0.25, moveZ) * scale(0.25, 0.25, 0.25);
+	shape->material.color = Color(random_double(), random_double(), random_double());
+	shape->material.diffuse = random_double();
+	shape->material.specular = random_double();
+	shape->material.reflective = random_double();
+	shape->material.transparency = random_double();
+	shape->material.shininess = random_double() * 200;
+
+	return shape;
+}
+
+void drawRefractiveSphere(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+	
 	auto world = World();
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 
@@ -268,17 +282,77 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	floor.material.reflective = 0.5;
 
 	auto shape = Sphere();
-	shape.transform = scale(0.5, 0.5, 0.5) * translate(1.5, 0.5, 0.5);
-	shape.material.color = Color(0, 0, 0.4);
+	shape.transform = translate(2.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape.material.color = Color(1, 1, 1);
 	shape.material.diffuse = 0.0;
 	shape.material.specular = 1;
 	shape.material.reflective = 0.5;
 	shape.material.transparency = 0.9;
-	shape.material.refractiveIndex = 1.52;
+	shape.material.refractiveIndex = 0;
+
+	auto shape1 = Sphere();
+	shape1.transform = translate(1.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape1.material.color = Color(1, 1, 1);
+	shape1.material.diffuse = 0.0;
+	shape1.material.specular = 1;
+	shape1.material.reflective = 0.5;
+	shape1.material.transparency = 0.9;
+	shape1.material.refractiveIndex = 1;
+
+	auto shape2 = Sphere();
+	shape2.transform = translate(0.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape2.material.color = Color(1, 1, 1);
+	shape2.material.diffuse = 0.0;
+	shape2.material.specular = 1;
+	shape2.material.reflective = 0.5;
+	shape2.material.transparency = 0.9;
+	shape2.material.refractiveIndex = 2;
+
+	auto shape3 = Sphere();
+	shape3.transform = translate(-0.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape3.material.color = Color(1, 1, 1);
+	shape3.material.diffuse = 0.0;
+	shape3.material.specular = 1;
+	shape3.material.reflective = 0.5;
+	shape3.material.transparency = 0.9;
+	shape3.material.refractiveIndex = 3;
+
+	auto shape4 = Sphere();
+	shape4.transform = translate(-1.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape4.material.color = Color(1, 1, 1);
+	shape4.material.diffuse = 0.0;
+	shape4.material.specular = 1;
+	shape4.material.reflective = 0.5;
+	shape4.material.transparency = 0.9;
+	shape4.material.refractiveIndex = 4;
+
+	auto shape5 = Sphere();
+	shape5.transform = translate(-2.5, 0.5, 0.5) * scale(0.5, 0.5, 0.5);
+	shape5.material.color = Color(0.56, 0.58, 0.58);
+	shape5.material.diffuse = 0.2775f;
+	shape5.material.specular = 0.773911f;
+	shape5.material.ambient = 0.23125f;
+	shape5.material.reflective = 0.07;
+	shape5.material.shininess = 89.6f;
+	shape5.material.transparency = 0.0;
+	//shape5.material.refractiveIndex = 1;
+
+	auto shape6 = Sphere();
+	shape6.transform = translate(-2.5, 0.5, 1.5) * scale(0.5, 0.5, 0.5);
+	shape6.material.color = Color(1, 0, 1);
+	shape6.material.diffuse = 1;
+	shape6.material.specular = 1;
+	shape6.material.reflective = 0.8;
 
 
 	world.objects.emplace_back(&floor);
 	world.objects.emplace_back(&shape);
+	world.objects.emplace_back(&shape1);
+	world.objects.emplace_back(&shape2);
+	world.objects.emplace_back(&shape3);
+	world.objects.emplace_back(&shape4);
+	world.objects.emplace_back(&shape5);
+	world.objects.emplace_back(&shape6);
 
 
 	Camera cam(width, height, TEST_PI / 3);
@@ -290,6 +364,45 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 
 	auto ans = cam.render(world);
 	ans.canvasToImage();
+	
+	/*
+	auto world = World();
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 10, -10)));
+
+	auto floor = Plane();
+
+
+	//shape.material.refractiveIndex = 1.52;
+
+
+	world.objects.emplace_back(&floor);
+
+	double moveX = 0; double moveZ = 0;
+
+	auto g = Group();
+
+	for (int j = 0; j < 20; ++j) {
+		moveZ += 1;
+		moveX = 0;
+		for (int i = 0; i < 20; ++i) {
+			g.addChild(createRandomSphere(moveX, moveZ));
+			moveX += 1;
+		}
+	}
+
+	g.divide();
+	world.objects.emplace_back(&g);
+	drawAxes(world);
+
+	Camera cam(width, height, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(10, 5, -10), Tuple::point(10, 1, 10), Tuple::vector(0, 1, 0));
+	cam.aliasingSamples = aliasing;
+	cam.aliasEdges = edge;
+	cam.edgeAliasHighlights = highlights;
+	cam.aliasingThreshold = threshold;
+
+	auto ans = cam.render(world);
+	ans.canvasToImage();*/
 
 }
 
@@ -452,21 +565,73 @@ Group* hexagonSide() {
 
 }
 
-void drawHexagon(int aliasing, int width, int height, int highlights, int edge, double threshold){
-	
-	auto hex = Group();
+Group* createHexagon() {
+	auto hex = new Group();
 
 	for (int i = 0; i < 6; ++i) {
 		auto side = hexagonSide();
 		side->transform = rotationY(i * TEST_PI / 3);
-		hex.addChild(side);
+		hex->addChild(side);
 	}
+	return hex;
+}
+
+void drawHexagon(int aliasing, int width, int height, int highlights, int edge, double threshold){
+	
+	Group* hex = createHexagon();
+	Group* hex1 = createHexagon();
+	Group* hex2 = createHexagon();
+
+	hex->transform = translate(0, -1, 0);
+
+	hex1->transform = translate(-1., -1, 0) * rotationX(TEST_PI / 2);
+	Material m1;
+	m1.color = Color(0, 0.63922, 0.42353);
+	hex1->setMaterial(m1);
+
+	Material m2;
+	m2.color = Color(0, 0.63922, 0.42353);
+	hex2->transform = translate(1., -1, 0) * rotationX(TEST_PI / 2);
+	m2.color = Color(0, 1, 1);
+	hex2->setMaterial(m2);
+
+	Group* mesh = new Group();
+	
+	double moveX = -2.5;
+	double moveY = 3.5;
+	double back = 0;
+	double forth = 0.25;
+
+
+	for (int i = 0; i < 50; ++i) {
+		if (i % 10 == 0 && i != 0) {
+			moveY -= 0.5;
+			moveX = -2.5;
+			moveX += forth;
+			std::swap(back, forth);
+		}
+
+		auto tmp = createHexagon();
+		tmp->transform = translate(moveX, moveY, 0) * rotationX(TEST_PI / 2) * scale(0.25, 0.25, 0.25);
+		auto tmp1 = Material();
+		tmp1.color = Color(random_double(), random_double(), random_double());
+
+		tmp->setMaterial(tmp1);
+		mesh->addChild(tmp);
+		moveX += 0.5;
+		
+	}
+	
+	mesh->divide();
 
 	auto world = World();
 	//world.light = Light(Color(1, 1, 1), Tuple::point(-5, 10, -10));
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(4, 5, -4.1)));
 
-	world.objects.emplace_back(&hex);
+	world.objects.emplace_back(hex);
+	world.objects.emplace_back(hex1);
+	world.objects.emplace_back(hex2);
+	world.objects.emplace_back(mesh);
 
 	Camera cam(width, height, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 3.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
@@ -979,7 +1144,13 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
 	plane.material.specular = 0.f;
 	plane.material.reflective = 0.3f;
-	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+	//plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+	//plane.material.pattern = new StripePattern(Color(1, 1, 1), Color(0, 0, 0));
+	auto pat = StripePattern(Color(1, 0, 0), Color(0, 0, 0));
+	auto pat1 = StripePattern(Color(0, 1, 0), Color(0, 0, 1));
+	pat1.transform = rotationY(TEST_PI / 2);
+	plane.material.pattern = new BlendedPattern(&pat, &pat1);
+
 
 	auto plane1 = Plane();
 	plane1.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
@@ -988,11 +1159,13 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 
 	auto sphere = Sphere();
 	sphere.transform = translate(-0.5, 1, 0.5);
-	sphere.material.color = Color(0.1, 0.4, 0.9);
+	/*sphere.material.color = Color(0.1, 0.4, 0.9);
 	sphere.material.diffuse = 0.7;
 	sphere.material.specular = 0.3;
 	sphere.material.reflective = 0.8;
-
+	*/
+	sphere.material.pattern = new StripePattern(Color(1, 0, 0), Color(0, 0, 0));
+	sphere.material.pattern->transform = scale(0.25, 0.25, 0.25);
 
 	auto world = World();
 
@@ -1083,15 +1256,65 @@ void cubeTest() {
 	ans.canvasToImage();
 
 }
+
+void earth() {
+
+	auto world = World();
+
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-100, 100, -100)));
+
+	auto cube = Cube();
+
+	auto sphere = Sphere();
+
+	auto canvas = canvasFromPPM("farinaWp6.ppm");
+
+	sphere.transform = translate(-2, 1.1, 0) * rotationY(1.9);
+	cube.transform = translate(1, 1.1, 0) * rotationY(1.9);
+
+	
+	UVImagePattern front = UVImagePattern(&canvas);
+	UVImagePattern back = UVImagePattern(&canvas);
+	UVImagePattern left = UVImagePattern(&canvas);
+	UVImagePattern right = UVImagePattern(&canvas);
+	UVImagePattern up = UVImagePattern(&canvas);
+	UVImagePattern down = UVImagePattern(&canvas);
+	CubeMap map = CubeMap(&front, &back, &left, &right, &up, &down);
+
+	cube.material.pattern = &map;
+	
+	auto canvasEarth = canvasFromPPM("earthmap1k.ppm");
+	sphere.material.pattern = new UVImagePattern(&canvasEarth);
+
+	
+	sphere.material.diffuse = 0.9;
+	sphere.material.specular = 0.1;
+	sphere.material.ambient = 0.1;
+	sphere.material.shininess = 10;
+	
+	world.objects.emplace_back(&sphere);
+	world.objects.emplace_back(&cube);
+	
+	Camera cam(800, 400, 0.8);
+	cam.transform = viewTransformation(Tuple::point(1, 2, -10), Tuple::point(0, 1.1, 0), Tuple::vector(0, 1, 0));
+	auto ans = cam.render(world);
+	ans.canvasToImage();
+	
+}
+
 void testScene() {
 
 	//TODO: double check everything in bounding-boxes it's a bit too slow
 	
 	auto plane = Plane();
-	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
+	plane.transform = rotationY(TEST_PI / 4.9f); //* scale(0.4, 0.4, 0.4);
 	plane.material.specular = 0.f;
 	plane.material.reflective = 0.3f;
-	plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+	//plane.material.pattern = new StripePattern(new StripePattern(Color(1, 0, 0), Color(1, 1, 1)), new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0)));
+	//plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
+	//plane.material.pattern = new RingPattern(new StripePattern(Color(1, 0, 0), Color(0, 0, 1)), new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0)));
+	plane.material.pattern = new UVCheckers(2, 2, Color(1, 1, 1), Color(0, 0, 0));
+	//plane.material.pattern = new AlignCheck(Color(1, 1, 1), Color(1, 0, 0), Color(1, 1, 0), Color(0, 1, 0), Color(0, 1, 1));
 
 	auto plane1 = Plane();
 	plane1.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
@@ -1100,11 +1323,24 @@ void testScene() {
 
 	auto sphere = Sphere();
 	sphere.transform = translate(-0.5, 1, 0.5);
-	sphere.material.color = Color(0.1, 0.4, 0.9);
-	sphere.material.diffuse = 0.7;
-	sphere.material.specular = 0.3;
-	sphere.material.reflective = 0.8;
+	
+	auto tmp = new UVCheckers(20, 10,  Color(1, 1, 1), Color(0, 0, 0));
+	//tmp->transform = scale(0.25, 0.25, 0.25);
 
+	sphere.material.pattern = tmp;
+
+	//sphere.material.color = Color(0.1, 0.4, 0.9);
+	//sphere.material.diffuse = 0.7;
+	//sphere.material.specular = 0.3;
+	//sphere.material.reflective = 0.8;
+
+	auto cilindro = Cylinder();
+	cilindro.minimum = 0;
+	cilindro.maximum = 1;
+	cilindro.closed = 1;
+	cilindro.transform = scale(1, 1, 1);
+	//cilindro.material.color = Color(1, 0, 0);
+	cilindro.material.pattern = new UVCheckers(8, 8, Color(1, 1, 1), Color(0, 0, 0));
 
 	auto world = World();
 
@@ -1114,21 +1350,23 @@ void testScene() {
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 	//world.lights.emplace_back(new Light(Color(0.4, 0.4, 0.4), Tuple::point(10, 10, -10)));
 	//world.lights.emplace_back(spotlight);
-	world.objects.emplace_back(&sphere);
+	//world.objects.emplace_back(&sphere);
+	world.objects.emplace_back(&cilindro);
 	world.objects.emplace_back(&plane);
-	world.objects.emplace_back(&plane1);
+	//world.objects.emplace_back(&plane1);
 
-	drawAxes(world);
+	//drawAxes(world);
 
 	Camera cam(1280, 720, TEST_PI / 3);
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
-	cam.aliasingSamples = 16;
+	/*cam.aliasingSamples = 16;
 	cam.aliasEdges = 1;
 	cam.edgeAliasHighlights = 1;
 	cam.aliasingThreshold = 0.01;
+	*/
+	//cam.aliasingSamples = 16;
 	auto ans = cam.render(world);
-
 	ans.canvasToImage();
 	
 
