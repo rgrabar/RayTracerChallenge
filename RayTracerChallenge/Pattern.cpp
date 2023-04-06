@@ -142,6 +142,7 @@ Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
 Color CubeMap::uvPatternAt(double u, double v) const {
 	std::cout << "This should not be called. The pattern type for face should be called!";
 	assert(0);
+	return Color(0, 0, 0);
 }
 
 Color UVImagePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
