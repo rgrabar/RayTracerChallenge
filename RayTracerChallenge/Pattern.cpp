@@ -115,12 +115,33 @@ Color AlignCheck::patternColorAt(const Tuple& point, const Shape* shape)const {
 	return uvPatternAt(a, b);
 }
 
+Color AlignCheck::uvPatternAt(double u, double v) const {
+	if (v > 0.8) {
+		if (u < 0.2)
+			return ul;
+		if (u > 0.8)
+			return ur;
+	}
+	else if (v < 0.2) {
+		if (u < 0.2)
+			return bl;
+		if (u > 0.8)
+			return br;
+	}
+	return main;
+}
+
 Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
 	double a, b;
 	// TODO: check if null or somehting
 	shape->UVmap(point, &a, &b);
 	int face = Cube::faceFromPoint(point);
 	return faces[face]->patternColorAt(point, shape);
+}
+
+Color CubeMap::uvPatternAt(double u, double v) const {
+	std::cout << "This should not be called. The pattern type for face should be called!";
+	assert(0);
 }
 
 Color UVImagePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
@@ -130,6 +151,14 @@ Color UVImagePattern::patternColorAt(const Tuple& point, const Shape* shape)cons
 		return Color(0, 0, 0);
 	shape->UVmap(point, &a, &b);
 	return uvPatternAt(a, b);
+}
+
+Color UVImagePattern::uvPatternAt(double u, double v) const {
+	v = 1 - v;
+	auto x = u * (canvas->w - 1);
+	auto y = v * (canvas->h - 1);
+
+	return canvas->canvas[(int)round(y) * canvas->w + (int)round(x)];
 }
 
 Color TestPatern::patternColorAt(const Tuple& object_point, const Shape* shape)const {

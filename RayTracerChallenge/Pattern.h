@@ -3,6 +3,9 @@
 #include "Color.h"
 #include "Tuple.h"
 #include "Matrix.h"
+
+#include <cassert>
+#include <iostream>
 #include <math.h>
 
 class Shape;
@@ -119,21 +122,7 @@ public:
 
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 
-	Color uvPatternAt(double u, double v) const {
-		if (v > 0.8) {
-			if (u < 0.2)
-				return ul;
-			if (u > 0.8)
-				return ur;
-		}
-		else if (v < 0.2) {
-			if (u < 0.2)
-				return bl;
-			if (u > 0.8)
-				return br;
-		}
-		return main;
-	}
+	Color uvPatternAt(double u, double v) const;
 
 	Color main;
 	Color ul;
@@ -151,30 +140,20 @@ public:
 
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 
-	// TODO: this should never be called
-	Color uvPatternAt(double u, double v) const {
-		
-	}
+	Color uvPatternAt(double u, double v) const;
+
 	Pattern* faces[6];
 };
 
 class UVImagePattern :public Pattern {
 public:
-	// TODO: is there a way to guarantee order?
 	UVImagePattern(Canvas* _canvas) : canvas(_canvas) {
 
 	}
 
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 
-	// TODO: this should never be called
-	Color uvPatternAt(double u, double v) const {
-		v = 1 - v;
-		auto x = u * (canvas->w - 1);
-		auto y = v * (canvas->h - 1);
-
-		return canvas->canvas[(int)round(y) * canvas->w + (int)round(x)];
-	}
+	Color uvPatternAt(double u, double v) const;
 	Canvas* canvas;
 };
 
