@@ -1,9 +1,10 @@
 #include "Canvas.h"
 
-#include <iostream>
-#include <vector>
+#include <cassert>
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <vector>
 
 Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 	canvas = (Color*)calloc(w * h, sizeof(Color));
@@ -89,6 +90,7 @@ Canvas canvasFromPPM(const std::string& fileName) {
     if (flavor != "P3" && flavor != "P6") {
         // TODO: some assert?
         std::cout << "Wrong PPM format\n";
+        assert(0);
     }
 
    

@@ -1,5 +1,7 @@
 #include "Matrix.h"
 #include "Helper.h"
+
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -15,6 +17,7 @@ Matrix::Matrix(int _h, int _w) : h(_h), w(_w) {
     }
     else {
         std::cout << "Can't allocate memory for the matrix!";
+        assert(0);
     }
 };
 
