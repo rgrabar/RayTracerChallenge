@@ -792,6 +792,14 @@ void sphereCubeDivide(int aliasing, int width, int height, int highlights, int e
 		moveX += 0.5;
 	}
 
+	auto pattern = new StripePattern(Color(0.5123, 0.3426, 0.934906), Color(0.934906, 0.3426, 0.5123));
+	pattern->transform = rotationZ(TEST_PI / 8) * scale(0.25, 0.25, 0.25);
+	Material m;
+	m.color = Color(0, 0.63922, 0.42353);
+	m.pattern = pattern;
+
+	g.setMaterial(m);
+
 	g.divide(50);
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
@@ -1141,16 +1149,19 @@ void spotLightScene(int aliasing, int width, int height, int highlights, int edg
 void aliasingScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
 
 	auto plane = Plane();
-	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
+	//plane.transform = /*rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);*/
 	plane.material.specular = 0.f;
 	plane.material.reflective = 0.3f;
 	//plane.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
 	//plane.material.pattern = new StripePattern(Color(1, 1, 1), Color(0, 0, 0));
 	auto pat = StripePattern(Color(1, 0, 0), Color(0, 0, 0));
-	auto pat1 = StripePattern(Color(0, 1, 0), Color(0, 0, 1));
-	pat1.transform = rotationY(TEST_PI / 2);
-	plane.material.pattern = new BlendedPattern(&pat, &pat1);
-
+	pat.transform = scale(0.5, 0.5, 0.5) * rotationY(TEST_PI / 6);
+	auto pat1 =  RingPattern(Color(0, 1, 0), Color(0, 0, 1));
+	pat1.transform = scale(0.3, 0.3, 0.3) * rotationZ(TEST_PI / 2);
+	//plane.material.pattern = new BlendedPattern(&pat, &pat1);
+	plane.material.pattern = new RingPattern(&pat, &pat1);
+	//plane.material.pattern->transform = scale(1.5, 1.5, 1.5);
+	//plane.material.pattern = &pat;
 
 	auto plane1 = Plane();
 	plane1.transform = translate(0, 0, 5) * rotationX(TEST_PI / 2);
@@ -1159,13 +1170,13 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 
 	auto sphere = Sphere();
 	sphere.transform = translate(-0.5, 1, 0.5);
-	/*sphere.material.color = Color(0.1, 0.4, 0.9);
+	sphere.material.color = Color(0.1, 0.4, 0.9);
 	sphere.material.diffuse = 0.7;
 	sphere.material.specular = 0.3;
 	sphere.material.reflective = 0.8;
-	*/
-	sphere.material.pattern = new StripePattern(Color(1, 0, 0), Color(0, 0, 0));
-	sphere.material.pattern->transform = scale(0.25, 0.25, 0.25);
+	
+	//sphere.material.pattern = new StripePattern(Color(1, 0, 0), Color(0, 0, 0));
+	//sphere.material.pattern->transform = scale(0.25, 0.25, 0.25) * rotationZ(TEST_PI / 3);
 
 	auto world = World();
 

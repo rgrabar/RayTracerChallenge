@@ -1,9 +1,9 @@
 #include <chrono>
 #include <iostream>
-#include "scenes/Scenes.h"
-#include <stdio.h>
-#include <string.h>
 #include <time.h> 
+#include <string.h>
+
+#include "scenes/Scenes.h"
 
 using namespace std::chrono;
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "SpotLight";
+	std::string scene = "Aliasing";
 	int aliasing = 0;
 	int width = 900;
 	int height = 900;
@@ -99,6 +99,12 @@ int main(int argc, char* argv[]) {
 		spotLightScene(aliasing, width, height, highlights, edge, threshold);
 	else if (scene == "Aliasing")
 		aliasingScene(aliasing, width, height, highlights, edge, threshold);
+	else if (scene == "CubeTest")
+		cubeTest();
+	else if (scene == "Earth")
+		earth();
+	else if (scene == "Test")
+		testScene();
 	
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
