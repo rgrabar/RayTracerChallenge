@@ -122,7 +122,7 @@ Canvas canvasFromPPM(const std::string& fileName) {
 
         int cur = 0;
 
-        for (int i = 3; i < numbers.size(); i += 3) {
+        for (int i = 3; i < (int)numbers.size(); i += 3) {
             canvas.canvas[cur++] = Color(numbers[i - 2] / (double)scale, numbers[i - 1] / (double)scale, numbers[i] / (float)scale);
         }
 

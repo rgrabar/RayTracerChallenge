@@ -42,7 +42,7 @@ void Camera::splitArray(World* world, Canvas* image) {
 	//for (auto y = start; y < end; ++y) {
 	//	for (auto x = 0; x < hSize; ++x) {
 	int curIndex = 0;
-	while (shuffleIndex < shufflePoints.size()) {
+	while (shuffleIndex < (int)shufflePoints.size()) {
 
 		curIndex = shuffleIndex++;
 		
