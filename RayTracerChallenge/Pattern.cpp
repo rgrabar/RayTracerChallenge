@@ -6,10 +6,17 @@
 Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 
 	if (isNested) {
-		if ((int)floor(point.x) % 2 == 0)
-			return patternA->patternColorAt(point);
-		else
-			return patternB->patternColorAt(point);
+		if ((int)floor(point.x) % 2 == 0) {
+			auto objectPointA = *patternA->transform.inverse() * point;
+			auto patternPointA = *patternA->transform.inverse() * objectPointA;
+			return patternA->patternColorAt(patternPointA);
+		}
+		else {
+			auto objectPointB = *patternB->transform.inverse() * point;
+			auto patternPointB = *patternB->transform.inverse() * objectPointB;
+
+			return patternB->patternColorAt(patternPointB);
+		}
 	}
 
 	if ((int)floor(point.x) % 2 == 0)
@@ -26,10 +33,20 @@ Color GradientPattern::patternColorAt(const Tuple& point, const Shape* shape)con
 
 Color CheckerPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 	if (isNested) {
+
 		if (((int)(floor(point.x) + floor(point.y) + floor(point.z))) % 2 == 0)
-			return patternA->patternColorAt(point);
-		else
-			return patternB->patternColorAt(point);
+		{
+			auto objectPointA = *patternA->transform.inverse() * point;
+			auto patternPointA = *patternA->transform.inverse() * objectPointA;
+
+			return patternA->patternColorAt(patternPointA);
+		}
+		else {
+			auto objectPointB = *patternB->transform.inverse() * point;
+			auto patternPointB = *patternB->transform.inverse() * objectPointB;
+			
+			return patternB->patternColorAt(patternPointB);
+		}
 	}
 
 	if (((int)(floor(point.x) + floor(point.y) + floor(point.z))) % 2 == 0)
@@ -40,10 +57,18 @@ Color CheckerPattern::patternColorAt(const Tuple& point, const Shape* shape)cons
 
 Color RingPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 	if (isNested) {
-		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
-			return patternA->patternColorAt(point);
-		else
-			return patternB->patternColorAt(point);
+		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0) {	
+			auto objectPointA = *patternA->transform.inverse() * point;
+			auto patternPointA = *patternA->transform.inverse() * objectPointA;
+
+			return patternA->patternColorAt(patternPointA);
+		}
+		else {
+			auto objectPointB = *patternB->transform.inverse() * point;
+			auto patternPointB = *patternB->transform.inverse() * objectPointB;
+
+			return patternB->patternColorAt(patternPointB);
+		}
 	}
 
 	if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
