@@ -43,14 +43,27 @@ BoundingBox Sphere::boundsOf([[maybe_unused]] bool update) {
 	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
 }
 
-inline void Sphere::divide([[maybe_unused]] int threashold) {
+void Sphere::divide([[maybe_unused]] int threashold) {
 	return;
 }
 
-inline bool Sphere::includes(const Shape* s)const {
+bool Sphere::includes(const Shape* s)const {
 	return this == s;
 }
 
-inline void Sphere::setMaterial(const Material& s) {
+void Sphere::setMaterial(const Material& s) {
 	material = s;
+}
+
+void Sphere::UVmap(const Tuple& p, double* u, double* v) const {
+	auto theta = atan2(p.x, p.z);
+
+	Tuple vec = Tuple::vector(p.x, p.y, p.z);
+	auto radius = vec.magnitude();
+
+	auto phi = acos(p.y / radius);
+	auto rawU = theta / (2.0 * acos(-1));
+
+	*u = 1.0 - (rawU + 0.5);
+	*v = 1.0 - (phi / acos(-1));
 }

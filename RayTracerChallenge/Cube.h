@@ -55,53 +55,14 @@ public:
 		return cubeFace::BACK;
 	}
 
-	void cubeUVFront(const Tuple& point, double* u, double* v)const {
-		*u = fmod((point.x + 1), 2.0) / 2.0;
-		*v = fmod((point.y + 1), 2.0) / 2.0;
-	}
-
-	void cubeUVBack(const Tuple& point, double* u, double* v)const {
-		*u = fmod((1 - point.x), 2.0) / 2.0;
-		*v = fmod((point.y + 1), 2.0) / 2.0;
-	}
-
-	void cubeUVLeft(const Tuple& point, double* u, double* v)const {
-		*u = fmod((point.z + 1), 2.0) / 2.0;
-		*v = fmod((point.y + 1), 2.0) / 2.0;
-	}
-
-	void cubeUVRight(const Tuple& point, double* u, double* v)const {
-		*u = fmod((1 - point.z), 2.0) / 2.0;
-		*v = fmod((point.y + 1), 2.0) / 2.0;
-	}
-
+	void cubeUVFront(const Tuple& point, double* u, double* v)const;
+	void cubeUVBack(const Tuple& point, double* u, double* v)const;
+	void cubeUVLeft(const Tuple& point, double* u, double* v)const;
+	void cubeUVRight(const Tuple& point, double* u, double* v)const;
 	// The X is wrong in the example i think for both up and down
-	void cubeUVUp(const Tuple& point, double* u, double* v)const {
-		*u = fmod((point.x + 1), 2.0) / 2.0;
-		*v = fmod((1 - point.z), 2.0) / 2.0;
-	}
+	void cubeUVUp(const Tuple& point, double* u, double* v)const;
+	void cubeUVDown(const Tuple& point, double* u, double* v)const;
 
-	void cubeUVDown(const Tuple& point, double* u, double* v)const {
-		*u = fmod((point.x + 1), 2.0) / 2.0;
-		*v = fmod((point.z + 1), 2.0) / 2.0;
-	}
-
-	void UVmap(const Tuple& p, double* u, double* v) const {
-		// faceFromPoint is in helper.h
-		auto face = faceFromPoint(p);
-
-		if (face == cubeFace::LEFT)
-			cubeUVLeft(p, u, v);
-		else if (face == cubeFace::RIGHT)
-			cubeUVRight(p, u, v);
-		else if (face == cubeFace::FRONT)
-			cubeUVFront(p, u, v);
-		else if (face == cubeFace::BACK)
-			cubeUVBack(p, u, v);
-		else if (face == cubeFace::UP)
-			cubeUVUp(p, u, v);
-		else
-			cubeUVDown(p, u, v);
-	}
+	void UVmap(const Tuple& p, double* u, double* v) const override;
 
 };

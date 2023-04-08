@@ -33,3 +33,15 @@ bool Plane::includes(const Shape* s)const {
 void Plane::setMaterial(const Material& s) {
 	material = s;
 }
+
+void Plane::UVmap(const Tuple& p, double* u, double* v) const {
+
+	*u = fmod(p.x, 1);
+	*v = fmod(p.z, 1);
+
+	if (*u < 0.0)
+		*u += 1;
+
+	if (*v < 0.0)
+		*v += 1;
+}

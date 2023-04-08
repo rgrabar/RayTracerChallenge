@@ -75,3 +75,50 @@ inline bool Cube::includes(const Shape* s)const {
 inline void Cube::setMaterial(const Material& s) {
 	material = s;
 }
+
+void Cube::cubeUVFront(const Tuple& point, double* u, double* v)const {
+	*u = fmod((point.x + 1), 2.0) / 2.0;
+	*v = fmod((point.y + 1), 2.0) / 2.0;
+}
+
+void Cube::cubeUVBack(const Tuple& point, double* u, double* v)const {
+	*u = fmod((1 - point.x), 2.0) / 2.0;
+	*v = fmod((point.y + 1), 2.0) / 2.0;
+}
+
+void Cube::cubeUVLeft(const Tuple& point, double* u, double* v)const {
+	*u = fmod((point.z + 1), 2.0) / 2.0;
+	*v = fmod((point.y + 1), 2.0) / 2.0;
+}
+
+void Cube::cubeUVRight(const Tuple& point, double* u, double* v)const {
+	*u = fmod((1 - point.z), 2.0) / 2.0;
+	*v = fmod((point.y + 1), 2.0) / 2.0;
+}
+
+void Cube::cubeUVUp(const Tuple& point, double* u, double* v)const {
+	*u = fmod((point.x + 1), 2.0) / 2.0;
+	*v = fmod((1 - point.z), 2.0) / 2.0;
+}
+
+void Cube::cubeUVDown(const Tuple& point, double* u, double* v)const {
+	*u = fmod((point.x + 1), 2.0) / 2.0;
+	*v = fmod((point.z + 1), 2.0) / 2.0;
+}
+
+void Cube::UVmap(const Tuple& p, double* u, double* v) const {
+	auto face = faceFromPoint(p);
+
+	if (face == cubeFace::LEFT)
+		cubeUVLeft(p, u, v);
+	else if (face == cubeFace::RIGHT)
+		cubeUVRight(p, u, v);
+	else if (face == cubeFace::FRONT)
+		cubeUVFront(p, u, v);
+	else if (face == cubeFace::BACK)
+		cubeUVBack(p, u, v);
+	else if (face == cubeFace::UP)
+		cubeUVUp(p, u, v);
+	else
+		cubeUVDown(p, u, v);
+}

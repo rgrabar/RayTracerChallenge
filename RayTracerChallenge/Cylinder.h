@@ -27,25 +27,5 @@ public:
 	bool includes(const Shape* s)const override;
 	void setMaterial(const Material& s)override;
 
-	void UVmap(const Tuple& p, double* u, double* v) const {
-
-		if (maximum - EPSILON <= p.y) {
-			//TODO: fix after cubes
-			*u = fmod((p.x + 1.f), 2.f) / 2.f;
-			*v = fmod((1.f - p.z), 2.f) / 2.f;
-
-			return;
-		}
-
-		auto theta = atan2(p.x, p.z);
-		auto rawU = theta / (2 * acos(-1));
-
-		// we can scale u by 2 * pi to make the checker pattern square, but should I?
-		*u = 1 - (rawU + 0.5);
-		*v = fmod(p.y, 1);
-
-		if (*v < 0.0) {
-			*v += 1;
-		}
-	}
+	void UVmap(const Tuple& p, double* u, double* v) const override;
 };
