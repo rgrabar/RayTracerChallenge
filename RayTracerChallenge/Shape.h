@@ -21,8 +21,8 @@ public:
 
 	//TODO: make it a bit more clear that group overrides all other materials
 	virtual void setMaterial(const Material& s) = 0;
-	//TODO: should this be = 0?
-	virtual void UVmap(const Tuple& p, double* u, double* v) const {}
+	//TODO: should this be = 0? also add UVmap for triangles and textures
+	virtual void UVmap([[maybe_unused]]const Tuple& p, [[maybe_unused]]double* u, [[maybe_unused]]double* v) const {}
 
 	bool optOutShadow = 0;
 	Shape* parent = nullptr;

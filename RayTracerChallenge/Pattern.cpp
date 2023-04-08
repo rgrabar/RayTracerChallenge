@@ -3,7 +3,7 @@
 
 #include "Cube.h"
 
-Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+Color StripePattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
 
 	if (isNested) {
 		if ((int)floor(point.x) % 2 == 0) {
@@ -24,14 +24,14 @@ Color StripePattern::patternColorAt(const Tuple& point, const Shape* shape)const
 	return b;
 }
 
-Color GradientPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+Color GradientPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
 	auto distance = b - a;
 	auto fraction = point.x - floor(point.x);
 
 	return a + distance * fraction;
 }
 
-Color CheckerPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+Color CheckerPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
 	if (isNested) {
 
 		if (((int)(floor(point.x) + floor(point.y) + floor(point.z))) % 2 == 0)
@@ -55,7 +55,7 @@ Color CheckerPattern::patternColorAt(const Tuple& point, const Shape* shape)cons
 		return b;
 }
 
-Color RingPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+Color RingPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
 	if (isNested) {
 		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0) {	
 			auto objectPointA = *patternA->transform.inverse() * point;
@@ -77,7 +77,7 @@ Color RingPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 		return b;
 }
 
-Color RadialGradientPattern::patternColorAt(const Tuple& point, const Shape* shape)const {
+Color RadialGradientPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
 	if (!type) {
 
 		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0) {
@@ -113,7 +113,7 @@ Color RadialGradientPattern::patternColorAt(const Tuple& point, const Shape* sha
 	}
 }
 
-Color BlendedPattern::patternColorAt(const Tuple & point, const Shape* shape) const {
+Color BlendedPattern::patternColorAt(const Tuple & point, [[maybe_unused]] const Shape* shape) const {
 
 	// TODO: this works but is it even correct? the transform part shouldn't it be transformed?
 
@@ -164,7 +164,7 @@ Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
 	return faces[face]->patternColorAt(point, shape);
 }
 
-Color CubeMap::uvPatternAt(double u, double v) const {
+Color CubeMap::uvPatternAt([[maybe_unused]] double u, [[maybe_unused]] double v) const {
 	std::cout << "This should not be called. The pattern type for face should be called!";
 	assert(0);
 	return Color(0, 0, 0);
@@ -187,6 +187,6 @@ Color UVImagePattern::uvPatternAt(double u, double v) const {
 	return canvas->canvas[(int)round(y) * canvas->w + (int)round(x)];
 }
 
-Color TestPatern::patternColorAt(const Tuple& object_point, const Shape* shape)const {
+Color TestPatern::patternColorAt(const Tuple& object_point, [[maybe_unused]] const Shape* shape)const {
 	return Color(object_point.x, object_point.y, object_point.z);
 }
