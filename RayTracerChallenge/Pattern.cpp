@@ -128,14 +128,22 @@ Color BlendedPattern::patternColorAt(const Tuple & point, [[maybe_unused]] const
 
 Color UVCheckers::patternColorAt(const Tuple& point, const Shape* shape)const  {
 	double a, b;
-	// TODO: check if null or somehting
+	if (shape == nullptr) {
+		std::cout << "UVCheckers: trying to map to a non existant shape!";
+		assert(0);
+		return Color(0, 0, 0);
+	}
 	shape->UVmap(point, &a, &b);
 	return uvPatternAt(a, b);
 }
 
 Color AlignCheck::patternColorAt(const Tuple& point, const Shape* shape)const {
 	double a, b;
-	// TODO: check if null or somehting
+	if (shape == nullptr) {
+		std::cout << "AlignCheck: trying to map to a non existant shape!";
+		assert(0);
+		return Color(0, 0, 0);
+	}
 	shape->UVmap(point, &a, &b);
 	return uvPatternAt(a, b);
 }
@@ -158,7 +166,11 @@ Color AlignCheck::uvPatternAt(double u, double v) const {
 
 Color CubeMap::patternColorAt(const Tuple& point, const Shape* shape)const {
 	double a, b;
-	// TODO: check if null or somehting
+	if (shape == nullptr) {
+		std::cout << "CubeMap: trying to map to a non existant shape!";
+		assert(0);
+		return Color(0, 0, 0);
+	}
 	shape->UVmap(point, &a, &b);
 	int face = Cube::faceFromPoint(point);
 	return faces[face]->patternColorAt(point, shape);
@@ -172,9 +184,11 @@ Color CubeMap::uvPatternAt([[maybe_unused]] double u, [[maybe_unused]] double v)
 
 Color UVImagePattern::patternColorAt(const Tuple& point, const Shape* shape)const {
 	double a, b;
-	// TODO: check if null or somehting
-	if (shape == nullptr)
+	if (shape == nullptr) {
+		std::cout << "UVImagePattern: trying to map to a non existant shape!";
+		assert(0);
 		return Color(0, 0, 0);
+	}
 	shape->UVmap(point, &a, &b);
 	return uvPatternAt(a, b);
 }
