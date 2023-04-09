@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "LoadOBJ";
+	std::string scene = "Test";
 	std::string path = "assets/airboat.obj";
 	int aliasing = 0;
 	int width = 900;
@@ -29,6 +29,41 @@ int main(int argc, char* argv[]) {
 	double threshold = 0.3;
 
 	if (n != 1) {
+		if (strcmp(argv[1], "--help") == 0) {
+			std::cout << "[Scene name] [--option]\n";
+			std::cout << "\t--aliasing\t\tnumber of samples per pixel\n";
+			std::cout << "\t--size\t\t\twidth height\n";
+			std::cout << "\t--edge\t\t\t0/1 if enabled will antialiasing only applied to edges\n";
+			std::cout << "\t--highlights\t\t0/1, if enabled previews what will be antialiased when using the --edge option\n";
+			std::cout << "\t--threshold\t\tfloat [0, 1], if --edge is enabeld set the threshold for edge detection\n";
+			std::cout << "\t\t\t\tit checks for the difference in color beween the center of the pixel and it's edges\n";
+
+			std::cout << "Available scenes:\n";
+			std::cout << "\tProjectile\n";
+			std::cout << "\tClock\n";
+			std::cout << "\tRedCircle\n";
+			std::cout << "\tShadows\n";
+			std::cout << "\tBadSmiley\n";
+			std::cout << "\tRefractiveSphere\n";
+			std::cout << "\tAllShapes\n";
+			std::cout << "\tHexagon\n";
+			std::cout << "\tSpheres\n";
+			std::cout << "\tSpheresDivide\n";
+			std::cout << "\tTeapot\n";
+			std::cout << "\tCS\n";
+			std::cout << "\tDragon\n";
+			std::cout << "\tAstronaut\n";
+			std::cout << "\tCSG\n";
+			std::cout << "\tAreaLight\n";
+			std::cout << "\tSpotLight\n";
+			std::cout << "\tAliasing\n";
+			std::cout << "\tCubeTest\n";
+			std::cout << "\tEarth\n";
+			std::cout << "\tLoadOBJ\n";
+
+			std::cout << "E.g. Aliasing --aliasing 16 --size 400 400 --highlights 1 --edge 1 --threshold 0.005";
+			return 0;
+		}
 		scene = argv[1];
 	}
 
@@ -60,6 +95,7 @@ int main(int argc, char* argv[]) {
 			i++;
 		}
 	}
+
 	std::cout << "Settings: \n";
 	std::cout << "scene: " << scene << "\n";
 	std::cout << "width: " << width << "\n";
@@ -67,7 +103,6 @@ int main(int argc, char* argv[]) {
 	std::cout << "aliasing samples: " << aliasing << "\n";
 	std::cout << "alias edges: " << edge << "\n";
 	std::cout << "highlight edges: " << highlights << "\n";
-	std::cout << "path : " << path << "\n";
 
 	if (scene == "Projectile")
 		drawProjectile();
