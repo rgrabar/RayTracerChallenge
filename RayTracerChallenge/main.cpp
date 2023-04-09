@@ -19,7 +19,8 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "Aliasing";
+	std::string scene = "LoadOBJ";
+	std::string path = "assets/airboat.obj";
 	int aliasing = 0;
 	int width = 900;
 	int height = 900;
@@ -54,6 +55,10 @@ int main(int argc, char* argv[]) {
 			threshold = atof(argv[i + 1]);
 			i++;
 		}
+		else if (strcmp(argv[i], "--path") == 0) {
+			path = argv[i + 1];
+			i++;
+		}
 	}
 	std::cout << "Settings: \n";
 	std::cout << "scene: " << scene << "\n";
@@ -62,6 +67,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "aliasing samples: " << aliasing << "\n";
 	std::cout << "alias edges: " << edge << "\n";
 	std::cout << "highlight edges: " << highlights << "\n";
+	std::cout << "path : " << path << "\n";
 
 	if (scene == "Projectile")
 		drawProjectile();
@@ -103,6 +109,8 @@ int main(int argc, char* argv[]) {
 		cubeTest();
 	else if (scene == "Earth")
 		earth();
+	else if (scene == "LoadOBJ")
+		loadOBJ(path);
 	else if (scene == "Test")
 		testScene();
 	

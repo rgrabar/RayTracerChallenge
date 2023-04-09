@@ -819,7 +819,7 @@ void sphereCubeDivide(int aliasing, int width, int height, int highlights, int e
 }
 
 void drawTeapot(int aliasing, int width, int height, int highlights, int edge, double threshold) {
-	OBJParser o("triangles.obj");
+	OBJParser o("assets/triangles.obj");
 
 	auto g = o.ObjToGroup();
 	g->transform = translate(1, -1, -40) * scale(20, 20, 20);
@@ -842,7 +842,7 @@ void drawTeapot(int aliasing, int width, int height, int highlights, int edge, d
 }
 
 void drawAstronaut(int aliasing, int width, int height, int highlights, int edge, double threshold) {
-	OBJParser o("astronaut.obj");
+	OBJParser o("assets/astronaut.obj");
 
 	auto g = o.ObjToGroup();
 	// without normalizing the obj
@@ -884,7 +884,7 @@ void drawAstronaut(int aliasing, int width, int height, int highlights, int edge
 }
 
 void drawDragon	(int aliasing, int width, int height, int highlights, int edge, double threshold) {
-	OBJParser o("dragon.obj");
+	OBJParser o("assets/dragon.obj");
 
 	auto g = o.ObjToGroup();
 	g->transform = scale(20, 20, 20);
@@ -915,7 +915,7 @@ void drawDragon	(int aliasing, int width, int height, int highlights, int edge, 
 
 
 void drawCSKnife(int aliasing, int width, int height, int highlights, int edge, double threshold) {
-	OBJParser o("Bayonet.obj");
+	OBJParser o("assets/Bayonet.obj");
 
 	auto g = o.ObjToGroup();
 	g->transform = rotationY(TEST_PI / 2) * translate(-8, 10, 0) * scale(24, 24, 24);
@@ -1278,7 +1278,7 @@ void earth() {
 
 	auto sphere = Sphere();
 
-	auto canvas = canvasFromPPM("farinaWp6.ppm");
+	auto canvas = canvasFromPPM("assets/farinaWp6.ppm");
 
 	sphere.transform = translate(-2, 1.1, 0) * rotationY(1.9);
 	cube.transform = translate(1, 1.1, 0) * rotationY(1.9);
@@ -1294,7 +1294,7 @@ void earth() {
 
 	cube.material.pattern = &map;
 	
-	auto canvasEarth = canvasFromPPM("earthmap1k.ppm");
+	auto canvasEarth = canvasFromPPM("assets/earthmap1k.ppm");
 	sphere.material.pattern = new UVImagePattern(&canvasEarth);
 
 	
@@ -1311,6 +1311,27 @@ void earth() {
 	auto ans = cam.render(world);
 	ans.canvasToImage();
 	
+}
+
+void loadOBJ(std::string path) {
+
+	OBJParser o(path);
+
+	auto g = o.ObjToGroup();
+	g->divide();
+
+	auto world = World();
+	world.objects.emplace_back(g);
+
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(10, 15, 20)));
+
+	Camera cam(900, 900, TEST_PI / 3);
+	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
+
+
+	auto ans = cam.render(world);
+	ans.canvasToImage();
+
 }
 
 void testScene() {

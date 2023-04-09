@@ -16,7 +16,7 @@ OBJParser::OBJParser(std::string path) {
 	std::string line;
 	double n1, n2, n3;
 	int f1, f2, f3;
-
+	// TODO: rework this
 	while (std::getline(myfile, line)) {
 
 		if (line[0] == '#') {
@@ -95,14 +95,9 @@ OBJParser::OBJParser(std::string path) {
 								namedGroup[name]->addChild(tmp);
 							else
 								g.addChild(tmp);
-#ifdef DEBUG
-							triangles.emplace_back(tmp);
-#endif // DEBUG
 						}
-
 					}
 					faceIndexExtended.clear();
-
 				}
 			}
 
@@ -117,19 +112,8 @@ OBJParser::OBJParser(std::string path) {
 						normalIndex.emplace_back(--b);
 					}
 				}
-				auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
-					normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
-				if (saveToNewGroup)
-					namedGroup[name]->addChild(tmp);
-				else
-					g.addChild(tmp);
-#ifdef DEBUG
-				smoothTriangles.emplace_back(tmp);
-#endif // DEBUG
-				faceIndex.clear();
-				normalIndex.clear();
-			}
 
+			}
 			else if (found1 != std::string::npos) {
 				std::stringstream ss(line);
 				std::string s;
@@ -141,17 +125,6 @@ OBJParser::OBJParser(std::string path) {
 						normalIndex.emplace_back(--b);
 					}
 				}
-				auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[1]], vertices[faceIndex[2]],
-					normals[normalIndex[0]], normals[normalIndex[1]], normals[normalIndex[2]]);
-#ifdef DEBUG
-				smoothTriangles.emplace_back(tmp);
-#endif // DEBUG
-				if (saveToNewGroup)
-					namedGroup[name]->addChild(tmp);
-				else
-					g.addChild(tmp);
-				faceIndex.clear();
-				normalIndex.clear();
 			}
 			else if (line[0] == 'g') {
 
@@ -167,6 +140,21 @@ OBJParser::OBJParser(std::string path) {
 				}
 				saveToNewGroup = 1;
 			}
+
+			// if there is any parsed smooth triangles add them to the group 
+			for (int i = 1; i < (int)faceIndex.size() - 1; ++i) {
+				auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[i]], vertices[faceIndex[i + 1]], normals[normalIndex[0]], normals[normalIndex[i]], normals[normalIndex[i + 1]]);
+#ifdef DEBUG
+				smoothTriangles.emplace_back(tmp);
+#endif // DEBUG
+
+				if (saveToNewGroup)
+					namedGroup[name]->addChild(tmp);
+				else
+					g.addChild(tmp);
+			}
+			faceIndex.clear();
+			normalIndex.clear();
 		}
 		else
 			skippedLines++;
