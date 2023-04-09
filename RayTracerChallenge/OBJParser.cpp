@@ -87,6 +87,22 @@ OBJParser::OBJParser(std::string path) {
 							faceIndexExtended.emplace_back(tmp);
 						}
 					}
+					if (faceIndexExtended.size() > 0) {
+
+						for (int i = 1; i < (int)faceIndexExtended.size() - 1; ++i) {
+							auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
+							if (saveToNewGroup)
+								namedGroup[name]->addChild(tmp);
+							else
+								g.addChild(tmp);
+#ifdef DEBUG
+							triangles.emplace_back(tmp);
+#endif // DEBUG
+						}
+
+					}
+					faceIndexExtended.clear();
+
 				}
 			}
 
@@ -154,21 +170,6 @@ OBJParser::OBJParser(std::string path) {
 		}
 		else
 			skippedLines++;
-
-		if (faceIndexExtended.size() > 0) {
-
-			for (int i = 1; i < (int)faceIndexExtended.size() - 1; ++i) {
-				auto tmp = new Triangle(vertices[faceIndexExtended[0]], vertices[faceIndexExtended[i]], vertices[faceIndexExtended[i + 1]]);
-				if (saveToNewGroup)
-					namedGroup[name]->addChild(tmp);
-				else
-					g.addChild(tmp);
-#ifdef DEBUG
-				triangles.emplace_back(tmp);
-#endif // DEBUG
-			}
-			
-		}
 	}
 
 	if (!isNormalized) {
