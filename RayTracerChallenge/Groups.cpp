@@ -4,7 +4,8 @@
 
 Group::~Group() {
 	for (auto child : children) {
-		if (dynamic_cast<Group*>(child)) {
+		// only the partent should remove child groups
+		if (dynamic_cast<Group*>(child) && child->parent == nullptr) {
 			// cast only to avoid warning
 			delete (Group*)child;
 		}
