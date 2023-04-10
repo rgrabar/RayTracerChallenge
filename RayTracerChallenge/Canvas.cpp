@@ -91,7 +91,9 @@ Canvas canvasFromPPM(const std::string& fileName) {
     if (flavor != "P3" && flavor != "P6") {
         // TODO: some assert?
         std::cout << "Wrong PPM format\n";
+#ifndef DEBUG
         assert(0);
+#endif
     }
 
    
