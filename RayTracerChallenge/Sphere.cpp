@@ -11,8 +11,8 @@ Intersections Sphere::intersect(const Ray& ray)const {
 
 	auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
 	auto a = ray.direction.dotProduct(ray.direction);
-	auto b = 2 * ray.direction.dotProduct(shapeToRay);
-	auto c = shapeToRay.dotProduct(shapeToRay) - 1;
+	auto b = 2.0 * ray.direction.dotProduct(shapeToRay);
+	auto c = shapeToRay.dotProduct(shapeToRay) - 1.0;
 
 	double discriminant = b * b - 4 * a * c;
 

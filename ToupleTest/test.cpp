@@ -4564,14 +4564,14 @@ TEST(PPMParsing, CheckerPatternIn2d) {
 	auto sphere = Sphere();
 
 	auto c = pattern.uvPatternAt(0, 0);
-	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+	ASSERT_EQ(c, ans[0]);
 
 	c = pattern.uvPatternAt(0.3, 0);
-	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+	ASSERT_EQ(c, ans[1]);
 
 	c = pattern.uvPatternAt(0.6, 0.3);
-	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+	ASSERT_EQ(c, ans[2]);
 
 	c = pattern.uvPatternAt(1, 1);
-	std::cout << c.r << " " << c.g << " " << c.b << "\n";
+	ASSERT_EQ(c, ans[3]);
 }

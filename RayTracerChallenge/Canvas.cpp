@@ -139,22 +139,11 @@ Canvas canvasFromPPM(const std::string& fileName) {
 
         ppmFile.read(reinterpret_cast<char*>(data.data()), num_pixels * 3);
 
-        // Print some information about the image
-        std::cout << "Magic number: " << flavor << std::endl;
-        std::cout << "Width: " << width << std::endl;
-        std::cout << "Height: " << height << std::endl;
-        std::cout << "Max value: " << max_value << std::endl;
-
-        // Print the pixel values
         int cur = 0;
         auto canvas = Canvas(width, height);
         for (int i = 0; i < num_pixels; ++i) {
-            //std::cout << static_cast<int>(data[i * 3]) << ",";
-            //std::cout << static_cast<int>(data[i * 3 + 1]) << ",";
-            //std::cout << static_cast<int>(data[i * 3 + 2]) << " ";
             canvas.canvas[cur++] = Color(static_cast<int>(data[i * 3 + 1]) / (double)max_value, static_cast<int>(data[i * 3 + 2]) / (double)max_value, static_cast<int>(data[i * 3]) / (double)max_value);
         }
-        std::cout << std::endl;
 
         // Close the file
         ppmFile.close();
