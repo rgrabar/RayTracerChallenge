@@ -1,6 +1,7 @@
+#!/bin/bash
 #clang++ RayTracerChallenge/*.cpp -o RayTracer -O2 -std=gnu++17 -IRayTracerChallenge -pthread -Wall -pedantic -Wextra
 #read -n 1 -s -r -p "Press any key to continue..."
-#!/bin/bash
+
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     make='make'
