@@ -20,18 +20,18 @@ Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 		std::cout << "Can't allocate memory";
 		exit(0);
 	}
-#ifndef DEBUG
+#ifndef FOR_TEST
     rayImage = Raylib::GenImageColor(w, h, Raylib::Color{ 0, 0, 0, 255 });
-#endif
+#endif //FOR_TEST
 };
 
 void Canvas::writePixel(int x, int y, const Color& c)const {
 	// TODO: don't be dumb
 	if(y * w + x < w * h)
 		canvas[y * w + x] = c;
-#ifndef DEBUG
+#ifndef FOR_TEST
     Raylib::ImageDrawPixel(&rayImage, x, y, Raylib::Color{ scaleColor(c.r), scaleColor(c.g), scaleColor(c.b), 255 });
-#endif
+#endif //FOR_TEST
 }
 
 unsigned char Canvas::scaleColor(double c)const {
@@ -91,9 +91,9 @@ Canvas canvasFromPPM(const std::string& fileName) {
     if (flavor != "P3" && flavor != "P6") {
         // TODO: some assert?
         std::cout << "Wrong PPM format\n";
-#ifndef DEBUG
+#ifndef FOR_TEST
         assert(0);
-#endif
+#endif //FOR_TEST
     }
 
    

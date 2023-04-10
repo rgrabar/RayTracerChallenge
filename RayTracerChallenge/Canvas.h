@@ -3,13 +3,13 @@
 
 #include <string> 
 
-#ifndef DEBUG
+#ifndef FOR_TEST
 
 namespace Raylib {
 	#include "raylib.h"
 };
 
-#endif
+#endif //FOR_TEST
 
 class Canvas {
 public:
@@ -19,9 +19,9 @@ public:
 	void writePixel(int x, int y, const Color& c)const;
 	void canvasToImage()const;
 	unsigned char scaleColor(double c)const;
-#ifndef DEBUG
+#ifndef FOR_TEST
 	mutable Raylib::Image rayImage;
-#endif
+#endif //FOR_TEST
 };
 
 Canvas canvasFromPPM(const std::string& fileName);

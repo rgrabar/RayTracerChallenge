@@ -18,10 +18,10 @@ public:
 	std::vector<Tuple> vertices;
 	std::vector<Tuple> normals;
 
-#ifdef DEBUG
+#ifdef FOR_TEST
 	std::vector<Triangle*> triangles;
 	std::vector<SmoothTriangle*> smoothTriangles;
-#endif // DEBUG
+#endif // FOR_TEST
 
 	std::vector<int> faceIndex;
 	std::vector<int> faceIndexExtended;

@@ -73,9 +73,9 @@ OBJParser::OBJParser(std::string path) {
 							namedGroup[name]->addChild(tmp);
 						else
 							g.addChild(tmp);
-#ifdef DEBUG
+#ifdef FOR_TEST
 						triangles.emplace_back(tmp);
-#endif // DEBUG
+#endif // FOR_TEST
 					}
 				}
 				else if (matches == 4) {
@@ -144,9 +144,9 @@ OBJParser::OBJParser(std::string path) {
 			// if there is any parsed smooth triangles add them to the group 
 			for (int i = 1; i < (int)faceIndex.size() - 1; ++i) {
 				auto tmp = new SmoothTriangle(vertices[faceIndex[0]], vertices[faceIndex[i]], vertices[faceIndex[i + 1]], normals[normalIndex[0]], normals[normalIndex[i]], normals[normalIndex[i + 1]]);
-#ifdef DEBUG
+#ifdef FOR_TEST
 				smoothTriangles.emplace_back(tmp);
-#endif // DEBUG
+#endif // FOR_TEST
 
 				if (saveToNewGroup)
 					namedGroup[name]->addChild(tmp);

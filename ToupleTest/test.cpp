@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#define DEBUG
+#define FOR_TEST
 
 #include <limits.h>
 
