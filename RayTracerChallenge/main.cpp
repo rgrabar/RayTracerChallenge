@@ -19,8 +19,8 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "Test";
-	std::string path = "assets/airboat.obj";
+	std::string scene = "LoadOBJ";
+	std::string path = "assets/smoothTriangles.obj";
 	int aliasing = 0;
 	int width = 900;
 	int height = 900;
@@ -141,9 +141,9 @@ int main(int argc, char* argv[]) {
 	else if (scene == "Aliasing")
 		aliasingScene(aliasing, width, height, highlights, edge, threshold);
 	else if (scene == "CubeTest")
-		cubeTest();
+		cubeTest(aliasing, width, height, highlights, edge, threshold);
 	else if (scene == "Earth")
-		earth();
+		earth(aliasing, width, height, highlights, edge, threshold);
 	else if (scene == "LoadOBJ")
 		loadOBJ(path);
 	else if (scene == "Test")

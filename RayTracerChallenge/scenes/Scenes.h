@@ -276,7 +276,7 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 
 	auto floor = Plane();
-	floor.material.pattern = new CheckerPattern(Color(1, 0.9, 0.9), Color(0, 0.1, 0.1));
+	floor.material.pattern = new CheckerPattern(Color(1, 1, 1), Color(0, 0, 0));
 	floor.transform = translate(0, -0.1, 0);
 	floor.material.specular = 0;
 	floor.material.reflective = 0.5;
@@ -337,14 +337,6 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	shape5.material.transparency = 0.0;
 	//shape5.material.refractiveIndex = 1;
 
-	auto shape6 = Sphere();
-	shape6.transform = translate(-2.5, 0.5, 1.5) * scale(0.5, 0.5, 0.5);
-	shape6.material.color = Color(1, 0, 1);
-	shape6.material.diffuse = 1;
-	shape6.material.specular = 1;
-	shape6.material.reflective = 0.8;
-
-
 	world.objects.emplace_back(&floor);
 	world.objects.emplace_back(&shape);
 	world.objects.emplace_back(&shape1);
@@ -352,7 +344,6 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	world.objects.emplace_back(&shape3);
 	world.objects.emplace_back(&shape4);
 	world.objects.emplace_back(&shape5);
-	world.objects.emplace_back(&shape6);
 
 
 	Camera cam(width, height, TEST_PI / 3);
@@ -1003,12 +994,25 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 
 	auto csg = CSGShape(CSGOperation::OPERATION::UNION, &cylinder, &cone);
 	auto csg1 = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &csg, &sphere);
+	csg1.transform = translate(3, 0, 0);
+
+	auto cube = Cube();
+	cube.transform = translate(-3, 0, 3);
+	cube.material.color = Color(0.215, 0.6489, 0.948);
+
+	auto sphere1 = Sphere();
+	sphere1.transform = translate(-3, 1, 2.5);
+	sphere1.material.pattern = new UVCheckers(8, 8, Color(1, 1, 1), Color(0, 0, 0));
+	sphere1.optOutShadow = 1;
+
+	auto csg2 = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &cube, &sphere1);
 
 	auto world = World();
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
 
 	world.objects.emplace_back(&csg1);
+	world.objects.emplace_back(&csg2);
 
 	Camera cam(width, height, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
@@ -1135,7 +1139,7 @@ void spotLightScene(int aliasing, int width, int height, int highlights, int edg
 	//drawAxes(world);
 
 	Camera cam(width, height, TEST_PI / 3);
-	cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	cam.transform = viewTransformation(Tuple::point(0, 10, -12), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -1204,7 +1208,7 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 	ans.canvasToImage();
 }
 
-void cubeTest() {
+void cubeTest(int aliasing, int width, int height, int highlights, int edge, double threshold) {
 	
 
 
@@ -1261,14 +1265,19 @@ void cubeTest() {
 	world.objects.emplace_back(&cube6);
 	world.objects.emplace_back(&cube7);
 
-	Camera cam(800, 400, 0.8);
+	Camera cam(width, height, TEST_PI / 3);
+	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 0, -20), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+	cam.aliasingSamples = aliasing;
+	cam.aliasEdges = edge;
+	cam.edgeAliasHighlights = highlights;
+	cam.aliasingThreshold = threshold;
 	auto ans = cam.render(world);
 	ans.canvasToImage();
 
 }
 
-void earth() {
+void earth(int aliasing, int width, int height, int highlights, int edge, double threshold) {
 
 	auto world = World();
 
@@ -1306,8 +1315,13 @@ void earth() {
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&cube);
 	
-	Camera cam(800, 400, 0.8);
+	Camera cam(width, height, TEST_PI / 3);
+	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(1, 2, -10), Tuple::point(0, 1.1, 0), Tuple::vector(0, 1, 0));
+	cam.aliasingSamples = aliasing;
+	cam.aliasEdges = edge;
+	cam.edgeAliasHighlights = highlights;
+	cam.aliasingThreshold = threshold;
 	auto ans = cam.render(world);
 	ans.canvasToImage();
 	
@@ -1318,6 +1332,7 @@ void loadOBJ(std::string path) {
 	OBJParser o(path);
 
 	auto g = o.ObjToGroup();
+	g->transform = translate(1, -1, -40) * scale(20, 20, 20) * rotationX(-TEST_PI / 2);
 	g->divide();
 
 	auto world = World();
