@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "Tuple.h"
 
+#include <climits>
 #include <limits>
 
 class BoundingBox {

@@ -2,6 +2,7 @@
 #include "Helper.h"
 
 #include <cassert>
+#include <cstring>
 #include <iostream>
 #include <vector>
 
