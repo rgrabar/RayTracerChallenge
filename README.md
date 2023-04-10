@@ -1,5 +1,7 @@
 ## Build
-Clone the raylib repo (https://github.com/raysan5/raylib) inside this project folder and run one of the build files. 
+Clone the raylib repo (https://github.com/raysan5/raylib) inside this project folder. Don't forget to install the required libraries e.g for ubuntu 
+`sudo apt install libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev` (more details https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux)
+After you can run one of the build files. 
 This should build raylib and the project itself. Can also be built by using Visual Studio and raylib as a NuGet package (Tools -> NuGet Package Manager).
 
 ## Build Tests
