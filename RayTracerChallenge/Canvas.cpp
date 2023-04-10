@@ -20,17 +20,18 @@ Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 		std::cout << "Can't allocate memory";
 		exit(0);
 	}
-
+#ifndef DEBUG
     rayImage = Raylib::GenImageColor(w, h, Raylib::Color{ 0, 0, 0, 255 });
+#endif
 };
 
 void Canvas::writePixel(int x, int y, const Color& c)const {
 	// TODO: don't be dumb
 	if(y * w + x < w * h)
 		canvas[y * w + x] = c;
-
+#ifndef DEBUG
     Raylib::ImageDrawPixel(&rayImage, x, y, Raylib::Color{ scaleColor(c.r), scaleColor(c.g), scaleColor(c.b), 255 });
-
+#endif
 }
 
 unsigned char Canvas::scaleColor(double c)const {

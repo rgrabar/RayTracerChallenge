@@ -33,7 +33,9 @@ public:
 
 	void splitArray(World* world, Canvas* image);
 
+#ifndef DEBUG
 	void drawRayImage(Canvas* image);
+#endif
 
 	std::vector<std::pair<int, int>> shufflePoints;
 	std::atomic_int shuffleIndex = 0;

@@ -4,10 +4,11 @@
 #include <random>
 #include <thread>
 
+#ifndef DEBUG
 namespace Raylib {
 	#include "raylib.h"
 };
-
+#endif
 
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);
@@ -168,6 +169,8 @@ void Camera::splitArray(World* world, Canvas* image) {
 	//}
 }
 
+#ifndef DEBUG
+
 void Camera::drawRayImage(Canvas* image) {
 
 	Raylib::InitWindow(image->w, image->h, "raylib [core] example - basic window");
@@ -188,6 +191,8 @@ void Camera::drawRayImage(Canvas* image) {
 	Raylib::CloseWindow();
 
 }
+
+#endif
 
 using namespace std::chrono_literals;
 
@@ -216,21 +221,26 @@ Canvas Camera::render(World& world) {
 
 	std::cout << "USING : " << n << " THREADS\n";
 
+#ifndef DEBUG
 	std::thread rayThread(&Camera::drawRayImage, this, &image);
 
 	while (!Raylib::IsWindowReady()) {
 		// wait for window
 	}
-
+#endif
 
 	std::vector<std::thread> threads;
 	for (int i = 0; i < (int)n; ++i) {
+#ifndef DEBUG
 		// give a bit of time for each tread to start otherwise some pixels get skipped
 		Raylib::WaitTime(0.001);
+#endif 
 		threads.push_back(std::thread(&Camera::splitArray, this, &world, &image));
 	}
 
+#ifndef DEBUG
 	rayThread.join();
+#endif
 
 	for (auto& thread:threads) {
 		thread.join();
