@@ -7,8 +7,11 @@ This should build raylib and the project itself. Can also be built by using Visu
 Install gtests: sudo apt-get install libgtest-dev
 build by using of of the build files:
 
-## Windows 
+### Windows 
 Add google tests by using NuGet and build the solution.
+<br>
+***Note:*** The test name should be changed, it's a bit annyoing to do tho. 
+
 
 ## Scenes
 
