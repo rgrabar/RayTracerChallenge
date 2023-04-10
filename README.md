@@ -1,16 +1,16 @@
-### Build
+## Build
 Clone the raylib repo (https://github.com/raysan5/raylib) inside this project folder and run one of the build files. 
 This should build raylib and the project itself. Can also be built by using Visual Studio and raylib as a NuGet package (Tools -> NuGet Package Manager).
 
-### Build Tests
-## Linux
+## Build Tests
+### Linux
 Install gtests: sudo apt-get install libgtest-dev
 build by using of of the build files:
 
 ## Windows 
 Add google tests by using NuGet and build the solution.
 
-### Scenes
+## Scenes
 
 ***Note:*** first three scenes won't be previewd using raylib, however every scene gets saved as canvas.ppm. 
 
