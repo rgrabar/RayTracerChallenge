@@ -12,6 +12,7 @@ Build by using one of the build files.
 
 ### Windows 
 Add google tests by using NuGet and build the solution.
+You can also test without visual studio but I haven't tried.
 <br>
 ***Note:*** The test name should be changed, it's a bit annoying to do tho. 
 
