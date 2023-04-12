@@ -2,7 +2,7 @@
 
 
 struct Color {
-public:
+
 	Color(double r, double g, double b);
 	double r, g, b;
 	Color operator*(double scalar)const;

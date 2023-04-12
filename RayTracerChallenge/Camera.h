@@ -6,8 +6,7 @@
 #include <atomic>
 #include <mutex>
 
-class Camera {
-public:
+struct Camera {
 	int hSize;
 	int vSize;
 	double fieldOfView;

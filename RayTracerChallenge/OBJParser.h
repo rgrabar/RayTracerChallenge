@@ -7,8 +7,8 @@
 #include "Triangle.h"
 #include "Groups.h"
 
-class OBJParser{
-public:
+struct OBJParser{
+
 	bool saveToNewGroup = 0;
 	std::string name;
 	std::map<std::string, Group*> namedGroup;

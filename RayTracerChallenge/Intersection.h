@@ -3,8 +3,7 @@
 #include <set>
 #include "Helper.h"
 
-class Intersection {
-public:
+struct Intersection {
 
 	// di ga je hit
 	double t;
@@ -24,8 +23,8 @@ struct cmp {
     }
 };
 
-class Intersections {
-public:
+struct Intersections {
+
     Intersections() {};
     Intersections(const std::multiset<Intersection*, cmp>& i) : intersections(i) {
 

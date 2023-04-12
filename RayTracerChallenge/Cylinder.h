@@ -8,9 +8,8 @@
 #include <iostream>
 #include <cmath>
 
-class Cylinder : public Shape {
+struct Cylinder : public Shape {
 
-public:
 	double minimum = -INFINITY;
 	double maximum = INFINITY;
 	bool closed = false;

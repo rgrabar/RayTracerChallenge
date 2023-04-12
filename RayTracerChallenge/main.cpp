@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
 
 	std::cout << duration.count() << std::endl;
 	
-	std::getchar();
+//	std::getchar();
 	
 	
 	return 0;

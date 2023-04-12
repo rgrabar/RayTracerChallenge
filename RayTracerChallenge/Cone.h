@@ -8,9 +8,8 @@
 #include "Shape.h"
 #include "Tuple.h"
 
-class Cone : public Shape {
+struct Cone : public Shape {
 
-public:
 	double minimum = -INFINITY;
 	double maximum = INFINITY;
 	bool closed = false;

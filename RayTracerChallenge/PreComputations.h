@@ -6,8 +6,7 @@
 #include "Helper.h"
 #include <vector>
 
-class Precomputations {
-public:
+struct Precomputations {
 
 	Ray ray;
 	Tuple point, eyev, normalv, reflectv;

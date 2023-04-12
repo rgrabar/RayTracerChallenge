@@ -3,9 +3,7 @@
 #include "Shape.h"
 #include <math.h>
 
-class Triangle : public Shape{
-	
-public:
+struct Triangle : public Shape{
 
 	Tuple p1;
 	Tuple p2;
@@ -27,9 +25,8 @@ public:
 	void setMaterial(const Material& s)override;
 };
 
-class SmoothTriangle : public Shape {
+struct SmoothTriangle : public Shape {
 
-public:
 	Tuple p1;
 	Tuple p2;
 	Tuple p3;

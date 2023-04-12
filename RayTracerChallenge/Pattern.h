@@ -8,10 +8,10 @@
 #include <iostream>
 #include <math.h>
 
-class Shape;
+struct Shape;
 
-class Pattern {
-public:
+struct Pattern {
+
 	Color a;
 	Color b;
 	Matrix transform = identityMatrix(4);
@@ -21,8 +21,8 @@ public:
 	virtual Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const = 0;
 };
 
-class StripePattern :public Pattern {
-public:
+struct StripePattern :public Pattern {
+
 	Pattern* patternA = nullptr;
 	Pattern* patternB = nullptr;
 	bool isNested = false;
@@ -34,8 +34,8 @@ public:
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 };
 
-class GradientPattern : public Pattern {
-public:
+struct GradientPattern : public Pattern {
+
 	GradientPattern() {}
 	GradientPattern(const Color& _a, const Color& _b) : Pattern(_a, _b) {}
 
@@ -43,8 +43,8 @@ public:
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 };
 
-class CheckerPattern : public Pattern {
-public:
+struct CheckerPattern : public Pattern {
+
 	// use for nested patterns e.g. have a checkered pattern with different nested stripe patterns
 	Pattern* patternA = nullptr;
 	Pattern* patternB = nullptr;
@@ -57,8 +57,8 @@ public:
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 };
 
-class RingPattern : public Pattern {
-public:
+struct RingPattern : public Pattern {
+
 	Pattern* patternA = nullptr;
 	Pattern* patternB = nullptr;
 	bool isNested = false;
@@ -70,8 +70,7 @@ public:
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 };
 
-class RadialGradientPattern : public Pattern {
-public:
+struct RadialGradientPattern : public Pattern {
 
 	int type = 0;
 
@@ -82,8 +81,8 @@ public:
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
 };
 
-class BlendedPattern :public Pattern {
-public:
+struct BlendedPattern :public Pattern {
+
 	BlendedPattern() {}
 	BlendedPattern(Pattern* _a, Pattern* _b) : a(_a), b(_b) {}
 
@@ -92,8 +91,8 @@ public:
 	Pattern* b = nullptr;
 };
 
-class UVCheckers :public Pattern {
-public:
+struct UVCheckers :public Pattern {
+
 	UVCheckers() : a(1, 1, 1), b(0, 0, 0) {}
 	UVCheckers(int _u, int _v, Color _a, Color _b) : widht(_u), height(_v), a(_a), b(_b) {}
 
@@ -116,8 +115,8 @@ public:
 	Color b;
 };
 
-class AlignCheck :public Pattern {
-public:
+struct AlignCheck :public Pattern {
+
 	AlignCheck(Color _main, Color _ul, Color _ur, Color _bl, Color _br) : main(_main), ul(_ul), ur(_ur), bl(_bl), br(_br) {}
 
 	Color patternColorAt(const Tuple& point, const Shape* shape = nullptr)const override;
@@ -131,8 +130,8 @@ public:
 	Color br;
 };
 
-class CubeMap :public Pattern {
-public:
+struct CubeMap :public Pattern {
+
 	// TODO: is there a way to guarantee order?
 	CubeMap(Pattern* _front, Pattern* _back, Pattern* _left, Pattern* _right, Pattern* _up, Pattern* _down) : faces{ _front, _back, _left, _right, _up, _down } {
 
@@ -145,8 +144,8 @@ public:
 	Pattern* faces[6];
 };
 
-class UVImagePattern :public Pattern {
-public:
+struct UVImagePattern :public Pattern {
+
 	UVImagePattern(Canvas* _canvas) : canvas(_canvas) {
 
 	}
@@ -157,9 +156,7 @@ public:
 	Canvas* canvas;
 };
 
+struct TestPatern :public Pattern{
 
-
-class TestPatern :public Pattern{
-public:
 	Color patternColorAt(const Tuple& object_point, const Shape* shape = nullptr)const override;
 };

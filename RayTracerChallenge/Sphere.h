@@ -2,9 +2,8 @@
 
 #include "Shape.h"
 
-class Sphere : public Shape {
+struct Sphere : public Shape {
 
-public:
 	Sphere();
 
 	bool operator==(const Sphere& other) const;

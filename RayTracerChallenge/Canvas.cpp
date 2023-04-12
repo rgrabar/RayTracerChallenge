@@ -25,7 +25,7 @@ Canvas::Canvas(int _w, int _h): w(_w), h(_h) {
 #endif //FOR_TEST
 };
 
-void Canvas::writePixel(int x, int y, const Color& c)const {
+void Canvas::writePixel(int x, int y, const Color& c) {
 	// TODO: don't be dumb
 	if(y * w + x < w * h)
 		canvas[y * w + x] = c;

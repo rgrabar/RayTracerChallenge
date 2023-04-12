@@ -14,8 +14,8 @@ namespace CSGOperation {
 	};
 }
 
-class CSGShape : public Shape{
-public:
+struct CSGShape : public Shape{
+
 	CSGOperation::OPERATION operation;
 	Shape* left;
 	Shape* right;

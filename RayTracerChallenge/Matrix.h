@@ -4,9 +4,7 @@
 #include <stdlib.h>     /* malloc, calloc, realloc, free */
 #include <memory>
 
-class Matrix {
-
-public:
+struct Matrix {
 
 	Matrix(int _h, int _w);
 	Matrix(Matrix& other);

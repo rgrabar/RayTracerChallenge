@@ -6,8 +6,7 @@
 #include "Shape.h"
 #include <vector>
 
-class Group : public Shape {
-public:
+struct Group : public Shape {
 	//TODO: materials for groups
 
 	std::vector<Shape*> children;

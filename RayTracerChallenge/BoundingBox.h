@@ -7,9 +7,8 @@
 #include <climits>
 #include <limits>
 
-class BoundingBox {
+struct BoundingBox {
 	// TODO: revise the bounding box code after adding triangles and CSG
-public:
 	Tuple boxMin;
 	Tuple boxMax;
 

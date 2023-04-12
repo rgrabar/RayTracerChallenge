@@ -8,8 +8,7 @@
 #include <set>
 #include <vector>
 
-class World {
-public:
+struct World {
 
 	std::vector<Light*> lights;
 	std::vector<Shape*> objects;

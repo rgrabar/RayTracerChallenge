@@ -4,8 +4,8 @@
 #include <math.h>
 #include <cmath>
 
-class Plane : public Shape{
-public:
+struct Plane : public Shape{
+
 	Plane();
 
 	Intersections intersect(const Ray& ray)const override;

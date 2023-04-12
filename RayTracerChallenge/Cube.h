@@ -16,9 +16,7 @@ namespace cubeFace {
 	};
 }
 
-class Cube : public Shape {
-
-public:
+struct Cube : public Shape {
 	
 	struct MinMaxPoint {
 		double tMin = INT_MAX, tMax = INT_MIN;

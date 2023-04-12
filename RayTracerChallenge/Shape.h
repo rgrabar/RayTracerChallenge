@@ -8,8 +8,7 @@
 #include "Tuple.h"
 #include <iostream>
 
-class Shape {
-public:
+struct Shape {
 
 	// TODO: add == operator for all shapes
 

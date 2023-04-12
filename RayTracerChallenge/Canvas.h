@@ -11,12 +11,11 @@ namespace Raylib {
 
 #endif //FOR_TEST
 
-class Canvas {
-public:
+struct Canvas {
 	Canvas(int _w, int _h);
 	int w, h;
 	Color* canvas;
-	void writePixel(int x, int y, const Color& c)const;
+	void writePixel(int x, int y, const Color& c);
 	void canvasToImage()const;
 	unsigned char scaleColor(double c)const;
 #ifndef FOR_TEST

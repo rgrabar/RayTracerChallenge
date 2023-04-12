@@ -2,9 +2,7 @@
 #include "Tuple.h"
 #include "Matrix.h"
 
-class Ray {
-
-public:
+struct Ray {
 
 	Tuple origin, direction;
 

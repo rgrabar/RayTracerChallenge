@@ -6,10 +6,9 @@
 #include <vector>
 
 // TODO: this is here because of intensityAt can i move it somewhere?
-class World;
+struct World;
 
-class Light {
-public:
+struct Light {
 
 	virtual bool operator==(const Light& other)const = 0;
 
@@ -25,9 +24,7 @@ public:
 };
 
 
-class PointLight : public Light {
-
-public:
+struct PointLight : public Light {
 
 	PointLight(const Color& _intensity, const Tuple& _position);
 
@@ -35,10 +32,7 @@ public:
 	double intensityAt(const Tuple& point, const World& world);
 };
 
-class SpotLight : public Light {
-
-public:
-
+struct SpotLight : public Light {
 
 	SpotLight(const Color& _intensity, const Tuple& _position, const Tuple& _direction, double _angle, int _samples, double _radius);
 	// TODO: change compare operator
@@ -55,9 +49,7 @@ public:
 
 };
 
-class AreaLight : public Light {
-
-public:
+struct AreaLight : public Light {
 
 	AreaLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity);
 	// TODO: change compare operator
@@ -77,9 +69,7 @@ public:
 };
 
 // Test light for arealight jitter tests
-class TestLight : public Light {
-
-public:
+struct TestLight : public Light {
 
 	TestLight(const Tuple& _corner, const Tuple& _fullUvec, int _uSteps, const Tuple& _fullVvec, int _vSteps, Color _intensity);
 	// TODO: change compare operator
