@@ -16,6 +16,20 @@ You can also test without visual studio but I haven't tried.
 <br>
 ***Note:*** The test name should be changed, it's a bit annoying to do tho. 
 
+## Command line arguments
+
+First argument is always the scene name (see below).
+
+`--aliasing`&emsp;->              [int] number of samples per pixel <br>
+`--size`&emsp;&emsp;&ensp;&nbsp;->                  [int, int] width height <br>
+`--edge`&emsp;&emsp;&ensp;&nbsp;->                  0/1 if enabled antialiasing will only be applied to edges <br>
+`--highlights`->            0/1, if enabled previews what will be antialiased when using the --edge option <br>
+`--threshold`&nbsp; ->             float [0, 1], if --edge is enabeld set the threshold for edge detection <br>
+                          &emsp; &emsp; &emsp; &emsp; &emsp;&ensp;&nbsp;&nbsp;&nbsp; it checks for the difference in color beween the center of the pixel and it's edges <br>
+`--path`&emsp;&emsp;&emsp;->                  sets the path to the custom .obj file (can be used only with LoadOBJ scene) <br>
+
+Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --threshold 0.01` <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;&nbsp;`RayTracer LoadOBJ --path assets/smoothTriangles.obj`
 
 ## Scenes
 
