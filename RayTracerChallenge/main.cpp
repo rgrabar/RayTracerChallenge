@@ -31,12 +31,13 @@ int main(int argc, char* argv[]) {
 	if (n != 1) {
 		if (strcmp(argv[1], "--help") == 0) {
 			std::cout << "[Scene name] [--option]\n";
-			std::cout << "\t--aliasing\t\tnumber of samples per pixel\n";
-			std::cout << "\t--size\t\t\twidth height\n";
-			std::cout << "\t--edge\t\t\t0/1 if enabled will antialiasing only applied to edges\n";
-			std::cout << "\t--highlights\t\t0/1, if enabled previews what will be antialiased when using the --edge option\n";
-			std::cout << "\t--threshold\t\tfloat [0, 1], if --edge is enabeld set the threshold for edge detection\n";
-			std::cout << "\t\t\t\tit checks for the difference in color beween the center of the pixel and it's edges\n";
+			std::cout << "\t--aliasing\t\t [int] number of samples per pixel\n";
+			std::cout << "\t--size\t\t\t [int, int] width height\n";
+			std::cout << "\t--edge\t\t\t 0/1 if enabled antialiasing will only be applied to edges\n";
+			std::cout << "\t--highlights\t\t 0/1, if enabled previews what will be antialiased when using the --edge option\n";
+			std::cout << "\t--threshold\t\t float [0, 1], if --edge is enabeld set the threshold for edge detection\n";
+			std::cout << "\t\t\t\t it checks for the difference in color beween the center of the pixel and it's edges\n";
+			std::cout << "\t--path\t\t\t sets the path to the custom .obj file (can be used only with LoadOBJ scene)\n\n";
 
 			std::cout << "Available scenes:\n";
 			std::cout << "\tProjectile\n";
@@ -103,6 +104,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "aliasing samples: " << aliasing << "\n";
 	std::cout << "alias edges: " << edge << "\n";
 	std::cout << "highlight edges: " << highlights << "\n";
+	std::cout << "threshold: " << threshold << "\n";
 
 	if (scene == "Projectile")
 		drawProjectile();
