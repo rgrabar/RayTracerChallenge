@@ -22,6 +22,8 @@ struct Camera {
 	std::atomic_int pixelCount = 0;
 	std::atomic_int next = 5;
 
+	static int numOfThreads;
+
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
 

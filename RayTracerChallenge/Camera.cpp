@@ -10,6 +10,8 @@ namespace Raylib {
 };
 #endif //FOR_TEST
 
+int Camera::numOfThreads = std::thread::hardware_concurrency();
+
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);
 	auto aspect = hSize / (double)vSize;
@@ -217,9 +219,7 @@ Canvas Camera::render(World& world) {
 		object->transform.inverse();
 	}
 
-	const unsigned n = std::thread::hardware_concurrency();
-
-	std::cout << "USING : " << n << " THREADS\n";
+	std::cout << "USING : " << numOfThreads << " THREADS\n";
 
 #ifndef FOR_TEST
 	std::thread rayThread(&Camera::drawRayImage, this, &image);
@@ -230,7 +230,7 @@ Canvas Camera::render(World& world) {
 #endif //FOR_TEST
 
 	std::vector<std::thread> threads;
-	for (int i = 0; i < (int)n; ++i) {
+	for (int i = 0; i < (int)numOfThreads; ++i) {
 #ifndef FOR_TEST
 		// give a bit of time for each tread to start otherwise some pixels get skipped
 		Raylib::WaitTime(0.001);

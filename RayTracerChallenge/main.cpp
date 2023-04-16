@@ -39,6 +39,9 @@ int main(int argc, char* argv[]) {
 			std::cout << "\t\t\t\t it checks for the difference in color beween the center of the pixel and it's edges\n";
 			std::cout << "\t--path\t\t\t sets the path to the custom .obj file (can be used only with LoadOBJ scene)\n\n";
 
+			std::cout << "Other options: \n";
+			std::cout << "\t --threads [int], number of threads to use\n\n";
+
 			std::cout << "Available scenes:\n";
 			std::cout << "\tProjectile\n";
 			std::cout << "\tClock\n";
@@ -94,6 +97,9 @@ int main(int argc, char* argv[]) {
 		else if (strcmp(argv[i], "--path") == 0) {
 			path = argv[i + 1];
 			i++;
+		}
+		else if (strcmp(argv[i], "--threads") == 0) {
+			Camera::numOfThreads = atoi(argv[i + 1]);
 		}
 	}
 
