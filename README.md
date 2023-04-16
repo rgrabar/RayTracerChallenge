@@ -18,6 +18,8 @@ You can also test without visual studio but I haven't tried.
 
 ## Command line arguments
 
+### Scene related
+
 First argument is always the scene name (see below).
 
 `--aliasing`&emsp;->              [int] number of samples per pixel <br>
@@ -30,6 +32,9 @@ First argument is always the scene name (see below).
 
 Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --threshold 0.01` <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;&nbsp;`RayTracer LoadOBJ --path assets/smoothTriangles.obj`
+<br>
+### Other arguments: <br>
+`--threads`-> [int] number of threads to use for rendering<br>
 
 ## Scenes
 
