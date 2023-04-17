@@ -175,7 +175,7 @@ void Camera::splitArray(World* world, Canvas* image) {
 
 void Camera::drawRayImage(Canvas* image) {
 
-	Raylib::InitWindow(image->w, image->h, "raylib [core] example - basic window");
+	Raylib::InitWindow(image->w, image->h, "Ray tracer");
 	Raylib::SetTargetFPS(30);
 	Raylib::SetTraceLogLevel(4);
 
