@@ -23,6 +23,7 @@ struct Camera {
 	std::atomic_int next = 5;
 
 	static int numOfThreads;
+	static bool noPPM;
 
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
@@ -30,7 +31,12 @@ struct Camera {
 	Camera(int _hSize, int _vSize, double _fieldOfView);
 	Ray rayForPixel(double px, double py);
 
+#ifndef FOR_TEST
+	void render(World& world);
+#else
 	Canvas render(World& world);
+#endif
+
 
 	void splitArray(World* world, Canvas* image);
 

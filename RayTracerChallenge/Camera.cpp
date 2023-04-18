@@ -11,6 +11,7 @@ namespace Raylib {
 #endif //FOR_TEST
 
 int Camera::numOfThreads = std::thread::hardware_concurrency();
+bool Camera::noPPM = false;
 
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
 	auto halfView = tan(fieldOfView / 2.f);
@@ -198,7 +199,13 @@ void Camera::drawRayImage(Canvas* image) {
 
 using namespace std::chrono_literals;
 
+//TODO: this is ugly
+#ifndef FOR_TEST
+void Camera::render(World& world) {
+#else
 Canvas Camera::render(World& world) {
+#endif
+
 	Canvas image(hSize, vSize);
 
 	for (auto y = 0; y < vSize; ++y) {
@@ -248,5 +255,11 @@ Canvas Camera::render(World& world) {
 
 
 	std::cout << "\nCOMPLETED\n";
+	if (noPPM == false) {
+		std::cout << "SAVING TO PPM \n";
+		image.canvasToImage();
+	}
+#ifdef FOR_TEST
 	return image;
+#endif
 }

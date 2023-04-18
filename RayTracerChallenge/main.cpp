@@ -101,6 +101,9 @@ int main(int argc, char* argv[]) {
 		else if (strcmp(argv[i], "--threads") == 0) {
 			Camera::numOfThreads = atoi(argv[i + 1]);
 		}
+		else if (strcmp(argv[i], "--no-ppm") == 0) {
+			Camera::noPPM = atoi(argv[i + 1]);
+		}
 	}
 
 	std::cout << "Settings: \n";
@@ -159,13 +162,6 @@ int main(int argc, char* argv[]) {
 	
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
-
-	std::cout << duration.count() << std::endl;
-
-	std::cout << "SAVING TO PPM \n";
-
-	stop = high_resolution_clock::now();
-	duration = duration_cast<microseconds>(stop - start);
 
 	std::cout << duration.count() << std::endl;
 	

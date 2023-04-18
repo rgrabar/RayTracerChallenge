@@ -39,8 +39,6 @@ void drawProjectile() {
 	}
 
 	c.canvasToImage();
-
-
 }
 
 void drawClock() {
@@ -65,7 +63,6 @@ void drawClock() {
 		twelve = r * twelve;
 	}
 	c.canvasToImage();
-
 }
 
 void drawRedCircle() {
@@ -190,8 +187,7 @@ void drawShadowPatternsReflection(int aliasing, int width, int height, int highl
 		cam.aliasingThreshold = threshold;
 
 
-		auto ans = cam.render(world);
-		ans.canvasToImage();		
+		cam.render(world);	
 }
 
 void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -252,8 +248,7 @@ void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 
@@ -353,8 +348,7 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 	
 	/*
 	auto world = World();
@@ -529,8 +523,7 @@ void drawAllShapes(int aliasing, int width, int height, int highlights, int edge
 		cam.edgeAliasHighlights = highlights;
 		cam.aliasingThreshold = threshold;
 
-		auto ans = cam.render(world);
-		ans.canvasToImage();
+		cam.render(world);
 }
 
 Sphere* hexagonCorner() {
@@ -631,9 +624,7 @@ void drawHexagon(int aliasing, int width, int height, int highlights, int edge, 
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
-	
+	cam.render(world);
 }
 
 
@@ -741,8 +732,7 @@ void sphereCube(int aliasing, int width, int height, int highlights, int edge, d
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void sphereCubeDivide(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -805,8 +795,7 @@ void sphereCubeDivide(int aliasing, int width, int height, int highlights, int e
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void drawTeapot(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -828,8 +817,7 @@ void drawTeapot(int aliasing, int width, int height, int highlights, int edge, d
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void drawAstronaut(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -870,8 +858,7 @@ void drawAstronaut(int aliasing, int width, int height, int highlights, int edge
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void drawDragon	(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -900,8 +887,7 @@ void drawDragon	(int aliasing, int width, int height, int highlights, int edge, 
 	cam.aliasingThreshold = threshold;
 
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 
@@ -925,8 +911,7 @@ void drawCSKnife(int aliasing, int width, int height, int highlights, int edge, 
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 /* 
@@ -1021,8 +1006,7 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void areaLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -1088,8 +1072,7 @@ void areaLightScene(int aliasing, int width, int height, int highlights, int edg
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void spotLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -1146,8 +1129,7 @@ void spotLightScene(int aliasing, int width, int height, int highlights, int edg
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void aliasingScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -1204,8 +1186,7 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
 
-	auto ans = cam.render(world);
-	ans.canvasToImage();
+	cam.render(world);
 }
 
 void cubeTest(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -1272,9 +1253,7 @@ void cubeTest(int aliasing, int width, int height, int highlights, int edge, dou
 	cam.aliasEdges = edge;
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
-	auto ans = cam.render(world);
-	ans.canvasToImage();
-
+	cam.render(world);
 }
 
 void earth(int aliasing, int width, int height, int highlights, int edge, double threshold) {
@@ -1322,9 +1301,7 @@ void earth(int aliasing, int width, int height, int highlights, int edge, double
 	cam.aliasEdges = edge;
 	cam.edgeAliasHighlights = highlights;
 	cam.aliasingThreshold = threshold;
-	auto ans = cam.render(world);
-	ans.canvasToImage();
-	
+	cam.render(world);
 }
 
 void loadOBJ(std::string path) {
@@ -1343,10 +1320,7 @@ void loadOBJ(std::string path) {
 	Camera cam(900, 900, TEST_PI / 3);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 
-
-	auto ans = cam.render(world);
-	ans.canvasToImage();
-
+	cam.render(world);
 }
 
 void testScene() {
@@ -1413,10 +1387,7 @@ void testScene() {
 	cam.aliasingThreshold = 0.01;
 	*/
 	//cam.aliasingSamples = 16;
-	auto ans = cam.render(world);
-	ans.canvasToImage();
-	
-
+	cam.render(world);
 }
 
 void drawAxes(World& world) {
