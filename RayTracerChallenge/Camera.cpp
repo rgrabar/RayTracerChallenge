@@ -108,8 +108,8 @@ void Camera::splitArray(World* world, Canvas* image) {
 			if (isEdge) {
 				for (int k = 0; k < aliasingSamples; ++k) {
 
-					u = (y + random_double());
-					v = (x + random_double());
+					u = (y + random_double() - 0.5);
+					v = (x + random_double() - 0.5);
 
 					auto ray = rayForPixel(v, u);
 					pixelColor += world->colorAt(ray);
@@ -134,8 +134,8 @@ void Camera::splitArray(World* world, Canvas* image) {
 		else if (aliasingSamples != 0) {
 			for (int k = 0; k < aliasingSamples; ++k) {
 
-				u = (y + random_double());
-				v = (x + random_double());
+				u = (y + random_double() - 0.5);
+				v = (x + random_double() - 0.5);
 
 				auto ray = rayForPixel(v, u);
 				pixelColor += world->colorAt(ray);
