@@ -35,6 +35,7 @@ Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --thr
 <br>
 ### Other arguments: <br>
 `--threads`-> [int] number of threads to use for rendering<br>
+`--no-ppm`&nbsp; -> [bool] if true the ppm image of the scene won't be created<br>
 
 ## Scenes
 
