@@ -210,7 +210,7 @@ Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --thr
   
   Command: ```RayTracer Aliasing --aliasing 16 --edge 1```
   
-  ![image](https://user-images.githubusercontent.com/78257998/230874832-626db5cc-b7b3-442f-8ff5-c0dfa5c59a7e.png)
+  ![image](https://user-images.githubusercontent.com/78257998/233157520-469871f0-90a4-4c2a-8bda-d2c2d38c2705.png)
 
   Command: ```RayTracer Aliasing --aliasing 16```
   
