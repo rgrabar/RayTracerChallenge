@@ -107,7 +107,7 @@ double SpotLight::intensityAt(const Tuple& point, const World& world) {
 Tuple SpotLight::pointOnLight() {
 
 	// https://mathworld.wolfram.com/DiskPointPicking.html
-	// random points in a uniform circle form -1 to 1
+	// random points in a uniform circle r E [0, 1] and phi E (0, 2*pi)
 	
 	auto r = random_double();
 	auto phi = random_double() * 2 * 3.1415926536;
