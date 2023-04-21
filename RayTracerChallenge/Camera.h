@@ -13,6 +13,8 @@ struct Camera {
 	double halfWidth;
 	double halfheight;
 	double pixelSize;
+	double focalLenght = 3;
+	double apertureRadius = 0.4;
 
 	int aliasingSamples = 0;
 	double aliasingThreshold = 0.3;
@@ -46,4 +48,6 @@ struct Camera {
 
 	std::vector<std::pair<int, int>> shufflePoints;
 	std::atomic_int shuffleIndex = 0;
+
+	const Tuple aperturePoint()const;
 };

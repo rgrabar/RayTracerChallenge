@@ -14,7 +14,13 @@ int Camera::numOfThreads = std::thread::hardware_concurrency();
 bool Camera::noPPM = false;
 
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
-	auto halfView = tan(fieldOfView / 2.f);
+	double halfView;
+	if (epsilonEqual(apertureRadius, 0)) {
+		halfView = tan(fieldOfView / 2.f);
+	}
+	else
+		halfView = tan(fieldOfView / 2.f) * focalLenght;
+
 	auto aspect = hSize / (double)vSize;
 
 	if (aspect >= 1) {
@@ -26,6 +32,21 @@ Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSi
 		halfheight = halfView;
 	}
 	pixelSize = halfWidth * 2 / hSize;
+	//std::cout << pixelSize << "\n";
+}
+
+const Tuple Camera::aperturePoint() const {
+	//https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly/50746409#50746409
+	auto r = apertureRadius * sqrt(random_double());
+	auto phi = random_double() * 2 * 3.1415926536;
+		//std::cout << cos(phi) << "\n";
+
+	auto x = r * cos(phi);
+	auto y = r * sin(phi);
+
+	//std::cout << x << " " << y << "\n";
+
+	return Tuple::point(x, y, 0);
 }
 
 Ray Camera::rayForPixel(double px, double py) {
@@ -35,11 +56,21 @@ Ray Camera::rayForPixel(double px, double py) {
 	auto worldX = halfWidth - xOffset;
 	auto worldY = halfheight - yOffset;
 
-	auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
-	auto origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
-	auto direction = (pixel - origin).normalize();
+	if (epsilonEqual(apertureRadius, 0)) {
+	
+		auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
+		auto origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
+		auto direction = (pixel - origin).normalize();
 
-	return Ray(origin, direction);
+		return Ray(origin, direction);
+	}	
+	else {
+		auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -focalLenght);
+		auto origin = *(transform.inverse()) * aperturePoint(); 
+		auto direction = (pixel - origin).normalize();
+
+		return Ray(origin, direction);
+	}
 }
 
 void Camera::splitArray(World* world, Canvas* image) {	
@@ -143,9 +174,11 @@ void Camera::splitArray(World* world, Canvas* image) {
 			image->writePixel(x, y, pixelColor / aliasingSamples);
 		}
 		else {
-			auto ray = rayForPixel(v, u);
-			pixelColor += world->colorAt(ray);
-			image->writePixel(x, y, pixelColor);
+			for (int i = 0; i < 8; ++i) {
+				auto ray = rayForPixel(v, u);
+				pixelColor += world->colorAt(ray);
+			}
+			image->writePixel(x, y, pixelColor / 8);
 		}
 
 		pixelCount++;
