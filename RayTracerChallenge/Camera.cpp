@@ -13,7 +13,9 @@ namespace Raylib {
 int Camera::numOfThreads = std::thread::hardware_concurrency();
 bool Camera::noPPM = false;
 
-Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
+Camera::Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength, double _apertureRadius, int _apertureSamples) :
+		hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView), focalLenght(_focalLength), apertureRadius(_apertureRadius), apertureSamples(_apertureSamples)
+{
 	double halfView;
 	if (epsilonEqual(apertureRadius, 0)) {
 		halfView = tan(fieldOfView / 2.f);
@@ -174,11 +176,11 @@ void Camera::splitArray(World* world, Canvas* image) {
 			image->writePixel(x, y, pixelColor / aliasingSamples);
 		}
 		else {
-			for (int i = 0; i < 8; ++i) {
+			for (int i = 0; i < apertureSamples; ++i) {
 				auto ray = rayForPixel(v, u);
 				pixelColor += world->colorAt(ray);
 			}
-			image->writePixel(x, y, pixelColor / 8);
+			image->writePixel(x, y, pixelColor / apertureSamples);
 		}
 
 		pixelCount++;

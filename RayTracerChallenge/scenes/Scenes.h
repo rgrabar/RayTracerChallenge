@@ -1323,7 +1323,7 @@ void loadOBJ(std::string path) {
 	cam.render(world);
 }
 
-void testScene() {
+void coneTexture() {
 
 	//TODO: double check everything in bounding-boxes it's a bit too slow
 	
@@ -1387,6 +1387,32 @@ void testScene() {
 	cam.aliasingThreshold = 0.01;
 	*/
 	//cam.aliasingSamples = 16;
+	cam.render(world);
+}
+
+void testScene() {
+
+	auto sphere1 = Sphere();
+
+	sphere1.transform = translate(-0.75, 1, 1) * scale(0.25, 0.25, 0.25);
+
+	auto sphere2 = Sphere(); 
+	sphere2.transform = translate(0, 1, -2) * scale(0.25, 0.25, 0.25);
+
+	auto sphere3 = Sphere();
+	sphere3.transform = translate(0.5, 1, -3) * scale(0.25, 0.25, 0.25);
+
+	auto world = World();
+
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
+	world.objects.emplace_back(&sphere1);
+	world.objects.emplace_back(&sphere2);
+	world.objects.emplace_back(&sphere3);
+
+	Camera cam(1280, 720, TEST_PI / 3, 3, 0.04, 8);
+	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
+	//cam.aliasingSamples = 8;
+
 	cam.render(world);
 }
 

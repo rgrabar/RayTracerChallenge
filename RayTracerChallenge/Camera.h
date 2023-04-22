@@ -13,8 +13,10 @@ struct Camera {
 	double halfWidth;
 	double halfheight;
 	double pixelSize;
-	double focalLenght = 3;
-	double apertureRadius = 0.4;
+
+	double focalLenght = 1;
+	double apertureRadius = 0;
+	int apertureSamples = 1;
 
 	int aliasingSamples = 0;
 	double aliasingThreshold = 0.3;
@@ -30,7 +32,7 @@ struct Camera {
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
 
-	Camera(int _hSize, int _vSize, double _fieldOfView);
+	Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength = 1, double _apertureRadius = 0, int _apertureSamples = 1);
 	Ray rayForPixel(double px, double py);
 
 #ifndef FOR_TEST
