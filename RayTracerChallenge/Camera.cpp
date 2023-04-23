@@ -58,21 +58,19 @@ Ray Camera::rayForPixel(double px, double py) {
 	auto worldX = halfWidth - xOffset;
 	auto worldY = halfheight - yOffset;
 
-	if (epsilonEqual(apertureRadius, 0)) {
-	
-		auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
-		auto origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
-		auto direction = (pixel - origin).normalize();
+	Tuple pixel = Tuple::point(0, 0, 0);
+	Tuple origin = Tuple::point(0, 0, 0);
 
-		return Ray(origin, direction);
+	if (epsilonEqual(apertureRadius, 0)) {
+		pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
+		origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
 	}	
 	else {
-		auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -focalLenght);
-		auto origin = *(transform.inverse()) * aperturePoint(); 
-		auto direction = (pixel - origin).normalize();
-
-		return Ray(origin, direction);
+		pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -focalLenght);
+		origin = *(transform.inverse()) * aperturePoint(); 
 	}
+	auto direction = (pixel - origin).normalize();
+	return Ray(origin, direction);
 }
 
 void Camera::splitArray(World* world, Canvas* image) {	
@@ -176,6 +174,7 @@ void Camera::splitArray(World* world, Canvas* image) {
 			image->writePixel(x, y, pixelColor / aliasingSamples);
 		}
 		else {
+			// TODO: not sure what to do with focal blur with AA
 			for (int i = 0; i < apertureSamples; ++i) {
 				auto ray = rayForPixel(v, u);
 				pixelColor += world->colorAt(ray);
