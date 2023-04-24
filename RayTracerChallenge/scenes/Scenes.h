@@ -118,7 +118,7 @@ void drawRedCircle() {
 	   c.canvasToImage();	   
 }
 
-void drawShadowPatternsReflection(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawShadowPatternsReflection(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	
 		// CODE FOR SHADOWS CHAPTER, PATTERNS, REFLECTION
 		auto plane = Plane();
@@ -179,18 +179,17 @@ void drawShadowPatternsReflection(int aliasing, int width, int height, int highl
 		world.objects.emplace_back(&plane);
 		//world.objects.emplace_back(&plane2);
 
-		Camera cam(width, height, TEST_PI / 3);
+		Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 		cam.transform = viewTransformation(Tuple::point(1, 1.5, -8), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 		cam.aliasingSamples = aliasing;
 		cam.aliasEdges = edge;
 		cam.edgeAliasHighlights = highlights;
 		cam.aliasingThreshold = threshold;
 
-
 		cam.render(world);	
 }
 
-void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	 // shit smiley
 	auto plane = Plane();
 	plane.transform = rotationZ(0.f);
@@ -241,7 +240,7 @@ void drawBadSmiley(int aliasing, int width, int height, int highlights, int edge
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	Camera cam(width, height, TEST_PI / 1.5);
+	Camera cam(width, height, TEST_PI / 1.5, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -265,7 +264,7 @@ Shape* createRandomSphere(double moveX, double moveZ) {
 	return shape;
 }
 
-void drawRefractiveSphere(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawRefractiveSphere(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	
 	auto world = World();
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
@@ -341,7 +340,7 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	world.objects.emplace_back(&shape5);
 
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -391,7 +390,7 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 
 }
 
-void drawAllShapes(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawAllShapes(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	
 		auto plane = Plane();
 		auto pat = CheckerPattern(Color(1.0, 1.0, 1.0), Color(0.5, 0.5, 0.5));
@@ -516,7 +515,7 @@ void drawAllShapes(int aliasing, int width, int height, int highlights, int edge
 		//world.objects.emplace_back(&plane2);
 		//world.objects.emplace_back(&plane2);
 
-		Camera cam(width, height, TEST_PI / 3);
+		Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 		cam.transform = viewTransformation(Tuple::point(5.0, 1.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 		cam.aliasingSamples = aliasing;
 		cam.aliasEdges = edge;
@@ -560,7 +559,7 @@ Group* createHexagon() {
 	return hex;
 }
 
-void drawHexagon(int aliasing, int width, int height, int highlights, int edge, double threshold){
+void drawHexagon(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples){
 	
 	Group* hex = createHexagon();
 	Group* hex1 = createHexagon();
@@ -617,7 +616,7 @@ void drawHexagon(int aliasing, int width, int height, int highlights, int edge, 
 	world.objects.emplace_back(hex2);
 	world.objects.emplace_back(mesh);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 3.5, -5.5), Tuple::point(0.0, 0.7, 0.0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -666,7 +665,7 @@ Group* createLayer() {
 	return g;
 }
 
-void sphereCube(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void sphereCube(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto plane = Plane();
 	plane.transform = translate(0, -2, 0) * rotationZ(0.f);
@@ -725,7 +724,7 @@ void sphereCube(int aliasing, int width, int height, int highlights, int edge, d
 	world.objects.emplace_back(&plane);
 	world.objects.emplace_back(&plane1);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -735,7 +734,7 @@ void sphereCube(int aliasing, int width, int height, int highlights, int edge, d
 	cam.render(world);
 }
 
-void sphereCubeDivide(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void sphereCubeDivide(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	//TODO: double check everything in bounding-boxes it's a bit too slow
 
@@ -788,7 +787,7 @@ void sphereCubeDivide(int aliasing, int width, int height, int highlights, int e
 	world.objects.emplace_back(&plane1);
 	world.objects.emplace_back(&g);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -798,7 +797,7 @@ void sphereCubeDivide(int aliasing, int width, int height, int highlights, int e
 	cam.render(world);
 }
 
-void drawTeapot(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawTeapot(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	OBJParser o("assets/triangles.obj");
 
 	auto g = o.ObjToGroup();
@@ -810,7 +809,7 @@ void drawTeapot(int aliasing, int width, int height, int highlights, int edge, d
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -820,7 +819,7 @@ void drawTeapot(int aliasing, int width, int height, int highlights, int edge, d
 	cam.render(world);
 }
 
-void drawAstronaut(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawAstronaut(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	OBJParser o("assets/astronaut.obj");
 
 	auto g = o.ObjToGroup();
@@ -851,7 +850,7 @@ void drawAstronaut(int aliasing, int width, int height, int highlights, int edge
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(10, 15, 20)));
 
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -861,7 +860,7 @@ void drawAstronaut(int aliasing, int width, int height, int highlights, int edge
 	cam.render(world);
 }
 
-void drawDragon	(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawDragon	(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	OBJParser o("assets/dragon.obj");
 
 	auto g = o.ObjToGroup();
@@ -879,7 +878,7 @@ void drawDragon	(int aliasing, int width, int height, int highlights, int edge, 
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -891,7 +890,7 @@ void drawDragon	(int aliasing, int width, int height, int highlights, int edge, 
 }
 
 
-void drawCSKnife(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void drawCSKnife(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	OBJParser o("assets/Bayonet.obj");
 
 	auto g = o.ObjToGroup();
@@ -904,7 +903,7 @@ void drawCSKnife(int aliasing, int width, int height, int highlights, int edge, 
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 15, 20)));
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 20, 50), Tuple::point(0, 10, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -954,7 +953,7 @@ void drawAstronaut() {
 
 */
 
-void CSGScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void CSGScene(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto sphere = Sphere();
 	sphere.material.color = Color(1, 0, 0);
@@ -999,7 +998,7 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 	world.objects.emplace_back(&csg1);
 	world.objects.emplace_back(&csg2);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(-5, 5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
 	cam.aliasEdges = edge;
@@ -1009,7 +1008,7 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 	cam.render(world);
 }
 
-void areaLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void areaLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto world = World();
 
@@ -1064,7 +1063,7 @@ void areaLightScene(int aliasing, int width, int height, int highlights, int edg
 
 	//drawAxes(world);
 
-	Camera cam(width, height, 0.7854);
+	Camera cam(width, height, 0.7854, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(-3, 1, 2.5), Tuple::point(0, 0.5, 0), Tuple::vector(0, 1, 0));
 	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
@@ -1075,7 +1074,7 @@ void areaLightScene(int aliasing, int width, int height, int highlights, int edg
 	cam.render(world);
 }
 
-void spotLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void spotLightScene(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 	auto plane = Plane();
 	plane.transform = rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);
 	plane.material.color = Color(1, 1, 1);
@@ -1121,7 +1120,7 @@ void spotLightScene(int aliasing, int width, int height, int highlights, int edg
 
 	//drawAxes(world);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Tuple::point(0, 10, -12), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	//cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
@@ -1132,7 +1131,7 @@ void spotLightScene(int aliasing, int width, int height, int highlights, int edg
 	cam.render(world);
 }
 
-void aliasingScene(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void aliasingScene(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto plane = Plane();
 	//plane.transform = /*rotationY(TEST_PI / 4.9f) * scale(0.4, 0.4, 0.4);*/
@@ -1178,7 +1177,7 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 
 	drawAxes(world);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 1.5, -5), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
@@ -1189,9 +1188,7 @@ void aliasingScene(int aliasing, int width, int height, int highlights, int edge
 	cam.render(world);
 }
 
-void cubeTest(int aliasing, int width, int height, int highlights, int edge, double threshold) {
-	
-
+void cubeTest(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto world = World();
 
@@ -1246,7 +1243,7 @@ void cubeTest(int aliasing, int width, int height, int highlights, int edge, dou
 	world.objects.emplace_back(&cube6);
 	world.objects.emplace_back(&cube7);
 
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(0, 0, -20), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;
@@ -1256,7 +1253,7 @@ void cubeTest(int aliasing, int width, int height, int highlights, int edge, dou
 	cam.render(world);
 }
 
-void earth(int aliasing, int width, int height, int highlights, int edge, double threshold) {
+void earth(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
 
 	auto world = World();
 
@@ -1294,7 +1291,7 @@ void earth(int aliasing, int width, int height, int highlights, int edge, double
 	world.objects.emplace_back(&sphere);
 	world.objects.emplace_back(&cube);
 	
-	Camera cam(width, height, TEST_PI / 3);
+	Camera cam(width, height, TEST_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	//cam.transform = viewTransformation(Tuple::point(0, 10, -15), Tuple::point(0, 1, 0), Tuple::vector(0, 1, 0));
 	cam.transform = viewTransformation(Tuple::point(1, 2, -10), Tuple::point(0, 1.1, 0), Tuple::vector(0, 1, 0));
 	cam.aliasingSamples = aliasing;

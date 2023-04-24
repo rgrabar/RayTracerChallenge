@@ -19,14 +19,21 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "LoadOBJ";
+	std::string scene = "Shadows";
 	std::string path = "assets/smoothTriangles.obj";
-	int aliasing = 0;
+	
 	int width = 900;
 	int height = 900;
+	
+	int aliasing = 0;
 	int highlights = 0;
 	int edge = 0;
 	double threshold = 0.3;
+
+	double focalLenght = 1;
+	double apertureRadius = 0;
+	int apertureSamples = 1;
+
 
 	if (n != 1) {
 		if (strcmp(argv[1], "--help") == 0) {
@@ -101,9 +108,23 @@ int main(int argc, char* argv[]) {
 		}
 		else if (strcmp(argv[i], "--threads") == 0) {
 			Camera::numOfThreads = atoi(argv[i + 1]);
+			i++;
 		}
 		else if (strcmp(argv[i], "--no-ppm") == 0) {
 			Camera::noPPM = atoi(argv[i + 1]);
+			i++;
+		}
+		else if (strcmp(argv[i], "--focal-length") == 0) {
+			focalLenght = atof(argv[i + 1]);
+			i++;
+		}
+		else if (strcmp(argv[i], "--aperture-radius") == 0) {
+			apertureRadius = atof(argv[i + 1]);
+			i++;
+		}
+		else if (strcmp(argv[i], "--aperture-samples") == 0) {
+			apertureSamples = atoi(argv[i + 1]);
+			i++;
 		}
 	}
 
@@ -123,39 +144,39 @@ int main(int argc, char* argv[]) {
 	else if (scene == "RedCircle")
 		drawRedCircle();
 	else if (scene == "Shadows")
-		drawShadowPatternsReflection(aliasing, width, height, highlights, edge, threshold);
+		drawShadowPatternsReflection(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "BadSmiley")
-		drawBadSmiley(aliasing, width, height, highlights, edge, threshold);
+		drawBadSmiley(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "RefractiveSphere")
-		drawRefractiveSphere(aliasing, width, height, highlights, edge, threshold);
+		drawRefractiveSphere(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "AllShapes")
-		drawAllShapes(aliasing, width, height, highlights, edge, threshold);
+		drawAllShapes(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Hexagon")
-		drawHexagon(aliasing, width, height, highlights, edge, threshold);
+		drawHexagon(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Spheres")
-		sphereCube(aliasing, width, height, highlights, edge, threshold);
+		sphereCube(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "SpheresDivide")
-		sphereCubeDivide(aliasing, width, height, highlights, edge, threshold);
+		sphereCubeDivide(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Teapot")
-		drawTeapot(aliasing, width, height, highlights, edge, threshold);
+		drawTeapot(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "CS")
-		drawCSKnife(aliasing, width, height, highlights, edge, threshold);
+		drawCSKnife(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Dragon")
-		drawDragon(aliasing, width, height, highlights, edge, threshold);
+		drawDragon(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Astronaut")
-		drawAstronaut(aliasing, width, height, highlights, edge, threshold);
+		drawAstronaut(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "CSG")
-		CSGScene(aliasing, width, height, highlights, edge, threshold);
+		CSGScene(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "AreaLight")
-		areaLightScene(aliasing, width, height, highlights, edge, threshold);
+		areaLightScene(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "SpotLight")
-		spotLightScene(aliasing, width, height, highlights, edge, threshold);
+		spotLightScene(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Aliasing")
-		aliasingScene(aliasing, width, height, highlights, edge, threshold);
+		aliasingScene(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "CubeTest")
-		cubeTest(aliasing, width, height, highlights, edge, threshold);
+		cubeTest(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Earth")
-		earth(aliasing, width, height, highlights, edge, threshold);
+		earth(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "LoadOBJ")
 		loadOBJ(path);
 	else if (scene == "Test")
