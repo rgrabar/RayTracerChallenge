@@ -73,8 +73,6 @@
 #include "../RayTracerChallenge/CSGShape.h"
 #include "../RayTracerChallenge/CSGShape.cpp"
 
-# define TEST_PI           3.14159265358979323846  /* pi */
-
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
 
 TEST(TupleTest, PointBasic) {
@@ -908,8 +906,8 @@ TEST(TransformationTest, Reflection) {
 TEST(TransformationTest, RotatonX) {
 
 	Tuple p = Tuple::point(0, 1, 0);
-	Matrix halfQuarter = rotationX(TEST_PI / 4);
-	Matrix fullQuarter = rotationX(TEST_PI / 2);
+	Matrix halfQuarter = rotationX(M_PI / 4);
+	Matrix fullQuarter = rotationX(M_PI / 2);
 
 	ASSERT_EQ(halfQuarter * p, Tuple::point(0, sqrt(2) / 2, sqrt(2) / 2));
 	ASSERT_EQ(fullQuarter * p, Tuple::point(0, 0, 1));
@@ -918,8 +916,8 @@ TEST(TransformationTest, RotatonX) {
 TEST(TransformationTest, RotatonY) {
 
 	Tuple p = Tuple::point(0, 0, 1);
-	Matrix halfQuarter = rotationY(TEST_PI / 4);
-	Matrix fullQuarter = rotationY(TEST_PI / 2);
+	Matrix halfQuarter = rotationY(M_PI / 4);
+	Matrix fullQuarter = rotationY(M_PI / 2);
 
 	ASSERT_EQ(halfQuarter * p, Tuple::point(sqrt(2) / 2, 0, sqrt(2) / 2));
 	ASSERT_EQ(fullQuarter * p, Tuple::point(1, 0, 0));
@@ -928,8 +926,8 @@ TEST(TransformationTest, RotatonY) {
 TEST(TransformationTest, RotatonZ) {
 
 	Tuple p = Tuple::point(0, 1, 0);
-	Matrix halfQuarter = rotationZ(TEST_PI / 4);
-	Matrix fullQuarter = rotationZ(TEST_PI / 2);
+	Matrix halfQuarter = rotationZ(M_PI / 4);
+	Matrix fullQuarter = rotationZ(M_PI / 2);
 
 	ASSERT_EQ(halfQuarter * p, Tuple::point(-sqrt(2) / 2, sqrt(2) / 2, 0));
 	ASSERT_EQ(fullQuarter * p, Tuple::point(-1, 0, 0));
@@ -987,7 +985,7 @@ TEST(TransformationTest, ShearingZY) {
 TEST(TransformationTest, TransformationSeq) {
 
 	Tuple p = Tuple::point(1, 0, 1);
-	Matrix A = rotationX(TEST_PI / 2);
+	Matrix A = rotationX(M_PI / 2);
 	Matrix B = scale(5, 5, 5);
 	Matrix C = translate(10, 5, 7);
 
@@ -1007,7 +1005,7 @@ TEST(TransformationTest, TransformationSeq) {
 TEST(TransformationTest, TransformationChained) {
 
 	Tuple p = Tuple::point(1, 0, 1);
-	Matrix A = rotationX(TEST_PI / 2);
+	Matrix A = rotationX(M_PI / 2);
 	Matrix B = scale(5, 5, 5);
 	Matrix C = translate(10, 5, 7);
 
@@ -1339,7 +1337,7 @@ TEST(NormalTest, TranslatedSphere) {
 
 TEST(NormalTest, TransformedSphere) {
 	auto s = Sphere();
-	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
+	s.transform = (scale(1, 0.5, 1) * rotationZ(M_PI / 5));
 
 	auto n = s.normal(Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
 	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
@@ -1637,23 +1635,23 @@ TEST(ViewTransformation, ArbitraryViewTransform) {
 }
 
 TEST(CameraTest, ConstructingACamera) {
-	Camera c(160, 120, TEST_PI / 2);
+	Camera c(160, 120, M_PI / 2);
 	ASSERT_EQ(c.hSize, 160);
 	ASSERT_EQ(c.vSize, 120);
-	ASSERT_FLOAT_EQ(c.fieldOfView, TEST_PI / 2);
+	ASSERT_FLOAT_EQ(c.fieldOfView, M_PI / 2);
 	ASSERT_EQ(c.transform, identityMatrix(4));
 }
 
 TEST(CameraTest, HorizontalCanvas) {
-	Camera c(200, 125, TEST_PI / 2);
+	Camera c(200, 125, M_PI / 2);
 	ASSERT_FLOAT_EQ(c.pixelSize, 0.01);
 
-	Camera c1(125, 200, TEST_PI / 2);
+	Camera c1(125, 200, M_PI / 2);
 	ASSERT_FLOAT_EQ(c1.pixelSize, 0.01);
 }
 
 TEST(CameraTest, RayThroughCenter) {
-	Camera c(201, 101, TEST_PI / 2);
+	Camera c(201, 101, M_PI / 2);
 		
 	auto r = c.rayForPixel(100, 50);
 	ASSERT_EQ(r.origin, Tuple::point(0,0, 0));
@@ -1661,7 +1659,7 @@ TEST(CameraTest, RayThroughCenter) {
 }
 
 TEST(CameraTest, RayThroughCorner) {
-	Camera c(201, 101, TEST_PI / 2);
+	Camera c(201, 101, M_PI / 2);
 
 	auto r = c.rayForPixel(0, 0);
 	ASSERT_EQ(r.origin, Tuple::point(0, 0, 0));
@@ -1669,8 +1667,8 @@ TEST(CameraTest, RayThroughCorner) {
 }
 
 TEST(CameraTest, RayCameraTransformed) {
-	Camera c(201, 101, TEST_PI / 2);
-	c.transform = rotationY(TEST_PI / 4) * translate(0, -2, 5);
+	Camera c(201, 101, M_PI / 2);
+	c.transform = rotationY(M_PI / 4) * translate(0, -2, 5);
 	auto r = c.rayForPixel(100, 50);
 	ASSERT_EQ(r.origin, Tuple::point(0, 2, -5));
 	ASSERT_EQ(r.direction, Tuple::vector(sqrt(2) / 2, 0, -sqrt(2)/2));
@@ -1680,7 +1678,7 @@ TEST(CameraTest, RenderingWithCamera) {
 	World w = defaultWorld();
 	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
 
-	Camera c(11, 11, TEST_PI / 2);
+	Camera c(11, 11, M_PI / 2);
 	c.transform = viewTransformation(Tuple::point(0, 0, -5), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
 
 	auto image = c.render(w);
@@ -2753,7 +2751,7 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 TEST(GroupTest, WorldToObjectSpace) {
 	auto g1 = new Group();
 
-	g1->transform = rotationY(TEST_PI / 2);
+	g1->transform = rotationY(M_PI / 2);
 
 	auto g2 = new Group();
 	g2->transform = scale(2, 2, 2);
@@ -2775,7 +2773,7 @@ TEST(GroupTest, WorldToObjectSpace) {
 TEST(GroupTest, normalToWorldSpace) {
 	auto g1 = Group();
 
-	g1.transform = rotationY(TEST_PI / 2);
+	g1.transform = rotationY(M_PI / 2);
 
 	auto g2 = new Group();
 	g2->transform = scale(1, 2, 3);
@@ -2960,7 +2958,7 @@ TEST(BoundingBox, BoxContainsBox) {
 
 TEST(BoundingBox, TransformingBoundingBox) {
 	auto box = BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
-	auto matrix = rotationX(TEST_PI / 4) * rotationY(TEST_PI / 4);
+	auto matrix = rotationX(M_PI / 4) * rotationY(M_PI / 4);
 	auto box2 = box.transform(matrix);
 
 	// TODO: not the same as in the book, smaller epsilon for tests?

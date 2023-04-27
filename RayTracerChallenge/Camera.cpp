@@ -40,7 +40,7 @@ Camera::Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength,
 const Tuple Camera::aperturePoint() const {
 	//https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly/50746409#50746409
 	auto r = apertureRadius * sqrt(random_double());
-	auto phi = random_double() * 2 * 3.1415926536;
+	auto phi = random_double() * 2 * M_PI;
 		//std::cout << cos(phi) << "\n";
 
 	auto x = r * cos(phi);

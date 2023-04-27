@@ -110,7 +110,7 @@ Tuple SpotLight::pointOnLight() {
 	// random points in a uniform circle r E [0, 1] and phi E (0, 2*pi)
 	
 	auto r = random_double();
-	auto phi = random_double() * 2 * 3.1415926536;
+	auto phi = random_double() * 2 * M_PI;
 
 	auto x = sqrt(r) * cos(phi);
 	auto y = sqrt(r) * sin(phi);
