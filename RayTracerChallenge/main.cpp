@@ -38,17 +38,17 @@ int main(int argc, char* argv[]) {
 	if (n != 1) {
 		if (strcmp(argv[1], "--help") == 0) {
 			std::cout << "[Scene name] [--option]\n";
-			std::cout << "\t--aliasing\t\t [int] number of samples per pixel\n";
-			std::cout << "\t--size\t\t\t [int, int] width height\n";
+			std::cout << "\t--aliasing\t\t [int] number of samples per pixel, default: 1\n";
+			std::cout << "\t--size\t\t\t [int, int] width height, default: 900x900\n";
 			std::cout << "\t--edge\t\t\t 0/1 if enabled antialiasing will only be applied to edges\n";
-			std::cout << "\t--highlights\t\t 0/1, if enabled previews what will be antialiased when using the --edge option\n";
+			std::cout << "\t--highlights\t\t 0/1, if enabled previews what will be antialiased when using the --edge option, default: 0 (disabled)\n";
 			std::cout << "\t--threshold\t\t float [0, 1], if --edge is enabeld set the threshold for edge detection\n";
-			std::cout << "\t\t\t\t it checks for the difference in color beween the center of the pixel and it's edges\n";
+			std::cout << "\t\t\t\t it checks for the difference in color beween the center of the pixel and it's edges, default: 0.3\n";
 			std::cout << "\t--focal-length\t\t [double], the distance from the camera origin to the canvas\n";
-			std::cout << "\t\t\t\t by changing the focal length you can change which objects are in focus when using a non-zero aperture size\n";
-			std::cout << "\t--aperture-radius\t [double], camera aperture radius, the larger the value the more focal blur \n";
-			std::cout << "\t--apertureSamples\t [int], number of aprture samples to be jittered inside an aperture radius\n";
-			std::cout << "\t--path\t\t\t sets the path to the custom .obj file (can be used only with LoadOBJ scene)\n\n";
+			std::cout << "\t\t\t\t by changing the focal length you can change which objects are in focus when using a non-zero aperture size, default: 1\n";
+			std::cout << "\t--aperture-radius\t [double], camera aperture radius, the larger the value the more focal blur, default: 0 \n";
+			std::cout << "\t--apertureSamples\t [int], number of aprture samples to be jittered inside an aperture radius, default: 1\n";
+			std::cout << "\t--path\t\t\t sets the path to the custom .obj file (can be used only with LoadOBJ scene), default: assets/smoothTriangles.obj\n\n";
 
 			std::cout << "Other options: \n";
 			std::cout << "\t --threads [int], number of threads to use\n";
