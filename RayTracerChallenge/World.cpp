@@ -159,7 +159,7 @@ World defaultWorld() {
 	s2->transform = scale(0.5, 0.5, 0.5);
 
 	World w;
-	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(-10, 10, -10)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(-10, 10, -10)));
 
 	w.objects.emplace_back(s1);
 	w.objects.emplace_back(s2);

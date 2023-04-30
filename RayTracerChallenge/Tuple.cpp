@@ -4,6 +4,9 @@
 Tuple::Tuple(double _x, double _y, double _z, double _w) : x(_x), y(_y), z(_z), w(_w) {
 };
 
+Tuple::Tuple() : x(0), y(0), z(0), w(0) {
+};
+
 bool Tuple::isPoint() {
 	return epsilonEqual(1.0, w);
 }
@@ -26,7 +29,7 @@ double Tuple::dotProduct(const Tuple& v)const {
 }
 
 Tuple Tuple::crossProduct(const Tuple& v)const {
-	return Tuple::vector(y * v.z - z * v.y, z * v.x - x *v.z, x * v.y - y * v.x);
+	return Vector(y * v.z - z * v.y, z * v.x - x *v.z, x * v.y - y * v.x);
 }
 
 Tuple Tuple::reflect(const Tuple& normal) {

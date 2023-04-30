@@ -117,7 +117,7 @@ Tuple SpotLight::pointOnLight() {
 
 	// https://stackoverflow.com/questions/41275311/a-good-way-to-find-a-vector-perpendicular-to-another-vector
 	// random non collinear vector
-	Tuple randomDir = (Tuple::vector(random_double(), random_double(), random_double())).normalize();
+	Tuple randomDir = (Vector(random_double(), random_double(), random_double())).normalize();
 
 	// 2 vectors both ortogonal to the normal and ortogonal to each other to define the circle
 	Tuple ortogonalToDirection = randomDir.crossProduct(direction).normalize();

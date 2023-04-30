@@ -48,7 +48,7 @@ const Tuple Camera::aperturePoint() const {
 
 	//std::cout << x << " " << y << "\n";
 
-	return Tuple::point(x, y, 0);
+	return Point(x, y, 0);
 }
 
 Ray Camera::rayForPixel(double px, double py) {
@@ -58,15 +58,15 @@ Ray Camera::rayForPixel(double px, double py) {
 	auto worldX = halfWidth - xOffset;
 	auto worldY = halfheight - yOffset;
 
-	Tuple pixel = Tuple::point(0, 0, 0);
-	Tuple origin = Tuple::point(0, 0, 0);
+	Tuple pixel = Point(0, 0, 0);
+	Tuple origin = Point(0, 0, 0);
 
 	if (epsilonEqual(apertureRadius, 0)) {
-		pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
-		origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
+		pixel = *(transform.inverse()) * Point(worldX, worldY, -1);
+		origin = *(transform.inverse()) * Point(0, 0, 0);
 	}	
 	else {
-		pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -focalLenght);
+		pixel = *(transform.inverse()) * Point(worldX, worldY, -focalLenght);
 		origin = *(transform.inverse()) * aperturePoint(); 
 	}
 	auto direction = (pixel - origin).normalize();

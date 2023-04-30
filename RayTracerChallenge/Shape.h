@@ -30,7 +30,7 @@ struct Shape {
 	Material material;
 	Tuple origin;
 
-	Shape() :origin(Tuple::point(0, 0, 0)) {}
+	Shape() :origin(Point(0, 0, 0)) {}
 	Shape(Tuple _origin) : origin(_origin) {}
 
 	virtual ~Shape() = default;

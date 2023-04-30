@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-BoundingBox::BoundingBox() : boxMin(Tuple::point(INFINITY, INFINITY, INFINITY)),
-boxMax(Tuple::point(-INFINITY, -INFINITY, -INFINITY)) {}
+BoundingBox::BoundingBox() : boxMin(Point(INFINITY, INFINITY, INFINITY)),
+boxMax(Point(-INFINITY, -INFINITY, -INFINITY)) {}
 
 BoundingBox::BoundingBox(Tuple _boxMin, Tuple _boxMax) : boxMin(_boxMin), boxMax(_boxMax) {}
 
@@ -48,12 +48,12 @@ BoundingBox BoundingBox::transform(const Matrix& transformMatrix)const {
 
 	Tuple pointArr[] = {
 		boxMin,
-		Tuple::point(boxMin.x, boxMin.y, boxMax.z),
-		Tuple::point(boxMin.x, boxMax.y, boxMin.z),
-		Tuple::point(boxMin.x, boxMax.y, boxMax.z),
-		Tuple::point(boxMax.x, boxMin.y, boxMin.z),
-		Tuple::point(boxMax.x, boxMin.y, boxMax.z),
-		Tuple::point(boxMax.x, boxMax.y, boxMin.z),
+		Point(boxMin.x, boxMin.y, boxMax.z),
+		Point(boxMin.x, boxMax.y, boxMin.z),
+		Point(boxMin.x, boxMax.y, boxMax.z),
+		Point(boxMax.x, boxMin.y, boxMin.z),
+		Point(boxMax.x, boxMin.y, boxMax.z),
+		Point(boxMax.x, boxMax.y, boxMin.z),
 		boxMax
 	};
 
@@ -138,8 +138,8 @@ void BoundingBox::splitBounds(BoundingBox* left, BoundingBox* right)const {
 		z1 = z0;
 	}
 
-	auto midMin = Tuple::point(x0, y0, z0);
-	auto midMax = Tuple::point(x1, y1, z1);
+	auto midMin = Point(x0, y0, z0);
+	auto midMax = Point(x1, y1, z1);
 
 	*left = BoundingBox(boxMin, midMax);
 	*right = BoundingBox(midMin, boxMax);

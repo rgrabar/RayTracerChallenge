@@ -1,7 +1,7 @@
 #include "Cube.h"
 
 
-Cube::Cube() : Shape(Tuple::point(0, 0, 0)) {}
+Cube::Cube() : Shape(Point(0, 0, 0)) {}
 
 void Cube::checkAxis(MinMaxPoint& value, double origin, double direction)const {
 	auto tminNumerator = (-1 - origin);
@@ -52,16 +52,16 @@ Intersections Cube::intersect(const Ray& ray)const {
 Tuple Cube::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	auto maxc = std::fmax(fabs(objectPoint.x), fabs(std::fmax(fabs(objectPoint.y), fabs(objectPoint.z))));
 	if (epsilonEqual(maxc, fabs(objectPoint.x))) {
-		return Tuple::vector(objectPoint.x, 0, 0);
+		return Vector(objectPoint.x, 0, 0);
 	}
 	else if (epsilonEqual(maxc, fabs(objectPoint.y))) {
-		return Tuple::vector(0, objectPoint.y, 0);
+		return Vector(0, objectPoint.y, 0);
 	}
-	return Tuple::vector(0, 0, objectPoint.z);
+	return Vector(0, 0, objectPoint.z);
 }
 
 BoundingBox Cube::boundsOf([[maybe_unused]] bool update) {
-	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+	return BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
 }
 
 inline void Cube::divide([[maybe_unused]] int threashold) {
