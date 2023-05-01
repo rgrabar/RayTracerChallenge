@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "Shadows";
+	std::string scene = "SpheresDivide";
 	std::string path = "assets/smoothTriangles.obj";
 	
 	int width = 900;
@@ -116,6 +116,10 @@ int main(int argc, char* argv[]) {
 		}
 		else if (strcmp(argv[i], "--no-ppm") == 0) {
 			Camera::noPPM = atoi(argv[i + 1]);
+			i++;
+		}
+		else if (strcmp(argv[i], "--no-preview") == 0) {
+			Camera::noPreview = atoi(argv[i + 1]);
 			i++;
 		}
 		else if (strcmp(argv[i], "--focal-length") == 0) {

@@ -12,6 +12,7 @@ namespace Raylib {
 
 int Camera::numOfThreads = std::thread::hardware_concurrency();
 bool Camera::noPPM = false;
+bool Camera::noPreview = false;
 
 Camera::Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength, double _apertureRadius, int _apertureSamples) :
 		hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView), focalLenght(_focalLength), apertureRadius(_apertureRadius), apertureSamples(_apertureSamples)
@@ -262,31 +263,30 @@ Canvas Camera::render(World& world) {
 
 	std::cout << "USING : " << numOfThreads << " THREADS\n";
 
-#ifndef FOR_TEST
-	std::thread rayThread(&Camera::drawRayImage, this, &image);
+	std::vector<std::thread> threads;
 
-	while (!Raylib::IsWindowReady()) {
-		// wait for window
+#ifndef FOR_TEST
+	if (noPreview == false) {
+		threads.emplace_back(&Camera::drawRayImage, this, &image);
+
+		while (!Raylib::IsWindowReady()) {
+			// wait for window
+		}
 	}
 #endif //FOR_TEST
 
-	std::vector<std::thread> threads;
 	for (int i = 0; i < (int)numOfThreads; ++i) {
 #ifndef FOR_TEST
 		// give a bit of time for each tread to start otherwise some pixels get skipped
-		Raylib::WaitTime(0.001);
+		//Raylib::WaitTime(0.001);
+		busyLoop(10);
 #endif //FOR_TEST
 		threads.push_back(std::thread(&Camera::splitArray, this, &world, &image));
 	}
 
-#ifndef FOR_TEST
-	rayThread.join();
-#endif //FOR_TEST
-
 	for (auto& thread:threads) {
 		thread.join();
 	}
-
 
 	std::cout << "\nCOMPLETED\n";
 	if (noPPM == false) {

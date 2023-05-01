@@ -28,6 +28,7 @@ struct Camera {
 
 	static int numOfThreads;
 	static bool noPPM;
+	static bool noPreview;
 
 	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
