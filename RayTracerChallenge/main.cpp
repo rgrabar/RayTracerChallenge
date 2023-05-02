@@ -52,7 +52,8 @@ int main(int argc, char* argv[]) {
 
 			std::cout << "Other options: \n";
 			std::cout << "\t --threads [int], number of threads to use\n";
-			std::cout << "\t --no-ppm [bool], if true the ppm image of the scene won't be created\n\n";
+			std::cout << "\t --no-ppm [bool], if true the ppm image of the scene won't be created\n";
+			std::cout << "\t --no-preview [bool], if true a live preview of the render won't be shown\n\n";
 
 			std::cout << "Available scenes:\n";
 			std::cout << "\tProjectile\n";
