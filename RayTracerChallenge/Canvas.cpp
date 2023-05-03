@@ -69,12 +69,16 @@ void Canvas::canvasToImage()const {
 
 Canvas canvasFromPPM(const std::string& fileName) {
     std::ifstream ppmFile(fileName, std::ios::binary);
+
+    if (ppmFile.fail()){
+        std::cout << "File does't exist!\n";
+        assert(0);
+    }
+
     std::string line;
     std::vector<int> numbers;
     std::string flavor;
     int width, height, scale;
-
-    // TODO: check if file exists
 
     while (std::getline(ppmFile, line)) {
         if (line[0] != '#') { // skip comment lines
@@ -89,7 +93,6 @@ Canvas canvasFromPPM(const std::string& fileName) {
 
     flavor = line;
     if (flavor != "P3" && flavor != "P6") {
-        // TODO: some assert?
         std::cout << "Wrong PPM format\n";
 #ifndef FOR_TEST
         assert(0);

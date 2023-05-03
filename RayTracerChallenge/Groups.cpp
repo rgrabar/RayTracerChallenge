@@ -113,7 +113,11 @@ void Group::divide(int threashold) {
 }
 
 bool Group::includes(const Shape* s)const {
-	return std::find(children.begin(), children.end(), s) != children.end();
+	for (auto child : children) {
+		if (child->includes(s))
+			return true;
+	}
+	return false;
 }
 
 void Group::setMaterial(const Material& s) {
