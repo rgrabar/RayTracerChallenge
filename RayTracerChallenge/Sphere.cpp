@@ -3,8 +3,12 @@
 Sphere::Sphere() : Shape(Point(0, 0, 0)) {}
 
 bool Sphere::operator==(const Sphere& o) const {
-	//TODO: CHECK TRANSFORM
-	return o.origin == origin;
+	const Sphere* rhs_sphere = dynamic_cast<const Sphere*>(&o);
+
+	return o.origin == origin
+		&& o.transform == transform
+		&& o.material == material
+		&& rhs_sphere; 
 }
 
 Intersections Sphere::intersect(const Ray& ray)const {
