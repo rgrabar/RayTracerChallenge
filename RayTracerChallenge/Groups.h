@@ -7,7 +7,6 @@
 #include <vector>
 
 struct Group : public Shape {
-	//TODO: materials for groups
 
 	std::vector<Shape*> children;
 	BoundingBox m_bounds;

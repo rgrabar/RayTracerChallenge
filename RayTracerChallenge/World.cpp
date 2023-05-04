@@ -59,7 +59,6 @@ Color World::colorAt(const Ray& r, int remaining, int remainingRefraction)const 
 		c = shadeHit(p, remaining, remainingRefraction);
 	}
 
-	// TODO: leak?
 	for (auto tmp : i.intersections)
 		delete tmp;
 
