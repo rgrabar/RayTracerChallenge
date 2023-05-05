@@ -13,10 +13,7 @@ struct Group : public Shape {
 
 	~Group();
 
-	//TODO: passing a local group variable as child
-	// breaks everything yay
 	void addChild(Shape* s);
-	// TODO: do this better
 	void partitionChildren(Group& leftG, Group& rightG);
 	void makeSubgroup(Group& sub);
 

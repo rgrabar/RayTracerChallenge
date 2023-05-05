@@ -30,7 +30,6 @@ struct Camera {
 	static bool noPPM;
 	static bool noPreview;
 
-	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
 
 	Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength = 1, double _apertureRadius = 0, int _apertureSamples = 1);
