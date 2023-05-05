@@ -35,8 +35,8 @@ struct Shape {
 
 	virtual ~Shape() = default;
 
-	// TODO: shoud stripeatobject be part of material?  rename this 
-	inline Color stripeAtObject(const Tuple& worldPoint) {
+	// TODO: shoud colorAtObject be part of material?  rename this 
+	inline Color colorAtObject(const Tuple& worldPoint) {
 		auto objectPoint = *transform.inverse() * worldPoint;
 		auto patternPoint = *material.pattern->transform.inverse() * objectPoint;
 

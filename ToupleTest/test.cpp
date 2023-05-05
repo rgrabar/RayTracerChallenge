@@ -1899,7 +1899,7 @@ TEST(PatternTest, ObjectTransformation) {
 	object.transform = scale(2, 2, 2);
 	object.material.pattern = new StripePattern();
 
-	auto c = object.stripeAtObject(Point(1.5, 0, 0));
+	auto c = object.colorAtObject(Point(1.5, 0, 0));
 	
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1909,7 +1909,7 @@ TEST(PatternTest, StripesWithPatternTransform) {
 	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = scale(2, 2, 2);
 
-	auto c = object.stripeAtObject(Point(1.5, 0, 0));
+	auto c = object.colorAtObject(Point(1.5, 0, 0));
 
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1956,7 +1956,7 @@ TEST(PatternTest, PatternWihtObjectAndPatternTransform) {
 	auto pattern = StripePattern();
 	pattern.transform = translate(0.5, 1, 1.5);
 	shape.material.pattern = &pattern;
-	auto c = shape.stripeAtObject(Point(2.5, 3, 3.5));
+	auto c = shape.colorAtObject(Point(2.5, 3, 3.5));
 	//ASSERT_EQ(c, Color(0.75, 0.75, 0.75));
 }
 
@@ -1965,10 +1965,10 @@ TEST(PatternTest, GradientPatternTest) {
 	auto object = Sphere();
 	object.material.pattern = new GradientPattern(Color(1, 1, 1), Color(0, 0, 0));
 
-	ASSERT_EQ(object.stripeAtObject(Point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(object.stripeAtObject(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
-	ASSERT_EQ(object.stripeAtObject(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
-	ASSERT_EQ(object.stripeAtObject(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+	ASSERT_EQ(object.colorAtObject(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(object.colorAtObject(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+	ASSERT_EQ(object.colorAtObject(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+	ASSERT_EQ(object.colorAtObject(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(PatternTest, RingPatternTest) {
@@ -4414,7 +4414,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	int i = 0;
 
 	for (auto point : LPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), LAns[i++]);
 	}
 
@@ -4427,7 +4427,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	i = 0;
 
 	for (auto point : FPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), FAns[i++]);
 	}
 
@@ -4440,7 +4440,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	i = 0;
 
 	for (auto point : RPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), RAns[i++]);
 	}
 
@@ -4453,7 +4453,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	i = 0;
 
 	for (auto point : BPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), BAns[i++]);
 	}
 
@@ -4467,7 +4467,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	i = 0;
 
 	for (auto point : UPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), UAns[i++]);
 	}
 
@@ -4480,7 +4480,7 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	i = 0;
 
 	for (auto point : DPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), DAns[i++]);
 	}
 
