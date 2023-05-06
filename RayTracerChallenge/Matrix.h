@@ -24,10 +24,10 @@ struct Matrix {
 	Matrix* inverse();
 
 	Matrix* cachedMatrix = nullptr;
+	mutable double cacheDeterminant = NAN;
 
 };
 
-// TODO: not sure if this is the best to use identity matrix function...
 Matrix identityMatrix(int dimension);
 
 bool operator==(const Matrix& lhs, const Matrix& rhs);

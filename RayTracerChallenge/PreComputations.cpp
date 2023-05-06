@@ -34,9 +34,6 @@ Precomputations::Precomputations(const Intersection& _intersection, const Ray& _
 			break;
 		}
 	}
-
-	//std::cout << "n1: " << n1 << "\n";
-	//std::cout << "n2: " << n2 << "\n";
 	
 	t = _intersection.t;
 	shape = ((Shape*)_intersection.s);

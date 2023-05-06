@@ -16,7 +16,6 @@ inline void busyLoop(unsigned int mseconds) {
 	while (goal > clock());
 }
 
-// TODO: better way to handle epsilon?
 #ifdef FOR_TEST
 	const double EPSILON = 0.00001;
 	inline bool epsilonEqual(double a, double b) { return std::abs(a - b) < EPSILON; }
