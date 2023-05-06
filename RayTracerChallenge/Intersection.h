@@ -19,7 +19,7 @@ struct Intersection {
 
 struct cmp {
     bool operator()(const Intersection* lhs, const Intersection* rhs) const {
-        return lhs->t <= rhs->t;
+        return lhs->t < rhs->t;
     }
 };
 
