@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	//scena, image size, aliasing, load random obj
 
 	int n = argc;
-	std::string scene = "SpheresDivide";
+	std::string scene = "FocalBlur";
 	std::string path = "assets/smoothTriangles.obj";
 	
 	int width = 900;
@@ -188,6 +188,8 @@ int main(int argc, char* argv[]) {
 		earth(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "LoadOBJ")
 		loadOBJ(path);
+	else if (scene == "FocalBlur")
+		focalBlur(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
 	else if (scene == "Test")
 		testScene();
 	

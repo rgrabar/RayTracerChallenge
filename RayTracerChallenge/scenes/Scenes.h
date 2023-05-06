@@ -1385,6 +1385,33 @@ void coneTexture() {
 	cam.render(world);
 }
 
+void focalBlur(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
+
+	auto sphere1 = Sphere();
+
+	sphere1.transform = translate(-0.75, 1, 1) * scale(0.25, 0.25, 0.25);
+
+	auto sphere2 = Sphere();
+	sphere2.transform = translate(0, 1, -2) * scale(0.25, 0.25, 0.25);
+
+	auto sphere3 = Sphere();
+	sphere3.transform = translate(0.5, 1, -3) * scale(0.25, 0.25, 0.25);
+
+	auto world = World();
+
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(-10, 10, -10)));
+	world.objects.emplace_back(&sphere1);
+	world.objects.emplace_back(&sphere2);
+	world.objects.emplace_back(&sphere3);
+
+	//double _focalLength = 1, double _apertureRadius = 0, int _apertureSamples = 1 ( 3, 0.04, 8)
+	Camera cam(1280, 720, M_PI / 3, focalLenght, apertureRadius, apertureSamples);
+	cam.transform = viewTransformation(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0));
+	//cam.aliasingSamples = 8;
+
+	cam.render(world);
+}
+
 void testScene() {
 
 	auto sphere1 = Sphere();
