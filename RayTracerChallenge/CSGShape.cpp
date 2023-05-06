@@ -61,7 +61,7 @@ Intersections CSGShape::intersect(const Ray& ray)const {
 
 Tuple CSGShape::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	// CSG returns normal of primitive shape, this shouldn't happen
-	return Tuple::vector(0, 0, 0);
+	return Vector(0, 0, 0);
 }
 
 BoundingBox CSGShape::boundsOf([[maybe_unused]] bool update) {

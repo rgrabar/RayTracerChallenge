@@ -24,12 +24,12 @@ OBJParser::OBJParser(std::string path) {
 		}
 		if (line[0] == 'v' && line[1] == 'n') {
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
-			normals.emplace_back(Tuple::vector(n1, n2, n3));
+			normals.emplace_back(Vector(n1, n2, n3));
 		}
 
 		else if (line[0] == 'v' && line[1] != 't') {
 			sscanf_s(line.c_str(), "%*s %lf %lf %lf", &n1, &n2, &n3);
-			vertices.emplace_back(Tuple::point(n1, n2, n3));
+			vertices.emplace_back(Point(n1, n2, n3));
 		}
 
 		else if (line[0] == 'g' || line[0] == 'f') {

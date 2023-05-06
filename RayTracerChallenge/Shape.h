@@ -30,13 +30,13 @@ struct Shape {
 	Material material;
 	Tuple origin;
 
-	Shape() :origin(Tuple::point(0, 0, 0)) {}
+	Shape() :origin(Point(0, 0, 0)) {}
 	Shape(Tuple _origin) : origin(_origin) {}
 
 	virtual ~Shape() = default;
 
-	// TODO: shoud stripeatobject be part of material?  rename this 
-	inline Color stripeAtObject(const Tuple& worldPoint) {
+	// TODO: shoud colorAtObject be part of material?  rename this 
+	inline Color colorAtObject(const Tuple& worldPoint) {
 		auto objectPoint = *transform.inverse() * worldPoint;
 		auto patternPoint = *material.pattern->transform.inverse() * objectPoint;
 

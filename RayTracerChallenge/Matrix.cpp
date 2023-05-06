@@ -54,12 +54,17 @@ Matrix Matrix::transpose() const {
 }
 
 double Matrix::determinant()const {
+
+    if (!(isnan(cacheDeterminant)))
+        return cacheDeterminant;
+
     if(w == 2)
         return matrix[0] * matrix[3] - matrix[1] * matrix[2];
     double det = 0;
     for (int i = 0; i < w; ++i) {
         det += matrix[i] * cofactor(0, i);
     }
+    cacheDeterminant = det;
     return det;
 }
 

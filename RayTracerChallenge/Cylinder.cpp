@@ -1,7 +1,7 @@
 #include "Cylinder.h"
 
 
-Cylinder::Cylinder() : Shape(Tuple::point(0, 0, 0)) {}
+Cylinder::Cylinder() : Shape(Point(0, 0, 0)) {}
 
 bool Cylinder::checkCap(const Ray& ray, double t)const {
 	auto x = ray.origin.x + t * ray.direction.x;
@@ -77,16 +77,16 @@ Intersections Cylinder::intersect(const Ray& ray)const {
 Tuple Cylinder::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 	if (dist < 1 && objectPoint.y >= maximum - EPSILON)
-		return Tuple::vector(0, 1, 0);
+		return Vector(0, 1, 0);
 
 	else if (dist < 1 && objectPoint.y <= minimum + EPSILON)
-		return Tuple::vector(0, -1, 0);
+		return Vector(0, -1, 0);
 
-	return Tuple::vector(objectPoint.x, 0, objectPoint.z);
+	return Vector(objectPoint.x, 0, objectPoint.z);
 }
 
 BoundingBox Cylinder::boundsOf([[maybe_unused]] bool update) {
-	return BoundingBox(Tuple::point(-1, minimum, -1), Tuple::point(1, maximum, 1));
+	return BoundingBox(Point(-1, minimum, -1), Point(1, maximum, 1));
 }
 
 inline void Cylinder::divide([[maybe_unused]] int threashold) {

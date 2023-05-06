@@ -12,7 +12,6 @@ struct Triangle : public Shape{
 	Tuple e1;
 	Tuple e2;
 
-	// TODO: default constructor for tuples
 	Tuple normal;
 
 	Triangle(const Tuple& _p1, const Tuple _p2, const Tuple _p3);

@@ -1,6 +1,6 @@
 #include "Cone.h"
 
-Cone::Cone() : Shape(Tuple::point(0, 0, 0)) {}
+Cone::Cone() : Shape(Point(0, 0, 0)) {}
 
 bool Cone::checkCap(const Ray& ray, const double t, const double radius)const {
 	auto x = ray.origin.x + t * ray.direction.x;
@@ -82,17 +82,17 @@ Intersections Cone::intersect(const Ray& ray)const {
 Tuple Cone::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	auto dist = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
 	if (dist < 1 && objectPoint.y >= maximum - EPSILON)
-		return Tuple::vector(0, 1, 0);
+		return Vector(0, 1, 0);
 
 	else if (dist < 1 && objectPoint.y <= minimum + EPSILON)
-		return Tuple::vector(0, -1, 0);
+		return Vector(0, -1, 0);
 
 	auto y = sqrt(objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z);
 
 	if (objectPoint.y > 0)
 		y *= -1;
 
-	return Tuple::vector(objectPoint.x, y, objectPoint.z);
+	return Vector(objectPoint.x, y, objectPoint.z);
 }
 
 BoundingBox Cone::boundsOf([[maybe_unused]] bool update) {
@@ -101,7 +101,7 @@ BoundingBox Cone::boundsOf([[maybe_unused]] bool update) {
 
 	auto limit = std::max(a, b);
 
-	return BoundingBox(Tuple::point(-limit, minimum, -limit), Tuple::point(limit, maximum, limit));
+	return BoundingBox(Point(-limit, minimum, -limit), Point(limit, maximum, limit));
 }
 
 void Cone::divide([[maybe_unused]] int threashold) {

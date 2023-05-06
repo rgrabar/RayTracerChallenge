@@ -7,17 +7,13 @@
 #include <vector>
 
 struct Group : public Shape {
-	//TODO: materials for groups
 
 	std::vector<Shape*> children;
 	BoundingBox m_bounds;
 
 	~Group();
 
-	//TODO: passing a local group variable as child
-	// breaks everything yay
 	void addChild(Shape* s);
-	// TODO: do this better
 	void partitionChildren(Group& leftG, Group& rightG);
 	void makeSubgroup(Group& sub);
 

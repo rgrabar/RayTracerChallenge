@@ -7,8 +7,7 @@ Color Light::lighting(Material& material, Shape* object, const Tuple& point, con
 	Color newColor = material.color;
 
 	if (material.pattern != nullptr)
-		// TODO: rename stripeatobject to something that makes more sense
-		newColor = object->stripeAtObject(point);
+		newColor = object->colorAtObject(point);
 
 	auto effectiveColor = newColor * intensity;
 	auto ambientColor = effectiveColor * object->material.ambient;
@@ -110,14 +109,14 @@ Tuple SpotLight::pointOnLight() {
 	// random points in a uniform circle r E [0, 1] and phi E (0, 2*pi)
 	
 	auto r = random_double();
-	auto phi = random_double() * 2 * 3.1415926536;
+	auto phi = random_double() * 2 * M_PI;
 
 	auto x = sqrt(r) * cos(phi);
 	auto y = sqrt(r) * sin(phi);
 
 	// https://stackoverflow.com/questions/41275311/a-good-way-to-find-a-vector-perpendicular-to-another-vector
 	// random non collinear vector
-	Tuple randomDir = (Tuple::vector(random_double(), random_double(), random_double())).normalize();
+	Tuple randomDir = (Vector(random_double(), random_double(), random_double())).normalize();
 
 	// 2 vectors both ortogonal to the normal and ortogonal to each other to define the circle
 	Tuple ortogonalToDirection = randomDir.crossProduct(direction).normalize();

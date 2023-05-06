@@ -1,15 +1,19 @@
 #include "Sphere.h"
 
-Sphere::Sphere() : Shape(Tuple::point(0, 0, 0)) {}
+Sphere::Sphere() : Shape(Point(0, 0, 0)) {}
 
 bool Sphere::operator==(const Sphere& o) const {
-	//TODO: CHECK TRANSFORM
-	return o.origin == origin;
+	const Sphere* rhs_sphere = dynamic_cast<const Sphere*>(&o);
+
+	return o.origin == origin
+		&& o.transform == transform
+		&& o.material == material
+		&& rhs_sphere; 
 }
 
 Intersections Sphere::intersect(const Ray& ray)const {
 
-	auto shapeToRay = ray.origin - Tuple::point(0, 0, 0);
+	auto shapeToRay = ray.origin - Point(0, 0, 0);
 	auto a = ray.direction.dotProduct(ray.direction);
 	auto b = 2.0 * ray.direction.dotProduct(shapeToRay);
 	auto c = shapeToRay.dotProduct(shapeToRay) - 1.0;
@@ -36,11 +40,11 @@ Intersections Sphere::intersect(const Ray& ray)const {
 	return inter;
 }
 Tuple Sphere::objectNormal(const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
-	return objectPoint - Tuple::point(0, 0, 0);
+	return objectPoint - Point(0, 0, 0);
 }
 
 BoundingBox Sphere::boundsOf([[maybe_unused]] bool update) {
-	return BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+	return BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
 }
 
 void Sphere::divide([[maybe_unused]] int threashold) {
@@ -58,7 +62,7 @@ void Sphere::setMaterial(const Material& s) {
 void Sphere::UVmap(const Tuple& p, double* u, double* v) const {
 	auto theta = atan2(p.x, p.z);
 
-	Tuple vec = Tuple::vector(p.x, p.y, p.z);
+	Tuple vec = Vector(p.x, p.y, p.z);
 	auto radius = vec.magnitude();
 
 	auto phi = acos(p.y / radius);

@@ -12,9 +12,18 @@ namespace Raylib {
 
 int Camera::numOfThreads = std::thread::hardware_concurrency();
 bool Camera::noPPM = false;
+bool Camera::noPreview = false;
 
-Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView) {
-	auto halfView = tan(fieldOfView / 2.f);
+Camera::Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength, double _apertureRadius, int _apertureSamples) :
+		hSize(_hSize), vSize(_vSize), fieldOfView(_fieldOfView), focalLenght(_focalLength), apertureRadius(_apertureRadius), apertureSamples(_apertureSamples)
+{
+	double halfView;
+	if (epsilonEqual(apertureRadius, 0)) {
+		halfView = tan(fieldOfView / 2.f);
+	}
+	else
+		halfView = tan(fieldOfView / 2.f) * focalLenght;
+
 	auto aspect = hSize / (double)vSize;
 
 	if (aspect >= 1) {
@@ -26,6 +35,21 @@ Camera::Camera(int _hSize, int _vSize, double _fieldOfView) : hSize(_hSize), vSi
 		halfheight = halfView;
 	}
 	pixelSize = halfWidth * 2 / hSize;
+	//std::cout << pixelSize << "\n";
+}
+
+const Tuple Camera::aperturePoint() const {
+	//https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly/50746409#50746409
+	auto r = apertureRadius * sqrt(random_double());
+	auto phi = random_double() * 2 * M_PI;
+		//std::cout << cos(phi) << "\n";
+
+	auto x = r * cos(phi);
+	auto y = r * sin(phi);
+
+	//std::cout << x << " " << y << "\n";
+
+	return Point(x, y, 0);
 }
 
 Ray Camera::rayForPixel(double px, double py) {
@@ -35,10 +59,18 @@ Ray Camera::rayForPixel(double px, double py) {
 	auto worldX = halfWidth - xOffset;
 	auto worldY = halfheight - yOffset;
 
-	auto pixel = *(transform.inverse()) * Tuple::point(worldX, worldY, -1);
-	auto origin = *(transform.inverse()) * Tuple::point(0, 0, 0);
-	auto direction = (pixel - origin).normalize();
+	Tuple pixel = Point(0, 0, 0);
+	Tuple origin = Point(0, 0, 0);
 
+	if (epsilonEqual(apertureRadius, 0)) {
+		pixel = *(transform.inverse()) * Point(worldX, worldY, -1);
+		origin = *(transform.inverse()) * Point(0, 0, 0);
+	}	
+	else {
+		pixel = *(transform.inverse()) * Point(worldX, worldY, -focalLenght);
+		origin = *(transform.inverse()) * aperturePoint(); 
+	}
+	auto direction = (pixel - origin).normalize();
 	return Ray(origin, direction);
 }
 
@@ -143,9 +175,12 @@ void Camera::splitArray(World* world, Canvas* image) {
 			image->writePixel(x, y, pixelColor / aliasingSamples);
 		}
 		else {
-			auto ray = rayForPixel(v, u);
-			pixelColor += world->colorAt(ray);
-			image->writePixel(x, y, pixelColor);
+			// TODO: not sure what to do with focal blur with AA
+			for (int i = 0; i < apertureSamples; ++i) {
+				auto ray = rayForPixel(v, u);
+				pixelColor += world->colorAt(ray);
+			}
+			image->writePixel(x, y, pixelColor / apertureSamples);
 		}
 
 		pixelCount++;
@@ -228,31 +263,30 @@ Canvas Camera::render(World& world) {
 
 	std::cout << "USING : " << numOfThreads << " THREADS\n";
 
-#ifndef FOR_TEST
-	std::thread rayThread(&Camera::drawRayImage, this, &image);
+	std::vector<std::thread> threads;
 
-	while (!Raylib::IsWindowReady()) {
-		// wait for window
+#ifndef FOR_TEST
+	if (noPreview == false) {
+		threads.emplace_back(&Camera::drawRayImage, this, &image);
+
+		while (!Raylib::IsWindowReady()) {
+			// wait for window
+		}
 	}
 #endif //FOR_TEST
 
-	std::vector<std::thread> threads;
 	for (int i = 0; i < (int)numOfThreads; ++i) {
 #ifndef FOR_TEST
 		// give a bit of time for each tread to start otherwise some pixels get skipped
-		Raylib::WaitTime(0.001);
+		//Raylib::WaitTime(0.001);
+		busyLoop(10);
 #endif //FOR_TEST
 		threads.push_back(std::thread(&Camera::splitArray, this, &world, &image));
 	}
 
-#ifndef FOR_TEST
-	rayThread.join();
-#endif //FOR_TEST
-
 	for (auto& thread:threads) {
 		thread.join();
 	}
-
 
 	std::cout << "\nCOMPLETED\n";
 	if (noPPM == false) {

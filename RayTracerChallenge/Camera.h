@@ -14,6 +14,10 @@ struct Camera {
 	double halfheight;
 	double pixelSize;
 
+	double focalLenght = 1;
+	double apertureRadius = 0;
+	int apertureSamples = 1;
+
 	int aliasingSamples = 0;
 	double aliasingThreshold = 0.3;
 	bool aliasEdges = 0;
@@ -24,11 +28,11 @@ struct Camera {
 
 	static int numOfThreads;
 	static bool noPPM;
+	static bool noPreview;
 
-	// TODO: use this as default?
 	Matrix transform = identityMatrix(4);
 
-	Camera(int _hSize, int _vSize, double _fieldOfView);
+	Camera(int _hSize, int _vSize, double _fieldOfView, double _focalLength = 1, double _apertureRadius = 0, int _apertureSamples = 1);
 	Ray rayForPixel(double px, double py);
 
 #ifndef FOR_TEST
@@ -46,4 +50,6 @@ struct Camera {
 
 	std::vector<std::pair<int, int>> shufflePoints;
 	std::atomic_int shuffleIndex = 0;
+
+	const Tuple aperturePoint()const;
 };

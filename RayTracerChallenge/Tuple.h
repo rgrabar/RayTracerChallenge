@@ -4,14 +4,7 @@
 struct Tuple {
 
 	Tuple(double x, double y, double z, double w);
-
-	static Tuple point(double x, double y, double z) {
-		return Tuple(x, y, z, 1.f);
-	}
-
-	static Tuple vector(double x, double y, double z) {
-		return Tuple(x, y, z, 0.f);
-	}
+	Tuple();
 
 	bool isPoint();
 	bool isVector();
@@ -31,6 +24,14 @@ struct Tuple {
 	Tuple operator-()const;
 	bool operator==(const Tuple& rhs)const;
 	bool operator!=(const Tuple& rhs)const;
+};
+
+struct Point : public Tuple {
+	Point(double x = 0, double y = 0, double z = 0) : Tuple(x, y, z, 1.f) {}
+};
+
+struct Vector : public Tuple {
+	Vector(double x = 0, double y = 0, double z = 0) : Tuple(x, y, z, 0.f) {}
 };
 
 // TODO: why does this not work when it's a member variable

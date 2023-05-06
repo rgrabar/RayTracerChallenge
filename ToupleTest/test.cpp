@@ -73,8 +73,6 @@
 #include "../RayTracerChallenge/CSGShape.h"
 #include "../RayTracerChallenge/CSGShape.cpp"
 
-# define TEST_PI           3.14159265358979323846  /* pi */
-
 // TODO: tmp = 1; for shade hit, better way to make it work with defaults
 
 TEST(TupleTest, PointBasic) {
@@ -102,14 +100,14 @@ TEST(TupleTest, VectorBasic) {
 }
 
 TEST(TupleTest, CreatePoint) {
-	Tuple p = Tuple::point(4, -4, 3);
+	Tuple p = Point(4, -4, 3);
 	Tuple pointTuple = Tuple(4, -4, 3, 1);
 
 	ASSERT_TRUE(p == pointTuple);
 }
 
 TEST(TupleTest, CreateVector) {
-	Tuple v = Tuple::vector(4, -4, 3);
+	Tuple v = Vector(4, -4, 3);
 	Tuple vectorTuple = Tuple(4, -4, 3, 0);
 
 	ASSERT_TRUE(v == vectorTuple);
@@ -123,24 +121,24 @@ TEST(TupleTest, AddTuple) {
 }
 
 TEST(TupleTest, SubtractPoints) {
-	Tuple t1 = Tuple::point(3, 2, 1);
-	Tuple t2 = Tuple::point(5, 6, 7);
+	Tuple t1 = Point(3, 2, 1);
+	Tuple t2 = Point(5, 6, 7);
 
-	ASSERT_TRUE(t1 - t2 == Tuple::vector(-2, -4, -6));
+	ASSERT_TRUE(t1 - t2 == Vector(-2, -4, -6));
 }
 
 TEST(TupleTest, SubtractVectors) {
-	Tuple t1 = Tuple::vector(3, 2, 1);
-	Tuple t2 = Tuple::vector(5, 6, 7);
+	Tuple t1 = Vector(3, 2, 1);
+	Tuple t2 = Vector(5, 6, 7);
 
-	ASSERT_TRUE(t1 - t2 == Tuple::vector(-2, -4, -6));
+	ASSERT_TRUE(t1 - t2 == Vector(-2, -4, -6));
 }
 
 TEST(TupleTest, SubtractVectorFromPoint) {
-	Tuple t1 = Tuple::point(3, 2, 1);
-	Tuple t2 = Tuple::vector(5, 6, 7);
+	Tuple t1 = Point(3, 2, 1);
+	Tuple t2 = Vector(5, 6, 7);
 
-	ASSERT_TRUE(t1 - t2 == Tuple::point(-2, -4, -6));
+	ASSERT_TRUE(t1 - t2 == Point(-2, -4, -6));
 }
 
 TEST(TupleTest, NegateTuple) {
@@ -148,10 +146,10 @@ TEST(TupleTest, NegateTuple) {
 }
 
 TEST(TupleTest, SubVectorFromZeroVector) {
-	Tuple zero = Tuple::vector(0, 0, 0);
-	Tuple v = Tuple::vector(1, -2, 3);
+	Tuple zero = Vector(0, 0, 0);
+	Tuple v = Vector(1, -2, 3);
 
-	ASSERT_TRUE(zero - v == Tuple::vector(-1, 2, -3));
+	ASSERT_TRUE(zero - v == Vector(-1, 2, -3));
 }
 
 TEST(TupleTest, TupleMultipliedWihtScalar) {
@@ -169,11 +167,11 @@ TEST(TupleTest, TupleDividedWihtScalar) {
 }
 
 TEST(TupleTest, Magnitude) {
-	Tuple t1 = Tuple::vector(1, 0, 0);
-	Tuple t2 = Tuple::vector(0, 1, 0);
-	Tuple t3 = Tuple::vector(0, 0, 1);
-	Tuple t4 = Tuple::vector(1, 2, 3);
-	Tuple t5 = Tuple::vector(-1, -2, -3);
+	Tuple t1 = Vector(1, 0, 0);
+	Tuple t2 = Vector(0, 1, 0);
+	Tuple t3 = Vector(0, 0, 1);
+	Tuple t4 = Vector(1, 2, 3);
+	Tuple t5 = Vector(-1, -2, -3);
 
 	ASSERT_FLOAT_EQ(t1.magnitude(), 1.f);
 	ASSERT_FLOAT_EQ(t2.magnitude(), 1.f);
@@ -183,28 +181,28 @@ TEST(TupleTest, Magnitude) {
 }
 
 TEST(TupleTest, Normalize) {
-	Tuple t1 = Tuple::vector(4, 0, 0);
-	ASSERT_TRUE(t1.normalize() == Tuple::vector(1, 0, 0));
+	Tuple t1 = Vector(4, 0, 0);
+	ASSERT_TRUE(t1.normalize() == Vector(1, 0, 0));
 
-	Tuple t2 = Tuple::vector(1, 2, 3);
-	ASSERT_TRUE((t2.normalize()) == Tuple::vector(0.26726, 0.53452, 0.80178));
+	Tuple t2 = Vector(1, 2, 3);
+	ASSERT_TRUE((t2.normalize()) == Vector(0.26726, 0.53452, 0.80178));
 
 	ASSERT_FLOAT_EQ(t2.normalize().magnitude(), 1);
 }
 
 TEST(TupleTest, DotProduct) {
-	Tuple t1 = Tuple::vector(1, 2, 3);
-	Tuple t2 = Tuple::vector(2, 3, 4);
+	Tuple t1 = Vector(1, 2, 3);
+	Tuple t2 = Vector(2, 3, 4);
 
 	ASSERT_FLOAT_EQ(t1.dotProduct(t2), 20);
 }
 
 TEST(TupleTest, CrossProduct) {
-	Tuple t1 = Tuple::vector(1, 2, 3);
-	Tuple t2 = Tuple::vector(2, 3, 4);
+	Tuple t1 = Vector(1, 2, 3);
+	Tuple t2 = Vector(2, 3, 4);
 
-	ASSERT_TRUE(t1.crossProduct(t2) == Tuple::vector(-1, 2, -1));
-	ASSERT_TRUE(t2.crossProduct(t1) == Tuple::vector(1, -2, 1));
+	ASSERT_TRUE(t1.crossProduct(t2) == Vector(-1, 2, -1));
+	ASSERT_TRUE(t2.crossProduct(t1) == Vector(1, -2, 1));
 }
 
 
@@ -850,178 +848,178 @@ TEST(MatrixTest, MatrixMultiplicationByInverse) {
 
 
 TEST(TransformationTest, Translation) {
-	Tuple p = Tuple::point(-3, 4, 5);
+	Tuple p = Point(-3, 4, 5);
 	Matrix t = translate(5, -3, 2);
 
-	ASSERT_EQ(t * p, Tuple::point(2, 1, 7));
+	ASSERT_EQ(t * p, Point(2, 1, 7));
 }
 
 TEST(TransformationTest, MulInverseOfTranslation) {
 
 	Matrix t = translate(5, -3, 2);
 	Matrix inv = *t.inverse();
-	Tuple p = Tuple::point(-3, 4, 5);
+	Tuple p = Point(-3, 4, 5);
 
-	ASSERT_EQ(inv * p, Tuple::point(-8, 7, 3));
+	ASSERT_EQ(inv * p, Point(-8, 7, 3));
 }
 
 TEST(TransformationTest, VectorTranslation) {
 
 	Matrix t = translate(5, -3, 2);
-	Tuple v = Tuple::vector(-3, 4, 5);
+	Tuple v = Vector(-3, 4, 5);
 
 	ASSERT_EQ(t * v, v);
 }
 
 TEST(TransformationTest, PointScale) {
 
-	Tuple p = Tuple::point(-4, 6, 8);
+	Tuple p = Point(-4, 6, 8);
 	Matrix t = scale(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(-8, 18, 32));
+	ASSERT_EQ(t * p, Point(-8, 18, 32));
 }
 
 TEST(TransformationTest, VectorScale) {
 
-	Tuple v = Tuple::vector(-4, 6, 8);
+	Tuple v = Vector(-4, 6, 8);
 	Matrix t = scale(2, 3, 4);
 
-	ASSERT_EQ(t * v, Tuple::vector(-8, 18, 32));
+	ASSERT_EQ(t * v, Vector(-8, 18, 32));
 }
 
 TEST(TransformationTest, MulInverseOfScale) {
 
-	Tuple v = Tuple::vector(-4, 6, 8);
+	Tuple v = Vector(-4, 6, 8);
 	Matrix t = scale(2, 3, 4);
 	Matrix inv = *t.inverse();
 
-	ASSERT_EQ(inv * v, Tuple::vector(-2, 2, 2));
+	ASSERT_EQ(inv * v, Vector(-2, 2, 2));
 }
 
 TEST(TransformationTest, Reflection) {
 
 	Matrix t = scale(-1, 1, 1);
-	Tuple p = Tuple::point(2, 3, 4);
-	ASSERT_EQ(t * p, Tuple::point(-2, 3, 4));
+	Tuple p = Point(2, 3, 4);
+	ASSERT_EQ(t * p, Point(-2, 3, 4));
 }
 
 TEST(TransformationTest, RotatonX) {
 
-	Tuple p = Tuple::point(0, 1, 0);
-	Matrix halfQuarter = rotationX(TEST_PI / 4);
-	Matrix fullQuarter = rotationX(TEST_PI / 2);
+	Tuple p = Point(0, 1, 0);
+	Matrix halfQuarter = rotationX(M_PI / 4);
+	Matrix fullQuarter = rotationX(M_PI / 2);
 
-	ASSERT_EQ(halfQuarter * p, Tuple::point(0, sqrt(2) / 2, sqrt(2) / 2));
-	ASSERT_EQ(fullQuarter * p, Tuple::point(0, 0, 1));
+	ASSERT_EQ(halfQuarter * p, Point(0, sqrt(2) / 2, sqrt(2) / 2));
+	ASSERT_EQ(fullQuarter * p, Point(0, 0, 1));
 }
 
 TEST(TransformationTest, RotatonY) {
 
-	Tuple p = Tuple::point(0, 0, 1);
-	Matrix halfQuarter = rotationY(TEST_PI / 4);
-	Matrix fullQuarter = rotationY(TEST_PI / 2);
+	Tuple p = Point(0, 0, 1);
+	Matrix halfQuarter = rotationY(M_PI / 4);
+	Matrix fullQuarter = rotationY(M_PI / 2);
 
-	ASSERT_EQ(halfQuarter * p, Tuple::point(sqrt(2) / 2, 0, sqrt(2) / 2));
-	ASSERT_EQ(fullQuarter * p, Tuple::point(1, 0, 0));
+	ASSERT_EQ(halfQuarter * p, Point(sqrt(2) / 2, 0, sqrt(2) / 2));
+	ASSERT_EQ(fullQuarter * p, Point(1, 0, 0));
 }
 
 TEST(TransformationTest, RotatonZ) {
 
-	Tuple p = Tuple::point(0, 1, 0);
-	Matrix halfQuarter = rotationZ(TEST_PI / 4);
-	Matrix fullQuarter = rotationZ(TEST_PI / 2);
+	Tuple p = Point(0, 1, 0);
+	Matrix halfQuarter = rotationZ(M_PI / 4);
+	Matrix fullQuarter = rotationZ(M_PI / 2);
 
-	ASSERT_EQ(halfQuarter * p, Tuple::point(-sqrt(2) / 2, sqrt(2) / 2, 0));
-	ASSERT_EQ(fullQuarter * p, Tuple::point(-1, 0, 0));
+	ASSERT_EQ(halfQuarter * p, Point(-sqrt(2) / 2, sqrt(2) / 2, 0));
+	ASSERT_EQ(fullQuarter * p, Point(-1, 0, 0));
 }
 
 
 TEST(TransformationTest, ShearingXY) {
 
 	Matrix t = shearing(1, 0, 0, 0, 0, 0);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(5, 3, 4));
+	ASSERT_EQ(t * p, Point(5, 3, 4));
 }
 
 TEST(TransformationTest, ShearingXZ) {
 
 	Matrix t = shearing(0, 1, 0, 0, 0, 0);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(6, 3, 4));
+	ASSERT_EQ(t * p, Point(6, 3, 4));
 }
 
 TEST(TransformationTest, ShearingYX) {
 
 	Matrix t = shearing(0, 0, 1, 0, 0, 0);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(2, 5, 4));
+	ASSERT_EQ(t * p, Point(2, 5, 4));
 }
 
 TEST(TransformationTest, ShearingYZ) {
 
 	Matrix t = shearing(0, 0, 0, 1, 0, 0);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(2, 7, 4));
+	ASSERT_EQ(t * p, Point(2, 7, 4));
 }
 
 TEST(TransformationTest, ShearingZX) {
 
 	Matrix t = shearing(0, 0, 0, 0, 1, 0);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(2, 3, 6));
+	ASSERT_EQ(t * p, Point(2, 3, 6));
 }
 
 TEST(TransformationTest, ShearingZY) {
 
 	Matrix t = shearing(0, 0, 0, 0, 0, 1);
-	Tuple p = Tuple::point(2, 3, 4);
+	Tuple p = Point(2, 3, 4);
 
-	ASSERT_EQ(t * p, Tuple::point(2, 3, 7));
+	ASSERT_EQ(t * p, Point(2, 3, 7));
 }
 
 TEST(TransformationTest, TransformationSeq) {
 
-	Tuple p = Tuple::point(1, 0, 1);
-	Matrix A = rotationX(TEST_PI / 2);
+	Tuple p = Point(1, 0, 1);
+	Matrix A = rotationX(M_PI / 2);
 	Matrix B = scale(5, 5, 5);
 	Matrix C = translate(10, 5, 7);
 
 	Tuple p2 = A * p;
 
-	ASSERT_EQ(p2, Tuple::point(1, -1, 0));
+	ASSERT_EQ(p2, Point(1, -1, 0));
 
 	Tuple p3 = B * p2;
-	ASSERT_EQ(p3, Tuple::point(5, -5, 0));
+	ASSERT_EQ(p3, Point(5, -5, 0));
 
 	Tuple p4 = C * p3;
 
-	ASSERT_EQ(p4, Tuple::point(15, 0, 7));
+	ASSERT_EQ(p4, Point(15, 0, 7));
 
 }
 
 TEST(TransformationTest, TransformationChained) {
 
-	Tuple p = Tuple::point(1, 0, 1);
-	Matrix A = rotationX(TEST_PI / 2);
+	Tuple p = Point(1, 0, 1);
+	Matrix A = rotationX(M_PI / 2);
 	Matrix B = scale(5, 5, 5);
 	Matrix C = translate(10, 5, 7);
 
 	Matrix T = C * B * A;
 
-	ASSERT_EQ(T * p, Tuple::point(15, 0, 7));
+	ASSERT_EQ(T * p, Point(15, 0, 7));
 
 }
 
 
 TEST(RayTest, Contructor) {
 
-	Tuple origin = Tuple::point(1, 2, 3);
-	Tuple direction = Tuple::vector(4, 5, 6);
+	Tuple origin = Point(1, 2, 3);
+	Tuple direction = Vector(4, 5, 6);
 
 	Ray r(origin, direction);
 
@@ -1032,18 +1030,18 @@ TEST(RayTest, Contructor) {
 
 TEST(RayTest, Position) {
 
-	Ray r(Tuple::point(2, 3, 4), Tuple::vector(1, 0, 0));
+	Ray r(Point(2, 3, 4), Vector(1, 0, 0));
 
-	ASSERT_EQ(r.position(0), Tuple::point(2, 3, 4));
-	ASSERT_EQ(r.position(1), Tuple::point(3, 3, 4));
-	ASSERT_EQ(r.position(-1), Tuple::point(1, 3, 4));
-	ASSERT_EQ(r.position(2.5), Tuple::point(4.5, 3, 4));
+	ASSERT_EQ(r.position(0), Point(2, 3, 4));
+	ASSERT_EQ(r.position(1), Point(3, 3, 4));
+	ASSERT_EQ(r.position(-1), Point(1, 3, 4));
+	ASSERT_EQ(r.position(2.5), Point(4.5, 3, 4));
 
 }
 
 TEST(INTERSECTION, TwoPoints) {
 
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
 
 	auto i = s.intersect(r);
@@ -1062,7 +1060,7 @@ TEST(INTERSECTION, TwoPoints) {
 
 TEST(INTERSECTION, Tangent) {
 
-	Ray r(Tuple::point(0, 1, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
 	Sphere s;
 
 
@@ -1082,7 +1080,7 @@ TEST(INTERSECTION, Tangent) {
 
 TEST(INTERSECTION, Miss) {
 
-	Ray r(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
 	Sphere s;
 
 	auto i = s.intersect(r);
@@ -1092,7 +1090,7 @@ TEST(INTERSECTION, Miss) {
 
 TEST(INTERSECTION, RayInsideSphere) {
 
-	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Sphere s;
 
 	auto i = s.intersect(r);
@@ -1110,7 +1108,7 @@ TEST(INTERSECTION, RayInsideSphere) {
 
 TEST(INTERSECTION, SphereBehindRay) {
 
-	Ray r(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Sphere s;
 
 	auto i = s.intersect(r);
@@ -1160,7 +1158,7 @@ TEST(TrackingIntersections, AggregatingIntersections) {
 
 TEST(TrackingIntersections, ObjectOnTheIntersection) {
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto s = Sphere();
 
 	auto i = s.intersect(r);
@@ -1232,28 +1230,28 @@ TEST(HitTest, LowestNonNegative) {
 
 TEST(RayTest, RayTranslation) {
 
-	Ray r(Tuple::point(1, 2, 3), Tuple::vector(0, 1, 0));
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
 
 	Matrix m = translate(3, 4, 5);
 
 	auto r2 = r.transform(m);
 
-	ASSERT_EQ(r2.origin, Tuple::point(4, 6, 8));
-	ASSERT_EQ(r2.direction, Tuple::vector(0, 1, 0));
+	ASSERT_EQ(r2.origin, Point(4, 6, 8));
+	ASSERT_EQ(r2.direction, Vector(0, 1, 0));
 
 }
 
 
 TEST(RayTest, RayScaling) {
 
-	Ray r(Tuple::point(1, 2, 3), Tuple::vector(0, 1, 0));
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
 
 	Matrix m = scale(2, 3, 4);
 
 	auto r2 = r.transform(m);
 
-	ASSERT_EQ(r2.origin, Tuple::point(2, 6, 12));
-	ASSERT_EQ(r2.direction, Tuple::vector(0, 3, 0));
+	ASSERT_EQ(r2.origin, Point(2, 6, 12));
+	ASSERT_EQ(r2.direction, Vector(0, 3, 0));
 
 }
 
@@ -1266,14 +1264,14 @@ TEST(RayTest, DefaultTransformation) {
 
 	ASSERT_EQ(s.transform, id);
 
-	Ray r(Tuple::point(1, 2, 3), Tuple::vector(0, 1, 0));
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
 
 	Matrix m = scale(2, 3, 4);
 
 	auto r2 = r.transform(m);
 
-	ASSERT_EQ(r2.origin, Tuple::point(2, 6, 12));
-	ASSERT_EQ(r2.direction, Tuple::vector(0, 3, 0));
+	ASSERT_EQ(r2.origin, Point(2, 6, 12));
+	ASSERT_EQ(r2.direction, Vector(0, 3, 0));
 
 	auto t = translate(2, 3, 4);
 
@@ -1284,7 +1282,7 @@ TEST(RayTest, DefaultTransformation) {
 }
 
 TEST(RayTest, ScaledSphereAndRay) {
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto s = Sphere();
 	s.transform = scale(2, 2, 2);
@@ -1302,7 +1300,7 @@ TEST(RayTest, ScaledSphereAndRay) {
 }
 
 TEST(RayTest, TranslatedSphereAndRay) {
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto s = Sphere();
 	s.transform = translate(5, 0, 0);
@@ -1314,59 +1312,59 @@ TEST(RayTest, TranslatedSphereAndRay) {
 
 TEST(NormalTest, NormalOnASphereXZYAxis) {
 	auto s = Sphere();
-	auto n = s.objectNormal( Tuple::point(1, 0, 0));
+	auto n = s.objectNormal( Point(1, 0, 0));
 
-	ASSERT_EQ(n, Tuple::vector(1, 0, 0));
+	ASSERT_EQ(n, Vector(1, 0, 0));
 
-	n = s.objectNormal( Tuple::point(0, 1, 0));
-	ASSERT_EQ(n, Tuple::vector(0, 1, 0));
+	n = s.objectNormal( Point(0, 1, 0));
+	ASSERT_EQ(n, Vector(0, 1, 0));
 
-	n = s.objectNormal( Tuple::point(0, 0, 1));
-	ASSERT_EQ(n, Tuple::vector(0, 0, 1));
+	n = s.objectNormal( Point(0, 0, 1));
+	ASSERT_EQ(n, Vector(0, 0, 1));
 
-	n = s.objectNormal( Tuple::point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
-	ASSERT_EQ(n, Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	n = s.objectNormal( Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	ASSERT_EQ(n, Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
 TEST(NormalTest, TranslatedSphere) {
 	auto s = Sphere();
 	s.transform = (translate(0, 1, 0));
 
-	auto n = s.normal(Tuple::point(0, 1.70711, -0.70711));
+	auto n = s.normal(Point(0, 1.70711, -0.70711));
 
-	ASSERT_EQ(n, Tuple::vector(0, 0.70711, -0.70711));
+	ASSERT_EQ(n, Vector(0, 0.70711, -0.70711));
 }
 
 TEST(NormalTest, TransformedSphere) {
 	auto s = Sphere();
-	s.transform = (scale(1, 0.5, 1) * rotationZ(TEST_PI / 5));
+	s.transform = (scale(1, 0.5, 1) * rotationZ(M_PI / 5));
 
-	auto n = s.normal(Tuple::point(0, sqrt(2) / 2, -sqrt(2) / 2));
-	ASSERT_EQ(n, Tuple::vector(0, 0.97014, -0.24254));
+	auto n = s.normal(Point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	ASSERT_EQ(n, Vector(0, 0.97014, -0.24254));
 
 }
 
 TEST(ReflectionTest, VectorAt45) {
-	auto v = Tuple::vector(1, -1, 0);
-	auto n = Tuple::vector(0, 1, 0);
+	auto v = Vector(1, -1, 0);
+	auto n = Vector(0, 1, 0);
 
 	auto r = v.reflect(n);
 
-	ASSERT_EQ(r, Tuple::vector(1, 1, 0));
+	ASSERT_EQ(r, Vector(1, 1, 0));
 }
 
 TEST(ReflectionTest, SlantedSurface) {
-	auto v = Tuple::vector(0, -1, 0);
-	auto n = Tuple::vector(sqrt(2) / 2, sqrt(2) / 2, 0);
+	auto v = Vector(0, -1, 0);
+	auto n = Vector(sqrt(2) / 2, sqrt(2) / 2, 0);
 
 	auto r = v.reflect(n);
 
-	ASSERT_EQ(r, Tuple::vector(1, 0, 0));
+	ASSERT_EQ(r, Vector(1, 0, 0));
 }
 
 TEST(LightTest, PointLightPositionIntensity) {
 	auto intensity = Color(1, 1, 1);
-	auto position = Tuple::point(0, 0, 0);
+	auto position = Point(0, 0, 0);
 	PointLight light(intensity, position);
 
 	ASSERT_EQ(light.position, position);
@@ -1383,10 +1381,10 @@ TEST(MaterialTest, SphereMaterial) {
 // NOTE: this lighting tests use intensity instead of bool in shadow value
 TEST(LightingTest, EyeBetweenLight) {
 	Material m;
-	Tuple position = Tuple::point(0, 0, 0);
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv = Tuple::vector(0, 0, -1);
-	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	Tuple position = Point(0, 0, 0);
+	auto eyev = Vector(0, 0, -1);
+	auto normalv = Vector(0, 0, -1);
+	PointLight light(Color(1, 1, 1), Point(0, 0, -10));
 
 	auto sphere = Sphere();
 	sphere.material = m;
@@ -1397,10 +1395,10 @@ TEST(LightingTest, EyeBetweenLight) {
 
 TEST(LightingTest, EyeBetweenLightOffset45) {
 	Material m;
-	Tuple position = Tuple::point(0, 0, 0);
-	auto eyev = Tuple::vector(0, sqrt(2) / 2, -sqrt(2) / 2);
-	auto normalv = Tuple::vector(0, 0, -1);
-	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	Tuple position = Point(0, 0, 0);
+	auto eyev = Vector(0, sqrt(2) / 2, -sqrt(2) / 2);
+	auto normalv = Vector(0, 0, -1);
+	PointLight light(Color(1, 1, 1), Point(0, 0, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
@@ -1410,10 +1408,10 @@ TEST(LightingTest, EyeBetweenLightOffset45) {
 
 TEST(LightingTest, EyeOppositeLightOffset45) {
 	Material m;
-	Tuple position = Tuple::point(0, 0, 0);
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv = Tuple::vector(0, 0, -1);
-	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	Tuple position = Point(0, 0, 0);
+	auto eyev = Vector(0, 0, -1);
+	auto normalv = Vector(0, 0, -1);
+	PointLight light(Color(1, 1, 1), Point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
@@ -1423,10 +1421,10 @@ TEST(LightingTest, EyeOppositeLightOffset45) {
 
 TEST(LightingTest, EyeInPathLightOffset45) {
 	Material m;
-	Tuple position = Tuple::point(0, 0, 0);
-	auto eyev = Tuple::vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
-	auto normalv = Tuple::vector(0, 0, -1);
-	PointLight light(Color(1, 1, 1), Tuple::point(0, 10, -10));
+	Tuple position = Point(0, 0, 0);
+	auto eyev = Vector(0, -sqrt(2) / 2, -sqrt(2) / 2);
+	auto normalv = Vector(0, 0, -1);
+	PointLight light(Color(1, 1, 1), Point(0, 10, -10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 1);
@@ -1436,10 +1434,10 @@ TEST(LightingTest, EyeInPathLightOffset45) {
 
 TEST(LightingTest, LightBehindSurface) {
 	Material m;
-	Tuple position = Tuple::point(0, 0, 0);
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv = Tuple::vector(0, 0, -1);
-	PointLight light(Color(1, 1, 1), Tuple::point(0, 0, 10));
+	Tuple position = Point(0, 0, 0);
+	auto eyev = Vector(0, 0, -1);
+	auto normalv = Vector(0, 0, -1);
+	PointLight light(Color(1, 1, 1), Point(0, 0, 10));
 	auto sphere = Sphere();
 	sphere.material = m;
 	auto result = light.lighting(sphere.material, &sphere, position, eyev, normalv, 0);;
@@ -1448,7 +1446,7 @@ TEST(LightingTest, LightBehindSurface) {
 }
 
 TEST(WorldTest, DefaultWorld) {
-	PointLight light(Color(1, 1, 1), Tuple::point(-10, 10, -10));
+	PointLight light(Color(1, 1, 1), Point(-10, 10, -10));
 	Sphere s1, s2;
 	s1.material.color = Color(0.8, 1.0, 0.6);
 	s1.material.diffuse = 0.7;
@@ -1470,7 +1468,7 @@ TEST(WorldTest, DefaultWorld) {
 TEST(WorldTest, WorldRayIntersect) {
 
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto test = w.worldIntersection(r);
 
@@ -1484,7 +1482,7 @@ TEST(WorldTest, WorldRayIntersect) {
 }
 
 TEST(PreCompute, Initialization) {
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	auto s = Sphere();
 	Intersection i(4.f, &s);
 	Precomputations comps(i, r);
@@ -1492,15 +1490,15 @@ TEST(PreCompute, Initialization) {
 	 //TODO: make defaults for Precomputation class
 	ASSERT_FLOAT_EQ(i.t, comps.t);
 	ASSERT_EQ(comps.shape, &s);
-	ASSERT_EQ(comps.point, Tuple::point(0, 0, -1));
+	ASSERT_EQ(comps.point, Point(0, 0, -1));
 
-	ASSERT_EQ(comps.eyev, Tuple::vector(0, 0, -1));
-	ASSERT_EQ(comps.normalv, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(comps.eyev, Vector(0, 0, -1));
+	ASSERT_EQ(comps.normalv, Vector(0, 0, -1));
 	
 }
 	
 TEST(PreCompute, IntersectionOutside) {
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	auto s = Sphere();
 	Intersection i(4.f, &s);
 	Precomputations comps(i, r);
@@ -1509,20 +1507,20 @@ TEST(PreCompute, IntersectionOutside) {
 }
 	
 TEST(PreCompute, IntersectionInside) {
-	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	auto s = Sphere();
 	Intersection i(1.f, &s);
 	Precomputations comps(i, r);
 
-	ASSERT_EQ(comps.point, Tuple::point(0, 0, 1));
-	ASSERT_EQ(comps.eyev, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(comps.point, Point(0, 0, 1));
+	ASSERT_EQ(comps.eyev, Vector(0, 0, -1));
 	ASSERT_EQ(comps.inside, true);
-	ASSERT_EQ(comps.normalv, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(comps.normalv, Vector(0, 0, -1));
 }
 
 TEST(PreCompute, ShadingAnIntersection) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
 	Intersection i(4.f, w.objects[0]);
 
@@ -1536,9 +1534,9 @@ TEST(PreCompute, ShadingAnIntersection) {
 
 TEST(PreCompute, FromInside) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	// replacing the default light for this test
-	w.lights[0] = (new PointLight(Color(1, 1, 1), Tuple::point(0, 0.25, 0)));
+	w.lights[0] = (new PointLight(Color(1, 1, 1), Point(0, 0.25, 0)));
 
 	Intersection i(0.5f, w.objects[1]);
 
@@ -1551,7 +1549,7 @@ TEST(PreCompute, FromInside) {
 
 TEST(PreCompute, RayMiss) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
+	Ray r(Point(0, 0, -5), Vector(0, 1, 0));
 
 	auto c = w.colorAt(r);
 
@@ -1560,7 +1558,7 @@ TEST(PreCompute, RayMiss) {
 
 TEST(PreCompute, RayHit) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto c = w.colorAt(r);
 
@@ -1571,7 +1569,7 @@ TEST(PreCompute, IntersectionBehindRay) {
 	World w = defaultWorld();
 	w.objects[1]->material.ambient = 1;
 
-	Ray r(Tuple::point(0, 0, 0.75), Tuple::vector(0, 0, -1));
+	Ray r(Point(0, 0, 0.75), Vector(0, 0, -1));
 	auto c = w.colorAt(r);
 
 	ASSERT_EQ(c, w.objects[1]->material.color);
@@ -1579,9 +1577,9 @@ TEST(PreCompute, IntersectionBehindRay) {
 
 TEST(ViewTransformation, defaultOrientation) {
 	
-	Tuple from = Tuple::point(0, 0, 0);
-	Tuple to = Tuple::point(0, 0, -1);
-	Tuple up = Tuple::vector(0, 1, 0);
+	Tuple from = Point(0, 0, 0);
+	Tuple to = Point(0, 0, -1);
+	Tuple up = Vector(0, 1, 0);
 	auto t = viewTransformation(from, to, up);
 
 	ASSERT_EQ(t, identityMatrix(4));
@@ -1589,9 +1587,9 @@ TEST(ViewTransformation, defaultOrientation) {
 
 TEST(ViewTransformation, lookingInPozitiveZ) {
 
-	Tuple from = Tuple::point(0, 0, 0);
-	Tuple to = Tuple::point(0, 0, 1);
-	Tuple up = Tuple::vector(0, 1, 0);
+	Tuple from = Point(0, 0, 0);
+	Tuple to = Point(0, 0, 1);
+	Tuple up = Vector(0, 1, 0);
 	auto t = viewTransformation(from, to, up);
 
 	ASSERT_EQ(t, scale(-1, 1, -1));
@@ -1600,9 +1598,9 @@ TEST(ViewTransformation, lookingInPozitiveZ) {
 
 TEST(ViewTransformation, viewTransfomationMovesTheWorld) {
 
-	Tuple from = Tuple::point(0, 0, 8);
-	Tuple to = Tuple::point(0, 0, 0);
-	Tuple up = Tuple::vector(0, 1, 0);
+	Tuple from = Point(0, 0, 8);
+	Tuple to = Point(0, 0, 0);
+	Tuple up = Vector(0, 1, 0);
 	auto t = viewTransformation(from, to, up);
 
 	ASSERT_EQ(t, translate(0, 0, -8));
@@ -1610,9 +1608,9 @@ TEST(ViewTransformation, viewTransfomationMovesTheWorld) {
 
 TEST(ViewTransformation, ArbitraryViewTransform) {
 
-	Tuple from = Tuple::point(1, 3, 2);
-	Tuple to = Tuple::point(4, -2, 8);
-	Tuple up = Tuple::vector(1, 1, 0);
+	Tuple from = Point(1, 3, 2);
+	Tuple to = Point(4, -2, 8);
+	Tuple up = Vector(1, 1, 0);
 	auto t = viewTransformation(from, to, up);
 
 	Matrix testM(4, 4);
@@ -1637,51 +1635,51 @@ TEST(ViewTransformation, ArbitraryViewTransform) {
 }
 
 TEST(CameraTest, ConstructingACamera) {
-	Camera c(160, 120, TEST_PI / 2);
+	Camera c(160, 120, M_PI / 2);
 	ASSERT_EQ(c.hSize, 160);
 	ASSERT_EQ(c.vSize, 120);
-	ASSERT_FLOAT_EQ(c.fieldOfView, TEST_PI / 2);
+	ASSERT_FLOAT_EQ(c.fieldOfView, M_PI / 2);
 	ASSERT_EQ(c.transform, identityMatrix(4));
 }
 
 TEST(CameraTest, HorizontalCanvas) {
-	Camera c(200, 125, TEST_PI / 2);
+	Camera c(200, 125, M_PI / 2);
 	ASSERT_FLOAT_EQ(c.pixelSize, 0.01);
 
-	Camera c1(125, 200, TEST_PI / 2);
+	Camera c1(125, 200, M_PI / 2);
 	ASSERT_FLOAT_EQ(c1.pixelSize, 0.01);
 }
 
 TEST(CameraTest, RayThroughCenter) {
-	Camera c(201, 101, TEST_PI / 2);
+	Camera c(201, 101, M_PI / 2);
 		
 	auto r = c.rayForPixel(100, 50);
-	ASSERT_EQ(r.origin, Tuple::point(0,0, 0));
-	ASSERT_EQ(r.direction, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(r.origin, Point(0,0, 0));
+	ASSERT_EQ(r.direction, Vector(0, 0, -1));
 }
 
 TEST(CameraTest, RayThroughCorner) {
-	Camera c(201, 101, TEST_PI / 2);
+	Camera c(201, 101, M_PI / 2);
 
 	auto r = c.rayForPixel(0, 0);
-	ASSERT_EQ(r.origin, Tuple::point(0, 0, 0));
-	ASSERT_EQ(r.direction, Tuple::vector(0.66519, 0.33259, -0.66851));
+	ASSERT_EQ(r.origin, Point(0, 0, 0));
+	ASSERT_EQ(r.direction, Vector(0.66519, 0.33259, -0.66851));
 }
 
 TEST(CameraTest, RayCameraTransformed) {
-	Camera c(201, 101, TEST_PI / 2);
-	c.transform = rotationY(TEST_PI / 4) * translate(0, -2, 5);
+	Camera c(201, 101, M_PI / 2);
+	c.transform = rotationY(M_PI / 4) * translate(0, -2, 5);
 	auto r = c.rayForPixel(100, 50);
-	ASSERT_EQ(r.origin, Tuple::point(0, 2, -5));
-	ASSERT_EQ(r.direction, Tuple::vector(sqrt(2) / 2, 0, -sqrt(2)/2));
+	ASSERT_EQ(r.origin, Point(0, 2, -5));
+	ASSERT_EQ(r.direction, Vector(sqrt(2) / 2, 0, -sqrt(2)/2));
 }
 
 TEST(CameraTest, RenderingWithCamera) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
-	Camera c(11, 11, TEST_PI / 2);
-	c.transform = viewTransformation(Tuple::point(0, 0, -5), Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+	Camera c(11, 11, M_PI / 2);
+	c.transform = viewTransformation(Point(0, 0, -5), Point(0, 0, 0), Vector(0, 1, 0));
 
 	auto image = c.render(w);
 
@@ -1689,12 +1687,12 @@ TEST(CameraTest, RenderingWithCamera) {
 }
 
 TEST(ShadowTest, SurfaceInShadow) {
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv= Tuple::vector(0, 0, -1);
-	auto light = PointLight(Color(1, 1, 1), Tuple::point(0, 0.25, 0));
+	auto eyev = Vector(0, 0, -1);
+	auto normalv= Vector(0, 0, -1);
+	auto light = PointLight(Color(1, 1, 1), Point(0, 0.25, 0));
 	
 	auto m = Material();
-	auto position = Tuple::point(0, 0, 0);
+	auto position = Point(0, 0, 0);
 
 	auto sphere = Sphere();
 	sphere.material = m;
@@ -1705,28 +1703,28 @@ TEST(ShadowTest, SurfaceInShadow) {
 
 TEST(ShadowTest, TestingNotInShadow) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
-	Tuple p = Tuple::point(0, 10, 0);
+	Tuple p = Point(0, 10, 0);
 
 	ASSERT_FALSE(w.isShadowed(p, w.lights[0]->position));
 }
 
 TEST(ShadowTest, TestingInShadow) {
 	World w = defaultWorld();
-	Ray r(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 
-	Tuple p = Tuple::point(0, 10, 0);
+	Tuple p = Point(0, 10, 0);
 
 	ASSERT_FALSE(w.isShadowed(p, w.lights[0]->position));
 
-	auto p1 = Tuple::point(10, -10, 10);
+	auto p1 = Point(10, -10, 10);
 	ASSERT_TRUE(w.isShadowed(p1, w.lights[0]->position));
 	
-	auto p2 = Tuple::point(-20, 20, -20);
+	auto p2 = Point(-20, 20, -20);
 	ASSERT_FALSE(w.isShadowed(p2, w.lights[0]->position));
 
-	auto p3 = Tuple::point(-2, 2, -2);
+	auto p3 = Point(-2, 2, -2);
 	ASSERT_FALSE(w.isShadowed(p3, w.lights[0]->position));
 }
 
@@ -1738,9 +1736,9 @@ TEST(ShadowTest, ShadeHitAcne) {
 
 	w.objects.emplace_back(&s1);
 	w.objects.emplace_back(&s2);
-	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 0, -10)));
 
-	auto r = Ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
 	auto i = Intersection(4.f, w.objects[1]);
 
 	auto comps = Precomputations(i, r);
@@ -1753,7 +1751,7 @@ TEST(ShadowTest, ShadeHitAcne) {
 
 TEST(ShadowTest, OffsetThePoint) {
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto s = Sphere();
 	s.transform = translate(0, 0, 1);
 
@@ -1789,19 +1787,19 @@ TEST(ShapesRefactor, DefaultMaterial) {
 TEST(PlaneRefactor, NormalIsConstant) {
 	auto p = Plane();
 	
-	auto n1 = p.normal(Tuple::point(0, 0, 0));
-	ASSERT_EQ(Tuple::vector(0, 1, 0), n1);
+	auto n1 = p.normal(Point(0, 0, 0));
+	ASSERT_EQ(Vector(0, 1, 0), n1);
 
-	auto n2 = p.normal(Tuple::point(10, 0, -10));
-	ASSERT_EQ(Tuple::vector(0, 1, 0), n2);
+	auto n2 = p.normal(Point(10, 0, -10));
+	ASSERT_EQ(Vector(0, 1, 0), n2);
 
-	auto n3 = p.normal(Tuple::point(-5, 0, 150));
-	ASSERT_EQ(Tuple::vector(0, 1, 0), n3);
+	auto n3 = p.normal(Point(-5, 0, 150));
+	ASSERT_EQ(Vector(0, 1, 0), n3);
 }
 
 TEST(PlaneRefactor, IntersectingParallel) {
 	auto p = Plane();
-	auto r = Ray(Tuple::point(0, 10, 0), Tuple::vector(0, 0, 0));
+	auto r = Ray(Point(0, 10, 0), Vector(0, 0, 0));
 
 	auto xs = p.shapeIntersect(r);
 
@@ -1810,7 +1808,7 @@ TEST(PlaneRefactor, IntersectingParallel) {
 
 TEST(PlaneRefactor, IntersectingCoplanar) {
 	auto p = Plane();
-	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
 
 	auto xs = p.shapeIntersect(r);
 
@@ -1820,7 +1818,7 @@ TEST(PlaneRefactor, IntersectingCoplanar) {
 
 TEST(PlaneRefactor, IntersectingAbove) {
 	auto p = Plane();
-	auto r = Ray(Tuple::point(0, 1, 0), Tuple::vector(0, -1, 0));
+	auto r = Ray(Point(0, 1, 0), Vector(0, -1, 0));
 
 	auto xs = p.intersect(r);
 
@@ -1834,7 +1832,7 @@ TEST(PlaneRefactor, IntersectingAbove) {
 
 TEST(PlaneRefactor, IntersectingBelow) {
 	auto p = Plane();
-	auto r = Ray(Tuple::point(0, -1, 0), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, -1, 0), Vector(0, 1, 0));
 
 	auto xs = p.intersect(r);
 
@@ -1858,20 +1856,20 @@ TEST(PatternTest, DefaultPattern) {
 TEST(PatternTest, PatternAt) {
 	auto pattern = StripePattern();
 	
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 1, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 2, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 1, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 2, 0)), Color(1, 1, 1));
 
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 2)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 1)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 2)), Color(1, 1, 1));
 	
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.9, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-0.1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(-1.1, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0.9, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(-0.1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(-1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(-1.1, 0, 0)), Color(1, 1, 1));
 }
 
 TEST(PatternTest, LightingWithPattern) {
@@ -1882,15 +1880,15 @@ TEST(PatternTest, LightingWithPattern) {
 	material.diffuse = 0;
 	material.specular = 0;
 
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv = Tuple::vector(0, 0, -1);
-	auto light = PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10));
+	auto eyev = Vector(0, 0, -1);
+	auto normalv = Vector(0, 0, -1);
+	auto light = PointLight(Color(1, 1, 1), Point(0, 0, -10));
 
 	auto sphere = Sphere();
 	sphere.material = material;
-	auto c1 = light.lighting(sphere.material, &sphere, Tuple::point(0.9, 0, 0), eyev, normalv, false);
+	auto c1 = light.lighting(sphere.material, &sphere, Point(0.9, 0, 0), eyev, normalv, false);
 
-	auto c2 = light.lighting(sphere.material, &sphere, Tuple::point(1.1, 0, 0), eyev, normalv, false);
+	auto c2 = light.lighting(sphere.material, &sphere, Point(1.1, 0, 0), eyev, normalv, false);
 
 	ASSERT_EQ(c1, Color(1, 1, 1));
 	ASSERT_EQ(c2, Color(0, 0, 0));
@@ -1901,7 +1899,7 @@ TEST(PatternTest, ObjectTransformation) {
 	object.transform = scale(2, 2, 2);
 	object.material.pattern = new StripePattern();
 
-	auto c = object.stripeAtObject(Tuple::point(1.5, 0, 0));
+	auto c = object.colorAtObject(Point(1.5, 0, 0));
 	
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1911,7 +1909,7 @@ TEST(PatternTest, StripesWithPatternTransform) {
 	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = scale(2, 2, 2);
 
-	auto c = object.stripeAtObject(Tuple::point(1.5, 0, 0));
+	auto c = object.colorAtObject(Point(1.5, 0, 0));
 
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1922,7 +1920,7 @@ TEST(PatternTest, StripesWithPatternAndObjectTransform) {
 	object.material.pattern = new StripePattern();
 	object.material.pattern->transform = translate(0.5, 0, 0);
 
-	auto c = object.material.pattern->patternColorAt(Tuple::point(2.5, 0, 0));
+	auto c = object.material.pattern->patternColorAt(Point(2.5, 0, 0));
 
 	ASSERT_EQ(c, Color(1, 1, 1));
 }
@@ -1946,7 +1944,7 @@ TEST(PatternTest, PatternWithObjectTransform) {
 	shape.transform = scale(2, 2, 2);
 	auto pattern = StripePattern();
 	shape.material.pattern = &pattern;
-	auto c = pattern.patternColorAt(Tuple::point(2, 3, 4));
+	auto c = pattern.patternColorAt(Point(2, 3, 4));
 	//ASSERT_EQ(c, Color(1, 1.5, 2));
 }
 
@@ -1958,7 +1956,7 @@ TEST(PatternTest, PatternWihtObjectAndPatternTransform) {
 	auto pattern = StripePattern();
 	pattern.transform = translate(0.5, 1, 1.5);
 	shape.material.pattern = &pattern;
-	auto c = shape.stripeAtObject(Tuple::point(2.5, 3, 3.5));
+	auto c = shape.colorAtObject(Point(2.5, 3, 3.5));
 	//ASSERT_EQ(c, Color(0.75, 0.75, 0.75));
 }
 
@@ -1967,36 +1965,36 @@ TEST(PatternTest, GradientPatternTest) {
 	auto object = Sphere();
 	object.material.pattern = new GradientPattern(Color(1, 1, 1), Color(0, 0, 0));
 
-	ASSERT_EQ(object.stripeAtObject(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
-	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
-	ASSERT_EQ(object.stripeAtObject(Tuple::point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+	ASSERT_EQ(object.colorAtObject(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(object.colorAtObject(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+	ASSERT_EQ(object.colorAtObject(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+	ASSERT_EQ(object.colorAtObject(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(PatternTest, RingPatternTest) {
 
 	auto pattern = RingPattern();
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1, 0, 0)), Color(0, 0, 0));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(1, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 1)), Color(0, 0, 0));
 
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.708, 0, 0.708)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0.708, 0, 0.708)), Color(0, 0, 0));
 }
 
 TEST(PatternTest, CheckerTest) {
 
 	auto pattern = CheckerPattern();
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0.99, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(1.01, 0, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0.99, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(1.01, 0, 0)), Color(0, 0, 0));
 
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0.99, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 1.01, 0)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0.99, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 1.01, 0)), Color(0, 0, 0));
 
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 0.99)), Color(1, 1, 1));
-	ASSERT_EQ(pattern.patternColorAt(Tuple::point(0, 0, 1.01)), Color(0, 0, 0));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 0.99)), Color(1, 1, 1));
+	ASSERT_EQ(pattern.patternColorAt(Point(0, 0, 1.01)), Color(0, 0, 0));
 }
 
 // TODO: nested patterns, perlin noise
@@ -2010,18 +2008,18 @@ TEST(ReflectivityTest, DefaultMaterial) {
 TEST(ReflectivityTest, ReflectionVector) {
 
 	auto shape = Plane();
-	auto r = Ray(Tuple::point(0, 1, -1), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	auto i = Intersection(sqrt(2), &shape);
 	auto comps = Precomputations(i, r);
 
-	ASSERT_EQ(comps.reflectv, Tuple::vector(0, sqrt(2) / 2, sqrt(2) / 2));
+	ASSERT_EQ(comps.reflectv, Vector(0, sqrt(2) / 2, sqrt(2) / 2));
 }
 
 TEST(ReflectivityTest, NonReflectiveMaterial) {
 
 	World w = defaultWorld();
 
-	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
 
 	auto i = Intersection(1, w.objects[1]);
 	auto comps = Precomputations(i, r);
@@ -2042,7 +2040,7 @@ TEST(ReflectivityTest, ReflectiveMaterial) {
 
 	w.objects.emplace_back(&shape);
 
-	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 
 	auto i = Intersection(sqrt(2), w.objects[2]);
 	auto comps = Precomputations(i, r);
@@ -2066,7 +2064,7 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterial) {
 
 	w.objects.emplace_back(&shape);
 
-	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 
 	auto i = Intersection(sqrt(2), w.objects[2]);
 	auto comps = Precomputations(i, r);
@@ -2082,7 +2080,7 @@ TEST(ReflectivityTest, TerminateInfiniteRecursion) {
 
 	World w = defaultWorld();
 
-	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, 0)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 0, 0)));
 
 	auto lower = Plane();
 	lower.material.reflective = 1;
@@ -2095,7 +2093,7 @@ TEST(ReflectivityTest, TerminateInfiniteRecursion) {
 	w.objects.emplace_back(&lower);
 	w.objects.emplace_back(&upper);
 
-	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
 
 	Color out(0, 0, 0);
 	out = w.colorAt(r);
@@ -2114,7 +2112,7 @@ TEST(ReflectivityTest, ShadeHitReflectiveMaterialMaxDepth) {
 
 	w.objects.emplace_back(&shape);
 
-	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 
 	auto i = Intersection(sqrt(2), w.objects[2]);
 	auto comps = Precomputations(i, r);
@@ -2172,7 +2170,7 @@ TEST(RefractionTest, n1n2VariousIntersections) {
 	i.intersections.insert(&tmp4);
 	i.intersections.insert(&tmp5);
 
-	auto r = Ray(Tuple::point(0, 0, -4), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -4), Vector(0, 0, 1));
 	
 	Precomputations comps;
 
@@ -2190,7 +2188,7 @@ TEST(RefractionTest, n1n2VariousIntersections) {
 
 TEST(RefractionTest, UnderPoint) {
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto s = glassSphere();
 	s.transform = translate(0, 0, 1);
 	auto i = Intersection(5, &s);
@@ -2208,7 +2206,7 @@ TEST(RefractionTest, opaqueSurface) {
 	auto w = defaultWorld();
 	auto s = w.objects[0];
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto tmp = Intersection(4, s);
 	auto tmp1 = Intersection(6, s);
 	
@@ -2231,7 +2229,7 @@ TEST(RefractionTest, maxRecursiveDepth) {
 	s->material.transparency = 1.0;
 	s->material.refractiveIndex = 1.5;
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto tmp = Intersection(4, s);
 	auto tmp1 = Intersection(6, s);
 
@@ -2258,7 +2256,7 @@ TEST(RefractionTest, totalInternalReflection) {
 	b->material.transparency = 1.0;
 	b->material.refractiveIndex = 1.5;
 
-	auto r = Ray(Tuple::point(0, 0, 0.1), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, 0, 0.1), Vector(0, 1, 0));
 	
 	auto tmp = Intersection(-0.9899, s);
 	auto tmp1 = Intersection(-0.4899, b);
@@ -2296,7 +2294,7 @@ TEST(RefractionTest, shadeHitTransparentMaterial) {
 
 	w.objects.emplace_back(&ball);
 
-	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 
 	auto tmp = Intersection(sqrt(2), &floor);
 
@@ -2312,7 +2310,7 @@ TEST(RefractionTest, shadeHitTransparentMaterial) {
 
 TEST(FresnelEffect, InternalReflection) {
 	auto shape = glassSphere();
-	auto r = Ray(Tuple::point(0, 0, sqrt(2) / 2), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0));
 	auto tmp1 = Intersection(-sqrt(2) / 2, &shape);
 	auto tmp2 = Intersection(sqrt(2) / 2, &shape);
 
@@ -2328,7 +2326,7 @@ TEST(FresnelEffect, InternalReflection) {
 
 TEST(FresnelEffect, SchlickAproxPerpendicular) {
 	auto shape = glassSphere();
-	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
 	auto tmp1 = Intersection(-1, &shape);
 	auto tmp2 = Intersection(1, &shape);
 
@@ -2344,7 +2342,7 @@ TEST(FresnelEffect, SchlickAproxPerpendicular) {
 
 TEST(FresnelEffect, N2GreaterThanN1) {
 	auto shape = glassSphere();
-	auto r = Ray(Tuple::point(0, 0.99, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1));
 	auto tmp1 = Intersection(1.8589, &shape);
 
 	auto xs = Intersections();
@@ -2359,7 +2357,7 @@ TEST(FresnelEffect, N2GreaterThanN1) {
 
 TEST(FresnelEffect, ReflectiveTransparentMaterial) {
 	auto w = defaultWorld();
-	auto r = Ray(Tuple::point(0, 0, -3), Tuple::vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	auto r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	auto floor = Plane();
 	floor.transform = translate(0, -1, 0);
 	floor.material.reflective = 0.5;
@@ -2393,13 +2391,13 @@ TEST(CubeTest, RayIntersectsCube) {
 	auto c = Cube();
 
 	std::vector<Ray> testRay{
-		Ray(Tuple::point(5, 0.5, 0), Tuple::vector(-1, 0, 0)),
-		Ray(Tuple::point(-5, 0.5, 0), Tuple::vector(1, 0, 0)),
-		Ray(Tuple::point(0.5, 5, 0), Tuple::vector(0, -1, 0)),
-		Ray(Tuple::point(0.5, -5, 0), Tuple::vector(0, 1, 0)),
-		Ray(Tuple::point(0.5, 0, 5), Tuple::vector(0, 0, -1)),
-		Ray(Tuple::point(0.5, 0, -5), Tuple::vector(0, 0, 1)),
-		Ray(Tuple::point(0, 0.5, 0), Tuple::vector(0, 0, 1))
+		Ray(Point(5, 0.5, 0), Vector(-1, 0, 0)),
+		Ray(Point(-5, 0.5, 0), Vector(1, 0, 0)),
+		Ray(Point(0.5, 5, 0), Vector(0, -1, 0)),
+		Ray(Point(0.5, -5, 0), Vector(0, 1, 0)),
+		Ray(Point(0.5, 0, 5), Vector(0, 0, -1)),
+		Ray(Point(0.5, 0, -5), Vector(0, 0, 1)),
+		Ray(Point(0, 0.5, 0), Vector(0, 0, 1))
 	};
 
 	double ans[] = {4, 6, 4, 6, 4, 6, 4, 6, 4, 6, 4, 6, -1, 1};
@@ -2424,12 +2422,12 @@ TEST(CubeTest, RayMissCube) {
 	auto c = Cube();
 
 	std::vector<Ray> testRay{
-		Ray(Tuple::point(-2, 0, 0), Tuple::vector(0.2673, 0.5345, 0.8018)),
-		Ray(Tuple::point(0, -2, 0), Tuple::vector(0.8018, 0.2673, 0.5345)),
-		Ray(Tuple::point(0, 0, -2), Tuple::vector(0.5345, 0.8018, 0.2673)),
-		Ray(Tuple::point(2, 0, 2), Tuple::vector(0, 0, -1)),
-		Ray(Tuple::point(0, 2, 2), Tuple::vector(0, -1, 0)),
-		Ray(Tuple::point(2, 2, 0), Tuple::vector(-1, 0, 0))
+		Ray(Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)),
+		Ray(Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)),
+		Ray(Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)),
+		Ray(Point(2, 0, 2), Vector(0, 0, -1)),
+		Ray(Point(0, 2, 2), Vector(0, -1, 0)),
+		Ray(Point(2, 2, 0), Vector(-1, 0, 0))
 	};
 
 	for (auto x : testRay) {
@@ -2443,25 +2441,25 @@ TEST(CubeTest, NormalCube) {
 	auto c = Cube();
 
 	std::vector<Tuple> point{
-		Tuple::point(1, 0.5, -0.8),
-		Tuple::point(-1, -0.2, 0.9),
-		Tuple::point(-0.4, 1, -0.1),
-		Tuple::point(0.3, -1, -0.7),
-		Tuple::point(-0.6, 0.3, 1),
-		Tuple::point(0.4, 0.4, -1),
-		Tuple::point(1, 1, 1),
-		Tuple::point(-1, -1, -1)
+		Point(1, 0.5, -0.8),
+		Point(-1, -0.2, 0.9),
+		Point(-0.4, 1, -0.1),
+		Point(0.3, -1, -0.7),
+		Point(-0.6, 0.3, 1),
+		Point(0.4, 0.4, -1),
+		Point(1, 1, 1),
+		Point(-1, -1, -1)
 	};
 
 	std::vector<Tuple> normal{
-		Tuple::vector(1, 0, 0),
-		Tuple::vector(-1, 0, 0),
-		Tuple::vector(0, 1, 0),
-		Tuple::vector(0, -1, 0),
-		Tuple::vector(0, 0, 1),
-		Tuple::vector(0, 0, -1),
-		Tuple::vector(1, 0, 0),
-		Tuple::vector(-1, 0, 0)
+		Vector(1, 0, 0),
+		Vector(-1, 0, 0),
+		Vector(0, 1, 0),
+		Vector(0, -1, 0),
+		Vector(0, 0, 1),
+		Vector(0, 0, -1),
+		Vector(1, 0, 0),
+		Vector(-1, 0, 0)
 	};
 
 	auto cnt = 0;
@@ -2477,8 +2475,8 @@ TEST(CubeTest, NormalCube) {
 TEST(CylinderTest, RayMisses) {
 
 	auto cyl = Cylinder();
-	std::vector<Tuple> origin = { Tuple::point(1, 0, 0), Tuple::point(0, 0, 0), Tuple::point(0, 0, -5) };
-	std::vector<Tuple> direction = { Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0), Tuple::vector(1, 1, 1) };
+	std::vector<Tuple> origin = { Point(1, 0, 0), Point(0, 0, 0), Point(0, 0, -5) };
+	std::vector<Tuple> direction = { Vector(0, 1, 0), Vector(0, 1, 0), Vector(1, 1, 1) };
 
 	for (int i = 0; i < 3; ++i) {
 		auto dir = direction[i].normalize();
@@ -2492,8 +2490,8 @@ TEST(CylinderTest, RayMisses) {
 TEST(CylinderTest, RayHits) {
 
 	auto cyl = Cylinder();
-	std::vector<Tuple> origin = { Tuple::point(1, 0, -5), Tuple::point(0, 0, -5), Tuple::point(0.5, 0, -5) };
-	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(0, 0, 1), Tuple::vector(0.1, 1, 1) };
+	std::vector<Tuple> origin = { Point(1, 0, -5), Point(0, 0, -5), Point(0.5, 0, -5) };
+	std::vector<Tuple> direction = { Vector(0, 0, 1), Vector(0, 0, 1), Vector(0.1, 1, 1) };
 
 	double ans[] = {5, 5, 4, 6, 6.80798, 7.0887237};
 	// TODO: small difference compared to the book smaller epsilon?
@@ -2516,8 +2514,8 @@ TEST(CylinderTest, RayHits) {
 TEST(CylinderTest, NormalVector) {
 
 	auto cyl = Cylinder();
-	std::vector<Tuple> point = { Tuple::point(1, 0, 0), Tuple::point(0, 5, -1), Tuple::point(0, -2, 1), Tuple::point(-1, -1, 0) };
-	std::vector<Tuple> normal = { Tuple::vector(1, 0, 0), Tuple::vector(0, 0, -1), Tuple::vector(0, 0, 1), Tuple::vector(-1, 0, 0)};
+	std::vector<Tuple> point = { Point(1, 0, 0), Point(0, 5, -1), Point(0, -2, 1), Point(-1, -1, 0) };
+	std::vector<Tuple> normal = { Vector(1, 0, 0), Vector(0, 0, -1), Vector(0, 0, 1), Vector(-1, 0, 0)};
 
 	for (int i = 0; i < 4; ++i) {
 		auto n = cyl.objectNormal(point[i]);
@@ -2535,8 +2533,8 @@ TEST(CylinderTest, DefaultMinMax) {
 TEST(CylinderTest, IntersectingConstrained) {
 
 	auto cyl = Cylinder();
-	std::vector<Tuple> point = { Tuple::point(0, 1.5, 0), Tuple::point(0, 3, -5), Tuple::point(0, 0, -5), Tuple::point(0, 2, -5), Tuple::point(0, 1, -5), Tuple::point(0, 1.5, -2) };
-	std::vector<Tuple> direction = { Tuple::vector(0.1, 1, 0), Tuple::vector(0, 0, 1), Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) , Tuple::vector(0, 0, 1) };
+	std::vector<Tuple> point = { Point(0, 1.5, 0), Point(0, 3, -5), Point(0, 0, -5), Point(0, 2, -5), Point(0, 1, -5), Point(0, 1.5, -2) };
+	std::vector<Tuple> direction = { Vector(0.1, 1, 0), Vector(0, 0, 1), Vector(0, 0, 1) , Vector(0, 0, 1) , Vector(0, 0, 1) , Vector(0, 0, 1) };
 
 	cyl.maximum = 2;
 	cyl.minimum = 1;
@@ -2565,8 +2563,8 @@ TEST(CylinderTest, IntersectingClosedCaps) {
 	cyl.maximum = 2;
 	cyl.closed = true;
 
-	std::vector<Tuple> point = { Tuple::point(0, 3, 0), Tuple::point(0, 3, -2), Tuple::point(0, 4, -2), Tuple::point(0, 0, -2), Tuple::point(0, -1, -2) };
-	std::vector<Tuple> direction = { Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 2), Tuple::vector(0, -1, 1) , Tuple::vector(0, 1, 2) , Tuple::vector(0, 1, 1) };
+	std::vector<Tuple> point = { Point(0, 3, 0), Point(0, 3, -2), Point(0, 4, -2), Point(0, 0, -2), Point(0, -1, -2) };
+	std::vector<Tuple> direction = { Vector(0, -1, 0), Vector(0, -1, 2), Vector(0, -1, 1) , Vector(0, 1, 2) , Vector(0, 1, 1) };
 
 	for (int i = 0; i < 5; ++i) {
 		auto dir = direction[i].normalize();
@@ -2584,8 +2582,8 @@ TEST(CylinderTest, NormalVectorEndCaps) {
 	cyl.maximum = 2;
 	cyl.closed = true;
 
-	std::vector<Tuple> point = { Tuple::point(0, 1, 0), Tuple::point(0.5, 1, 0), Tuple::point(0, 1, 0.5), Tuple::point(0, 2, 0), Tuple::point(0.5, 2, 0), Tuple::point(0, 2, 0.5) };
-	std::vector<Tuple> normal = { Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 0), Tuple::vector(0, -1, 0) , Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 0) };
+	std::vector<Tuple> point = { Point(0, 1, 0), Point(0.5, 1, 0), Point(0, 1, 0.5), Point(0, 2, 0), Point(0.5, 2, 0), Point(0, 2, 0.5) };
+	std::vector<Tuple> normal = { Vector(0, -1, 0), Vector(0, -1, 0), Vector(0, -1, 0) , Vector(0, 1, 0), Vector(0, 1, 0), Vector(0, 1, 0) };
 
 	for (int i = 0; i < 6; ++i) {
 		
@@ -2600,8 +2598,8 @@ TEST(ConeTest, ConeIntersection) {
 
 	auto cyl = Cone();
 
-	std::vector<Tuple> origin = { Tuple::point(0, 0, -5), Tuple::point(0, 0, -5), Tuple::point(1, 1, -5) };
-	std::vector<Tuple> direction = { Tuple::vector(0, 0, 1), Tuple::vector(1, 1, 1), Tuple::vector(-0.5, -1, 1) };
+	std::vector<Tuple> origin = { Point(0, 0, -5), Point(0, 0, -5), Point(1, 1, -5) };
+	std::vector<Tuple> direction = { Vector(0, 0, 1), Vector(1, 1, 1), Vector(-0.5, -1, 1) };
 
 	//TODO: small difference in number compared to the book, use a smaller epsilon?
 	double ans[] = { 5, 5, 8.6602545, 8.6602545, 4.5500555, 49.44994 };
@@ -2626,8 +2624,8 @@ TEST(ConeTest, ConeIntersection) {
 TEST(ConeTest, ConeRayParralelToHalve) {
 
 	auto cyl = Cone();
-	auto direction = Tuple::vector(0, 1, 1).normalize();
-	auto r = Ray(Tuple::point(0, 0, -1), direction);
+	auto direction = Vector(0, 1, 1).normalize();
+	auto r = Ray(Point(0, 0, -1), direction);
 
 	auto xs = cyl.intersect(r);
 
@@ -2645,8 +2643,8 @@ TEST(ConeTest, ConesEndCaps) {
 	cyl.maximum = 0.5;
 	cyl.closed = true;
 
-	std::vector<Tuple> origin = { Tuple::point(0, 0, -5), Tuple::point(0, 0, -0.25), Tuple::point(0, 0, -0.25) };
-	std::vector<Tuple> direction = { Tuple::vector(0, 1, 0), Tuple::vector(0, 1, 1), Tuple::vector(0, 1, 0) };
+	std::vector<Tuple> origin = { Point(0, 0, -5), Point(0, 0, -0.25), Point(0, 0, -0.25) };
+	std::vector<Tuple> direction = { Vector(0, 1, 0), Vector(0, 1, 1), Vector(0, 1, 0) };
 
 	int cnt[] = { 0, 2, 4 };
 
@@ -2667,8 +2665,8 @@ TEST(ConeTest, ConeNormal) {
 	cyl.maximum = 0.5;
 	cyl.closed = true;
 
-	std::vector<Tuple> point = { Tuple::point(0, 0, 0), Tuple::point(1, 1, 1), Tuple::point(-1, -1, 0) };
-	std::vector<Tuple> normal = { Tuple::vector(0, 0, 0), Tuple::vector(1, -sqrt(2), 1), Tuple::vector(-1, 1, 0)};
+	std::vector<Tuple> point = { Point(0, 0, 0), Point(1, 1, 1), Point(-1, -1, 0) };
+	std::vector<Tuple> normal = { Vector(0, 0, 0), Vector(1, -sqrt(2), 1), Vector(-1, 1, 0)};
 
 	for (int i = 0; i < 3; ++i) {
 		auto n = cyl.objectNormal(point[i]);
@@ -2701,7 +2699,7 @@ TEST(GroupTest, AddingAChild) {
 
 TEST(GroupTest, IntersectingWihtEmptyGroup) {
 	auto g = Group();
-	auto r = Ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
 
 	auto xs = g.intersect(r);
 	ASSERT_EQ(xs.intersections.size(), 0);
@@ -2720,7 +2718,7 @@ TEST(GroupTest, IntersectingWihtNonEmptyGroup) {
 	g.addChild(&s2);
 	g.addChild(&s3);
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto xs = g.intersect(r);
 	
@@ -2743,7 +2741,7 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 	s.transform = translate(5, 0, 0);
 
 	g.addChild(&s);
-	auto r = Ray(Tuple::point(10, 0, -10), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(10, 0, -10), Vector(0, 0, 1));
 
 	auto xs = g.shapeIntersect(r);
 
@@ -2753,7 +2751,7 @@ TEST(GroupTest, IntersectingWihtTransformedGroup) {
 TEST(GroupTest, WorldToObjectSpace) {
 	auto g1 = new Group();
 
-	g1->transform = rotationY(TEST_PI / 2);
+	g1->transform = rotationY(M_PI / 2);
 
 	auto g2 = new Group();
 	g2->transform = scale(2, 2, 2);
@@ -2766,16 +2764,16 @@ TEST(GroupTest, WorldToObjectSpace) {
 
 	g2->addChild(&s);
 
-	auto p = s.worldToObject(Tuple::point(-2, 0, -10));
+	auto p = s.worldToObject(Point(-2, 0, -10));
 
-	ASSERT_EQ(p, Tuple::point(0, 0, -1));
+	ASSERT_EQ(p, Point(0, 0, -1));
 }
 
 
 TEST(GroupTest, normalToWorldSpace) {
 	auto g1 = Group();
 
-	g1.transform = rotationY(TEST_PI / 2);
+	g1.transform = rotationY(M_PI / 2);
 
 	auto g2 = new Group();
 	g2->transform = scale(1, 2, 3);
@@ -2788,10 +2786,10 @@ TEST(GroupTest, normalToWorldSpace) {
 
 	g2->addChild(&s);
 
-	auto p = s.normalToWorld(Tuple::vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	auto p = s.normalToWorld(Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 
 	//TODO: not the same as in the book smaller epsilon?
-	ASSERT_EQ(p, Tuple::vector(0.285714, 0.428571, - 0.857143));
+	ASSERT_EQ(p, Vector(0.285714, 0.428571, - 0.857143));
 }
 
 TEST(BoundingBox, BoundingBoxDefault) {
@@ -2799,7 +2797,7 @@ TEST(BoundingBox, BoundingBoxDefault) {
 
 	// TODO: why doesn't this work
 	// check all infinity comparisons
-	//ASSERT_EQ(box.boxMin, Tuple::point(INFINITY, INFINITY, INFINITY));
+	//ASSERT_EQ(box.boxMin, Point(INFINITY, INFINITY, INFINITY));
 
 	ASSERT_FLOAT_EQ(box.boxMin.x, INFINITY);
 	ASSERT_FLOAT_EQ(box.boxMin.y, INFINITY);
@@ -2811,23 +2809,23 @@ TEST(BoundingBox, BoundingBoxDefault) {
 }
 
 TEST(BoundingBox, BoundingBoxWithVolume) {
-	auto box = BoundingBox(Tuple::point(-1, -2, -3) , Tuple::point(3, 2, 1));
+	auto box = BoundingBox(Point(-1, -2, -3) , Point(3, 2, 1));
 	
-	ASSERT_EQ(box.boxMin, Tuple::point(-1, -2, -3));
-	ASSERT_EQ(box.boxMax, Tuple::point(3, 2, 1));
+	ASSERT_EQ(box.boxMin, Point(-1, -2, -3));
+	ASSERT_EQ(box.boxMax, Point(3, 2, 1));
 }
 
 TEST(BoundingBox, AddingPointsToBoundingBox) {
 	auto box = BoundingBox();
 
-	Tuple p1 = Tuple::point(-5, 2, 0);
-	Tuple p2 = Tuple::point(7, 0, -3);
+	Tuple p1 = Point(-5, 2, 0);
+	Tuple p2 = Point(7, 0, -3);
 
 	box.addPoint(p1);
 	box.addPoint(p2);
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-5.f, 0.f, -3.f));
-	ASSERT_EQ(box.boxMax, Tuple::point(7.f, 2.f, 0.f));
+	ASSERT_EQ(box.boxMin, Point(-5.f, 0.f, -3.f));
+	ASSERT_EQ(box.boxMax, Point(7.f, 2.f, 0.f));
 
 }
 
@@ -2835,8 +2833,8 @@ TEST(BoundingBox, SphereBoundingBox) {
 	auto shape = Sphere();
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
-	ASSERT_EQ(box.boxMax, Tuple::point(1, 1, 1));
+	ASSERT_EQ(box.boxMin, Point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Point(1, 1, 1));
 
 }
 
@@ -2858,8 +2856,8 @@ TEST(BoundingBox, CubeBoundingBox) {
 	auto shape = Cube();
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
-	ASSERT_EQ(box.boxMax, Tuple::point(1, 1, 1));
+	ASSERT_EQ(box.boxMin, Point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Point(1, 1, 1));
 }
 
 TEST(BoundingBox, UnboundCylinderBoundingBox) {
@@ -2882,8 +2880,8 @@ TEST(BoundingBox, BoundCylinderBoundingBox) {
 	shape.maximum = 3;
 	auto box = shape.boundsOf();
 	
-	ASSERT_EQ(box.boxMin, Tuple::point(-1, -5, -1));
-	ASSERT_EQ(box.boxMax, Tuple::point(1, 3, 1));
+	ASSERT_EQ(box.boxMin, Point(-1, -5, -1));
+	ASSERT_EQ(box.boxMax, Point(1, 3, 1));
 }
 
 TEST(BoundingBox, UnboundConeBoundingBox) {
@@ -2907,35 +2905,35 @@ TEST(BoundingBox,BoundConeBoundingBox) {
 	shape.maximum = 3;
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-5, -5, -5));
-	ASSERT_EQ(box.boxMax, Tuple::point(5, 3, 5));
+	ASSERT_EQ(box.boxMin, Point(-5, -5, -5));
+	ASSERT_EQ(box.boxMax, Point(5, 3, 5));
 }
 
 //TODO: test shape
 
 TEST(BoundingBox, AddingBoxes) {
-	auto box1 = BoundingBox(Tuple::point(-5, -2, 0), Tuple::point(7, 4, 4));
-	auto box2 = BoundingBox(Tuple::point(8, -7, -2), Tuple::point(14, 2, 8));
+	auto box1 = BoundingBox(Point(-5, -2, 0), Point(7, 4, 4));
+	auto box2 = BoundingBox(Point(8, -7, -2), Point(14, 2, 8));
 
 	box1.mergeBox(box2);
 
-	ASSERT_EQ(box1.boxMin, Tuple::point(-5, -7, -2));
-	ASSERT_EQ(box1.boxMax, Tuple::point(14, 4, 8));
+	ASSERT_EQ(box1.boxMin, Point(-5, -7, -2));
+	ASSERT_EQ(box1.boxMax, Point(14, 4, 8));
 }
 
 TEST(BoundingBox, BoxContainsPoint) {
-	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+	auto box = BoundingBox(Point(5, -2, 0), Point(11, 4, 7));
 
 	Tuple points[] = {
-						Tuple::point(5, -2, 0),
-						Tuple::point(11, 4, 7),
-						Tuple::point(8, 1, 3),
-						Tuple::point(3, 0, 3),
-						Tuple::point(8, -4, 3),
-						Tuple::point(8, 1, -1),
-						Tuple::point(13, 1, 3),
-						Tuple::point(8, 5, 3),
-						Tuple::point(8, 1, 8)
+						Point(5, -2, 0),
+						Point(11, 4, 7),
+						Point(8, 1, 3),
+						Point(3, 0, 3),
+						Point(8, -4, 3),
+						Point(8, 1, -1),
+						Point(13, 1, 3),
+						Point(8, 5, 3),
+						Point(8, 1, 8)
 	};
 
 	bool ans[] = { true, true, true, false, false, false, false, false, false };
@@ -2946,11 +2944,11 @@ TEST(BoundingBox, BoxContainsPoint) {
 }
 
 TEST(BoundingBox, BoxContainsBox) {
-	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
-	auto box1 = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
-	auto box2 = BoundingBox(Tuple::point(6, -1, 1), Tuple::point(10, 3, 6));
-	auto box3 = BoundingBox(Tuple::point(4, -3, -1), Tuple::point(10, 3, 6));
-	auto box4 = BoundingBox(Tuple::point(6, -1, 1), Tuple::point(12, 5, 8));
+	auto box = BoundingBox(Point(5, -2, 0), Point(11, 4, 7));
+	auto box1 = BoundingBox(Point(5, -2, 0), Point(11, 4, 7));
+	auto box2 = BoundingBox(Point(6, -1, 1), Point(10, 3, 6));
+	auto box3 = BoundingBox(Point(4, -3, -1), Point(10, 3, 6));
+	auto box4 = BoundingBox(Point(6, -1, 1), Point(12, 5, 8));
 
 	EXPECT_TRUE(box.contains(box1));
 	EXPECT_TRUE(box.contains(box2));
@@ -2959,13 +2957,13 @@ TEST(BoundingBox, BoxContainsBox) {
 }
 
 TEST(BoundingBox, TransformingBoundingBox) {
-	auto box = BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
-	auto matrix = rotationX(TEST_PI / 4) * rotationY(TEST_PI / 4);
+	auto box = BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
+	auto matrix = rotationX(M_PI / 4) * rotationY(M_PI / 4);
 	auto box2 = box.transform(matrix);
 
 	// TODO: not the same as in the book, smaller epsilon for tests?
-	ASSERT_EQ(box2.boxMin, Tuple::point(-1.41421, -1.70711, -1.70711));
-	ASSERT_EQ(box2.boxMax, Tuple::point(1.41421, 1.70711, 1.70711));
+	ASSERT_EQ(box2.boxMin, Point(-1.41421, -1.70711, -1.70711));
+	ASSERT_EQ(box2.boxMax, Point(1.41421, 1.70711, 1.70711));
 }
 
 TEST(BoundingBox, BoundingBoxInParentSpace) {
@@ -2973,8 +2971,8 @@ TEST(BoundingBox, BoundingBoxInParentSpace) {
 	shape.transform = translate(1, -3, 5) * scale(0.5, 2, 4);
 	auto box = shape.parentSpaceBoundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(0.5, -5, 1));
-	ASSERT_EQ(box.boxMax, Tuple::point(1.5, -1, 9));
+	ASSERT_EQ(box.boxMin, Point(0.5, -5, 1));
+	ASSERT_EQ(box.boxMax, Point(1.5, -1, 9));
 }
 
 TEST(BoundingBox, GroupBoundingBoxWithChildren) {
@@ -2992,47 +2990,47 @@ TEST(BoundingBox, GroupBoundingBoxWithChildren) {
 
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-4.5, -3, -5));
-	ASSERT_EQ(box.boxMax, Tuple::point(4, 7, 4.5));
+	ASSERT_EQ(box.boxMin, Point(-4.5, -3, -5));
+	ASSERT_EQ(box.boxMax, Point(4, 7, 4.5));
 }
 //TODO tests for CSG
 
 
 
 TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
-	auto box = BoundingBox(Tuple::point(-1, -1, -1), Tuple::point(1, 1, 1));
+	auto box = BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
 
 	Tuple origin[] = {
-		  Tuple::point(5, 0.5, 0),
-		  Tuple::point(-5, 0.5, 0),
-		  Tuple::point(0.5, 5, 0),
-		  Tuple::point(0.5, -5, 0),
-		  Tuple::point(0.5, 0, 5),
-		  Tuple::point(0.5, 0, -5),
-		  Tuple::point(0, 0.5, 0),
-		  Tuple::point(-2, 0, 0),
-		  Tuple::point(0, -2, 0),
-		  Tuple::point(0, 0, -2),
-		  Tuple::point(2, 0, 2),
-		  Tuple::point(0, 2, 2),
-		  Tuple::point(2, 2, 0)
+		  Point(5, 0.5, 0),
+		  Point(-5, 0.5, 0),
+		  Point(0.5, 5, 0),
+		  Point(0.5, -5, 0),
+		  Point(0.5, 0, 5),
+		  Point(0.5, 0, -5),
+		  Point(0, 0.5, 0),
+		  Point(-2, 0, 0),
+		  Point(0, -2, 0),
+		  Point(0, 0, -2),
+		  Point(2, 0, 2),
+		  Point(0, 2, 2),
+		  Point(2, 2, 0)
 	};
 
 
 	Tuple direction[] = {
-		 Tuple::vector(-1, 0, 0),
-		 Tuple::vector(1, 0, 0),
-		 Tuple::vector(0, -1, 0),
-		 Tuple::vector(0, 1, 0),
-		 Tuple::vector(0, 0, -1),
-		 Tuple::vector(0, 0, 1),
-		 Tuple::vector(0, 0, 1),
-		 Tuple::vector(2, 4, 6),
-		 Tuple::vector(6, 2, 4),
-		 Tuple::vector(4, 6, 2),
-		 Tuple::vector(0, 0, -1),
-		 Tuple::vector(0, -1, 0),
-		 Tuple::vector(-1, 0, 0)
+		 Vector(-1, 0, 0),
+		 Vector(1, 0, 0),
+		 Vector(0, -1, 0),
+		 Vector(0, 1, 0),
+		 Vector(0, 0, -1),
+		 Vector(0, 0, 1),
+		 Vector(0, 0, 1),
+		 Vector(2, 4, 6),
+		 Vector(6, 2, 4),
+		 Vector(4, 6, 2),
+		 Vector(0, 0, -1),
+		 Vector(0, -1, 0),
+		 Vector(-1, 0, 0)
 	};
 
 
@@ -3060,39 +3058,39 @@ TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
 }
 
 TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
-	auto box = BoundingBox(Tuple::point(5, -2, 0), Tuple::point(11, 4, 7));
+	auto box = BoundingBox(Point(5, -2, 0), Point(11, 4, 7));
 
 	Tuple origin[] = {
-		  Tuple::point(15, 1, 2) ,
-		  Tuple::point(-5, -1, 4),
-		  Tuple::point(7, 6, 5),
-		  Tuple::point(9, -5, 6),
-		  Tuple::point(8, 2, 12),
-		  Tuple::point(6, 0, -5),
-		  Tuple::point(8, 1, 3.5),
-		  Tuple::point(9, -1, -8),
-		  Tuple::point(8, 3, -4),
-		  Tuple::point(9, -1, -2),
-		  Tuple::point(4, 0, 9),
-		  Tuple::point(8, 6, -1),
-		  Tuple::point(12, 5, 4)
+		  Point(15, 1, 2) ,
+		  Point(-5, -1, 4),
+		  Point(7, 6, 5),
+		  Point(9, -5, 6),
+		  Point(8, 2, 12),
+		  Point(6, 0, -5),
+		  Point(8, 1, 3.5),
+		  Point(9, -1, -8),
+		  Point(8, 3, -4),
+		  Point(9, -1, -2),
+		  Point(4, 0, 9),
+		  Point(8, 6, -1),
+		  Point(12, 5, 4)
 	};
 
 
 	Tuple direction[] = {
-		 Tuple::vector(-1, 0, 0),
-		 Tuple::vector(1, 0, 0),
-		 Tuple::vector(0, -1, 0),
-		 Tuple::vector(0, 1, 0),
-		 Tuple::vector(0, 0, -1),
-		 Tuple::vector(0, 0, 1),
-		 Tuple::vector(0, 0, 1),
-		 Tuple::vector(2, 4, 6),
-		 Tuple::vector(6, 2, 4),
-		 Tuple::vector(4, 6, 2),
-		 Tuple::vector(0, 0, -1),
-		 Tuple::vector(0, -1, 0),
-		 Tuple::vector(-1, 0, 0)
+		 Vector(-1, 0, 0),
+		 Vector(1, 0, 0),
+		 Vector(0, -1, 0),
+		 Vector(0, 1, 0),
+		 Vector(0, 0, -1),
+		 Vector(0, 0, 1),
+		 Vector(0, 0, 1),
+		 Vector(2, 4, 6),
+		 Vector(6, 2, 4),
+		 Vector(4, 6, 2),
+		 Vector(0, 0, -1),
+		 Vector(0, -1, 0),
+		 Vector(-1, 0, 0)
 	};
 
 
@@ -3122,55 +3120,55 @@ TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
 
 
 TEST(BoundingBox, SplittingAPerfectCube) {
-	auto box = BoundingBox(Tuple::point(-1, -4, -5), Tuple::point(9, 6, 5));
+	auto box = BoundingBox(Point(-1, -4, -5), Point(9, 6, 5));
 	BoundingBox left;
 	BoundingBox right;
 
 	box.splitBounds(&left, &right);
 
-	ASSERT_EQ(left.boxMin, Tuple::point(-1, -4, -5));
-	ASSERT_EQ(left.boxMax, Tuple::point(4, 6, 5));
-	ASSERT_EQ(right.boxMin, Tuple::point(4, -4, -5));
-	ASSERT_EQ(right.boxMax, Tuple::point(9, 6, 5));
+	ASSERT_EQ(left.boxMin, Point(-1, -4, -5));
+	ASSERT_EQ(left.boxMax, Point(4, 6, 5));
+	ASSERT_EQ(right.boxMin, Point(4, -4, -5));
+	ASSERT_EQ(right.boxMax, Point(9, 6, 5));
 }
 
 TEST(BoundingBox, SplittingAnXWideBox) {
-	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(9, 5.5, 3));
+	auto box = BoundingBox(Point(-1, -2, -3), Point(9, 5.5, 3));
 	BoundingBox left;
 	BoundingBox right;
 
 	box.splitBounds(&left, &right);
 
-	ASSERT_EQ(left.boxMin, Tuple::point(-1, -2, -3));
-	ASSERT_EQ(left.boxMax, Tuple::point(4, 5.5, 3));
-	ASSERT_EQ(right.boxMin, Tuple::point(4, -2, -3));
-	ASSERT_EQ(right.boxMax, Tuple::point(9, 5.5, 3));
+	ASSERT_EQ(left.boxMin, Point(-1, -2, -3));
+	ASSERT_EQ(left.boxMax, Point(4, 5.5, 3));
+	ASSERT_EQ(right.boxMin, Point(4, -2, -3));
+	ASSERT_EQ(right.boxMax, Point(9, 5.5, 3));
 }
 
 TEST(BoundingBox, SplittingAnYWideBox) {
-	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(5, 8, 3));
+	auto box = BoundingBox(Point(-1, -2, -3), Point(5, 8, 3));
 	BoundingBox left;
 	BoundingBox right;
 
 	box.splitBounds(&left, &right);
 
-	ASSERT_EQ(left.boxMin, Tuple::point(-1, -2, -3));
-	ASSERT_EQ(left.boxMax, Tuple::point(5, 3, 3));
-	ASSERT_EQ(right.boxMin, Tuple::point(- 1, 3, -3));
-	ASSERT_EQ(right.boxMax, Tuple::point(5, 8, 3));
+	ASSERT_EQ(left.boxMin, Point(-1, -2, -3));
+	ASSERT_EQ(left.boxMax, Point(5, 3, 3));
+	ASSERT_EQ(right.boxMin, Point(- 1, 3, -3));
+	ASSERT_EQ(right.boxMax, Point(5, 8, 3));
 }
 
 TEST(BoundingBox, SplittingAnZWideBox) {
-	auto box = BoundingBox(Tuple::point(-1, -2, -3), Tuple::point(5, 3, 7));
+	auto box = BoundingBox(Point(-1, -2, -3), Point(5, 3, 7));
 	BoundingBox left;
 	BoundingBox right;
 
 	box.splitBounds(&left, &right);
 
-	ASSERT_EQ(left.boxMin, Tuple::point(- 1, -2, -3));
-	ASSERT_EQ(left.boxMax, Tuple::point(5, 3, 2));
-	ASSERT_EQ(right.boxMin, Tuple::point(-1, -2, 2));
-	ASSERT_EQ(right.boxMax, Tuple::point(5, 3, 7));
+	ASSERT_EQ(left.boxMin, Point(- 1, -2, -3));
+	ASSERT_EQ(left.boxMax, Point(5, 3, 2));
+	ASSERT_EQ(right.boxMin, Point(-1, -2, 2));
+	ASSERT_EQ(right.boxMax, Point(5, 3, 7));
 }
 
 TEST(BoundingBox, PartitioningGroupsChildren) {
@@ -3304,9 +3302,9 @@ TEST(BoundingBox, SubdividingAGroupWithTooFewChildren) {
 
 TEST(Triangle, ConstructingATriangle) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
@@ -3314,22 +3312,22 @@ TEST(Triangle, ConstructingATriangle) {
 	ASSERT_EQ(t.p2, p2);
 	ASSERT_EQ(t.p3, p3);
 
-	ASSERT_EQ(t.e1, Tuple::vector(-1, -1, 0));
-	ASSERT_EQ(t.e2, Tuple::vector(1, -1, 0));
-	ASSERT_EQ(t.normal, Tuple::vector(0, 0, -1));
+	ASSERT_EQ(t.e1, Vector(-1, -1, 0));
+	ASSERT_EQ(t.e2, Vector(1, -1, 0));
+	ASSERT_EQ(t.normal, Vector(0, 0, -1));
 }
 
 TEST(Triangle, NormalOnATriangle) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto n1 = t.objectNormal(Tuple::point(0, 0.5, 0));
-	auto n2 = t.objectNormal(Tuple::point(-0.5, 0.75, 0));
-	auto n3 = t.objectNormal(Tuple::point(0.5, 0.25, 0));
+	auto n1 = t.objectNormal(Point(0, 0.5, 0));
+	auto n2 = t.objectNormal(Point(-0.5, 0.75, 0));
+	auto n3 = t.objectNormal(Point(0.5, 0.25, 0));
 
 
 	ASSERT_EQ(n1, t.normal);
@@ -3339,13 +3337,13 @@ TEST(Triangle, NormalOnATriangle) {
 
 TEST(Triangle, IntersectingARayParallelToTriangle) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto r = Ray(Tuple::point(0, -1, -2), Tuple::vector(0, 1, 0));
+	auto r = Ray(Point(0, -1, -2), Vector(0, 1, 0));
 
 	auto xs = t.intersect(r);
 
@@ -3354,13 +3352,13 @@ TEST(Triangle, IntersectingARayParallelToTriangle) {
 
 TEST(Triangle, RayMisssesP1P3Edge){
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto r = Ray(Tuple::point(1, 1, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(1, 1, -2), Vector(0, 0, 1));
 
 	auto xs = t.intersect(r);
 
@@ -3369,13 +3367,13 @@ TEST(Triangle, RayMisssesP1P3Edge){
 
 TEST(Triangle, RayMisssesP1P2Edge) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto r = Ray(Tuple::point(-1, 1, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(-1, 1, -2), Vector(0, 0, 1));
 
 	auto xs = t.intersect(r);
 
@@ -3384,13 +3382,13 @@ TEST(Triangle, RayMisssesP1P2Edge) {
 
 TEST(Triangle, RayMisssesP2P3Edge) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto r = Ray(Tuple::point(0, -1, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, -1, -2), Vector(0, 0, 1));
 
 	auto xs = t.intersect(r);
 
@@ -3399,13 +3397,13 @@ TEST(Triangle, RayMisssesP2P3Edge) {
 
 TEST(Triangle, RayStrikesTriangle) {
 
-	Tuple p1 = Tuple::point(0, 1, 0);
-	Tuple p2 = Tuple::point(-1, 0, 0);
-	Tuple p3 = Tuple::point(1, 0, 0);
+	Tuple p1 = Point(0, 1, 0);
+	Tuple p2 = Point(-1, 0, 0);
+	Tuple p3 = Point(1, 0, 0);
 
 	Triangle t(p1, p2, p3);
 
-	auto r = Ray(Tuple::point(0, 0.5, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0.5, -2), Vector(0, 0, 1));
 
 	auto xs = t.intersect(r);
 
@@ -3427,9 +3425,9 @@ TEST(OBJPARSER, VertexRecords) {
 	OBJParser o("VertexRecords1.obj");
 
 	// book values, not the same because mine are normalized from (-1, -1, -1), (1, 1, 1)
-	//Tuple ans[] = {Tuple::point(-1, 1, 0), Tuple::point(-1, 0.5, 0), Tuple::point(1, 0, 0), Tuple::point(1, 1, 0)};
+	//Tuple ans[] = {Point(-1, 1, 0), Point(-1, 0.5, 0), Point(1, 0, 0), Point(1, 1, 0)};
 	//TODO: check if the new values are normalized correctly
-	Tuple ans[] = { Tuple::point(-1, 0.5, 0), Tuple::point(-1, 0, 0), Tuple::point(1, - 0.5, 0), Tuple::point(1, 0.5, 0) };
+	Tuple ans[] = { Point(-1, 0.5, 0), Point(-1, 0, 0), Point(1, - 0.5, 0), Point(1, 0.5, 0) };
 	int i = 0;
 
 	for (auto x : o.vertices) {
@@ -3492,12 +3490,12 @@ TEST(OBJPARSER, TrianglesInGroups) {
 
 TEST(OBJPARSER, ConstructingSmoothTriangle) {
 
-	auto p1 = Tuple::point(0, 1, 0);
-	auto p2 = Tuple::point(-1, 0, 0);
-	auto p3 = Tuple::point(1, 0, 0);
-	auto n1 = Tuple::point(0, 1, 0);
-	auto n2 = Tuple::point(-1, 0, 0);
-	auto n3 = Tuple::point(1, 0, 0);
+	auto p1 = Point(0, 1, 0);
+	auto p2 = Point(-1, 0, 0);
+	auto p3 = Point(1, 0, 0);
+	auto n1 = Point(0, 1, 0);
+	auto n2 = Point(-1, 0, 0);
+	auto n3 = Point(1, 0, 0);
 
 	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
 
@@ -3511,7 +3509,7 @@ TEST(OBJPARSER, ConstructingSmoothTriangle) {
 
 TEST(OBJPARSER, IntersectionEncapsulateUandV) {
 
-	auto s = Triangle(Tuple::point(0, 1, 0), Tuple::point(-1, 0, 0), Tuple::point(1, 0, 0));
+	auto s = Triangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
 	auto i = Intersection(3.5, &s, 0.2, 0.4);
 
 	ASSERT_FLOAT_EQ(i.u, 0.2);
@@ -3520,16 +3518,16 @@ TEST(OBJPARSER, IntersectionEncapsulateUandV) {
 
 TEST(OBJPARSER, IntersectioNWithSmoothTriangle) {
 
-	auto p1 = Tuple::point(0, 1, 0);
-	auto p2 = Tuple::point(-1, 0, 0);
-	auto p3 = Tuple::point(1, 0, 0);
-	auto n1 = Tuple::point(0, 1, 0);
-	auto n2 = Tuple::point(-1, 0, 0);
-	auto n3 = Tuple::point(1, 0, 0);
+	auto p1 = Point(0, 1, 0);
+	auto p2 = Point(-1, 0, 0);
+	auto p3 = Point(1, 0, 0);
+	auto n1 = Point(0, 1, 0);
+	auto n2 = Point(-1, 0, 0);
+	auto n3 = Point(1, 0, 0);
 
 	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
 
-	auto r = Ray(Tuple::point(-0.2, 0.3, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1));
 
 	auto xs = smooth.intersect(r);
 
@@ -3543,23 +3541,23 @@ TEST(OBJPARSER, IntersectioNWithSmoothTriangle) {
 // TODO: fix for floats
 TEST(OBJPARSER, SmoothTriangleInterpolateTheNormal) {
 
-	auto p1 = Tuple::point(0, 1, 0);
-	auto p2 = Tuple::point(-1, 0, 0);
-	auto p3 = Tuple::point(1, 0, 0);
-	auto n1 = Tuple::point(0, 1, 0);
-	auto n2 = Tuple::point(-1, 0, 0);
-	auto n3 = Tuple::point(1, 0, 0);
+	auto p1 = Point(0, 1, 0);
+	auto p2 = Point(-1, 0, 0);
+	auto p3 = Point(1, 0, 0);
+	auto n1 = Point(0, 1, 0);
+	auto n2 = Point(-1, 0, 0);
+	auto n3 = Point(1, 0, 0);
 
 	auto smooth = SmoothTriangle(p1, p2, p3, n1, n2, n3);
 
-	auto r = Ray(Tuple::point(-0.2, 0.3, -2), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1));
 
 	auto xs = smooth.intersect(r);
 	
 
 	for (auto x : xs.intersections) {
 		auto comps = Precomputations(*x, r, xs);
-		ASSERT_EQ(comps.normalv, Tuple::vector(-0.5547, 0.83205, 0));
+		ASSERT_EQ(comps.normalv, Vector(-0.5547, 0.83205, 0));
 	}
 }
 
@@ -3567,9 +3565,9 @@ TEST(OBJPARSER, VertexNormalRecords) {
 
 	OBJParser o("vertexNormalRecords.obj");
 
-	ASSERT_EQ(o.normals[0], Tuple::vector(0, 0, 1));
-	ASSERT_EQ(o.normals[1], Tuple::vector(0.707, 0, -0.707));
-	ASSERT_EQ(o.normals[2], Tuple::vector(1, 2, 3));
+	ASSERT_EQ(o.normals[0], Vector(0, 0, 1));
+	ASSERT_EQ(o.normals[1], Vector(0.707, 0, -0.707));
+	ASSERT_EQ(o.normals[2], Vector(1, 2, 3));
 }
 
 TEST(OBJPARSER, a) {
@@ -3597,12 +3595,12 @@ TEST(OBJPARSER, a) {
 
 TEST(BoundingBox, TriangleBox) {
 
-	auto shape = Triangle(Tuple::point(-3, 7, 2), Tuple::point(6, 2, -4), Tuple::point(2, -1, -1));
+	auto shape = Triangle(Point(-3, 7, 2), Point(6, 2, -4), Point(2, -1, -1));
 
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-3, -1, -4));
-	ASSERT_EQ(box.boxMax, Tuple::point(6, 7, 2));
+	ASSERT_EQ(box.boxMin, Point(-3, -1, -4));
+	ASSERT_EQ(box.boxMax, Point(6, 7, 2));
 }
 
 TEST(CSG, CSGConstruct) {
@@ -3740,7 +3738,7 @@ TEST(CSG, RayMissesCSGObject) {
 
 	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
-	auto r = Ray(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
 
 	auto xs = c.intersect(r);
 	ASSERT_EQ(xs.intersections.size(), 0);
@@ -3754,7 +3752,7 @@ TEST(CSG, RayHitsCSGObject) {
 
 	auto c = CSGShape(CSGOperation::OPERATION::UNION, &s1, &s2);
 
-	auto r = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 
 	auto xs = c.intersect(r);
 	ASSERT_EQ(xs.intersections.size(), 2);
@@ -3782,8 +3780,8 @@ TEST(CSG, BoundsOfCSG) {
 
 	auto box = shape.boundsOf();
 
-	ASSERT_EQ(box.boxMin, Tuple::point(-1, -1, -1));
-	ASSERT_EQ(box.boxMax, Tuple::point(3, 4, 5));
+	ASSERT_EQ(box.boxMin, Point(-1, -1, -1));
+	ASSERT_EQ(box.boxMax, Point(3, 4, 5));
 }
 
 //TODO: set ray as in the book, testshape
@@ -3795,7 +3793,7 @@ TEST(CSG, RayMissesCSG) {
 
 	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
-	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 1, 0));
+	auto ray = Ray(Point(0, 0, -5), Vector(0, 1, 0));
 	auto xs = shape.intersect(ray);
 
 	ASSERT_EQ(xs.intersections.size(), 0);
@@ -3808,7 +3806,7 @@ TEST(CSG, RayHitsCSG) {
 
 	auto shape = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &left, &right);
 
-	auto ray = Ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+	auto ray = Ray(Point(0, 0, -5), Vector(0, 0, 1));
 	auto xs = shape.intersect(ray);
 
 	ASSERT_EQ(xs.intersections.size(), 2);
@@ -3859,10 +3857,10 @@ TEST(CSG, SubdividingCSGSubdividesChildren) {
 
 TEST(AreaLight, isShadowForOcclusion) {
 	auto w = defaultWorld();
-	auto lightPosition = Tuple::point(-10, -10, -10);
+	auto lightPosition = Point(-10, -10, -10);
 
 	bool ans[] = { false, true, false, false };
-	std::vector<Tuple> points{ Tuple::point(-10, -10, 10), Tuple::point(10, 10, 10) ,Tuple::point(-20, -20, -20),Tuple::point(-5, -5, -5) };
+	std::vector<Tuple> points{ Point(-10, -10, 10), Point(10, 10, 10) ,Point(-20, -20, -20),Point(-5, -5, -5) };
 
 	int cnt = 0;
 
@@ -3879,13 +3877,13 @@ TEST(AreaLight, PointLightIntensity) {
 
 	std::vector<Tuple> points{
 
-		Tuple::point(0, 1.0001, 0) ,
-		Tuple::point(-1.0001, 0, 0),
-		Tuple::point(0, 0, -1.0001),
-		Tuple::point(0, 0, 1.0001) ,
-		Tuple::point(1.0001, 0, 0) ,
-		Tuple::point(0, -1.0001, 0),
-		Tuple::point(0, 0, 0)
+		Point(0, 1.0001, 0) ,
+		Point(-1.0001, 0, 0),
+		Point(0, 0, -1.0001),
+		Point(0, 0, 1.0001) ,
+		Point(1.0001, 0, 0) ,
+		Point(0, -1.0001, 0),
+		Point(0, 0, 0)
 	};
 
 	double arr[] = { 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 };
@@ -3901,7 +3899,7 @@ TEST(AreaLight, IntensityToAttenuateColor) {
 	auto w = defaultWorld();
 	w.lights.clear();
 
-	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Tuple::point(0, 0, -10)));
+	w.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 0, -10)));
 
 	auto shape = w.objects[0];
 	shape->material.ambient = 0.1;
@@ -3909,9 +3907,9 @@ TEST(AreaLight, IntensityToAttenuateColor) {
 	shape->material.specular = 0.;
 	shape->material.color = Color(1, 1, 1);
 
-	auto pt = Tuple::point(0, 0, -1);
-	auto eyev = Tuple::vector(0, 0, -1);
-	auto normalv = Tuple::vector(0, 0, -1);
+	auto pt = Point(0, 0, -1);
+	auto eyev = Vector(0, 0, -1);
+	auto normalv = Vector(0, 0, -1);
 
 	std::vector<double> intensity = { 1.0, 0.5, 0.0 };
 	std::vector<Color> ans = { Color(1, 1, 1), Color(0.55, 0.55, 0.55), Color(0.1, 0.1, 0.1) };
@@ -3924,25 +3922,25 @@ TEST(AreaLight, IntensityToAttenuateColor) {
 }
 
 TEST(AreaLight, CreatingAreaLight) {
-	auto corner = Tuple::point(0, 0, 0);
-	auto v1 = Tuple::vector(2, 0, 0);
-	auto v2 = Tuple::vector(0, 0, 1);
+	auto corner = Point(0, 0, 0);
+	auto v1 = Vector(2, 0, 0);
+	auto v2 = Vector(0, 0, 1);
 
 	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 
 	ASSERT_EQ(light.corner, corner);
-	ASSERT_EQ(light.uVec, Tuple::vector(0.5, 0, 0));
+	ASSERT_EQ(light.uVec, Vector(0.5, 0, 0));
 	ASSERT_EQ(light.uSteps, 4);
-	ASSERT_EQ(light.vVec, Tuple::vector(0, 0, 0.5));
+	ASSERT_EQ(light.vVec, Vector(0, 0, 0.5));
 	ASSERT_EQ(light.vSteps, 2);
 	ASSERT_EQ(light.samples, 8);
-	ASSERT_EQ(light.position, Tuple::point(1, 0, 0.5));
+	ASSERT_EQ(light.position, Point(1, 0, 0.5));
 }
 
 TEST(AreaLight, SinglePointOnAreaLight) {
-	auto corner = Tuple::point(0, 0, 0);
-	auto v1 = Tuple::vector(2, 0, 0);
-	auto v2 = Tuple::vector(0, 0, 1);
+	auto corner = Point(0, 0, 0);
+	auto v1 = Vector(2, 0, 0);
+	auto v2 = Vector(0, 0, 1);
 
 	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 
@@ -3950,11 +3948,11 @@ TEST(AreaLight, SinglePointOnAreaLight) {
 	int v[] = { 0, 0, 1, 0, 1 };
 
 	std::vector<Tuple> result{
-		Tuple::point(0.25, 0, 0.25),
-		Tuple::point(0.75, 0, 0.25),
-		Tuple::point(0.25, 0, 0.75),
-		Tuple::point(1.25, 0, 0.25),
-		Tuple::point(1.75, 0, 0.75)
+		Point(0.25, 0, 0.25),
+		Point(0.75, 0, 0.25),
+		Point(0.25, 0, 0.75),
+		Point(1.25, 0, 0.25),
+		Point(1.75, 0, 0.75)
 	};
 
 	int i = 0;
@@ -3970,20 +3968,20 @@ TEST(AreaLight, AreaLightIntensity) {
 	auto w = defaultWorld();
 	w.lights.clear();
 	
-	auto corner = Tuple::point(-0.5, -0.5, -5);
-	auto v1 = Tuple::vector(1, 0, 0);
-	auto v2 = Tuple::vector(0, 1, 0);
+	auto corner = Point(-0.5, -0.5, -5);
+	auto v1 = Vector(1, 0, 0);
+	auto v2 = Vector(0, 1, 0);
 
 	auto light = TestLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
 
 	light.jitter = false;
 
 	std::vector<Tuple> points{
-	Tuple::point(0, 0, 2),
-	Tuple::point(1, -1, 2),
-	Tuple::point(1.5, 0, 2),
-	Tuple::point(1.25, 1.25, 3),
-	Tuple::point(0, 0, -2)
+	Point(0, 0, 2),
+	Point(1, -1, 2),
+	Point(1.5, 0, 2),
+	Point(1.25, 1.25, 3),
+	Point(0, 0, -2)
 	};
 
 	double result[] = { 0.0, 0.25, 0.5, 0.75, 1 };
@@ -3997,9 +3995,9 @@ TEST(AreaLight, AreaLightIntensity) {
 }
 
 TEST(AreaLight, NumberGEneratorCyclicSequence) {
-	auto corner = Tuple::point(-0.5, -0.5, -5);
-	auto v1 = Tuple::vector(1, 0, 0);
-	auto v2 = Tuple::vector(0, 1, 0);
+	auto corner = Point(-0.5, -0.5, -5);
+	auto v1 = Vector(1, 0, 0);
+	auto v2 = Vector(0, 1, 0);
 
 	auto light = TestLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
 	// TODO: why do i need to do this here but not in the test below
@@ -4015,9 +4013,9 @@ TEST(AreaLight, NumberGEneratorCyclicSequence) {
 
 
 TEST(AreaLight, SinglePointONaJitteredLight) {
-	auto corner = Tuple::point(0, 0, 0);
-	auto v1 = Tuple::vector(2, 0, 0);
-	auto v2 = Tuple::vector(0, 0, 1);
+	auto corner = Point(0, 0, 0);
+	auto v1 = Vector(2, 0, 0);
+	auto v2 = Vector(0, 0, 1);
 
 	auto light = TestLight(corner, v1, 4, v2, 2, Color(1, 1, 1));
 	light.seq = new std::vector<double>{ 0.3, 0.7 };
@@ -4027,11 +4025,11 @@ TEST(AreaLight, SinglePointONaJitteredLight) {
 	int v[] = { 0, 0, 1, 0, 1 };
 
 	std::vector<Tuple> ans{
-		Tuple::point(0.15, 0, 0.35),
-		Tuple::point(0.65, 0, 0.35),
-		Tuple::point(0.15, 0, 0.85),
-		Tuple::point(1.15, 0, 0.35),
-		Tuple::point(1.65, 0, 0.85)
+		Point(0.15, 0, 0.35),
+		Point(0.65, 0, 0.35),
+		Point(0.15, 0, 0.85),
+		Point(1.15, 0, 0.35),
+		Point(1.65, 0, 0.85)
 	};
 
 	int i = 0;
@@ -4046,9 +4044,9 @@ TEST(AreaLight, SinglePointONaJitteredLight) {
 
 TEST(AreaLight, LightingSamplesAreaLight) {
 	
-	auto corner = Tuple::point(-0.5, -0.5, -5);
-	auto v1 = Tuple::vector(1, 0, 0);
-	auto v2 = Tuple::vector(0, 1, 0);
+	auto corner = Point(-0.5, -0.5, -5);
+	auto v1 = Vector(1, 0, 0);
+	auto v2 = Vector(0, 1, 0);
 
 	auto light = TestLight(corner, v1, 2, v2, 2, Color(1, 1, 1));
 
@@ -4058,9 +4056,9 @@ TEST(AreaLight, LightingSamplesAreaLight) {
 	shape.material.specular = 0.;
 	shape.material.color = Color(1, 1, 1);
 
-	auto eye = Tuple::point(0, 0, -5);
+	auto eye = Point(0, 0, -5);
 	
-	std::vector<Tuple> pt{ Tuple::point(0, 0, -1), Tuple::point(0, 0.7071, -0.7071) };
+	std::vector<Tuple> pt{ Point(0, 0, -1), Point(0, 0.7071, -0.7071) };
 
 	//TODO: small difference to the book because of random?
 	Color ans[] = { Color(0.996505, 0.996505, 0.996505), Color(0.623183, 0.623183, 0.623183) };
@@ -4069,7 +4067,7 @@ TEST(AreaLight, LightingSamplesAreaLight) {
 
 	for (auto p : pt) {
 		auto eyev = (eye - p).normalize();
-		auto normalv = Tuple::vector(p.x, p.y, p.z);
+		auto normalv = Vector(p.x, p.y, p.z);
 
 		auto result = light.lighting(shape.material, &shape, p, eyev, normalv, 1.0);
 
@@ -4101,9 +4099,9 @@ TEST(UVPatterns, SphericalMap) {
 												};
 
 	std::vector<Tuple> points = {
-									Tuple::point(0, 0, -1), Tuple::point(1, 0, 0), Tuple::point(0, 0, 1),
-									Tuple::point(-1, 0, 0), Tuple::point(0, 1, 0), Tuple::point(0, -1, 0),
-									Tuple::point(sqrt(2) / 2, sqrt(2) / 2, 0)
+									Point(0, 0, -1), Point(1, 0, 0), Point(0, 0, 1),
+									Point(-1, 0, 0), Point(0, 1, 0), Point(0, -1, 0),
+									Point(sqrt(2) / 2, sqrt(2) / 2, 0)
 								};
 
 	int i = 0;
@@ -4127,16 +4125,16 @@ TEST(UVPatterns, TextureMapAndSpherical) {
 
 
 	std::vector<Tuple> points = {
-									Tuple::point(0.4315, 0.4670, 0.7719) ,
-									Tuple::point(-0.9654, 0.2552, -0.0534),
-									Tuple::point(0.1039, 0.7090, 0.6975),
-									Tuple::point(-0.4986, -0.7856, -0.3663),
-									Tuple::point(-0.0317, -0.9395, 0.3411),
-									Tuple::point(0.4809, -0.7721, 0.4154),
-									Tuple::point(0.0285, -0.9612, -0.2745),
-									Tuple::point(-0.5734, -0.2162, -0.7903),
-									Tuple::point(0.7688, -0.1470, 0.6223),
-									Tuple::point(-0.7652, 0.2175, 0.6060)
+									Point(0.4315, 0.4670, 0.7719) ,
+									Point(-0.9654, 0.2552, -0.0534),
+									Point(0.1039, 0.7090, 0.6975),
+									Point(-0.4986, -0.7856, -0.3663),
+									Point(-0.0317, -0.9395, 0.3411),
+									Point(0.4809, -0.7721, 0.4154),
+									Point(0.0285, -0.9612, -0.2745),
+									Point(-0.5734, -0.2162, -0.7903),
+									Point(0.7688, -0.1470, 0.6223),
+									Point(-0.7652, 0.2175, 0.6060)
 	};
 
 	Color ans[] = {
@@ -4162,13 +4160,13 @@ TEST(UVPatterns, PlanarMapping) {
 													};
 
 	std::vector<Tuple> points = {
-									 Tuple::point(0.25, 0, 0.5),	
-									 Tuple::point(0.25, 0, -0.25),	
-									 Tuple::point(0.25, 0.5, -0.25),	
-									 Tuple::point(1.25, 0, 0.5),	
-									 Tuple::point(0.25, 0, -1.75),	
-									 Tuple::point(1, 0, -1),	
-									 Tuple::point(0, 0, 0)
+									 Point(0.25, 0, 0.5),	
+									 Point(0.25, 0, -0.25),	
+									 Point(0.25, 0.5, -0.25),	
+									 Point(1.25, 0, 0.5),	
+									 Point(0.25, 0, -1.75),	
+									 Point(1, 0, -1),	
+									 Point(0, 0, 0)
 								};
 
 	auto plane = Plane();
@@ -4194,16 +4192,16 @@ TEST(UVPatterns, CylindricalMapping) {
 												 };
 
 	std::vector<Tuple> points = {
-									Tuple::point(0, 0, -1),
-									Tuple::point(0, 0.5, -1),
-									Tuple::point(0, 1, -1),
-									Tuple::point(0.70711, 0.5, -0.70711),
-									Tuple::point(1, 0.5, 0),
-									Tuple::point(0.70711, 0.5, 0.70711),
-									Tuple::point(0, -0.25, 1),
-									Tuple::point(-0.70711, 0.5, 0.70711),
-									Tuple::point(-1, 1.25, 0),
-									Tuple::point(-0.70711, 0.5, -0.70711)
+									Point(0, 0, -1),
+									Point(0, 0.5, -1),
+									Point(0, 1, -1),
+									Point(0.70711, 0.5, -0.70711),
+									Point(1, 0.5, 0),
+									Point(0.70711, 0.5, 0.70711),
+									Point(0, -0.25, 1),
+									Point(-0.70711, 0.5, 0.70711),
+									Point(-1, 1.25, 0),
+									Point(-0.70711, 0.5, -0.70711)
 								};
 
 	auto cylinder = Cylinder();
@@ -4224,12 +4222,12 @@ TEST(UVPatterns, FaceFromPoint) {
 	auto cube = Cube();
 
 	std::vector<Tuple> points = {
-		Tuple::point(-1, 0.5, -0.25),
-		Tuple::point(1.1, -0.75, 0.8),
-		Tuple::point(0.1, 0.6, 0.9),
-		Tuple::point(-0.7, 0, -2),
-		Tuple::point(0.5, 1, 0.9),
-		Tuple::point(-0.2, -1.3, 1.1)
+		Point(-1, 0.5, -0.25),
+		Point(1.1, -0.75, 0.8),
+		Point(0.1, 0.6, 0.9),
+		Point(-0.7, 0, -2),
+		Point(0.5, 1, 0.9),
+		Point(-0.2, -1.3, 1.1)
 	};
 
 	cubeFace::FACE ans[] = { cubeFace::LEFT, cubeFace::RIGHT, cubeFace::FRONT, cubeFace::BACK, cubeFace::UP, cubeFace::DOWN };
@@ -4245,8 +4243,8 @@ TEST(UVPatterns, UVMapFacesFront) {
 	auto cube = Cube();
 
 	std::vector<Tuple> points = {
-		Tuple::point(-0.5, 0.5, 1),
-		Tuple::point(0.5, -0.5, 1),
+		Point(-0.5, 0.5, 1),
+		Point(0.5, -0.5, 1),
 	};
 
 
@@ -4269,8 +4267,8 @@ TEST(UVPatterns, UVMapFacesBack) {
 
 	std::vector<Tuple> points = {
 		
-		Tuple::point(0.5, 0.5, -1),
-		Tuple::point(-0.5, -0.5, -1)
+		Point(0.5, 0.5, -1),
+		Point(-0.5, -0.5, -1)
 	};
 
 	std::vector<std::pair<double, double>> ans = { {0.25, 0.75}, {0.75, 0.25} };
@@ -4292,8 +4290,8 @@ TEST(UVPatterns, UVMapFacesLeft) {
 
 	std::vector<Tuple> points = {
 
-		Tuple::point(-1, 0.5, -0.5),
-		Tuple::point(-1, -0.5, 0.5),
+		Point(-1, 0.5, -0.5),
+		Point(-1, -0.5, 0.5),
 	};
 
 
@@ -4317,8 +4315,8 @@ TEST(UVPatterns, UVMapFacesRight) {
 
 	std::vector<Tuple> points = {
 
-		Tuple::point(1, 0.5, 0.5),
-		Tuple::point(1, -0.5, -0.5),
+		Point(1, 0.5, 0.5),
+		Point(1, -0.5, -0.5),
 	};
 
 
@@ -4340,8 +4338,8 @@ TEST(UVPatterns, UVMapFacesUP) {
 	auto cube = Cube();
 
 	std::vector<Tuple> points = {
-		Tuple::point(-0.5, 1, -0.5),
-		Tuple::point(0.5, 1, 0.5)
+		Point(-0.5, 1, -0.5),
+		Point(0.5, 1, 0.5)
 	};
 
 
@@ -4363,8 +4361,8 @@ TEST(UVPatterns, UVMapFacesDown) {
 	auto cube = Cube();
 
 	std::vector<Tuple> points = {
-		Tuple::point(-0.5, -1, 0.5),
-		Tuple::point(0.5, -1, -0.5)
+		Point(-0.5, -1, 0.5),
+		Point(0.5, -1, -0.5)
 		
 	};
 
@@ -4407,8 +4405,8 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 
 
 	std::vector<Tuple> LPoints = {
-									Tuple::point(-1, 0, 0), Tuple::point(-1, 0.9, -0.9), Tuple::point(-1, 0.9, 0.9),
-									Tuple::point(-1, -0.9, -0.9), Tuple::point(-1, -0.9, 0.9)
+									Point(-1, 0, 0), Point(-1, 0.9, -0.9), Point(-1, 0.9, 0.9),
+									Point(-1, -0.9, -0.9), Point(-1, -0.9, 0.9)
 								 };
 
 
@@ -4416,73 +4414,73 @@ TEST(UVPatterns, FindingColorsOnMappedCube) {
 	int i = 0;
 
 	for (auto point : LPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), LAns[i++]);
 	}
 
 	std::vector<Tuple> FPoints = {
-								Tuple::point(0, 0, 1), Tuple::point(-0.9, 0.9, 1), Tuple::point(0.9, 0.9, 1),
-								Tuple::point(-0.9, -0.9, 1), Tuple::point(0.9, -0.9, 1)
+								Point(0, 0, 1), Point(-0.9, 0.9, 1), Point(0.9, 0.9, 1),
+								Point(-0.9, -0.9, 1), Point(0.9, -0.9, 1)
 	};
 
 	std::vector<Color> FAns = { cyan, red, yellow, brown, green };
 	i = 0;
 
 	for (auto point : FPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), FAns[i++]);
 	}
 
 	std::vector<Tuple> RPoints = {
-							Tuple::point(1, 0, 0), Tuple::point(1, 0.9, 0.9), Tuple::point(1, 0.9, -0.9),
-							Tuple::point(1, -0.9, 0.9), Tuple::point(1, -0.9, -0.9)
+							Point(1, 0, 0), Point(1, 0.9, 0.9), Point(1, 0.9, -0.9),
+							Point(1, -0.9, 0.9), Point(1, -0.9, -0.9)
 	};
 
 	std::vector<Color> RAns = { red, yellow, purple, green, white };
 	i = 0;
 
 	for (auto point : RPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), RAns[i++]);
 	}
 
 	std::vector<Tuple> BPoints = {
-						Tuple::point(0, 0, -1), Tuple::point(0.9, 0.9, -1), Tuple::point(-0.9, 0.9, -1),
-						Tuple::point(0.9, -0.9, -1), Tuple::point(-0.9, -0.9, -1)
+						Point(0, 0, -1), Point(0.9, 0.9, -1), Point(-0.9, 0.9, -1),
+						Point(0.9, -0.9, -1), Point(-0.9, -0.9, -1)
 	};
 
 	std::vector<Color> BAns = { green, purple, cyan, white, blue };
 	i = 0;
 
 	for (auto point : BPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), BAns[i++]);
 	}
 
 
 	std::vector<Tuple> UPoints = {
-						Tuple::point(0, 1, 0), Tuple::point(-0.9, 1, -0.9), Tuple::point(0.9, 1, -0.9),
-						Tuple::point(-0.9, 1, 0.9), Tuple::point(0.9, 1, 0.9)
+						Point(0, 1, 0), Point(-0.9, 1, -0.9), Point(0.9, 1, -0.9),
+						Point(-0.9, 1, 0.9), Point(0.9, 1, 0.9)
 	};
 
 	std::vector<Color> UAns = { brown, cyan, purple, red, yellow };
 	i = 0;
 
 	for (auto point : UPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), UAns[i++]);
 	}
 
 	std::vector<Tuple> DPoints = {
-					Tuple::point(0, -1, 0), Tuple::point(-0.9, -1, 0.9), Tuple::point(0.9, -1, 0.9),
-					Tuple::point(-0.9, -1, -0.9), Tuple::point(0.9, -1, -0.9)
+					Point(0, -1, 0), Point(-0.9, -1, 0.9), Point(0.9, -1, 0.9),
+					Point(-0.9, -1, -0.9), Point(0.9, -1, -0.9)
 	};
 
 	std::vector<Color> DAns = { purple, brown, green, blue, white };
 	i = 0;
 
 	for (auto point : DPoints) {
-		// we can simply call cube.stripeAtObject(point), but i will leave it to follow the example
+		// we can simply call cube.colorAtObject(point), but i will leave it to follow the example
 		ASSERT_EQ(pattern.patternColorAt(point, &cube), DAns[i++]);
 	}
 

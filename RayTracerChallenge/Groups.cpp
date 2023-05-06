@@ -74,7 +74,7 @@ Intersections Group::intersect(const Ray& ray)const {
 Tuple Group::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unused]] const Intersection* hit)const {
 	std::cout << "This should not be called, child normal should be used instead!\n";
 	assert(0);
-	return Tuple::vector(0, 0, 0);
+	return Vector(0, 0, 0);
 }
 
 BoundingBox Group::boundsOf(bool update) {
@@ -113,7 +113,11 @@ void Group::divide(int threashold) {
 }
 
 bool Group::includes(const Shape* s)const {
-	return std::find(children.begin(), children.end(), s) != children.end();
+	for (auto child : children) {
+		if (child->includes(s))
+			return true;
+	}
+	return false;
 }
 
 void Group::setMaterial(const Material& s) {
