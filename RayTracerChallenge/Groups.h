@@ -10,6 +10,7 @@ struct Group : public Shape {
 
 	std::vector<Shape*> children;
 	BoundingBox m_bounds;
+	bool is_m_bounds_set = 0;
 
 	~Group();
 

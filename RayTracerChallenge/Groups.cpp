@@ -80,14 +80,19 @@ Tuple Group::objectNormal([[maybe_unused]] const Tuple& objectPoint, [[maybe_unu
 BoundingBox Group::boundsOf(bool update) {
 	// TODO: cache the box, don't update if not needed
 	if (update) {
-		auto box = BoundingBox();
 
-		for (auto shape : children) {
-			auto cbox = shape->parentSpaceBoundsOf();
-			box.mergeBox(cbox);
+		if (!is_m_bounds_set) {
+
+			for (auto shape : children) {
+				auto cbox = shape->parentSpaceBoundsOf();
+				m_bounds.mergeBox(cbox);
+			}
+			is_m_bounds_set = true;
 		}
-
-		m_bounds = box;
+		else {
+			auto cbox = children[children.size() - 1]->parentSpaceBoundsOf();
+			m_bounds.mergeBox(cbox);
+		}
 	}
 	return m_bounds;
 }
