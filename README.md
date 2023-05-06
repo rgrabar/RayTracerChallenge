@@ -242,7 +242,7 @@ Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --thr
 <details>
   <summary>Focal Blur</summary>
   
-  Focal blur examples with different focal length and aperture radius.
+  Focal blur examples with different focal length, aperture radius and aperture samples.
   
   Command: ```RayTracer FocalBlur --focal-length 2 --aperture-radius 0.04 --aperture-samples 16```
   
@@ -253,5 +253,8 @@ Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --thr
 
   Command: ```RayTracer FocalBlur --focal-length 6 --aperture-radius 0.1 --aperture-samples 16```
   ![image](https://user-images.githubusercontent.com/78257998/236624060-e14cfc3b-84ab-4a34-b3cb-4c71b67219a2.png)
+
+  RayTracer FocalBlur --focal-length 6 --aperture-radius 0.1 --aperture-samples 1600
+  ![image](https://user-images.githubusercontent.com/78257998/236624446-adcd28c5-38aa-442c-8f5e-b3e11253e06a.png)
 
 </details>
