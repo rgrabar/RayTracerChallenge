@@ -28,7 +28,10 @@ First argument is always the scene name (see below).
 `--highlights`->            0/1, if enabled previews what will be antialiased when using the --edge option, default: 0 (disabled) <br>
 `--threshold`&nbsp; ->             float [0, 1], if --edge is enabeld set the threshold for edge detection <br>
                           &emsp; &emsp; &emsp; &emsp; &emsp;&ensp;&nbsp;&nbsp;&nbsp; it checks for the difference in color beween the center of the pixel and it's edges, default: 0.3 <br>
-`--path`&emsp;&emsp;&emsp;->                  sets the path to the custom .obj file (can be used only with LoadOBJ scene), default: assets/smoothTriangles.obj  <br>
+`--path`&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;-> sets the path to the custom .obj file (can be used only with LoadOBJ scene), default: assets/smoothTriangles.obj<br>
+`--focal-length`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-> [double], the distance from the camera origin to the canvas, by changing the focal length you can change which objects are in focus when using a non-zero aperture size, default: 1 <br>
+`--aperture-radius`-> [double], camera aperture radius, the larger the value the more focal blur, default: 0 <br>
+`--apertureSamples`-> [int], number of aprture samples to be jittered inside an aperture radius, default: 1 <br>
 
 Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --threshold 0.01` <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;&nbsp;`RayTracer LoadOBJ --path assets/smoothTriangles.obj`
