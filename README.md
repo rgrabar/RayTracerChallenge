@@ -17,28 +17,30 @@ You can also test without visual studio but I haven't tried.
 ***Note:*** The test name should be changed, it's a bit annoying to do tho. 
 
 ## Command line arguments
-
 ### Scene related
-
+```
 First argument is always the scene name (see below).
 
-`--aliasing`&emsp;->              [int] number of samples per pixel, default: 1 <br>
-`--size`&emsp;&emsp;&ensp;&nbsp;->                  [int, int] width height, default: 900x900 <br>
-`--edge`&emsp;&emsp;&ensp;&nbsp;->                  0/1 if enabled antialiasing will only be applied to edges, default: 0 (disabled) <br>
-`--highlights`->            0/1, if enabled previews what will be antialiased when using the --edge option, default: 0 (disabled) <br>
-`--threshold`&nbsp; ->             float [0, 1], if --edge is enabeld set the threshold for edge detection <br>
-                          &emsp; &emsp; &emsp; &emsp; &emsp;&ensp;&nbsp;&nbsp;&nbsp; it checks for the difference in color beween the center of the pixel and it's edges, default: 0.3 <br>
-`--path`&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;-> sets the path to the custom .obj file (can be used only with LoadOBJ scene), default: assets/smoothTriangles.obj<br>
-`--focal-length`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-> [double], the distance from the camera origin to the canvas, by changing the focal length you can change which objects are in focus when using a non-zero aperture size, default: 1 <br>
-`--aperture-radius`-> [double], camera aperture radius, the larger the value the more focal blur, default: 0 <br>
-`--apertureSamples`-> [int], number of aprture samples to be jittered inside an aperture radius, default: 1 <br>
+--aliasing   -> [int] number of samples per pixel, default: 1
+--size       -> [int, int] width height, default: 900x900
+--edge       -> [bool] if enabled antialiasing will only be applied to edges, default: 0 (disabled)
+--highlights -> [bool] if enabled previews what will be antialiased when using the --edge option, default: 0 (disabled)
+--threshold  -> float [0, 1] if --edge is enabeld set the threshold for edge detection
+                it checks for the difference in color beween the center of the pixel and it's edges, default: 0.3
+--path            -> sets the path to the custom .obj file (can be used only with LoadOBJ scene), default: assets/smoothTriangles.obj
+--focal-length    -> [double] the distance from the camera origin to the canvas, by changing the focal length you can change which objects are in focus when using a non-zero aperture size, default: 1
+--aperture-radius -> [double] camera aperture radius, the larger the value the more focal blur, default: 0
+--apertureSamples -> [int] number of aprture samples to be jittered inside an aperture radius, default: 1
 
-Command exampls: `RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --threshold 0.01` <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;&nbsp;`RayTracer LoadOBJ --path assets/smoothTriangles.obj`
-<br>
+Command exampls: RayTracer Aliasing --size 900 900 --aliasing 16 --edge 1 --threshold 0.01
+                 RayTracer LoadOBJ --path assets/smoothTriangles.obj
+```
 ### Other arguments: <br>
-`--threads`-> [int] number of threads to use for rendering, default whatever is decided by `std::thread::hardware_concurrency()` <br>
-`--no-ppm`&nbsp; -> [bool] if true the ppm image of the scene won't be created, default: 0 (ppm will be created)<br>
+```
+--threads    -> [int] number of threads to use for rendering, default whatever is decided by `std::thread::hardware_concurrency()`
+--no-ppm     -> [bool] if true the ppm image of the scene won't be created, default: 0 (ppm will be created)
+--no-preview -> [bool] if true the Raylib preview won't be shown
+```
 
 ## Scenes
 
