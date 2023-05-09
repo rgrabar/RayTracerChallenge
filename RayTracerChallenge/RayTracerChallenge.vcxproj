@@ -165,7 +165,6 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="OBJParser.cpp" />
     <ClCompile Include="Pattern.cpp" />
-    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PreComputations.cpp" />
     <ClCompile Include="Ray.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="OBJParser.h" />
     <ClInclude Include="Pattern.h" />
-    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PreComputations.h" />
     <ClInclude Include="Ray.h" />
