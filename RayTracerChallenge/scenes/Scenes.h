@@ -346,46 +346,6 @@ void drawRefractiveSphere(int aliasing, int width, int height, int highlights, i
 	cam.aliasingThreshold = threshold;
 
 	cam.render(world);
-	
-	/*
-	auto world = World();
-	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 10, -10)));
-
-	auto floor = Plane();
-
-
-	//shape.material.refractiveIndex = 1.52;
-
-
-	world.objects.emplace_back(&floor);
-
-	double moveX = 0; double moveZ = 0;
-
-	auto g = Group();
-
-	for (int j = 0; j < 20; ++j) {
-		moveZ += 1;
-		moveX = 0;
-		for (int i = 0; i < 20; ++i) {
-			g.addChild(createRandomSphere(moveX, moveZ));
-			moveX += 1;
-		}
-	}
-
-	g.divide();
-	world.objects.emplace_back(&g);
-	drawAxes(world);
-
-	Camera cam(width, height, M_PI / 3);
-	cam.transform = viewTransformation(Point(10, 5, -10), Point(10, 1, 10), Vector(0, 1, 0));
-	cam.aliasingSamples = aliasing;
-	cam.aliasEdges = edge;
-	cam.edgeAliasHighlights = highlights;
-	cam.aliasingThreshold = threshold;
-
-	auto ans = cam.render(world);
-	ans.canvasToImage();*/
-
 }
 
 void drawAllShapes(int aliasing, int width, int height, int highlights, int edge, double threshold, double focalLenght, double apertureRadius, int apertureSamples) {
@@ -1412,28 +1372,69 @@ void focalBlur(int aliasing, int width, int height, int highlights, int edge, do
 	cam.render(world);
 }
 
+
+//code for rotations
+//OBJParser o("assets/dragon.obj");
+
+//auto g = o.ObjToGroup();
+//g->transform = scale(5, 5, 5);
+
+//g->transform = /*translate(4, 0, 0)*/ rotationY(M_PI / 2) * scale(5, 5, 5);
+
+//std::cout << "dividing\n";
+//g->divide();
+//g->material.color = Color(0, 0.63922, 0.42353);
+//Material m;
+//m.color = Color(0, 0.63922, 0.42353);
+
+//g->setMaterial(m);
+
+//auto world = World();
+//world.objects.emplace_back(g);
+
+//world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(20, 15, -20)));
+
+//Camera cam(900, 900, M_PI / 3);
+//cam.transform = viewTransformation(Point(8, 15, -15), Point(0, 1, 0), Vector(0, 1, 0));
+
+//drawAxes(world);
+
+//cam.render(world);
+
+
 void testScene() {
 
-	auto sphere1 = Sphere();
-
-	sphere1.transform = translate(-0.75, 1, 1) * scale(0.25, 0.25, 0.25);
-
-	auto sphere2 = Sphere(); 
-	sphere2.transform = translate(0, 1, -2) * scale(0.25, 0.25, 0.25);
-
-	auto sphere3 = Sphere();
-	sphere3.transform = translate(0.5, 1, -3) * scale(0.25, 0.25, 0.25);
-
+	
 	auto world = World();
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 10, -10)));
 
-	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(-10, 10, -10)));
-	world.objects.emplace_back(&sphere1);
-	world.objects.emplace_back(&sphere2);
-	world.objects.emplace_back(&sphere3);
+	auto floor = Plane();
 
-	Camera cam(1280, 720, M_PI / 3, 3, 0.04, 8);
-	cam.transform = viewTransformation(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0));
-	//cam.aliasingSamples = 8;
+
+	//shape.material.refractiveIndex = 1.52;
+
+
+	world.objects.emplace_back(&floor);
+
+	double moveX = 0; double moveZ = 0;
+
+	auto g = Group();
+
+	for (int j = 0; j < 200; ++j) {
+		moveZ += 1;
+		moveX = 0;
+		for (int i = 0; i < 20; ++i) {
+			g.addChild(createRandomSphere(moveX, moveZ));
+			moveX += 1;
+		}
+	}
+
+	g.divide();
+	world.objects.emplace_back(&g);
+	drawAxes(world);
+
+	Camera cam(900, 900, M_PI / 3);
+	cam.transform = viewTransformation(Point(10, 5, -10), Point(10, 1, 10), Vector(0, 1, 0));
 
 	cam.render(world);
 }
