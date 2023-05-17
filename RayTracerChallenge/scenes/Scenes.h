@@ -1401,6 +1401,40 @@ void focalBlur(int aliasing, int width, int height, int highlights, int edge, do
 
 //cam.render(world);
 
+void manySpheres() {
+	auto world = World();
+	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(0, 10, -10)));
+
+	auto floor = Plane();
+
+
+	//shape.material.refractiveIndex = 1.52;
+
+
+	world.objects.emplace_back(&floor);
+
+	double moveX = 0; double moveZ = 0;
+
+	auto g = Group();
+
+	for (int j = 0; j < 200; ++j) {
+		moveZ += 1;
+		moveX = 0;
+		for (int i = 0; i < 200; ++i) {
+			g.addChild(createRandomSphere(moveX, moveZ));
+			moveX += 1;
+		}
+	}
+
+	g.divide();
+	world.objects.emplace_back(&g);
+	drawAxes(world);
+
+	Camera cam(900, 900, M_PI / 3);
+	cam.transform = viewTransformation(Point(10, 5, -10), Point(10, 1, 10), Vector(0, 1, 0));
+
+	cam.render(world);
+}
 
 void testScene() {
 
@@ -1423,7 +1457,7 @@ void testScene() {
 	for (int j = 0; j < 200; ++j) {
 		moveZ += 1;
 		moveX = 0;
-		for (int i = 0; i < 20; ++i) {
+		for (int i = 0; i < 200; ++i) {
 			g.addChild(createRandomSphere(moveX, moveZ));
 			moveX += 1;
 		}

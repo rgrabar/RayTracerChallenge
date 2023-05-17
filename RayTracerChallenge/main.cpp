@@ -190,6 +190,8 @@ int main(int argc, char* argv[]) {
 		loadOBJ(path);
 	else if (scene == "FocalBlur")
 		focalBlur(aliasing, width, height, highlights, edge, threshold, focalLenght, apertureRadius, apertureSamples);
+	else if (scene == "ManySpheres")
+		manySpheres();
 	else if (scene == "Test")
 		testScene();
 	
