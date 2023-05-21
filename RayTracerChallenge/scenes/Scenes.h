@@ -949,12 +949,53 @@ void CSGScene(int aliasing, int width, int height, int highlights, int edge, dou
 
 	auto csg2 = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &cube, &sphere1);
 
+	auto cube1 = Cube();
+	cube1.material.color = Color(1, 0, 0);
+	auto sphere2 = Sphere();
+	sphere2.transform = scale(1.25, 1.25, 1.25);
+	sphere2.material.color = Color(0, 1, 0);
+
+	auto cs = CSGShape(CSGOperation::OPERATION::INTERSECTION, &cube1, &sphere2);
+	cs.transform = translate(0, 0, 2);
+
+	auto c1 = Cylinder();
+	c1.minimum = 0;
+	c1.maximum = 2;
+	c1.closed = 1;
+	c1.transform = translate(0, -2, 2) * scale(0.5, 2, 0.5);
+	c1.material.color = Color(0.9519275, 0.1285, 0.93126);
+
+	auto c2 = Cylinder();
+	c2.minimum = 0;
+	c2.maximum = 2;
+	c2.closed = 1;
+	c2.transform = rotationX(M_PI / 2) * scale(0.5, 2, 0.5);
+	c2.material.color = Color(0.38621, 0.12352, 0.63981268);
+
+	auto c12 = CSGShape(CSGOperation::OPERATION::UNION, &c1, &c2);
+
+
+	auto c3 = Cylinder();
+	c3.minimum = 0;
+	c3.maximum = 2;
+	c3.closed = 1;
+	c3.transform = translate(2, 0, 2) * rotationZ(M_PI / 2) * scale(0.5, 2, 0.5);
+	c3.material.color = Color(0.63981268, 0.12352, 0.1285);
+
+	auto c123 = CSGShape(CSGOperation::OPERATION::UNION, &c12, &c3);
+
+	auto diff = CSGShape(CSGOperation::OPERATION::DIFFERENCE, &cs, &c123);
+
 	auto world = World();
 
 	world.lights.emplace_back(new PointLight(Color(1, 1, 1), Point(-10, 10, -10)));
 
 	world.objects.emplace_back(&csg1);
 	world.objects.emplace_back(&csg2);
+	//world.objects.emplace_back(&cube1);
+	//world.objects.emplace_back(&sphere2);
+	world.objects.emplace_back(&diff);
+	//world.objects.emplace_back(&c123);
 
 	Camera cam(width, height, M_PI / 3, focalLenght, apertureRadius, apertureSamples);
 	cam.transform = viewTransformation(Point(-5, 5, -5), Point(0, 1, 0), Vector(0, 1, 0));
