@@ -71,10 +71,35 @@ Color RingPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Sha
 		}
 	}
 
-	if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
-		return a;
-	else
-		return b;
+	auto test = (Shape *)shape;
+
+	if (dynamic_cast<Cube*>(test)) {
+		auto tmp = ((Cube*)test)->faceFromPoint(point);
+		if (tmp == cubeFace::UP || tmp == cubeFace::DOWN) {
+			if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
+				return a;
+			else
+				return b;
+		}
+		if (tmp == cubeFace::BACK || tmp == cubeFace::FRONT) {
+			if ((int)floor(sqrt(point.x * point.x + point.y * point.y)) % 2 == 0)
+				return a;
+			else
+				return b;
+		}
+		if (tmp == cubeFace::LEFT || tmp == cubeFace::RIGHT) {
+			if ((int)floor(sqrt(point.z * point.z + point.y * point.y)) % 2 == 0)
+				return a;
+			else
+				return b;
+		}
+	}
+	else {
+		if ((int)floor(sqrt(point.x * point.x + point.z * point.z)) % 2 == 0)
+			return a;
+		else
+			return b;
+	}
 }
 
 Color RadialGradientPattern::patternColorAt(const Tuple& point, [[maybe_unused]] const Shape* shape)const {
